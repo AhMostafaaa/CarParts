@@ -1,0 +1,80 @@
+<div class="category-parts-page">
+
+  <div class="page-layout">
+
+    <!-- الفلاتر على اليمين -->
+    <aside class="filters-sidebar">
+      <h4>تصفية حسب:</h4>
+
+      <div class="filter-group">
+        <label>الحالة:</label>
+        <select [(ngModel)]="selectedCondition" (change)="applyFilters()">
+          <option value="">الكل</option>
+          <option value="New">جديد</option>
+          <option value="Refurbished">مستعمل</option>
+        </select>
+      </div>
+
+      <div class="filter-group">
+        <label>السعر:</label>
+        <select [(ngModel)]="selectedPriceRange" (change)="applyFilters()">
+          <option value="">الكل</option>
+          <option value="low">أقل من 500</option>
+          <option value="medium">من 500 إلى 1000</option>
+          <option value="high">أعلى من 1000</option>
+        </select>
+      </div>
+
+      <div class="filter-group">
+        <label>الفئة:</label>
+        <select>
+          <option>كل الفئات</option>
+          <option>محرك</option>
+          <option>كهرباء</option>
+          <option>عفشة</option>
+        </select>
+      </div>
+
+      <div class="filter-group">
+        <label>ماركة:</label>
+        <select>
+          <option>الكل</option>
+          <option>تويوتا</option>
+          <option>نيسان</option>
+          <option>هيونداي</option>
+        </select>
+      </div>
+
+      <div class="filter-group">
+        <label>التوصيل السريع:</label>
+        <select>
+          <option>الكل</option>
+          <option>متاح</option>
+          <option>غير متاح</option>
+        </select>
+      </div>
+    </aside>
+
+    <!-- القطع على الشمال -->
+    <section class="parts-section">
+      <div class="category-header">
+        <h2>تصنيف: {{ categoryName }}</h2>
+      </div>
+
+      <div class="parts-grid">
+        <div class="part-card" *ngFor="let part of filteredParts">
+          <div class="part-image">
+            <img [src]="part.imageUrl" alt="{{ part.name }}">
+          </div>
+          <div class="part-info">
+            <h3>{{ part.name }}</h3>
+            <p class="price">{{ part.price }} جنيه</p>
+            <button [routerLink]="['/parts', part.id]" class="btn btn-primary">عرض التفاصيل</button>
+          </div>
+        </div>
+      </div>
+    </section>
+
+  </div>
+
+</div>

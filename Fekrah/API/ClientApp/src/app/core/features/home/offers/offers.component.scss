@@ -1,0 +1,113 @@
+.offers-page-container {
+  margin: 40px 20px;
+
+  .page-title {
+    font-size: 28px;
+    margin-bottom: 20px;
+    text-align: right;
+    color: #333;
+  }
+
+  .swiper-container {
+    position: relative;
+    width: 100%;
+    padding: 20px 40px 60px 40px; /* 👈 خلي فيه padding يمين وشمال */
+    overflow: hidden;
+  }
+
+
+  .swiper-wrapper {
+    display: flex;
+    align-items: center;
+  }
+
+  .swiper-slide {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: auto;
+  }
+
+  .offer-card {
+      width: 180px;
+      height: 280px;
+      background: white;
+      border: 1px solid #ddd;
+      border-radius: 10px;
+      padding: 15px;
+      margin: 0 auto; /* 👈 خلي الكارت دايمًا في النص */
+      text-align: center;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      transition: transform 0.3s;
+      z-index: 1; // لو موجود مفيش مشكلة
+
+
+
+    img {
+      width: 100px;
+      height: 100px;
+      margin: 0 auto 10px;
+      object-fit: contain;
+    }
+
+    h3 {
+      font-size: 16px;
+      color: #333;
+      height: 40px;
+      overflow: hidden;
+    }
+
+    .price {
+      color: #b12704;
+      font-weight: bold;
+      margin-bottom: 10px;
+    }
+
+    .btn {
+      background-color: #febd69;
+      border: none;
+      padding: 6px 12px;
+      border-radius: 4px;
+      font-weight: bold;
+      cursor: pointer;
+    }
+
+    &:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+    }
+  }
+
+  .swiper-button-next,
+  .swiper-button-prev {
+    position: absolute;
+    top: 50%;
+    width: 40px;
+    height: 40px;
+    background-color: rgba(0, 0, 0, 0.5);
+    color: white;
+    border-radius: 50%;
+    transform: translateY(-50%);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 18px;
+    z-index: 100; /* 👈 خليه عالي جدا فوق أي حاجة */
+  }
+
+
+  .swiper-button-next {
+    left: 10px; /* 👈 مش 0، نبعده شوية لجوه */
+  }
+
+  .swiper-button-prev {
+    right: 10px; /* 👈 ومثله لليسار */
+  }
+
+
+  .swiper-pagination {
+    bottom: 10px !important;
+  }
+}

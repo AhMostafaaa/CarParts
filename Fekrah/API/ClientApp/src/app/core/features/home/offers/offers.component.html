@@ -1,0 +1,18 @@
+<div class="offers-page-container">
+  <h2 class="page-title">أفضل العروض</h2>
+
+  <div class="swiper-container offers-swiper">
+    <div class="swiper-wrapper">
+      <div class="swiper-slide" *ngFor="let offer of bestOffers">
+        <div class="offer-card">
+          <img [src]="offer.imageUrl" alt="{{ offer.name }}">
+          <h3>{{ offer.name }}</h3>
+          <p class="price">{{ offer.price }} جنيه</p>
+          <button routerLink="/parts/{{ offer.id }}" class="btn btn-primary">عرض التفاصيل</button>
+        </div>
+      </div>
+    </div>
+
+
+  </div>
+</div>

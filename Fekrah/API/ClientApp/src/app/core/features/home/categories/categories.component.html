@@ -1,0 +1,21 @@
+<div class="categories-section">
+  <h2 class="section-title">التصنيفات</h2>
+
+  <div class="swiper-container">
+    <div class="swiper-wrapper">
+      <div class="swiper-slide" *ngFor="let category of categories">
+        <div class="category-card" [routerLink]="['/category', category.name]">
+          <img [src]="category.image" alt="{{ category.name }}">
+          <p>{{ category.name }}</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- أزرار التنقل -->
+    <div class="swiper-button-next"></div>
+    <div class="swiper-button-prev"></div>
+
+    <!-- النقاط -->
+    <div class="swiper-pagination"></div>
+  </div>
+</div>

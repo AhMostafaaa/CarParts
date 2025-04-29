@@ -1,0 +1,41 @@
+<div class="part-details-page" *ngIf="part">
+
+  <div class="part-details-container">
+    <div class="part-image">
+      <img [src]="part.imageUrl" alt="{{ part.name }}">
+    </div>
+
+    <div class="part-info">
+      <h1 class="part-title">{{ part.name }}</h1>
+
+      <div class="price-box">
+        <h2 class="price">{{ part.price }} جنيه</h2>
+        <span class="condition">{{ part.condition === 'New' ? 'جديد' : 'مستعمل' }}</span>
+      </div>
+
+      <div class="part-meta">
+        <p><strong>البائع:</strong> {{ part.sellerShopName }}</p>
+        <p><strong>التصنيف:</strong> {{ part.categoryName }}</p>
+      </div>
+
+      <p class="description">{{ part.description }}</p>
+
+      <button class="btn btn-primary">تواصل مع البائع</button>
+    </div>
+  </div>
+
+  <!-- 👇 منتجات مرتبطة -->
+  <div class="related-parts-section">
+    <h3>منتجات مشابهة</h3>
+
+    <div class="related-parts-grid">
+      <div class="related-card" *ngFor="let related of relatedParts">
+        <img [src]="related.imageUrl" alt="{{ related.name }}">
+        <h4>{{ related.name }}</h4>
+        <p class="price">{{ related.price }} جنيه</p>
+        <button [routerLink]="['/parts', related.id]" class="btn btn-secondary">عرض التفاصيل</button>
+      </div>
+    </div>
+  </div>
+
+</div>

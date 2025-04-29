@@ -1,0 +1,23 @@
+<form (ngSubmit)="submitFilters()">
+  <div class="filter-group">
+    <label>اسم القطعة:</label>
+    <input type="text" [(ngModel)]="filters.name" name="name" />
+  </div>
+
+  <div class="filter-group">
+    <label>الحالة:</label>
+    <select [(ngModel)]="filters.condition" name="condition">
+      <option value="">الكل</option>
+      <option value="New">جديد</option>
+      <option value="Used">مستعمل</option>
+      <option value="Refurbished">مجددة</option>
+    </select>
+  </div>
+
+  <div class="filter-group">
+    <label>التصنيف:</label>
+    <input type="text" [(ngModel)]="filters.categoryName" name="categoryName" />
+  </div>
+
+  <button type="submit" class="btn btn-primary">تصفية</button>
+</form>

@@ -1,0 +1,23 @@
+<div class="search-results-container">
+
+  <!-- Sidebar Filters -->
+  <aside class="sidebar-filters">
+    <app-part-filter (filtersChanged)="applyFilters($event)"></app-part-filter>
+  </aside>
+
+  <!-- Main Results -->
+  <section class="main-results">
+
+    <!-- Search Summary -->
+    <div class="search-summary">
+      <p>تم العثور على {{ filteredParts.length }} قطعة</p>
+    </div>
+
+    <!-- Parts Grid -->
+    <div class="parts-grid">
+      <app-part-card *ngFor="let part of filteredParts" [part]="part"></app-part-card>
+    </div>
+
+  </section>
+
+</div>

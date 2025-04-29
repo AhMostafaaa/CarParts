@@ -1,0 +1,9 @@
+<div class="promo-ticker">
+  <div class="ticker-wrap">
+    <div class="ticker-move">
+      <a *ngFor="let promo of promoOffers" [routerLink]="['/parts', promo.id]" class="ticker-item">
+        {{ promo.title }}
+      </a>
+    </div>
+  </div>
+</div>

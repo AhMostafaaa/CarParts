@@ -1,0 +1,29 @@
+<div class="parts-preview-section">
+  <h2 class="section-title">أحدث القطع</h2>
+
+  <div class="swiper-container parts-preview-swiper">
+    <div class="swiper-wrapper">
+
+      <div class="swiper-slide" *ngFor="let part of parts">
+        <div class="part-preview-card">
+
+          <div class="image-container">
+            <img [src]="part.imageUrl" alt="{{ part.name }}">
+            <span class="badge" [ngClass]="part.condition === 'New' ? 'new' : 'used'">
+              {{ part.condition === 'New' ? 'جديد' : 'مستعمل' }}
+            </span>
+          </div>
+
+          <div class="card-content">
+            <h3 class="part-title">{{ part.name }}</h3>
+            <p class="description">{{ part.description }}</p>
+            <p class="price">{{ part.price }} جنيه</p>
+            <button [routerLink]="['/parts', part.id]" class="btn view-details-btn">عرض التفاصيل</button>
+          </div>
+
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>

@@ -1,0 +1,19 @@
+<div class="suggested-offers-section">
+  <h2 class="section-title">مقترحات لك</h2>
+
+  <div class="swiper-container suggested-swiper">
+    <div class="swiper-wrapper">
+      <div class="swiper-slide" *ngFor="let offer of suggestedOffers">
+        <div class="offer-card">
+          <div class="image-container">
+            <img [src]="offer.imageUrl" alt="{{ offer.name }}">
+          </div>
+          <h3>{{ offer.name }}</h3>
+          <p class="price">{{ offer.price }} جنيه</p>
+        </div>
+      </div>
+    </div>
+
+  
+  </div>
+</div>
