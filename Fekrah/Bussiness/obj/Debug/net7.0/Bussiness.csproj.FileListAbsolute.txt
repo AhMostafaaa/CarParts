@@ -1,0 +1,15 @@
+D:\Fekrah\Bussiness\bin\Debug\net7.0\Bussiness.deps.json
+D:\Fekrah\Bussiness\bin\Debug\net7.0\Bussiness.dll
+D:\Fekrah\Bussiness\bin\Debug\net7.0\Bussiness.pdb
+D:\Fekrah\Bussiness\bin\Debug\net7.0\Data.dll
+D:\Fekrah\Bussiness\bin\Debug\net7.0\Data.pdb
+D:\Fekrah\Bussiness\obj\Debug\net7.0\Bussiness.csproj.AssemblyReference.cache
+D:\Fekrah\Bussiness\obj\Debug\net7.0\Bussiness.GeneratedMSBuildEditorConfig.editorconfig
+D:\Fekrah\Bussiness\obj\Debug\net7.0\Bussiness.AssemblyInfoInputs.cache
+D:\Fekrah\Bussiness\obj\Debug\net7.0\Bussiness.AssemblyInfo.cs
+D:\Fekrah\Bussiness\obj\Debug\net7.0\Bussiness.csproj.CoreCompileInputs.cache
+D:\Fekrah\Bussiness\obj\Debug\net7.0\Bussiness.csproj.CopyComplete
+D:\Fekrah\Bussiness\obj\Debug\net7.0\Bussiness.dll
+D:\Fekrah\Bussiness\obj\Debug\net7.0\refint\Bussiness.dll
+D:\Fekrah\Bussiness\obj\Debug\net7.0\Bussiness.pdb
+D:\Fekrah\Bussiness\obj\Debug\net7.0\ref\Bussiness.dll
