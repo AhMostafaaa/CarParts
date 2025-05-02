@@ -18,6 +18,7 @@ import { PromoTickerComponent } from './core/Shared/layout/promo-ticker/promo-ti
     BrowserModule,
     AppRoutingModule,
     BrowserAnimationsModule,
+
   ],
   providers: [],
   bootstrap: [AppComponent]

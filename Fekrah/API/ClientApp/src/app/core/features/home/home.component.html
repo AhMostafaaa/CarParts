@@ -2,7 +2,7 @@
 
   <!-- ✅ زرار فتح الفلتر ثابت -->
   <button class="filter-open-button" [class.shifted]="filtersOpened" (click)="toggleFilters()" *ngIf="!filtersOpened">
-     <i class="fas fa-sliders-h"></i>a
+    <i class="fa-solid fa-circle-left"></i>
   </button>
 
 
@@ -17,7 +17,7 @@
 
         <!-- ✅ زرار الغلق بجانب الاسم بشكل سليم -->
         <button class="filter-toggle-inside" (click)="toggleFilters()">
-          X<i class="fas fa-times"></i>
+          <i class="fa-solid fa-bars"></i>
         </button>
       </div>
 
