@@ -1,0 +1,39 @@
+<div class="part-card" [class.offer]="type === 'offer'">
+
+  <!-- شارات -->
+  <div class="badges" *ngIf="type === 'offer'">
+    <span class="badge new" *ngIf="part.condition === 'New'">جديد</span>
+    <span class="badge discount" *ngIf="part.oldPrice > part.price">-{{ part.discount }}%</span>
+  </div>
+
+  <!-- صورة -->
+  <div class="image-container">
+    <img [src]="part.imageUrl" [alt]="part.name">
+  </div>
+
+  <!-- اسم القطعة -->
+  <h3 class="part-name">{{ part.name }}</h3>
+
+  <!-- وصف -->
+  <p class="description">{{ part.description }}</p>
+
+  <!-- اسم التاجر -->
+  <a class="seller-name" [routerLink]="['/seller', part.sellerId]">
+    <i class="fas fa-store"></i> {{ part.sellerName }}
+  </a>
+
+  <!-- السعر -->
+  <div class="price-section">
+    <div class="price">{{ part.price }} ج.م</div>
+    <div class="old-price" *ngIf="type === 'offer' && part.oldPrice > part.price">
+      {{ part.oldPrice }} ج.م
+    </div>
+    <div class="save" *ngIf="type === 'offer' && part.oldPrice > part.price">
+      وفر {{ part.oldPrice - part.price }} ج
+    </div>
+  </div>
+
+  <!-- زر -->
+  <button class="btn" [routerLink]="['/parts', part.id]">عرض التفاصيل</button>
+
+</div>
