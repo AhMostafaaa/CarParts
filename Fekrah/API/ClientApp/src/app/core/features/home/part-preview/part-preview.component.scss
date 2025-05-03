@@ -1,8 +1,19 @@
 .part-preview-section {
   margin: 40px 0;
-  background: #f8f9fa;
+  position: relative;
   padding: 30px 20px;
   border-radius: 12px;
+  overflow: hidden;
+  z-index: 1;
+
+  background: linear-gradient(
+      to right,
+      rgba(50, 119, 54, 0.95),
+      rgba(126, 180, 122, 0.95)
+    ),
+    // ✅ تغطية لونية ناعمة
+    url("/assets/images/background2.png") no-repeat center center; // ✅ الخلفية
+  background-size: cover;
 
   .section-title {
     font-size: 24px;
@@ -10,11 +21,14 @@
     margin-bottom: 20px;
     font-weight: bold;
     color: #333;
+    z-index: 2;
+    position: relative;
   }
 
   .swiper-container {
     overflow: hidden;
     position: relative;
+    z-index: 2;
   }
 
   .swiper-slide {
@@ -26,10 +40,12 @@
 
   .swiper-pagination {
     bottom: -20px !important;
+
     .swiper-pagination-bullet {
       background: #555;
       opacity: 0.5;
     }
+
     .swiper-pagination-bullet-active {
       background: #222;
       opacity: 1;
