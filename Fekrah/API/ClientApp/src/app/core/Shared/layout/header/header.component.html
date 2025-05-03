@@ -1,7 +1,9 @@
-<header class="header-container">
+<header class="header-container" [class.sticky]="isSticky">
   <!-- Logo -->
   <div class="logo">
-    <a routerLink="/">قطع غيار</a>
+    <a routerLink="/">
+      <i class="fas fa-tools"></i> قطع غيار
+    </a>
   </div>
 
   <!-- Search Bar -->
@@ -12,16 +14,16 @@
       <option value="الكهرباء">الكهرباء</option>
       <option value="البودي">البودي</option>
     </select>
-    <input type="text" placeholder=" ... ابحث عن قطع الغيار" />
+    <input type="text" placeholder="ابحث عن قطعة غيار..." />
     <button class="search-button">
-      🔍
+      <i class="fas fa-search"></i>
     </button>
   </div>
 
   <!-- Right Menu -->
   <div class="right-menu">
-    <a routerLink="/auth/login">تسجيل الدخول</a>
-    <a routerLink="/seller/dashboard">لوحة التحكم</a>
-    <a routerLink="/cart">🛒 السلة</a>
+    <a routerLink="/auth/login"><i class="fas fa-sign-in-alt"></i> دخول</a>
+    <a routerLink="/seller/dashboard"><i class="fas fa-user-cog"></i> لوحة التحكم</a>
+    <a routerLink="/cart"><i class="fas fa-shopping-cart"></i> السلة</a>
   </div>
 </header>
