@@ -2,16 +2,17 @@ import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 
 import { SellerRoutingModule } from './seller-routing.module';
-import { SellerComponent } from './seller.component';
-import { SharedModule } from '../../Shared/shared.module';
+import { SellerPageComponent } from './seller-page/seller-page.component';
+import { FormsModule } from '@angular/forms';
 
 
 @NgModule({
   declarations: [
-    SellerComponent
+    SellerPageComponent
   ],
   imports: [
-    SharedModule,
+    CommonModule,
+    FormsModule,
     SellerRoutingModule
   ]
 })

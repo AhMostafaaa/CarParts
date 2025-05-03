@@ -1,0 +1,61 @@
+<div class="seller-page">
+  <!-- بيانات البائع -->
+  <div class="seller-header">
+    <div class="seller-info">
+      <h2 class="seller-name">{{ seller.name }}</h2>
+      <div class="rating">
+        <ng-container *ngFor="let star of stars; let i = index">
+          <i class="fas" [ngClass]="i < seller.rating ? 'fa-star' : 'fa-star-half-alt'"></i>
+        </ng-container>
+        <span class="rating-text">({{ seller.rating }}/5)</span>
+      </div>
+      <p class="description">{{ seller.description }}</p>
+    </div>
+    <div class="contact-buttons">
+      <a class="whatsapp-button" [href]="'https://wa.me/' + seller.phone" target="_blank">
+        <i class="fab fa-whatsapp"></i> تواصل واتساب
+      </a>
+    </div>
+  </div>
+
+  <section class="seller-products-section">
+    <h3 class="section-heading">منتجات هذا البائع</h3>
+
+    <div class="products-grid">
+      <div class="product-card" *ngFor="let product of sellerProducts">
+        <div class="product-image">
+          <img [src]="product.imageUrl" alt="{{ product.name }}">
+        </div>
+        <div class="product-details">
+          <h4>{{ product.name }}</h4>
+          <p class="description">{{ product.description }}</p>
+          <div class="price-block">
+            <span class="price">{{ product.price }} ج.م</span>
+            <span class="old-price" *ngIf="product.oldPrice > product.price">{{ product.oldPrice }} ج.م</span>
+          </div>
+          <button class="details-btn" [routerLink]="['/parts', product.id]">عرض التفاصيل</button>
+        </div>
+      </div>
+    </div>
+  </section>
+
+
+  <!-- تقييمات العملاء -->
+  <div class="reviews-section">
+    <h3>تقييمات العملاء</h3>
+    <div class="reviews">
+      <div class="review-card" *ngFor="let review of seller.reviews">
+        <div class="review-header">
+          <strong>{{ review.customer }}</strong>
+          <span class="review-rating">
+            <ng-container *ngFor="let star of stars; let i = index">
+              <i class="fas" [ngClass]="i < review.rating ? 'fa-star' : 'fa-star-half-alt'"></i>
+            </ng-container>
+          </span>
+        </div>
+        <p class="comment">{{ review.comment }}</p>
+      </div>
+    </div>
+  </div>
+</div>
+

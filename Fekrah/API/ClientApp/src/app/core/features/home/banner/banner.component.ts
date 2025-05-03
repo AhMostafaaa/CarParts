@@ -8,9 +8,11 @@ import { Component, OnInit } from '@angular/core';
 export class BannerComponent implements OnInit {
 
   slides: (string | null)[] = [
-    null, // صورة مش موجودة
-    null // صورة مش موجودة
+    'assets/images/banner2.png',
+    'assets/images/banner3.png',
+    'assets/images/banner2.png'
   ];
+
 
   currentSlide = 0;
 
@@ -36,5 +38,5 @@ export class BannerComponent implements OnInit {
     this.currentSlide = index;
   }
 
-  
+
 }
