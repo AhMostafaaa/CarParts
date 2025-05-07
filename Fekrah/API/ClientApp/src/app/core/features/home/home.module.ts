@@ -10,6 +10,7 @@ import { CategoriesComponent } from './categories/categories.component';
 import { CategoryPageComponent } from './category-page/category-page.component';
 import { CarouselModule } from 'ngx-owl-carousel-o';
 import { SuggestedOffersComponent } from './suggested-offers/suggested-offers.component';
+import { FeaturedSellersComponent } from './featured-sellers/featured-sellers.component';
 
 @NgModule({
   declarations: [
@@ -20,6 +21,7 @@ import { SuggestedOffersComponent } from './suggested-offers/suggested-offers.co
     CategoriesComponent,
     CategoryPageComponent,
     SuggestedOffersComponent,
+    FeaturedSellersComponent,
   ],
   imports: [
     SharedModule,

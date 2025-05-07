@@ -11,6 +11,7 @@ const routes: Routes = [
   { path: 'category', loadChildren: () => import('./core/features/category/category.module').then(m => m.CategoryModule) },
   { path: 'category/:name', component: CategoryPageComponent },
   { path: 'seller', loadChildren: () => import('./core/features/seller/seller-page.module').then(m => m.SellerModule) },
+
   // أي مسارات تانية
 
 
