@@ -1,26 +1,39 @@
 <div class="featured-sellers-section">
-    <h2 class="section-title">البائعين المميزين</h2>
-  
-    <div class="swiper-container featured-sellers-swiper" dir="ltr">
-      <div class="swiper-wrapper">
-        <div class="swiper-slide" *ngFor="let seller of sellers">
-          <div class="seller-card" [routerLink]="['/seller', seller.id]">
-            <img [src]="seller.imageUrl" [alt]="seller.name">
-            <p class="seller-name">{{ seller.name }}</p>
-            <p class="seller-location"><i class="fa fa-map-marker-alt"></i> {{ seller.location }}</p>
-            <a class="whatsapp-button" [href]="'https://wa.me/' + seller.whatsapp" target="_blank">
-              <i class="fab fa-whatsapp"></i> واتساب
-            </a>
+  <h2 class="section-title">المتاجر المميزة</h2>
+
+  <div class="swiper-container featured-sellers-swiper" dir="ltr">
+    <div class="swiper-wrapper">
+      <div class="swiper-slide" *ngFor="let seller of sellers">
+        <div class="seller-card" [routerLink]="['/seller', seller.id]">
+
+          <!-- صورة المتجر -->
+          <div class="seller-image">
+            <img [src]="seller.imageUrl" [alt]="seller.name" />
           </div>
+
+          <!-- الاسم -->
+          <h3 class="seller-name">{{ seller.name }}</h3>
+
+          <!-- الموقع -->
+          <p class="seller-location">
+            <i class="fas fa-map-marker-alt"></i>
+            {{ seller.location }}
+          </p>
+
+          <!-- الفئة -->
+          <span class="seller-category">{{ seller.category }}</span>
+
         </div>
+
+        <!-- زرّ واتساب -->
+        <a class="whatsapp-button" [href]="'https://wa.me/' + seller.whatsapp" target="_blank">
+          <i class="fab fa-whatsapp"></i>
+        </a>
       </div>
-  
-      <!-- أزرار التنقل -->
-      <div class="swiper-button-next"></div>
-      <div class="swiper-button-prev"></div>
-  
-      <!-- النقاط -->
-      <div class="swiper-pagination"></div>
     </div>
+
+    <!-- <div class="swiper-button-prev"></div>
+    <div class="swiper-button-next"></div> -->
+    <div class="swiper-pagination"></div>
   </div>
-  
+</div>

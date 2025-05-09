@@ -5,17 +5,21 @@
     <div class="swiper-wrapper">
       <div class="swiper-slide" *ngFor="let category of categories">
         <div class="category-card" [routerLink]="['/category', category.name]">
-          <img [src]="category.image" alt="{{ category.name }}">
-          <p>{{ category.name }}</p>
+
+          <!-- صورة الفئة -->
+          <img [src]="category.image" alt="{{ category.name }}" loading="lazy">
+
+          <!-- اسم الفئة -->
+          <p class="name">{{ category.name }}</p>
         </div>
       </div>
     </div>
 
-    <!-- أزرار التنقل -->
-    <div class="swiper-button-next"></div>
-    <div class="swiper-button-prev"></div>
+    <!-- أزرار Swiper -->
+    <!-- <div class="swiper-button-next"></div>
+    <div class="swiper-button-prev"></div> -->
 
-    <!-- النقاط -->
-    <div class="swiper-pagination"></div>
+    <!-- نقاط الصفحة -->
+    <!-- <div class="swiper-pagination"></div> -->
   </div>
 </div>

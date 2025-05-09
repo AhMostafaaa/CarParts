@@ -14,98 +14,183 @@ export class FeaturedSellersComponent implements OnInit, AfterViewInit {
       name: 'مؤسسة البطاريات',
       imageUrl: 'assets/images/image_100_100.png',
       location: 'القاهرة',
-      whatsapp: '201234567890'
+      whatsapp: '201234567890',
+      category: 'كهرباء السيارة'
     },
     {
       id: 2,
       name: 'مركز الفلاتر الأصلي',
       imageUrl: 'assets/images/image_100_100.png',
       location: 'الإسكندرية',
-      whatsapp: '201112223334'
+      whatsapp: '201112223334',
+      category: 'الفلاتر'
+    },
+    {
+      id: 1,
+      name: 'مؤسسة البطاريات',
+      imageUrl: 'assets/images/image_100_100.png',
+      location: 'القاهرة',
+      whatsapp: '201234567890',
+      category: 'كهرباء السيارة'
     },
     {
       id: 2,
       name: 'مركز الفلاتر الأصلي',
       imageUrl: 'assets/images/image_100_100.png',
       location: 'الإسكندرية',
-      whatsapp: '201112223334'
+      whatsapp: '201112223334',
+      category: 'الفلاتر'
+    },
+    {
+      id: 1,
+      name: 'مؤسسة البطاريات',
+      imageUrl: 'assets/images/image_100_100.png',
+      location: 'القاهرة',
+      whatsapp: '201234567890',
+      category: 'كهرباء السيارة'
     },
     {
       id: 2,
       name: 'مركز الفلاتر الأصلي',
       imageUrl: 'assets/images/image_100_100.png',
       location: 'الإسكندرية',
-      whatsapp: '201112223334'
+      whatsapp: '201112223334',
+      category: 'الفلاتر'
+    },
+    {
+      id: 1,
+      name: 'مؤسسة البطاريات',
+      imageUrl: 'assets/images/image_100_100.png',
+      location: 'القاهرة',
+      whatsapp: '201234567890',
+      category: 'كهرباء السيارة'
     },
     {
       id: 2,
       name: 'مركز الفلاتر الأصلي',
       imageUrl: 'assets/images/image_100_100.png',
       location: 'الإسكندرية',
-      whatsapp: '201112223334'
+      whatsapp: '201112223334',
+      category: 'الفلاتر'
+    },
+    {
+      id: 1,
+      name: 'مؤسسة البطاريات',
+      imageUrl: 'assets/images/image_100_100.png',
+      location: 'القاهرة',
+      whatsapp: '201234567890',
+      category: 'كهرباء السيارة'
     },
     {
       id: 2,
       name: 'مركز الفلاتر الأصلي',
       imageUrl: 'assets/images/image_100_100.png',
       location: 'الإسكندرية',
-      whatsapp: '201112223334'
+      whatsapp: '201112223334',
+      category: 'الفلاتر'
+    },
+    {
+      id: 1,
+      name: 'مؤسسة البطاريات',
+      imageUrl: 'assets/images/image_100_100.png',
+      location: 'القاهرة',
+      whatsapp: '201234567890',
+      category: 'كهرباء السيارة'
     },
     {
       id: 2,
       name: 'مركز الفلاتر الأصلي',
       imageUrl: 'assets/images/image_100_100.png',
       location: 'الإسكندرية',
-      whatsapp: '201112223334'
+      whatsapp: '201112223334',
+      category: 'الفلاتر'
     },
     {
-      id: 3,
-      name: 'محل الكهرباء الحديثة',
+      id: 1,
+      name: 'مؤسسة البطاريات',
       imageUrl: 'assets/images/image_100_100.png',
-      location: 'الجيزة',
-      whatsapp: '201023456789'
+      location: 'القاهرة',
+      whatsapp: '201234567890',
+      category: 'كهرباء السيارة'
     },
     {
-      id: 4,
-      name: 'متجر الإنارة للسيارات',
+      id: 2,
+      name: 'مركز الفلاتر الأصلي',
       imageUrl: 'assets/images/image_100_100.png',
-      location: 'دمياط',
-      whatsapp: '201099887766'
+      location: 'الإسكندرية',
+      whatsapp: '201112223334',
+      category: 'الفلاتر'
     },
     {
-      id: 5,
-      name: 'شركة التبريد الحديثة',
+      id: 1,
+      name: 'مؤسسة البطاريات',
       imageUrl: 'assets/images/image_100_100.png',
-      location: 'بني سويف',
-      whatsapp: '201088776655'
-    }
-    // يمكنك إضافة المزيد بنفس المسار
+      location: 'القاهرة',
+      whatsapp: '201234567890',
+      category: 'كهرباء السيارة'
+    },
+    {
+      id: 2,
+      name: 'مركز الفلاتر الأصلي',
+      imageUrl: 'assets/images/image_100_100.png',
+      location: 'الإسكندرية',
+      whatsapp: '201112223334',
+      category: 'الفلاتر'
+    },
+    {
+      id: 1,
+      name: 'مؤسسة البطاريات',
+      imageUrl: 'assets/images/image_100_100.png',
+      location: 'القاهرة',
+      whatsapp: '201234567890',
+      category: 'كهرباء السيارة'
+    },
+    {
+      id: 2,
+      name: 'مركز الفلاتر الأصلي',
+      imageUrl: 'assets/images/image_100_100.png',
+      location: 'الإسكندرية',
+      whatsapp: '201112223334',
+      category: 'الفلاتر'
+    },
   ];
-  
+
+
 
   ngOnInit(): void { }
 
   ngAfterViewInit(): void {
-    new Swiper('.featured-sellers-swiper', {
-      slidesPerView: 5,
-      spaceBetween: 20,
+    new Swiper('.swiper-container', {
+      slidesPerView: 6,
+      spaceBetween: 10,
       loop: true,
       autoplay: {
-        delay: 3500,
-        disableOnInteraction: false
+        delay: 3000,
+        disableOnInteraction: false,
       },
       navigation: {
         nextEl: '.swiper-button-next',
-        prevEl: '.swiper-button-prev'
+        prevEl: '.swiper-button-prev',
       },
       pagination: {
         el: '.swiper-pagination',
-        clickable: true
+        clickable: true,
       },
+      speed: 800,
+      rtl: true,
       breakpoints: {
-        320: { slidesPerView: 2, spaceBetween: 10 },
-        640: { slidesPerView: 3, spaceBetween: 15 },
-        1024: { slidesPerView: 5, spaceBetween: 20 }
+        640: {
+          slidesPerView: 3,
+          spaceBetween: 1,
+        },
+        768: {
+          slidesPerView: 4,
+          spaceBetween: 1,
+        },
+        1024: {
+          slidesPerView: 7,
+          spaceBetween: 1,
+        }
       }
     });
   }

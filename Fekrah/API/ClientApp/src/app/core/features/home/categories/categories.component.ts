@@ -7,35 +7,38 @@ declare var Swiper: any;
   styleUrls: ['./categories.component.scss']
 })
 export class CategoriesComponent implements OnInit, AfterViewInit {
-
-  categories: any[] = [];
+  categories: { name: string; image: string; count: number; }[] = [];
 
   constructor() { }
 
   ngOnInit(): void {
     this.categories = [
-      { name: 'كهرباء', image: 'assets/images/image_100_100.png' },
-      { name: 'كهرباء', image: 'assets/images/image_100_100.png' },
-      { name: 'كهرباء', image: 'assets/images/image_100_100.png' },
-      { name: 'ميكانيكا', image: 'assets/images/image_100_100.png' },
-      { name: 'ميكانيكا', image: 'assets/images/image_100_100.png' },
-      { name: 'ميكانيكا', image: 'assets/images/image_100_100.png' },
-      { name: 'عفشة', image: 'assets/images/image_100_100.png' },
-      { name: 'عفشة', image: 'assets/images/image_100_100.png' },
-      { name: 'عفشة', image: 'assets/images/image_100_100.png' },
-      { name: 'سمكرة', image: 'assets/images/image_100_100.png' },
-      { name: 'سمكرة', image: 'assets/images/image_100_100.png' },
-      { name: 'سمكرة', image: 'assets/images/image_100_100.png' },
-      { name: 'دهانات', image: 'assets/images/image_100_100.png' },
-      { name: 'بطاريات', image: 'assets/images/image_100_100.png' },
-      { name: 'أكسسوارات', image: 'assets/images/image_100_100.png' }
+      { name: 'كهرباء', image: 'assets/images/image_100_100.png', count: 34 },
+      { name: 'ميكانيكا', image: 'assets/images/image_100_100.png', count: 28 },
+      { name: 'عفشة', image: 'assets/images/image_100_100.png', count: 19 },
+      { name: 'سمكرة', image: 'assets/images/image_100_100.png', count: 22 },
+      { name: 'دهانات', image: 'assets/images/image_100_100.png', count: 12 },
+      { name: 'بطاريات', image: 'assets/images/image_100_100.png', count: 16 },
+      { name: 'كهرباء', image: 'assets/images/image_100_100.png', count: 34 },
+      { name: 'ميكانيكا', image: 'assets/images/image_100_100.png', count: 28 },
+      { name: 'عفشة', image: 'assets/images/image_100_100.png', count: 19 },
+      { name: 'سمكرة', image: 'assets/images/image_100_100.png', count: 22 },
+      { name: 'دهانات', image: 'assets/images/image_100_100.png', count: 12 },
+      { name: 'بطاريات', image: 'assets/images/image_100_100.png', count: 16 },
+      { name: 'كهرباء', image: 'assets/images/image_100_100.png', count: 34 },
+      { name: 'ميكانيكا', image: 'assets/images/image_100_100.png', count: 28 },
+      { name: 'عفشة', image: 'assets/images/image_100_100.png', count: 19 },
+      { name: 'سمكرة', image: 'assets/images/image_100_100.png', count: 22 },
+      { name: 'دهانات', image: 'assets/images/image_100_100.png', count: 12 },
+      { name: 'بطاريات', image: 'assets/images/image_100_100.png', count: 16 },
+      { name: 'أكسسوارات', image: 'assets/images/image_100_100.png', count: 40 }
     ];
   }
 
   ngAfterViewInit(): void {
     new Swiper('.swiper-container', {
-      slidesPerView: 6,
-      spaceBetween: 10,
+      slidesPerView: 7,
+      spaceBetween: 8,
       loop: true,
       autoplay: {
         delay: 3000,
@@ -53,16 +56,16 @@ export class CategoriesComponent implements OnInit, AfterViewInit {
       rtl: true,
       breakpoints: {
         640: {
-          slidesPerView: 3,
-          spaceBetween: 1,
+          slidesPerView: 4,
+          spaceBetween: 5,
         },
         768: {
-          slidesPerView: 4,
-          spaceBetween: 1,
+          slidesPerView: 5,
+          spaceBetween: 6,
         },
         1024: {
           slidesPerView: 7,
-          spaceBetween: 1,
+          spaceBetween: 8,
         }
       }
     });

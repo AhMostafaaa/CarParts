@@ -1,80 +1,139 @@
+<!-- category-parts.component.html -->
 <div class="category-parts-page">
-
   <div class="page-layout">
 
-    <!-- الفلاتر على اليمين -->
-    <aside class="filters-sidebar">
-      <h4>تصفية حسب:</h4>
+     <!-- لوحة الفلاتر على اليمين -->
+     <aside class="filters-sidebar" [class.open]="showFilters">
+      <h4>ابحث وفلتر</h4>
 
-      <div class="filter-group">
-        <label>الحالة:</label>
-        <select [(ngModel)]="selectedCondition" (change)="applyFilters()">
-          <option value="">الكل</option>
-          <option value="New">جديد</option>
-          <option value="Refurbished">مستعمل</option>
-        </select>
+      <div class="filter-group search-group">
+        <input
+          type="text"
+          placeholder="🔍 ابحث عن منتج..."
+          [(ngModel)]="searchText"
+          (input)="applyFilters()"
+        />
       </div>
 
       <div class="filter-group">
-        <label>السعر:</label>
-        <select [(ngModel)]="selectedPriceRange" (change)="applyFilters()">
-          <option value="">الكل</option>
-          <option value="low">أقل من 500</option>
-          <option value="medium">من 500 إلى 1000</option>
-          <option value="high">أعلى من 1000</option>
-        </select>
+        <label>الحالة:</label>
+        <div class="checkbox-group">
+          <label><input type="checkbox" value="New" (change)="onConditionChange($event)" /> جديد</label>
+          <label><input type="checkbox" value="Refurbished" (change)="onConditionChange($event)" /> مستعمل</label>
+        </div>
+      </div>
+
+      <div class="filter-group">
+        <label>السعر ({{ selectedPriceMin }}–{{ selectedPriceMax }} ج):</label>
+        <div class="price-range">
+          <input
+            type="range"
+            min="0"
+            [max]="maxPrice"
+            [(ngModel)]="selectedPriceMin"
+            (change)="applyFilters()"
+          />
+          <input
+            type="range"
+            min="0"
+            [max]="maxPrice"
+            [(ngModel)]="selectedPriceMax"
+            (change)="applyFilters()"
+          />
+        </div>
       </div>
 
       <div class="filter-group">
         <label>الفئة:</label>
-        <select>
-          <option>كل الفئات</option>
-          <option>محرك</option>
-          <option>كهرباء</option>
-          <option>عفشة</option>
-        </select>
+        <div class="checkbox-group">
+          <label *ngFor="let cat of categoriesList">
+            <input type="checkbox" [value]="cat" (change)="onCategoryChange($event)" /> {{ cat }}
+          </label>
+        </div>
       </div>
 
       <div class="filter-group">
-        <label>ماركة:</label>
-        <select>
-          <option>الكل</option>
-          <option>تويوتا</option>
-          <option>نيسان</option>
-          <option>هيونداي</option>
-        </select>
+        <label>الماركة:</label>
+        <div class="checkbox-group">
+          <label *ngFor="let br of brandsList">
+            <input type="checkbox" [value]="br" (change)="onBrandChange($event)" /> {{ br }}
+          </label>
+        </div>
       </div>
 
       <div class="filter-group">
         <label>التوصيل السريع:</label>
-        <select>
-          <option>الكل</option>
-          <option>متاح</option>
-          <option>غير متاح</option>
-        </select>
+        <div class="checkbox-group">
+          <label><input type="checkbox" (change)="onDeliveryChange($event)" /> متاح فقط</label>
+        </div>
       </div>
-    </aside>
 
-    <!-- القطع على الشمال -->
+      <div class="filter-group">
+        <label>التقييم:</label>
+        <div class="radio-group">
+          <label *ngFor="let star of [5,4,3,2,1]">
+            <input type="radio" name="rating" [value]="star" (change)="onRatingChange($event)" />
+            {{ star }} نجوم فما فوق
+          </label>
+        </div>
+      </div>
+
+      <button class="btn-reset" (click)="resetFilters()">إعادة ضبط الفلتر</button>
+    </aside>
+    
+    <!-- قسم عرض المنتجات -->
     <section class="parts-section">
-      <div class="category-header">
-        <h2>تصنيف: {{ categoryName }}</h2>
+      <div class="parts-header">
+        <div class="header-title">
+          <i class="fas fa-th-large"></i>
+          <h2>جميع المنتجات</h2>
+        </div>
+        <div class="header-controls">
+          <button class="btn-filter-toggle" (click)="toggleFilters()">
+            <i class="fas fa-sliders-h"></i> فلتر
+          </button>
+          <span class="results-count">{{ filteredParts.length }} نتيجة</span>
+          <select [(ngModel)]="sortOption" (change)="applyFilters()">
+            <option value="">الافتراضي</option>
+            <option value="priceAsc">السعر تصاعدي</option>
+            <option value="priceDesc">السعر تنازلي</option>
+            <option value="ratingDesc">الأعلى تقييم</option>
+          </select>
+        </div>
       </div>
 
       <div class="parts-grid">
-        <div class="part-card" *ngFor="let part of filteredParts">
+        <div class="part-card" *ngFor="let part of displayedParts">
+          <div class="badges">
+            <span *ngIf="part.condition==='New'" class="badge new">جديد</span>
+            <span *ngIf="part.discount"       class="badge discount">-{{ part.discount }}%</span>
+          </div>
           <div class="part-image">
-            <img [src]="part.imageUrl" alt="{{ part.name }}">
+            <img [src]="part.imageUrl" alt="{{ part.name }}" />
           </div>
           <div class="part-info">
+            <h4 class="store-name">{{ part.storeName }}</h4>
             <h3>{{ part.name }}</h3>
-            <p class="price">{{ part.price }} جنيه</p>
-            <button [routerLink]="['/parts', part.id]" class="btn btn-primary">عرض التفاصيل</button>
+            <p class="price">{{ part.price }} ج</p>
+            <button class="btn-details" [routerLink]="['/parts', part.id]">
+              عرض التفاصيل
+            </button>
           </div>
         </div>
       </div>
+
+      <div class="pagination">
+        <button (click)="goToPage(currentPage-1)" [disabled]="currentPage===1">
+          « السابق
+        </button>
+        <span>صفحة {{ currentPage }} من {{ totalPages }}</span>
+        <button (click)="goToPage(currentPage+1)" [disabled]="currentPage===totalPages">
+          التالي »
+        </button>
+      </div>
     </section>
 
-  </div>
 
+
+  </div>
 </div>
