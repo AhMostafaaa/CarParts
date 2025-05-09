@@ -5,7 +5,7 @@ import { AppComponent } from './app.component';
 import { AppRoutingModule } from './app-routing.module';
 import { HeaderComponent } from './core/Shared/layout/header/header.component';
 import { FooterComponent } from './core/Shared/layout/footer/footer.component';
-import { PromoTickerComponent } from './core/Shared/layout/promo-ticker/promo-ticker.component';
+import { PromoTickerComponent } from './core/Shared/components/promo-ticker/promo-ticker.component';
 
 @NgModule({
   declarations: [
