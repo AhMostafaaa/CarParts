@@ -4,6 +4,9 @@ import { FormsModule } from '@angular/forms';
 import { HttpClientModule } from '@angular/common/http';
 import { RouterModule } from '@angular/router';
 import { PartCardComponent } from './components/part-card/part-card.component';
+import { FilterSidebarComponent } from './components/filter-sidebar/filter-sidebar.component';
+import { NgxPaginationModule } from 'ngx-pagination';
+import { CardComponent } from './components/card/card.component';
 // import { FooterComponent } from './layout/footer/footer.component'; // 👈 أضفها هنا كمان
 
 @NgModule({
@@ -12,6 +15,7 @@ import { PartCardComponent } from './components/part-card/part-card.component';
     FormsModule,
     HttpClientModule,
     RouterModule,
+    NgxPaginationModule
 
   ],
   exports: [
@@ -19,11 +23,17 @@ import { PartCardComponent } from './components/part-card/part-card.component';
     FormsModule,
     HttpClientModule,
     RouterModule,
-    PartCardComponent
+    PartCardComponent,
+    FilterSidebarComponent,
+    NgxPaginationModule,
+    CardComponent
 
   ],
   declarations: [
-    PartCardComponent
+    PartCardComponent,
+    FilterSidebarComponent,
+    CardComponent,
+
   ]
 })
 export class SharedModule { }
