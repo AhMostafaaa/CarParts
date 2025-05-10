@@ -17,18 +17,16 @@
 
     <div class="price-tag">
       <span class="price">{{ part.price }} ج.م</span>
-      <span *ngIf="part.isOnSale" class="offer">عرض خاص 🔥</span>
-    </div>
-
-    <div *ngIf="part.quantity === 0" class="availability not-available">
-      غير متوفر
     </div>
   </div>
 
+  <!-- ✅ الأيقونات جنب بعض بشكل مرتب -->
   <div class="action-buttons">
     <a class="whatsapp-icon" [href]="'https://wa.me/' + part.sellerPhone" target="_blank">
       <i class="fa-brands fa-whatsapp"></i>
     </a>
-    <button class="btn" [routerLink]="['/parts', part.id]">عرض التفاصيل</button>
+    <a class="view-icon" [routerLink]="['/parts', part.id]">
+      <i class="fa-solid fa-eye"></i>
+    </a>
   </div>
 </div>

@@ -1,11 +1,37 @@
+/* ✅ تصميم الهيدر */
+.category-header {
+  width: 100%;
+  background-color: #4f46e5;
+  color: white;
+  text-align: center;
+  padding: 20px 0;
+  margin-bottom: 20px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+  border-radius: 12px;
+
+  .category-title {
+    font-size: 26px;
+    font-weight: bold;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+
+    i {
+      font-size: 28px;
+    }
+  }
+}
+
+/* ✅ تصميم الكارد */
 .card {
   background-color: #ffffff;
-  border-radius: 12px;
+  border-radius: 16px;
   overflow: hidden;
   width: 100%;
   max-width: 360px;
   height: 500px;
-  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
   display: flex;
   flex-direction: column;
   justify-content: space-between;
@@ -15,12 +41,12 @@
 
   &:hover {
     transform: translateY(-5px);
-    box-shadow: 0 15px 30px rgba(0, 0, 0, 0.2);
+    box-shadow: 0 15px 30px rgba(0, 0, 0, 0.15);
   }
 
   .image-container {
     width: 100%;
-    height: 180px;
+    height: 220px;
     background-color: #e5e7eb;
     display: flex;
     justify-content: center;
@@ -31,6 +57,7 @@
       width: 100%;
       height: 100%;
       object-fit: cover;
+      border-bottom: 2px solid #e2e8f0;
       transition: 0.3s ease;
     }
 
@@ -43,12 +70,12 @@
     padding: 16px;
     display: flex;
     flex-direction: column;
-    align-items: center; // ✅ العناصر في المنتصف
-    gap: 10px;
+    align-items: center;
+    gap: 8px;
   }
 
   .part-name {
-    font-size: 18px;
+    font-size: 20px;
     font-weight: bold;
     color: #1f2937;
     text-align: center;
@@ -86,48 +113,34 @@
     display: flex;
     flex-direction: column;
     align-items: center;
-    background-color: #e0f2fe;
+    background-color: #fef3c7;
     color: #1f2937;
-    padding: 5px 12px;
-    border-radius: 8px;
+    padding: 8px 16px;
+    border-radius: 12px;
+    margin-bottom: 10px;
     box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
   }
 
   .price {
-    font-size: 18px;
+    font-size: 20px;
     font-weight: bold;
-    color: #e53e3e;
-  }
-
-  .offer {
-    margin-top: 4px;
-    font-size: 12px;
-    background-color: #d97706;
-    color: white;
-    padding: 2px 8px;
-    border-radius: 8px;
-  }
-
-  .availability {
-    font-size: 14px;
-    font-weight: bold;
-    color: #dc2626;
+    color: #d97706;
   }
 
   .action-buttons {
     display: flex;
-    gap: 8px;
+    gap: 15px;
     align-items: center;
     justify-content: center;
-    margin-bottom: 10px;
+    margin-bottom: 15px;
   }
 
-  .whatsapp-icon {
+  .whatsapp-icon, .view-icon {
     color: white;
-    background-color: #25D366;
+    background-color: #0284c7;
     border-radius: 50%;
-    width: 36px;
-    height: 36px;
+    width: 42px;
+    height: 42px;
     display: flex;
     justify-content: center;
     align-items: center;
@@ -135,26 +148,27 @@
     transition: background-color 0.3s, transform 0.3s;
 
     &:hover {
-      background-color: #128C7E;
       transform: scale(1.1);
     }
   }
 
-  .btn {
+  .whatsapp-icon {
+    background-color: #25D366;
+
+    &:hover {
+      background-color: #128C7E;
+    }
+  }
+
+  .view-icon {
     background-color: #0284c7;
-    border: none;
-    padding: 8px 18px;
-    border-radius: 25px;
-    font-weight: bold;
-    font-size: 14px;
-    color: white;
-    cursor: pointer;
-    transition: 0.3s;
 
     &:hover {
       background-color: #0369a1;
-      transform: translateY(-2px);
-      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
     }
+  }
+
+  .view-icon i {
+    font-size: 18px;
   }
 }

@@ -12,7 +12,7 @@ export class CategoryPartsComponent implements OnInit {
   currentPage = 1;
   pageSizeOptions = [12, 24, 36];
   filteredParts = this.getMockData();
-
+categoryName = 'كهرباء';
   constructor() {}
 
   ngOnInit(): void {}
