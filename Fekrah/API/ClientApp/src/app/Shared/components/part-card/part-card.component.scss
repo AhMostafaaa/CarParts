@@ -135,6 +135,8 @@
     font-size: 14px;
     cursor: pointer;
     transition: 0.3s;
+    position: relative;
+    left: 20%;
 
     &:hover {
       background-color: #f3a847;
