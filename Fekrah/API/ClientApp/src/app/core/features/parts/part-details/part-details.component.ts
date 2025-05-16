@@ -1,4 +1,4 @@
-import { Component, OnInit, OnDestroy, ElementRef, ViewChild, Renderer2, HostListener } from '@angular/core';
+import { Component, OnInit, OnDestroy, ElementRef, ViewChild, Renderer2, HostListener, ViewEncapsulation } from '@angular/core';
 
 declare const bootstrap: any;
 
@@ -39,7 +39,9 @@ interface RelatedPart {
 
 @Component({
   selector: 'app-part-details',
-  templateUrl: './part-details.component.html'
+  templateUrl: './part-details.component.html',
+  styleUrls: ['./part-details.component.scss'],
+  encapsulation: ViewEncapsulation.None // ✅ أضف هذا السطر
 })
 export class PartDetailsComponent implements OnInit, OnDestroy {
   @ViewChild('mainImage') mainImageRef!: ElementRef;
@@ -495,7 +497,23 @@ export class PartDetailsComponent implements OnInit, OnDestroy {
   }
 
   setRating(star: number) {
+    // تحديث التقييم
     this.newRating = star;
+
+    // إضافة تأثير بصري للنجوم المختارة (اختياري)
+    setTimeout(() => {
+      const stars = document.querySelectorAll('.rating-stars i');
+      stars.forEach((starElement, index) => {
+        if (index < star) {
+          // إضافة صنف للتأثير المتحرك
+          starElement.classList.add('active');
+          // إزالة الصنف بعد الانتهاء من التأثير
+          setTimeout(() => {
+            starElement.classList.remove('active');
+          }, 300);
+        }
+      });
+    }, 10);
   }
 
   submitComment() {
@@ -530,7 +548,26 @@ export class PartDetailsComponent implements OnInit, OnDestroy {
   }
 
   contactViaWhatsApp() {
-    const msg = encodeURIComponent(`أرغب في الاستفسار عن ${this.part.name}`);
-    window.open(`https://wa.me/201234567890?text=${msg}`, '_blank');
+    const msg = encodeURIComponent(
+      `👋 مرحبًا، هذه رسالة من موقع قطع غيار.\nأرغب في الاستفسار عن: ${this.part.name}`
+    );
+    window.open(`https://wa.me/201287868525?text=${msg}`, '_blank');
   }
+
+
+
+
+
+  getRatingText(rating: number): string {
+    switch (rating) {
+      case 1: return 'سيئ جدًا 😞';
+      case 2: return 'سيئ 😕';
+      case 3: return 'متوسط 🙂';
+      case 4: return 'جيد جدًا 😃';
+      case 5: return 'ممتاز 👌';
+      default: return '';
+    }
+  }
+
+
 }
