@@ -1,41 +1,338 @@
-<div class="part-details-page" *ngIf="part">
-
-  <div class="part-details-container">
-    <div class="part-image">
-      <img [src]="part.imageUrl" alt="{{ part.name }}">
-    </div>
-
-    <div class="part-info">
-      <h1 class="part-title">{{ part.name }}</h1>
-
-      <div class="price-box">
-        <h2 class="price">{{ part.price }} جنيه</h2>
-        <span class="condition">{{ part.condition === 'New' ? 'جديد' : 'مستعمل' }}</span>
+<div class="auto-parts-container">
+  <!-- صورة القطعة والمصغرات - بتصميم محسن -->
+  <div class="product-gallery-section frame">
+    <div class="product-gallery">
+      <div class="thumbnails vertical">
+        <div class="thumbnail-wrapper" *ngFor="let thumb of part.thumbnails; let i = index" 
+             [class.active]="thumb === selectedImage"
+             (click)="changeImage(thumb)">
+          <img [src]="thumb" alt="صورة مصغرة {{i+1}}" />
+        </div>
       </div>
-
-      <div class="part-meta">
-        <p><strong>البائع:</strong> {{ part.sellerShopName }}</p>
-        <p><strong>التصنيف:</strong> {{ part.categoryName }}</p>
-      </div>
-
-      <p class="description">{{ part.description }}</p>
-
-      <button class="btn btn-primary">تواصل مع البائع</button>
-    </div>
-  </div>
-
-  <!-- 👇 منتجات مرتبطة -->
-  <div class="related-parts-section">
-    <h3>منتجات مشابهة</h3>
-
-    <div class="related-parts-grid">
-      <div class="related-card" *ngFor="let related of relatedParts">
-        <img [src]="related.imageUrl" alt="{{ related.name }}">
-        <h4>{{ related.name }}</h4>
-        <p class="price">{{ related.price }} جنيه</p>
-        <button [routerLink]="['/parts', related.id]" class="btn btn-secondary">عرض التفاصيل</button>
+      
+      <div class="main-image-container">
+        <div class="main-image-wrapper">
+          <img class="main-image" [src]="selectedImage" alt="صورة القطعة" />
+          <div class="image-zoom-overlay">
+            <i class="fas fa-search-plus"></i>
+          </div>
+        </div>
+        
+        <div class="image-controls">
+          <button class="image-nav prev" (click)="prevImage()">
+            <i class="fas fa-chevron-right"></i>
+          </button>
+          <button class="image-nav next" (click)="nextImage()">
+            <i class="fas fa-chevron-left"></i>
+          </button>
+        </div>
       </div>
     </div>
   </div>
+  
+  <!-- معلومات المنتج الرئيسية - بإطار محسن -->
+  <div class="product-info-section frame">
+    <div class="product-info">
+      <div class="product-header">
+        <div class="product-badges">
+          <span class="badge new" *ngIf="part.condition === 'جديد'">جديد</span>
+          <span class="badge sale" *ngIf="part.onSale">خصم</span>
+          <span class="badge best-seller" *ngIf="isPopular">الأكثر مبيعًا</span>
+        </div>
+        <h1 class="product-title">{{ part.name }}</h1>
+      </div>
+      
+      <div class="product-rating">
+        <span class="stars">
+          <i class="fas fa-star" *ngFor="let star of getStars(averageRating)"></i>
+          <i class="far fa-star" *ngFor="let emptyStar of getEmptyStars(averageRating)"></i>
+        </span>
+        <span class="rating-value">{{ averageRating }}</span>
+        <span class="reviews-count">({{ part.comments.length }} تقييم)</span>
+      </div>
+      
+      <div class="price-section">
+        <div class="price-tag">{{ part.price }} ج.م</div>
+        <div class="price-options" *ngIf="part.onSale">
+          <span class="old-price">{{ part.originalPrice }} ج.م</span>
+          <span class="discount-badge">خصم {{ calculateDiscount() }}%</span>
+        </div>
+      </div>
+      
+      <div class="divider"></div>
+      
+      <p class="product-description">{{ part.description }}</p>
+      
+      <div class="product-meta">
+        <div class="meta-item">
+          <span class="meta-label">الحالة:</span>
+          <span class="meta-value">{{ part.condition }}</span>
+        </div>
+        <div class="meta-item">
+          <span class="meta-label">الفئة:</span>
+          <span class="meta-value">{{ part.type }}</span>
+        </div>
+        <div class="meta-item">
+          <span class="meta-label">رقم القطعة:</span>
+          <span class="meta-value">{{ part.id }}</span>
+        </div>
+      </div>
+      
+      <div class="product-availability">
+        <i class="fas fa-check-circle available"></i>
+        <span>متوفر في المخزون</span>
+        <span class="stock-qty" *ngIf="stockQuantity > 0">({{ stockQuantity }} قطعة)</span>
+      </div>
+      
+      <div class="product-quantity">
+        <label for="quantity">الكمية:</label>
+        <div class="quantity-selector">
+          <button class="qty-btn" (click)="decreaseQty()">-</button>
+          <input type="number" id="quantity" [(ngModel)]="quantity" min="1" max="10" />
+          <button class="qty-btn" (click)="increaseQty()">+</button>
+        </div>
+      </div>
+      
+      <div class="product-actions">
+        <button class="action-button add-to-cart" (click)="addToCart()">
+          <i class="fas fa-shopping-cart"></i>
+          أضف إلى السلة
+        </button>
+        <button class="action-button whatsapp" (click)="contactViaWhatsApp()">
+          <i class="fab fa-whatsapp"></i>
+          تواصل عبر واتساب
+        </button>
+      </div>
+    </div>
+  </div>
 
+  <!-- الأقسام الإضافية مع حركات انتقالية -->
+  <div class="product-details-tabs-section frame">
+    <div class="product-details-tabs">
+      <div class="tabs-nav">
+        <button class="tab-button" 
+                [class.active]="activeTab === 'shipping'"
+                (click)="setActiveTab('shipping')">
+          <i class="fas fa-truck"></i> الشحن والإرجاع
+          <span class="tab-indicator"></span>
+        </button>
+        <button class="tab-button" 
+                [class.active]="activeTab === 'offers'"
+                (click)="setActiveTab('offers')">
+          <i class="fas fa-gift"></i> العروض
+          <span class="tab-indicator"></span>
+        </button>
+        <button class="tab-button" 
+                [class.active]="activeTab === 'reviews'"
+                (click)="setActiveTab('reviews')">
+          <i class="fas fa-star"></i> التقييمات
+          <span class="tab-indicator"></span>
+        </button>
+        <button class="tab-button" 
+                [class.active]="activeTab === 'specs'"
+                (click)="setActiveTab('specs')">
+          <i class="fas fa-cogs"></i> المواصفات
+          <span class="tab-indicator"></span>
+        </button>
+      </div>
+      
+      <div class="tab-content">
+        <!-- محتوى قسم الشحن -->
+        <div class="tab-pane fade-in" *ngIf="activeTab === 'shipping'">
+          <h3>
+            <i class="tab-icon fas fa-truck"></i>
+            معلومات الشحن والإرجاع
+          </h3>
+          <div class="shipping-details">
+            <div class="shipping-item">
+              <i class="fas fa-truck"></i>
+              <div class="shipping-text">
+                <h4>سياسة الشحن</h4>
+                <p>{{ part.shippingDetails }}</p>
+              </div>
+            </div>
+            <div class="shipping-item">
+              <i class="fas fa-exchange-alt"></i>
+              <div class="shipping-text">
+                <h4>سياسة الإرجاع</h4>
+                <p>يمكنك إرجاع المنتج خلال 14 يومًا من تاريخ الاستلام إذا كان غير مستخدم وفي عبوته الأصلية.</p>
+              </div>
+            </div>
+            <div class="shipping-item">
+              <i class="fas fa-shield-alt"></i>
+              <div class="shipping-text">
+                <h4>الضمان</h4>
+                <p>جميع منتجاتنا مغطاة بضمان المصنع لمدة 24 شهر ضد عيوب التصنيع.</p>
+              </div>
+            </div>
+          </div>
+        </div>
+        
+        <!-- محتوى قسم العروض -->
+        <div class="tab-pane fade-in" *ngIf="activeTab === 'offers'">
+          <h3>
+            <i class="tab-icon fas fa-gift"></i>
+            العروض المتاحة
+          </h3>
+          <div class="offers-container">
+            <div class="offer-card" *ngFor="let offer of part.offers">
+              <div class="offer-badge">
+                <i class="fas fa-tag"></i>
+              </div>
+              <div class="offer-content">
+                <h4>عرض خاص</h4>
+                <p>{{ offer }}</p>
+              </div>
+            </div>
+          </div>
+        </div>
+        
+        <!-- محتوى قسم التقييمات -->
+        <div class="tab-pane fade-in" *ngIf="activeTab === 'reviews'">
+          <h3>
+            <i class="tab-icon fas fa-star"></i>
+            تقييمات المستخدمين
+          </h3>
+          
+          <div class="reviews-summary">
+            <div class="rating-average">
+              <div class="big-rating">{{ averageRating }}</div>
+              <div class="rating-stars">
+                <i class="fas fa-star" *ngFor="let star of getStars(averageRating)"></i>
+                <i class="far fa-star" *ngFor="let emptyStar of getEmptyStars(averageRating)"></i>
+              </div>
+              <div class="rating-count">{{ part.comments.length }} تقييم</div>
+            </div>
+            
+            <div class="rating-bars">
+              <div class="rating-bar-item" *ngFor="let level of [5,4,3,2,1]">
+                <div class="rating-bar-label">{{ level }} <i class="fas fa-star"></i></div>
+                <div class="rating-bar-container">
+                  <div class="rating-bar-fill" [style.width.%]="getRatingPercentage(level)"></div>
+                </div>
+                <div class="rating-bar-count">{{ getRatingCount(level) }}</div>
+              </div>
+            </div>
+          </div>
+          
+          <div class="reviews-container">
+            <div class="review-item" *ngFor="let comment of part.comments">
+              <div class="review-header">
+                <div class="reviewer-avatar">
+                  <i class="fas fa-user-circle"></i>
+                </div>
+                <div class="reviewer-info">
+                  <div class="reviewer-name">{{ comment.user }}</div>
+                  <div class="review-rating">
+                    <i class="fas fa-star" *ngFor="let star of getStars(comment.rating)"></i>
+                    <i class="far fa-star" *ngFor="let emptyStar of getEmptyStars(comment.rating)"></i>
+                  </div>
+                  <div class="review-date" *ngIf="comment.date">{{ comment.date | date:'longDate' }}</div>
+                </div>
+              </div>
+              <div class="review-text">{{ comment.text }}</div>
+            </div>
+          </div>
+          
+          <div class="add-review">
+            <h4>أضف تقييمك</h4>
+            <div class="rating-selector">
+              <label>التقييم:</label>
+              <div class="interactive-stars">
+                <i class="far fa-star" 
+                   *ngFor="let star of [1,2,3,4,5]" 
+                   [class.fas]="star <= newRating"
+                   [class.hovered]="star <= hoveredRating && newRating < star"
+                   (mouseover)="hoveredRating = star"
+                   (mouseleave)="hoveredRating = 0"
+                   (click)="setRating(star)"></i>
+              </div>
+            </div>
+            <textarea [(ngModel)]="newComment" 
+                      placeholder="شاركنا رأيك حول هذه القطعة..."></textarea>
+            <button class="submit-review-btn" [disabled]="!newComment || newRating === 0" (click)="submitComment()">
+              <i class="fas fa-paper-plane"></i>
+              إرسال التقييم
+            </button>
+          </div>
+        </div>
+        
+        <!-- محتوى قسم المواصفات -->
+        <div class="tab-pane fade-in" *ngIf="activeTab === 'specs'">
+          <h3>
+            <i class="tab-icon fas fa-cogs"></i>
+            المواصفات الفنية
+          </h3>
+          <div class="specifications-table">
+            <div class="spec-row">
+              <div class="spec-name">النوع</div>
+              <div class="spec-value">{{ part.type }}</div>
+            </div>
+            <div class="spec-row">
+              <div class="spec-name">السعة</div>
+              <div class="spec-value">70 أمبير</div>
+            </div>
+            <div class="spec-row">
+              <div class="spec-name">الجهد</div>
+              <div class="spec-value">12 فولت</div>
+            </div>
+            <div class="spec-row">
+              <div class="spec-name">بلد المنشأ</div>
+              <div class="spec-value">ألمانيا</div>
+            </div>
+            <div class="spec-row">
+              <div class="spec-name">مدة الضمان</div>
+              <div class="spec-value">24 شهر</div>
+            </div>
+            <div class="spec-row">
+              <div class="spec-name">الأبعاد</div>
+              <div class="spec-value">27 × 17 × 19 سم</div>
+            </div>
+            <div class="spec-row">
+              <div class="spec-name">الوزن</div>
+              <div class="spec-value">18.5 كجم</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  
+  <!-- منتجات ذات صلة - بإطار محسن -->
+  <div class="related-products-section frame">
+    <div class="section-header">
+      <h3><i class="fas fa-link"></i> منتجات ذات صلة</h3>
+      <button class="show-all-btn">عرض الكل <i class="fas fa-chevron-left"></i></button>
+    </div>
+    
+    <div class="related-products">
+      <button class="related-nav-btn prev">
+        <i class="fas fa-chevron-right"></i>
+      </button>
+      
+      <div class="related-products-slider">
+        <div class="related-product-card" *ngFor="let relatedPart of relatedParts">
+          <div class="product-image">
+            <img [src]="relatedPart.imageUrl" alt="صورة المنتج" />
+            <div class="product-actions">
+              <button class="quick-view-btn" (click)="viewProduct(relatedPart.id)" title="عرض سريع">
+                <i class="fas fa-eye"></i>
+              </button>
+              <button class="add-to-cart-btn" (click)="addRelatedToCart(relatedPart.id)" title="إضافة للسلة">
+                <i class="fas fa-cart-plus"></i>
+              </button>
+            </div>
+          </div>
+          <div class="product-info">
+            <h4 class="product-name">{{ relatedPart.name }}</h4>
+            <div class="product-price">{{ relatedPart.price }} ج.م</div>
+          </div>
+        </div>
+      </div>
+      
+      <button class="related-nav-btn next">
+        <i class="fas fa-chevron-left"></i>
+      </button>
+    </div>
+  </div>
 </div>

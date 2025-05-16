@@ -15,7 +15,8 @@ import { CardComponent } from './components/card/card.component';
     FormsModule,
     HttpClientModule,
     RouterModule,
-    NgxPaginationModule
+    NgxPaginationModule,
+    
 
   ],
   exports: [
@@ -26,7 +27,8 @@ import { CardComponent } from './components/card/card.component';
     PartCardComponent,
     FilterSidebarComponent,
     NgxPaginationModule,
-    CardComponent
+    CardComponent,
+
 
   ],
   declarations: [

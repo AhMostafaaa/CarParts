@@ -13,7 +13,8 @@ import { PromoTickerComponent } from './Shared/components/promo-ticker/promo-tic
     AppComponent,
     HeaderComponent,
     FooterComponent,
-    PromoTickerComponent
+    PromoTickerComponent,
+    
   ],
   imports: [
     BrowserModule,
