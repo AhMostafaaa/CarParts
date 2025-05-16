@@ -28,11 +28,13 @@
             "inlineStyleLanguage": "scss",
             "assets": ["src/favicon.ico", "src/assets"],
             "styles": [
+              "node_modules/bootstrap/dist/css/bootstrap.min.css",
               "src/styles.scss",
               "node_modules/swiper/swiper-bundle.min.css",
               "src/assets/fontAwesome/css/all.min.css"
             ],
             "scripts": [
+              "node_modules/bootstrap/dist/js/bootstrap.bundle.min.js",
               "node_modules/swiper/swiper-bundle.min.js",
               "src/assets/fontAwesome/js/all.min.js"
             ]
