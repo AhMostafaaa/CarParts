@@ -17,6 +17,6 @@ namespace API.Controllers
         }
 
         [HttpGet("GetLookup")]
-        public List<LookupDTO> GetLookupData(string lookupName) => _lookupService.GetLookUpDetails(lookupName);
+        public List<LookupDTO> GetLookupData(string lookupName, string? searchTerm = null) => _lookupService.GetLookUpDetails(lookupName, searchTerm);
     }
 }

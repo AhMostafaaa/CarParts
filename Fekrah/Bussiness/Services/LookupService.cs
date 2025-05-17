@@ -17,7 +17,7 @@ namespace Bussiness.Services
             _unitOfWork = unitOfWork;
         }
 
-        public List<LookupDTO> GetLookUpDetails(string lookupName)
+        public List<LookupDTO> GetLookUpDetails(string lookupName, string? searchTerm = null)
         {
             List<LookupDTO> result = new();
 
@@ -25,7 +25,9 @@ namespace Bussiness.Services
             {
                 case "categories":
                     result = _unitOfWork.Categories
-                        .GetAllAsync().Result
+                        .GetAllAsync()
+                        .Result
+                        .Where(c => string.IsNullOrEmpty(searchTerm) || c.Name.Contains(searchTerm))
                         .Select(c => new LookupDTO
                         {
                             Id = c.Id,  
@@ -35,7 +37,9 @@ namespace Bussiness.Services
 
                 case "parts":
                     result = _unitOfWork.Parts
-                        .GetAllAsync().Result
+                        .GetAllAsync()
+                        .Result
+                        .Where (p => string.IsNullOrEmpty(searchTerm) || p.Name.Contains(searchTerm) || p.Description.Contains(searchTerm))
                         .Select(c => new LookupDTO
                         {
                             Id = c.Id,
@@ -45,7 +49,9 @@ namespace Bussiness.Services
 
                 case "sellers":
                     result = _unitOfWork.Sellers
-                        .GetAllAsync().Result
+                        .GetAllAsync()
+                        .Result
+                        .Where(s => string.IsNullOrEmpty(searchTerm) || s.ShopName.Contains(searchTerm))
                         .Select(c => new LookupDTO
                         {
                             Id = c.Id,

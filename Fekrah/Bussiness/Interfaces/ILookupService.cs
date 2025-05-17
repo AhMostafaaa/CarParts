@@ -9,6 +9,6 @@ namespace Bussiness.Interfaces
 {
     public interface ILookupService
     {
-        List<LookupDTO> GetLookUpDetails(string lookupName);
+        List<LookupDTO> GetLookUpDetails(string lookupName, string? searchTerm = null);
     }
 }
