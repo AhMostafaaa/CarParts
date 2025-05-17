@@ -1,3 +1,6 @@
+<app-breadcrumb [items]="breadcrumbItems"></app-breadcrumb>
+
+
 <section class="container py-5">
   <div class="row d-flex align-items-stretch">
     <!-- عمود الصور -->
@@ -94,7 +97,7 @@
           <!-- مع خصم -->
           <div *ngIf="part.onSale"
             class="special-offer-banner bg-warning text-dark p-3 rounded mb-3 d-flex justify-content-between align-items-center shadow-sm">
-            <div class="d-flex flex-column">
+            <div class="d-flex flex-column" style="z-index: 1;">
               <strong class="fs-5">💥 سعر خاص لفترة محدودة</strong>
               <small class="text-dark">لا تفوت الفرصة! العرض ساري حتى نفاد الكمية.</small>
             </div>

@@ -48,6 +48,8 @@ export class PartDetailsComponent implements OnInit, OnDestroy {
   @ViewChild('lens') lensRef!: ElementRef;
   @ViewChild('reviewsContainer') reviewsContainerRef!: ElementRef;
 
+  breadcrumbItems: { label: string; link?: string }[] = [];
+
   part!: PartDto;
   relatedParts: RelatedPart[] = [];
   selectedImage: string = '';
@@ -73,6 +75,8 @@ export class PartDetailsComponent implements OnInit, OnDestroy {
     // ضبط ارتفاع مناسب لحاوية التقييمات
     this.adjustReviewsContainerHeight();
   }
+
+
 
   ngAfterViewInit(): void {
     if (this.mainImageRef && this.lensRef) {
@@ -437,6 +441,14 @@ export class PartDetailsComponent implements OnInit, OnDestroy {
     };
 
     this.selectedImage = this.part.imageUrl;
+
+    this.breadcrumbItems = [
+      { label: 'الرئيسية', link: '/' },
+      { label: 'الأقسام', link: '/home' },
+      { label: this.part.type, link: '/category/' + this.part.type },
+      { label: this.part.name }
+    ];
+
   }
 
   fetchRelatedParts() {

@@ -832,3 +832,33 @@ button.btn-outline-dark.btn-sm {
     opacity: 0;
   }
 }
+
+
+.breadcrumb {
+  background-color: transparent;
+  font-size: 0.95rem;
+
+  .breadcrumb-item + .breadcrumb-item::before {
+    color: $medium-gray;
+    content: " / ";
+    font-weight: 500;
+  }
+
+  .breadcrumb-item a {
+    transition: color 0.3s ease;
+
+    &:hover {
+      color: darken($primary-color, 10%);
+      text-decoration: underline;
+    }
+  }
+
+  .breadcrumb-item.active {
+    font-weight: 700;
+    color: $dark-gray;
+  }
+}
+
+.animated.slideInDown {
+  animation: slide-in-left 0.4s ease-out;
+}
