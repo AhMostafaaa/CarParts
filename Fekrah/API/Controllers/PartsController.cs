@@ -53,7 +53,7 @@ public class PartsController : ControllerBase
         await _unitOfWork.Parts.AddAsync(dto);
         await _unitOfWork.CompleteAsync();
 
-        return StatusCode(StatusCodes.Status201Created);
+        return StatusCode(StatusCodes.Status200OK);
     }
 
 

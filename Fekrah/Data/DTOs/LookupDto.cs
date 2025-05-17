@@ -4,9 +4,11 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Data.Models
+namespace Data.DTOs
 {
-    internal class User
+    public class LookupDTO
     {
+        public object Id { get; set; }
+        public string Text { get; set; }
     }
 }

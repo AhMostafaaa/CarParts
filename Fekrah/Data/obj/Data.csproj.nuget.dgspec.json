@@ -1,23 +1,23 @@
 {
   "format": 1,
   "restore": {
-    "D:\\Projects\\CarParts\\Fekrah\\Data\\Data.csproj": {}
+    "C:\\Users\\TIGEER2\\Source\\Repos\\CarParts\\Fekrah\\Data\\Data.csproj": {}
   },
   "projects": {
-    "D:\\Projects\\CarParts\\Fekrah\\Data\\Data.csproj": {
+    "C:\\Users\\TIGEER2\\Source\\Repos\\CarParts\\Fekrah\\Data\\Data.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "D:\\Projects\\CarParts\\Fekrah\\Data\\Data.csproj",
+        "projectUniqueName": "C:\\Users\\TIGEER2\\Source\\Repos\\CarParts\\Fekrah\\Data\\Data.csproj",
         "projectName": "Data",
-        "projectPath": "D:\\Projects\\CarParts\\Fekrah\\Data\\Data.csproj",
-        "packagesPath": "C:\\Users\\BAYAA\\.nuget\\packages\\",
-        "outputPath": "D:\\Projects\\CarParts\\Fekrah\\Data\\obj\\",
+        "projectPath": "C:\\Users\\TIGEER2\\Source\\Repos\\CarParts\\Fekrah\\Data\\Data.csproj",
+        "packagesPath": "C:\\Users\\TIGEER2\\.nuget\\packages\\",
+        "outputPath": "C:\\Users\\TIGEER2\\Source\\Repos\\CarParts\\Fekrah\\Data\\obj\\",
         "projectStyle": "PackageReference",
         "fallbackFolders": [
           "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
         ],
         "configFilePaths": [
-          "C:\\Users\\BAYAA\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Users\\TIGEER2\\AppData\\Roaming\\NuGet\\NuGet.Config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
         ],
@@ -39,6 +39,11 @@
           "warnAsError": [
             "NU1605"
           ]
+        },
+        "restoreAuditProperties": {
+          "enableAudit": "true",
+          "auditLevel": "low",
+          "auditMode": "direct"
         }
       },
       "frameworks": {
@@ -74,7 +79,7 @@
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\7.0.401\\RuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\8.0.400/PortableRuntimeIdentifierGraph.json"
         }
       }
     }

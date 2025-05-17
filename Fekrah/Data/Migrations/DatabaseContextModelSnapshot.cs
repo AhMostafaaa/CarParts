@@ -34,7 +34,7 @@ namespace Data.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Categories");
+                    b.ToTable("Categories", (string)null);
                 });
 
             modelBuilder.Entity("Part", b =>
@@ -78,7 +78,7 @@ namespace Data.Migrations
 
                     b.HasIndex("SellerId");
 
-                    b.ToTable("Parts");
+                    b.ToTable("Parts", (string)null);
                 });
 
             modelBuilder.Entity("Seller", b =>
@@ -103,7 +103,7 @@ namespace Data.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Sellers");
+                    b.ToTable("Sellers", (string)null);
                 });
 
             modelBuilder.Entity("User", b =>
@@ -128,7 +128,7 @@ namespace Data.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Users");
+                    b.ToTable("Users", (string)null);
                 });
 
             modelBuilder.Entity("Part", b =>
