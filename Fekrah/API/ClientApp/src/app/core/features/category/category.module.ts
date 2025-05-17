@@ -3,7 +3,7 @@ import { CommonModule } from '@angular/common';
 import { CategoryRoutingModule } from './category-routing.module';
 import { CategoryPartsComponent } from './category-parts/category-parts.component';
 import { RouterModule } from '@angular/router';
-import { SharedModule } from '../../Shared/shared.module';
+import { SharedModule } from '../../../Shared/shared.module';
 
 @NgModule({
   declarations: [

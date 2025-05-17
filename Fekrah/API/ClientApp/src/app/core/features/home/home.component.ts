@@ -37,7 +37,7 @@ export class HomeComponent {
     }
     // 🔁 أضف المزيد حسب رغبتك
   ];
-  
+
   toggleFilters() {
     this.filtersOpened = !this.filtersOpened; // ✅ كل ضغطة تغير حالة الفلتر
   }

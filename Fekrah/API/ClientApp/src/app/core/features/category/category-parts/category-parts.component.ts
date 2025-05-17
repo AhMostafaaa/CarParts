@@ -1,5 +1,4 @@
 import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
 
 @Component({
   selector: 'app-category-parts',
@@ -8,44 +7,65 @@ import { ActivatedRoute } from '@angular/router';
 })
 export class CategoryPartsComponent implements OnInit {
 
-  categoryName: string = '';
-  parts: any[] = [];
-  filteredParts: any[] = [];
+  showSidebar = false;
+  pageSize = 12;
+  currentPage = 1;
+  pageSizeOptions = [12, 24, 36];
+  filteredParts = this.getMockData();
+categoryName = 'كهرباء';
+  constructor() {}
 
-  selectedCondition: string = '';
-  selectedPriceRange: string = '';
+  ngOnInit(): void {}
 
-  constructor(private route: ActivatedRoute) { }
-
-  ngOnInit(): void {
-    this.route.paramMap.subscribe(params => {
-      this.categoryName = params.get('name') || '';
-      this.loadPartsByCategory();
-    });
+  toggleSidebar() {
+    this.showSidebar = !this.showSidebar;
   }
 
-  loadPartsByCategory(): void {
-    this.parts = [
-      { id: 1, name: 'فلتر زيت', price: 120, condition: 'New', imageUrl: 'assets/images/image100_100.png' },
-      { id: 2, name: 'مساعد خلفي', price: 450, condition: 'Refurbished', imageUrl: 'assets/images/image100_100.png' },
-      { id: 3, name: 'بطارية سيارة', price: 850, condition: 'New', imageUrl: 'assets/images/image100_100.png' },
-      { id: 4, name: 'ردياتير', price: 1200, condition: 'Refurbished', imageUrl: 'assets/images/image100_100.png' },
-    ];
-    this.filteredParts = [...this.parts];
+  changePageSize(event: any) {
+    this.pageSize = +event.target.value;
   }
 
-  applyFilters(): void {
-    this.filteredParts = this.parts.filter(part => {
-      const matchCondition = this.selectedCondition ? part.condition === this.selectedCondition : true;
-      const matchPrice = this.checkPriceRange(part.price);
-      return matchCondition && matchPrice;
-    });
+  pageChanged(event: any) {
+    this.currentPage = event;
   }
 
-  checkPriceRange(price: number): boolean {
-    if (this.selectedPriceRange === 'low') return price < 500;
-    if (this.selectedPriceRange === 'medium') return price >= 500 && price <= 1000;
-    if (this.selectedPriceRange === 'high') return price > 1000;
-    return true;
-  }
+getMockData() {
+  const types = ['كوري', 'ياباني', 'صيني'];
+  const categories = ['محرك', 'إطارات', 'بطاريات', 'زيوت'];
+  const brands = ['تويوتا', 'هيونداي', 'كيا', 'نيسان'];
+  const grades = ['فرز أول', 'فرز تاني', null];
+
+  return Array.from({ length: 100 }).map((_, index) => {
+    const isOnSale = index % 3 === 0;
+    const basePrice = Math.floor(Math.random() * 1000) + 100;
+    const quantity = Math.floor(Math.random() * 20);
+    const condition = index % 2 === 0 ? 'جديد' : 'استيراد';
+
+    // فقط لو القطعة "استيراد" نحدد الـ grade عشوائياً
+    const grade = condition === 'استيراد' ? grades[Math.floor(Math.random() * grades.length)] : null;
+
+    return {
+      id: index + 1,
+      name: `قطعة غيار ${index + 1}`,
+      category: categories[index % categories.length],
+      brand: brands[index % brands.length],
+      condition: condition,
+      type: types[index % types.length],
+      price: basePrice,
+      oldPrice: isOnSale ? basePrice + Math.floor(Math.random() * 500) + 100 : null,
+      imageUrl: `../../assets/images/image100_100.png`,
+      storeName: `متجر ${index + 1}`,
+      sellerId: index + 100,
+      sellerPhone: `201000000${String(index).padStart(3, '0')}`,
+      isOnSale: isOnSale,
+      freeDelivery: index % 5 === 0,
+      quantity: quantity,
+      availability: quantity > 0 ? 'متوفر' : 'غير متوفر',
+      grade: grade
+    };
+  });
+}
+
+
+
 }

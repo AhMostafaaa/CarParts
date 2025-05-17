@@ -1,0 +1,127 @@
+<div class="contact-us-page" dir="rtl">
+  <!-- Header Banner -->
+  <div class="contact-banner">
+    <div class="container">
+      <h1>اتصل بنا</h1>
+      <p>نحن هنا لمساعدتك - تواصل معنا لأي استفسار</p>
+    </div>
+  </div>
+
+  <div class="container">
+    <div class="row equal-height">
+      <!-- Contact Info -->
+      <div class="col-md-4">
+        <div class="contact-info-card">
+          <h2>معلومات الاتصال</h2>
+
+          <div class="contact-info-item">
+            <div class="contact-icon"><i class="fas fa-phone"></i></div>
+            <div class="contact-text">
+              <h3>اتصل بنا</h3>
+              <p>+966 123 456 789</p>
+            </div>
+          </div>
+
+          <div class="contact-info-item">
+            <div class="contact-icon"><i class="fas fa-envelope"></i></div>
+            <div class="contact-text">
+              <h3>البريد الإلكتروني</h3>
+              <p>info@qetaghyar.com</p>
+            </div>
+          </div>
+
+          <div class="contact-info-item">
+            <div class="contact-icon"><i class="fas fa-map-marker-alt"></i></div>
+            <div class="contact-text">
+              <h3>موقعنا</h3>
+              <p>الرياض، المملكة العربية السعودية</p>
+            </div>
+          </div>
+
+          <div class="contact-info-item">
+            <div class="contact-icon"><i class="fas fa-clock"></i></div>
+            <div class="contact-text">
+              <h3>ساعات العمل</h3>
+              <p>السبت - الخميس: 9 صباحاً - 10 مساءً</p>
+              <p>الجمعة: 2 ظهراً - 10 مساءً</p>
+            </div>
+          </div>
+
+          <!-- Social Media moved to bottom -->
+          <div class="social-media">
+            <h3>تابعنا على</h3>
+            <div class="social-icons">
+              <a href="#" class="social-icon facebook"><i class="fab fa-facebook-f"></i></a>
+              <a href="#" class="social-icon twitter"><i class="fab fa-twitter"></i></a>
+              <a href="#" class="social-icon instagram"><i class="fab fa-instagram"></i></a>
+              <a href="#" class="social-icon whatsapp"><i class="fab fa-whatsapp"></i></a>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Contact Form -->
+      <div class="col-md-8">
+        <div class="contact-form-card">
+          <h2>أرسل لنا رسالة</h2>
+
+          <div class="row">
+            <div class="col-md-6">
+              <div class="input-field">
+                <label for="name">الاسم الكامل <span class="required-field">*</span></label>
+                <input type="text" id="name" placeholder="أدخل اسمك الكامل" />
+              </div>
+            </div>
+
+            <div class="col-md-6">
+              <div class="input-field">
+                <label for="email">البريد الإلكتروني <span class="required-field">*</span></label>
+                <input type="email" id="email" placeholder="أدخل بريدك الإلكتروني" />
+              </div>
+            </div>
+          </div>
+
+          <div class="row">
+            <div class="col-md-6">
+              <div class="input-field">
+                <label for="phone">رقم الهاتف</label>
+                <input type="tel" id="phone" placeholder="أدخل رقم هاتفك" />
+              </div>
+            </div>
+
+            <div class="col-md-6">
+              <div class="input-field">
+                <label for="subject">الموضوع <span class="required-field">*</span></label>
+                <input type="text" id="subject" placeholder="موضوع الرسالة" />
+              </div>
+            </div>
+          </div>
+
+          <div class="input-field">
+            <label for="message">الرسالة <span class="required-field">*</span></label>
+            <textarea id="message" rows="6" placeholder="اكتب رسالتك هنا..."></textarea>
+          </div>
+
+          <div class="text-left">
+            <button type="button" class="submit-btn">
+              <span>إرسال الرسالة</span>
+              <i class="fas fa-paper-plane py-2"></i>
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- FAQ Section -->
+    <div class="faq-section">
+      <div class="faq-card">
+        <h2>الأسئلة الشائعة</h2>
+
+        <div class="faq-item" *ngFor="let faq of faqs">
+          <h3>{{ faq.question }}</h3>
+          <p>{{ faq.answer }}</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

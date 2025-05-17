@@ -38,20 +38,5 @@
 }
 
 
-.promo-strip {
-  display: block;
-  background: linear-gradient(to right, #643a1c, #e36900);
-  color: white;
-  text-align: center;
-  padding: 12px 0;
-  font-size: 16px;
-  font-weight: bold;
-  text-decoration: none;
-  transition: background 0.3s;
 
-  &:hover {
-    background: linear-gradient(to right, #ff7f00, #ffc166);
-    cursor: pointer;
-  }
-}
 

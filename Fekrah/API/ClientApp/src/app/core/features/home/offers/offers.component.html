@@ -1,49 +1,13 @@
 <div class="offers-section">
   <h2 class="section-title">أفضل العروض الحصرية</h2>
 
-  <div class="swiper-container offers-swiper" dir="ltr">
+  <div class="swiper-container offers-swiper">
     <div class="swiper-wrapper">
       <div class="swiper-slide" *ngFor="let offer of bestOffers">
-        <div class="offer-card">
-          <!-- ✅ الشارات -->
-          <div class="badges">
-            <span class="badge condition" *ngIf="offer.condition === 'New'">جديد</span>
-            <span class="badge discount" *ngIf="offer.oldPrice > offer.price">-{{ offer.discount }}%</span>
-          </div>
-
-          <!-- ✅ صورة المنتج -->
-          <div class="image-container">
-            <img [src]="offer.imageUrl" alt="{{ offer.name }}">
-          </div>
-
-          <!-- ✅ اسم المنتج -->
-          <h3>{{ offer.name }}</h3>
-
-          <!-- ✅ وصف المنتج -->
-          <p class="description">{{ offer.description }}</p>
-
-          <!-- ✅ اسم التاجر كـ رابط -->
-          <a class="seller-name" [routerLink]="['/seller', offer.sellerId]">
-            <i class="fas fa-store"></i> {{ offer.sellerName }}
-          </a>
-
-
-          <!-- ✅ السعر -->
-          <div class="price-section">
-            <div class="price">{{ offer.price }} ج.م</div>
-            <div class="old-price" *ngIf="offer.oldPrice > offer.price">{{ offer.oldPrice }} ج.م</div>
-            <div class="save" *ngIf="offer.oldPrice > offer.price">وفر {{ offer.oldPrice - offer.price }} ج</div>
-          </div>
-
-          <!-- ✅ زر التفاصيل -->
-          <button class="btn" [routerLink]="['/parts', offer.id]">التفاصيل</button>
-        </div>
-
+        <app-offer-card [offer]="offer"></app-offer-card>
       </div>
     </div>
 
     <div class="swiper-pagination"></div>
-    <!-- <div class="swiper-button-next"></div>
-    <div class="swiper-button-prev"></div> -->
   </div>
 </div>

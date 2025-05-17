@@ -1,5 +1,5 @@
 import { Component, Input } from '@angular/core';
-import { PartViewModel } from '../../../Shared/Services/Swagger/SwaggerClient.service';
+import { PartViewModel } from '../../../../Shared/Services/Swagger/SwaggerClient.service';
 
 @Component({
   selector: 'app-part-card',

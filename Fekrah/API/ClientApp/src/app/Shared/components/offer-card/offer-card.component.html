@@ -1,0 +1,29 @@
+<div class="offer-card">
+  <div class="exclusive-banner">عرض حصري 🔥</div>
+
+  <div class="image-container">
+    <img [src]="offer.imageUrl" alt="{{ offer.name }}">
+  </div>
+
+  <div class="offer-info">
+    <h3>{{ offer.name }}</h3>
+    <p class="description">{{ offer.description }}</p>
+
+    <div class="seller">
+      <i class="fas fa-store-alt text-primary me-1"></i>
+      <a [routerLink]="['/seller', offer.sellerId]" class="seller-link">
+        {{ offer.sellerName }}
+      </a>
+    </div>
+
+
+
+    <div class="price-box">
+      <div class="discount-badge">-{{ offer.discount }}%</div>
+      <div class="price">{{ offer.price }} ج.م</div>
+      <div class="old-price" *ngIf="offer.oldPrice > offer.price">{{ offer.oldPrice }} ج.م</div>
+    </div>
+
+    <a [routerLink]="['/parts', offer.id]" class="details-button">شاهد العرض</a>
+  </div>
+</div>

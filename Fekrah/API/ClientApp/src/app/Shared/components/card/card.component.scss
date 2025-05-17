@@ -1,0 +1,244 @@
+/* ✅ تصميم الهيدر */
+.category-header {
+  width: 100%;
+  background-color: #4f46e5;
+  color: white;
+  text-align: center;
+  padding: 20px 0;
+  margin-bottom: 20px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+  border-radius: 12px;
+
+  .category-title {
+    font-size: 26px;
+    font-weight: bold;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+
+    i {
+      font-size: 28px;
+    }
+  }
+}
+
+/* ✅ تصميم الكارد */
+.card {
+  background-color: #ffffff;
+  border-radius: 16px;
+  overflow: hidden;
+  width: 100%;
+  max-width: 360px;
+  height: 500px;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  transition: 0.3s ease;
+  margin-bottom: 20px;
+  position: relative;
+
+
+  &:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 15px 30px rgba(0, 0, 0, 0.15);
+  }
+
+  .image-container {
+    width: 100%;
+    height: 220px;
+    background-color: #e5e7eb;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    overflow: hidden;
+
+    img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      border-bottom: 2px solid #e2e8f0;
+      transition: 0.3s ease;
+    }
+
+    &:hover img {
+      transform: scale(1.05);
+    }
+  }
+
+  .content {
+    padding: 16px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .part-name {
+    font-size: 20px;
+    font-weight: bold;
+    color: #1f2937;
+    text-align: center;
+  }
+
+  .store-name {
+    font-size: 14px;
+    color: #6b7280;
+    text-align: center;
+  }
+
+  .part-info {
+    display: flex;
+    justify-content: center;
+    gap: 8px;
+
+    .condition {
+      background-color: #d1fae5;
+      color: #065f46;
+      padding: 3px 8px;
+      border-radius: 8px;
+      font-size: 12px;
+    }
+
+    .type {
+      background-color: #bfdbfe;
+      color: #1e3a8a;
+      padding: 3px 8px;
+      border-radius: 8px;
+      font-size: 12px;
+    }
+  }
+
+  .price-tag {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    background-color: #fef3c7;
+    color: #1f2937;
+    padding: 8px 16px;
+    border-radius: 12px;
+    margin-bottom: 10px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+  }
+
+  .price {
+    font-size: 20px;
+    font-weight: bold;
+    color: #d97706;
+  }
+
+  .action-buttons {
+    display: flex;
+    gap: 15px;
+    // align-items: center;
+    justify-content: center;
+    margin-bottom: 15px;
+  }
+
+  .whatsapp-icon, .view-icon {
+    color: white;
+    background-color: #0284c7;
+    border-radius: 50%;
+    width: 42px;
+    height: 42px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    transition: background-color 0.3s, transform 0.3s;
+
+    &:hover {
+      transform: scale(1.1);
+    }
+  }
+
+  .whatsapp-icon {
+    background-color: #25D366;
+
+    &:hover {
+      background-color: #128C7E;
+    }
+  }
+
+  .view-icon {
+    background-color: #0284c7;
+
+    &:hover {
+      background-color: #0369a1;
+    }
+  }
+
+  .view-icon i {
+    font-size: 18px;
+  }
+}
+
+.add-icon {
+  background-color:#9ead0f; // أخضر
+  color: white;
+  border: none;
+  border-radius: 50%;
+  width: 42px;
+  height: 42px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+  transition: background-color 0.3s, transform 0.3s;
+
+  i {
+    font-size: 18px;
+  }
+
+  &:hover {
+    background-color: #059669;
+    transform: scale(1.1);
+  }
+}
+
+
+.ribbon {
+  position: absolute;
+  top: 18px;
+  left: -40px;
+  width: 160px;
+  padding: 5px 0;
+  background-color: #16a34a;
+  color: white;
+  text-align: center;
+  font-size: 14px;
+  font-weight: bold;
+  transform: rotate(-45deg);
+  box-shadow: 0 3px 6px rgba(0, 0, 0, 0.2);
+  z-index: 10;
+}
+
+
+.grade-ribbon {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  padding: 4px 10px;
+  font-size: 12px;
+  font-weight: bold;
+  border-radius: 8px;
+  z-index: 2;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+}
+
+.grade-primary {
+  background-color: #10b981; // أخضر
+  color: white;
+}
+
+.grade-secondary {
+  background-color: #3b82f6; // أزرق
+  color: white;
+}
+
+.grade-default {
+  background-color: #6b7280; // رمادي
+  color: white;
+}

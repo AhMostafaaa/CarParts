@@ -1,70 +1,48 @@
-import { Component, OnInit, AfterViewInit } from '@angular/core';
-declare var Swiper: any;
+import {
+  Component,
+  OnInit,
+  ViewChild,
+  ElementRef
+} from '@angular/core';
 
 @Component({
   selector: 'app-categories',
   templateUrl: './categories.component.html',
   styleUrls: ['./categories.component.scss']
 })
-export class CategoriesComponent implements OnInit, AfterViewInit {
+export class CategoriesComponent implements OnInit {
+  @ViewChild('scrollContainer', { static: false }) scrollContainer!: ElementRef;
 
-  categories: any[] = [];
+  categories = [
+    { name: 'كهرباء' },
+    { name: 'ميكانيكا' },
+    { name: 'عفشة' },
+    { name: 'سمكرة' },
+    { name: 'دهانات' },
+    { name: 'بطاريات' },
+    { name: 'أكسسوارات' },
+    { name: 'زيوت' },
+    { name: 'أنوار' },
+    { name: 'كهرباء' },
+    { name: 'ميكانيكا' },
+    { name: 'عفشة' },
+    { name: 'سمكرة' },
+    { name: 'دهانات' },
+    { name: 'بطاريات' },
+    { name: 'أكسسوارات' },
+    { name: 'زيوت' },
+    { name: 'أنوار' },
+    { name: 'مكيفات' },
+    { name: 'فلتر' }
+  ];
 
-  constructor() { }
+  ngOnInit(): void {}
 
-  ngOnInit(): void {
-    this.categories = [
-      { name: 'كهرباء', image: 'assets/images/image_100_100.png' },
-      { name: 'كهرباء', image: 'assets/images/image_100_100.png' },
-      { name: 'كهرباء', image: 'assets/images/image_100_100.png' },
-      { name: 'ميكانيكا', image: 'assets/images/image_100_100.png' },
-      { name: 'ميكانيكا', image: 'assets/images/image_100_100.png' },
-      { name: 'ميكانيكا', image: 'assets/images/image_100_100.png' },
-      { name: 'عفشة', image: 'assets/images/image_100_100.png' },
-      { name: 'عفشة', image: 'assets/images/image_100_100.png' },
-      { name: 'عفشة', image: 'assets/images/image_100_100.png' },
-      { name: 'سمكرة', image: 'assets/images/image_100_100.png' },
-      { name: 'سمكرة', image: 'assets/images/image_100_100.png' },
-      { name: 'سمكرة', image: 'assets/images/image_100_100.png' },
-      { name: 'دهانات', image: 'assets/images/image_100_100.png' },
-      { name: 'بطاريات', image: 'assets/images/image_100_100.png' },
-      { name: 'أكسسوارات', image: 'assets/images/image_100_100.png' }
-    ];
+  scrollLeft(): void {
+    this.scrollContainer.nativeElement.scrollBy({ left: -200, behavior: 'smooth' });
   }
 
-  ngAfterViewInit(): void {
-    new Swiper('.swiper-container', {
-      slidesPerView: 6,
-      spaceBetween: 10,
-      loop: true,
-      autoplay: {
-        delay: 3000,
-        disableOnInteraction: false,
-      },
-      navigation: {
-        nextEl: '.swiper-button-next',
-        prevEl: '.swiper-button-prev',
-      },
-      pagination: {
-        el: '.swiper-pagination',
-        clickable: true,
-      },
-      speed: 800,
-      rtl: true,
-      breakpoints: {
-        640: {
-          slidesPerView: 3,
-          spaceBetween: 1,
-        },
-        768: {
-          slidesPerView: 4,
-          spaceBetween: 1,
-        },
-        1024: {
-          slidesPerView: 7,
-          spaceBetween: 1,
-        }
-      }
-    });
+  scrollRight(): void {
+    this.scrollContainer.nativeElement.scrollBy({ left: 200, behavior: 'smooth' });
   }
 }

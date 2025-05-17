@@ -1,0 +1,46 @@
+<div class="card">
+  <div class="ribbon" *ngIf="part.freeDelivery">توصيل مجانى</div>
+
+  <div class="image-container">
+    <img [src]="part.imageUrl" [alt]="part.name">
+   <div class="grade-ribbon" *ngIf="part.grade" [ngClass]="getGradeClass(part.grade)">
+  {{ part.grade }}
+</div>
+
+  </div>
+  
+
+  <div class="content">
+    <h2 class="part-name">{{ part.name }}</h2>
+
+
+    <div class="store-name">
+      🏪 {{ part.storeName || 'متجر غير معروف' }}
+    </div>
+
+    <div class="part-info">
+      <span class="condition">{{ part.condition === 'New' ? 'جديد' : 'استيراد' }}</span>
+      <span class="type">{{ part.type }}</span>
+    </div>
+
+    <div class="price-tag">
+      <span class="price">{{ part.price }} ج.م</span>
+    </div>
+  </div>
+
+  <!-- ✅ الأيقونات جنب بعض بشكل مرتب -->
+<div class="action-buttons">
+  <a class="whatsapp-icon" [href]="'https://wa.me/' + part.sellerPhone" target="_blank">
+    <i class="fa-brands fa-whatsapp"></i>
+  </a>
+
+  <a class="view-icon" [routerLink]="['/parts', part.id]">
+    <i class="fa-solid fa-eye"></i>
+  </a>
+
+  <a class="add-icon" (click)="onAdd(part)">
+   <i class="fa-solid fa-cart-plus"></i>
+  </a>
+</div>
+
+</div>

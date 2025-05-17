@@ -1,80 +1,50 @@
-<div class="category-parts-page">
+<div class="category-parts-page" [class.shifted]="showSidebar">
 
+  <!-- ✅ Header ثابت ويتحرك عند فتح الفلتر -->
+  <header class="header">
+    <div class="header-right">
+      <h1 class="page-title">
+        🛠️ {{ categoryName }}
+      </h1>
+    </div>
+
+    <div class="header-left">
+      <button (click)="toggleSidebar()" class="toggle-sidebar">
+        <i class="fas fa-filter"></i> فلتر
+      </button>
+      <select (change)="changePageSize($event)" class="page-size-selector">
+        <option *ngFor="let size of pageSizeOptions" [value]="size">
+          {{ size }} لكل صفحة
+        </option>
+      </select>
+    </div>
+  </header>
+
+  <!-- ✅ المحتوى الرئيسي + الفلتر -->
   <div class="page-layout">
-
-    <!-- الفلاتر على اليمين -->
-    <aside class="filters-sidebar">
-      <h4>تصفية حسب:</h4>
-
-      <div class="filter-group">
-        <label>الحالة:</label>
-        <select [(ngModel)]="selectedCondition" (change)="applyFilters()">
-          <option value="">الكل</option>
-          <option value="New">جديد</option>
-          <option value="Refurbished">مستعمل</option>
-        </select>
-      </div>
-
-      <div class="filter-group">
-        <label>السعر:</label>
-        <select [(ngModel)]="selectedPriceRange" (change)="applyFilters()">
-          <option value="">الكل</option>
-          <option value="low">أقل من 500</option>
-          <option value="medium">من 500 إلى 1000</option>
-          <option value="high">أعلى من 1000</option>
-        </select>
-      </div>
-
-      <div class="filter-group">
-        <label>الفئة:</label>
-        <select>
-          <option>كل الفئات</option>
-          <option>محرك</option>
-          <option>كهرباء</option>
-          <option>عفشة</option>
-        </select>
-      </div>
-
-      <div class="filter-group">
-        <label>ماركة:</label>
-        <select>
-          <option>الكل</option>
-          <option>تويوتا</option>
-          <option>نيسان</option>
-          <option>هيونداي</option>
-        </select>
-      </div>
-
-      <div class="filter-group">
-        <label>التوصيل السريع:</label>
-        <select>
-          <option>الكل</option>
-          <option>متاح</option>
-          <option>غير متاح</option>
-        </select>
-      </div>
-    </aside>
-
-    <!-- القطع على الشمال -->
     <section class="parts-section">
-      <div class="category-header">
-        <h2>تصنيف: {{ categoryName }}</h2>
+      <div class="parts-grid">
+        <app-card
+          *ngFor="let part of filteredParts | paginate: { itemsPerPage: pageSize, currentPage: currentPage }"
+          [part]="part">
+        </app-card>
       </div>
 
-      <div class="parts-grid">
-        <div class="part-card" *ngFor="let part of filteredParts">
-          <div class="part-image">
-            <img [src]="part.imageUrl" alt="{{ part.name }}">
-          </div>
-          <div class="part-info">
-            <h3>{{ part.name }}</h3>
-            <p class="price">{{ part.price }} جنيه</p>
-            <button [routerLink]="['/parts', part.id]" class="btn btn-primary">عرض التفاصيل</button>
-          </div>
-        </div>
+      <!-- ✅ Pagination Component -->
+      <div class="pagination-container">
+        <pagination-controls
+          (pageChange)="pageChanged($event)"
+          previousLabel="‹ السابق"
+          nextLabel="التالي ›"
+          firstLabel="« الأول"
+          lastLabel="الأخير »">
+        </pagination-controls>
       </div>
     </section>
 
+    <!-- ✅ Sidebar الفلتر في اليمين -->
+    <aside class="filters-sidebar" [class.open]="showSidebar">
+      <app-filter-sidebar></app-filter-sidebar>
+    </aside>
   </div>
-
 </div>

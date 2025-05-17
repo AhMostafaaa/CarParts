@@ -1,0 +1,93 @@
+<div class="about-us-container">
+  <div class="hero-section">
+    <div class="overlay">
+      <h1>{{ hero.title }}</h1>
+      <p>{{ hero.subtitle }}</p>
+    </div>
+  </div>
+
+  <div class="content-container">
+    <div class="section-container">
+      <!-- Story -->
+      <div class="section">
+        <div class="icon-container">
+          <i [class]="story.icon"></i>
+        </div>
+        <div class="text-content">
+          <h2>{{ story.title }}</h2>
+          <p *ngFor="let p of story.paragraphs">{{ p }}</p>
+        </div>
+      </div>
+
+      <!-- Vision -->
+      <div class="section reverse">
+        <div class="icon-container">
+          <i [class]="vision.icon"></i>
+        </div>
+        <div class="text-content">
+          <h2>{{ vision.title }}</h2>
+          <p *ngFor="let p of vision.paragraphs">{{ p }}</p>
+        </div>
+      </div>
+
+      <!-- Values -->
+      <div class="section">
+        <div class="icon-container">
+          <i [class]="values.icon"></i>
+        </div>
+        <div class="text-content">
+          <h2>{{ values.title }}</h2>
+          <ul class="values-list">
+            <li *ngFor="let item of values.items">
+              <span>{{ item.label }}</span> - {{ item.description }}
+            </li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <!-- Statistics -->
+    <div class="statistics-section">
+      <div class="stat-item" *ngFor="let stat of stats">
+        <i [class]="stat.icon"></i>
+        <div class="stat-number">{{ stat.number }}</div>
+        <div class="stat-title">{{ stat.title }}</div>
+      </div>
+    </div>
+
+    <!-- Team -->
+    <div class="team-section">
+      <h2>{{ team.title }}</h2>
+      <p class="team-intro">{{ team.intro }}</p>
+
+      <div class="team-grid">
+        <div class="team-member" *ngFor="let member of team.members">
+          <div class="member-image"></div>
+          <h3>{{ member.name }}</h3>
+          <p class="member-title">{{ member.title }}</p>
+          <p class="member-bio">{{ member.bio }}</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Partners -->
+    <div class="partners-section">
+      <h2>{{ partners.title }}</h2>
+      <p>{{ partners.description }}</p>
+
+      <div class="partners-grid">
+        <div class="partner" *ngFor="let partner of partners.list">
+          <div class="partner-logo"></div>
+          <p>{{ partner }}</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Call to Action -->
+    <div class="cta-section">
+      <h2>{{ cta.title }}</h2>
+      <p>{{ cta.description }}</p>
+      <button class="cta-button">{{ cta.button }}</button>
+    </div>
+  </div>
+</div>

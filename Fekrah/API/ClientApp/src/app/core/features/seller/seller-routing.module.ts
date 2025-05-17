@@ -3,6 +3,8 @@ import { RouterModule, Routes } from '@angular/router';
 import { SellerPageComponent } from './seller-page/seller-page.component';
 
 const routes: Routes = [  { path: ':id', component: SellerPageComponent },
+  { path: 'seller/:id', component: SellerPageComponent },
+
 ];
 
 @NgModule({

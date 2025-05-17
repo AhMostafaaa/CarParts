@@ -43,12 +43,16 @@
       </div>
 
     </aside>
-
     <!-- ✅ المحتوى الرئيسي -->
     <section class="parts-section" [class.shrink]="filtersOpened">
+      <!-- <a routerLink="home/offers" class="promo-strip">
+        🔥 خصومات صيفية تصل إلى 50% على جميع قطع الغيار! 🔥
+      </a> -->
+      <app-categories></app-categories>
 
       <app-banner></app-banner>
-      <app-categories></app-categories>
+      <app-featured-sellers></app-featured-sellers>
+
       <app-offers></app-offers>
       <app-part-preview></app-part-preview>
 

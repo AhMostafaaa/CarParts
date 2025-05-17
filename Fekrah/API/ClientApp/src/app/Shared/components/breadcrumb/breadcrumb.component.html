@@ -1,0 +1,14 @@
+<nav aria-label="breadcrumb" class="bg-light rounded-3 px-3 py-2 mb-4 shadow-sm animated slideInDown">
+  <ol class="breadcrumb mb-0">
+    <li *ngFor="let item of items; let last = last" class="breadcrumb-item" [class.active]="last" [attr.aria-current]="last ? 'page' : null">
+      <ng-container *ngIf="item.link && !last">
+        <a [routerLink]="item.link" class="text-decoration-none text-primary fw-semibold">
+          {{ item.label }}
+        </a>
+      </ng-container>
+      <ng-container *ngIf="!item.link || last">
+        <span class="text-dark fw-bold">{{ item.label }}</span>
+      </ng-container>
+    </li>
+  </ol>
+</nav>
