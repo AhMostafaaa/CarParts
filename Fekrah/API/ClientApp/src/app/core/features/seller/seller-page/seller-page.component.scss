@@ -1,433 +1,233 @@
-// استخدام متغيرات الألوان لسهولة التعديل
-$primary-color: #3f51b5;
-$secondary-color: #ff4081;
-$accent-color: #00bcd4;
-$light-bg: #f8f9fa;
-$dark-text: #333;
-$light-text: #fff;
+// Variables
+$primary-color: #3498db;
+$secondary-color: #2c3e50;
+$success-color: #2ecc71;
+$danger-color: #e74c3c;
 $border-radius: 12px;
-$box-shadow: 0 6px 15px rgba(0, 0, 0, 0.1);
+$transition-speed: 0.3s;
 
-.seller-page {
-  padding: 20px;
-  background-color: #f5f7fa;
-  min-height: 100vh;
-}
-
-// قسم البحث المتقدم
-.search-section {
-  .search-container {
-    background: $light-bg;
-    border-radius: $border-radius;
-    padding: 20px;
-    box-shadow: $box-shadow;
-    border-top: 4px solid $primary-color;
-    
-    .search-title {
-      color: $primary-color;
-      margin-bottom: 15px;
-      font-weight: 600;
-      font-size: 18px;
-      
-      i {
-        color: $primary-color;
-      }
-    }
-    
-    .search-form {
-      .input-group {
-        .input-group-text {
-          background-color: $primary-color;
-          color: $light-text;
-          border: none;
-        }
-        
-        .form-control, .form-select {
-          border: 1px solid #e0e0e0;
-          &:focus {
-            box-shadow: 0 0 0 0.2rem rgba($primary-color, 0.25);
-            border-color: $primary-color;
-          }
-        }
-      }
-      
-      .btn-primary {
-        background-color: $primary-color;
-        border: none;
-        font-weight: 600;
-        transition: all 0.3s ease;
-        
-        &:hover {
-          background-color: darken($primary-color, 10%);
-          transform: translateY(-2px);
-        }
-      }
-    }
-  }
-}
-
-// قسم ملف البائع
-.seller-profile {
-  .profile-banner {
-    background: linear-gradient(135deg, #1a237e, #283593, #3949ab);
-    border-radius: $border-radius;
-    padding: 30px;
-    box-shadow: $box-shadow;
-    display: flex;
-    justify-content: space-between;
-    flex-wrap: wrap;
-    position: relative;
-    overflow: hidden;
-    
-    &:before {
-      content: '';
-      position: absolute;
-      top: 0;
-      right: 0;
-      width: 100%;
-      height: 100%;
-      background: url('data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIxMDAlIiBoZWlnaHQ9IjEwMCUiPjxkZWZzPjxwYXR0ZXJuIGlkPSJwYXR0ZXJuIiB3aWR0aD0iNDAiIGhlaWdodD0iNDAiIHZpZXdCb3g9IjAgMCA0MCA0MCIgcGF0dGVyblVuaXRzPSJ1c2VyU3BhY2VPblVzZSIgcGF0dGVyblRyYW5zZm9ybT0icm90YXRlKDQ1KSI+PHJlY3QgaWQ9InBhdHRlcm4tYmFja2dyb3VuZCIgd2lkdGg9IjQwMCUiIGhlaWdodD0iNDAwJSIgZmlsbD0icmdiYSgyNTUsMjU1LDI1NSwwLjAzKSI+PC9yZWN0PiA8Y2lyY2xlIGZpbGw9InJnYmEoMjU1LDI1NSwyNTUsMC4wNSkiIGN4PSIyMCIgY3k9IjIwIiByPSIxIj48L2NpcmNsZT48L3BhdHRlcm4+PC9kZWZzPjxyZWN0IGZpbGw9InVybCgjcGF0dGVybikiIGhlaWdodD0iMTAwJSIgd2lkdGg9IjEwMCUiPjwvcmVjdD48L3N2Zz4=');
-      opacity: 0.5;
-    }
-    
-    .profile-info {
-      display: flex;
-      align-items: center;
-      z-index: 1;
-      flex: 1;
-      
-      .profile-avatar {
-        width: 80px;
-        height: 80px;
-        background: $secondary-color;
-        border-radius: 50%;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        margin-left: 20px;
-        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
-        
-        i {
-          font-size: 32px;
-          color: $light-text;
-        }
-      }
-      
-      .profile-details {
-        .profile-name {
-          color: $light-text;
-          font-size: 28px;
-          font-weight: 700;
-          margin-bottom: 5px;
-          text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.3);
-        }
-        
-        .profile-rating {
-          color: #ffc107;
-          font-size: 18px;
-          margin-bottom: 10px;
-          
-          .rating-count {
-            color: rgba(255, 255, 255, 0.8);
-            font-size: 14px;
-            margin-right: 5px;
-          }
-        }
-        
-        .profile-bio {
-          color: rgba(255, 255, 255, 0.9);
-          font-size: 16px;
-          max-width: 600px;
-        }
-      }
-    }
-    
-    .profile-actions {
-      display: flex;
-      align-items: center;
-      z-index: 1;
-      
-      .contact-btn {
-        background: #25d366;
-        color: $light-text;
-        padding: 12px 24px;
-        border-radius: 30px;
-        text-decoration: none;
-        font-weight: 600;
-        display: flex;
-        align-items: center;
-        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
-        transition: all 0.3s ease;
-        
-        i {
-          font-size: 20px;
-          margin-left: 8px;
-        }
-        
-        &:hover {
-          background: darken(#25d366, 10%);
-          transform: translateY(-3px);
-          box-shadow: 0 6px 15px rgba(0, 0, 0, 0.3);
-        }
-      }
-    }
-  }
-}
-
-// قسم المنتجات
-.products-section, .reviews-section {
-  background: $light-bg;
+// Seller Card
+.seller-card {
+  background: linear-gradient(135deg, $secondary-color, $primary-color);
   border-radius: $border-radius;
-  box-shadow: $box-shadow;
+  border: 2px solid $primary-color;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
   overflow: hidden;
-  
-  .section-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 20px;
-    border-bottom: 1px solid rgba(0, 0, 0, 0.05);
-    
-    .section-title {
-      color: $dark-text;
-      font-size: 20px;
-      font-weight: 600;
-      margin: 0;
-    }
-    
-    .product-count, .reviews-count {
-      background: $primary-color;
-      color: $light-text;
-      padding: 5px 12px;
-      border-radius: 20px;
-      font-size: 14px;
-      font-weight: 500;
-    }
-  }
-  
-  .products-container, .reviews-container {
-    padding: 20px;
-  }
-  
-  .no-products {
-    text-align: center;
-    padding: 40px 20px;
-    
-    .no-products-icon {
-      font-size: 50px;
-      color: #ccc;
-      margin-bottom: 15px;
-    }
-    
-    h5 {
-      color: #888;
-      margin-bottom: 15px;
-    }
-  }
-}
 
-// بطاقة المنتج
-.product-card {
-  background: $light-text;
-  border-radius: $border-radius;
-  box-shadow: 0 3px 10px rgba(0, 0, 0, 0.08);
-  overflow: hidden;
-  transition: all 0.3s ease;
-  height: 100%;
-  position: relative;
-  
-  &:hover {
-    transform: translateY(-5px);
-    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
-    
-    .product-image img {
-      transform: scale(1.08);
-    }
-  }
-  
-  .product-badge {
-    position: absolute;
-    top: 10px;
-    right: 10px;
-    background: $secondary-color;
-    color: $light-text;
-    padding: 5px 10px;
-    border-radius: 20px;
-    font-size: 12px;
+  .text-gradient {
+    color: white;
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2);
     font-weight: 600;
-    z-index: 2;
   }
-  
-  .product-image {
-    height: 160px;
+
+  .seller-avatar {
+    width: 80px;
+    height: 80px;
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 50%;
     display: flex;
     align-items: center;
     justify-content: center;
-    padding: 20px;
-    background: #f5f5f5;
-    overflow: hidden;
-    
-    img {
-      max-height: 120px;
-      max-width: 100%;
-      object-fit: contain;
-      transition: transform 0.5s ease;
-    }
+    border: 2px solid rgba(255, 255, 255, 0.2);
   }
-  
-  .product-info {
-    padding: 15px;
-    
-    .product-name {
-      font-size: 16px;
-      font-weight: 600;
-      color: $dark-text;
-      margin-bottom: 5px;
-      height: 40px;
-      overflow: hidden;
-      display: -webkit-box;
-      -webkit-line-clamp: 2;
-      -webkit-box-orient: vertical;
-    }
-    
-    .product-category {
-      color: $primary-color;
-      font-size: 13px;
-      margin-bottom: 8px;
-      font-weight: 500;
-    }
-    
-    .product-description {
-      color: #666;
-      font-size: 13px;
-      margin-bottom: 10px;
-      height: 40px;
-      overflow: hidden;
-      display: -webkit-box;
-      -webkit-line-clamp: 2;
-      -webkit-box-orient: vertical;
-    }
-    
-    .product-price {
-      display: flex;
-      align-items: center;
-      margin-bottom: 15px;
-      
-      .current-price {
-        color: $secondary-color;
-        font-weight: 700;
-        font-size: 18px;
-      }
-      
-      .old-price {
-        color: #999;
-        text-decoration: line-through;
-        margin-right: 8px;
-        font-size: 14px;
-      }
-    }
-    
-    .view-details-btn {
-      background: $accent-color;
-      color: $light-text;
-      border: none;
-      padding: 8px 0;
-      border-radius: 6px;
-      font-weight: 600;
-      width: 100%;
-      cursor: pointer;
-      transition: all 0.3s ease;
-      
-      &:hover {
-        background: darken($accent-color, 10%);
-      }
+
+  .seller-description {
+    font-size: 1.1rem;
+    opacity: 0.9;
+  }
+
+  .seller-info {
+    font-size: 0.9rem;
+    opacity: 0.8;
+  }
+
+  .whatsapp-btn {
+    background: #25d366;
+    color: white;
+    padding: 12px 24px;
+    border-radius: 30px;
+    text-decoration: none;
+    font-weight: 600;
+    transition: all $transition-speed ease;
+    border: 2px solid rgba(255, 255, 255, 0.2);
+
+    &:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 5px 15px rgba(37, 211, 102, 0.3);
     }
   }
 }
 
-// بطاقة التقييم
-.review-card {
-  background: $light-text;
+// Product Card
+.product-card {
+  border: 2px solid #e0e0e0;
   border-radius: $border-radius;
-  box-shadow: 0 3px 10px rgba(0, 0, 0, 0.08);
+  transition: all $transition-speed ease;
+  background: linear-gradient(to bottom, #ffffff, #f8f9fa);
   overflow: hidden;
-  transition: all 0.3s ease;
-  height: 100%;
-  
+  position: relative;
+  padding: 1rem;
+
   &:hover {
-    transform: translateY(-3px);
-    box-shadow: 0 8px 15px rgba(0, 0, 0, 0.12);
+    border-color: $primary-color;
+    transform: translateY(-5px);
+    box-shadow: 0 8px 20px rgba(52, 152, 219, 0.2);
+    background: linear-gradient(to bottom, #ffffff, #f0f2f5);
+
+    .product-image img {
+      transform: scale(1.05);
+    }
   }
-  
-  .review-header {
-    padding: 15px;
-    display: flex;
-    align-items: center;
-    border-bottom: 1px solid rgba(0, 0, 0, 0.05);
-    
-    .reviewer-avatar {
-      width: 40px;
-      height: 40px;
-      border-radius: 50%;
-      background: $primary-color;
-      color: $light-text;
-      display: flex;
-      align-items: center;
-      justify-content: center;
+
+  &.has-discount {
+    border-color: $danger-color;
+  }
+
+  &.free-shipping {
+    border-color: $success-color;
+  }
+
+  .product-badges {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    z-index: 2;
+
+    .badge {
+      display: block;
+      margin-bottom: 5px;
+      padding: 6px 12px;
+      border-radius: 20px;
+      font-size: 0.8rem;
       font-weight: 600;
-      margin-left: 12px;
-    }
-    
-    .reviewer-info {
-      .reviewer-name {
-        font-weight: 600;
-        color: $dark-text;
-        margin-bottom: 3px;
-      }
-      
-      .review-rating {
-        color: #ffc107;
-        font-size: 14px;
-      }
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
     }
   }
-  
-  .review-content {
-    padding: 15px;
-    
-    .review-text {
-      color: #555;
-      font-size: 14px;
-      line-height: 1.5;
-      margin: 0;
+
+  .discount-badge {
+    background: linear-gradient(45deg, $danger-color, darken($danger-color, 10%));
+    color: white;
+  }
+
+  .shipping-badge {
+    background: linear-gradient(45deg, $success-color, darken($success-color, 10%));
+    color: white;
+  }
+
+  .product-image {
+    padding: 1rem;
+    margin: -1rem -1rem 1rem -1rem;
+    background: #f8f9fa;
+    border-radius: $border-radius $border-radius 0 0;
+    overflow: hidden;
+
+    img {
+      width: 100%;
+      height: 200px;
+      object-fit: contain;
+      transition: transform $transition-speed ease;
+    }
+  }
+
+  .product-title {
+    color: $secondary-color;
+    font-weight: 600;
+    margin-bottom: 0.5rem;
+  }
+
+  .product-category {
+    background: #f8f9fa;
+    color: $secondary-color;
+    padding: 4px 12px;
+    border-radius: 15px;
+    font-size: 0.8rem;
+    display: inline-block;
+    margin-bottom: 0.5rem;
+  }
+
+  .product-description {
+    font-size: 0.9rem;
+    margin-bottom: 1rem;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
+
+  .product-price {
+    background: #f8f9fa;
+    padding: 1rem;
+    border-radius: $border-radius;
+    margin-top: auto;
+    text-align: center;
+
+    .current-price {
+      color: $primary-color;
+      font-size: 1.2rem;
+      font-weight: 700;
+    }
+
+    .old-price {
+      color: $danger-color;
+      text-decoration: line-through;
+      margin-right: 0.5rem;
+      font-size: 0.9rem;
+    }
+  }
+
+  .details-btn {
+    background: linear-gradient(45deg, $primary-color, darken($primary-color, 10%));
+    color: white;
+    border: none;
+    border-radius: 25px;
+    padding: 0.75rem 1.5rem;
+    font-weight: 600;
+    transition: all $transition-speed ease;
+    display: inline-block;
+    min-width: 80%;
+
+    &:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 4px 8px rgba($primary-color, 0.3);
+      background: linear-gradient(45deg, darken($primary-color, 5%), darken($primary-color, 15%));
+    }
+
+    i {
+      margin-left: 0.5rem;
     }
   }
 }
 
-// تحسينات للتجاوب مع الشاشات المختلفة
-@media (max-width: 768px) {
-  .seller-profile .profile-banner {
-    padding: 20px;
-    
-    .profile-info {
-      flex-direction: column;
-      align-items: center;
-      text-align: center;
-      margin-bottom: 20px;
-      
-      .profile-avatar {
-        margin-left: 0;
-        margin-bottom: 15px;
-      }
-      
-      .profile-details .profile-bio {
-        max-width: 100%;
-      }
-    }
-    
-    .profile-actions {
-      width: 100%;
-      justify-content: center;
-    }
-  }
+// Animations
+@keyframes pulse {
+  0% { transform: scale(1); }
+  50% { transform: scale(1.05); }
+  100% { transform: scale(1); }
+}
+
+@keyframes shine {
+  0% { opacity: 1; }
+  50% { opacity: 0.8; }
+  100% { opacity: 1; }
+}
+
+@keyframes bounce {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-5px); }
+}
+
+.pulse-animation {
+  animation: pulse 2s infinite;
+}
+
+.shine-animation {
+  animation: shine 2s infinite;
+}
+
+.bounce-animation {
+  animation: bounce 2s infinite;
+}
+
+.zoom-animation {
+  transition: transform $transition-speed ease;
 }
