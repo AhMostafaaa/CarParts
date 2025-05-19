@@ -1,61 +1,143 @@
 <div class="seller-page">
-  <!-- بيانات البائع -->
-  <div class="seller-header">
-    <div class="seller-info">
-      <h2 class="seller-name">{{ seller.name }}</h2>
-      <div class="rating">
-        <ng-container *ngFor="let star of stars; let i = index">
-          <i class="fas" [ngClass]="i < seller.rating ? 'fa-star' : 'fa-star-half-alt'"></i>
-        </ng-container>
-        <span class="rating-text">({{ seller.rating }}/5)</span>
+  <!-- قسم البحث المتقدم -->
+  <div class="search-section mb-4">
+    <div class="search-container">
+      <h4 class="search-title"><i class="fas fa-filter me-2"></i>تصفية المنتجات</h4>
+      <div class="search-form">
+        <div class="row g-3">
+          <div class="col-md-4">
+            <div class="input-group">
+              <span class="input-group-text"><i class="fas fa-search"></i></span>
+              <input type="text" class="form-control" placeholder="اسم المنتج" [(ngModel)]="searchFilters.name">
+            </div>
+          </div>
+          <div class="col-md-3">
+            <div class="input-group">
+              <span class="input-group-text"><i class="fas fa-tag"></i></span>
+              <select class="form-select" [(ngModel)]="searchFilters.category">
+                <option value="">جميع الفئات</option>
+                <option *ngFor="let category of categories" [value]="category">{{category}}</option>
+              </select>
+            </div>
+          </div>
+          <div class="col-md-3">
+            <div class="input-group">
+              <span class="input-group-text"><i class="fas fa-coins"></i></span>
+              <input type="number" class="form-control" placeholder="السعر الأقصى" [(ngModel)]="searchFilters.maxPrice">
+            </div>
+          </div>
+          <div class="col-md-2">
+            <button class="btn btn-primary w-100" (click)="applyFilters()">
+              <i class="fas fa-filter me-1"></i> تصفية
+            </button>
+          </div>
+        </div>
       </div>
-      <p class="description">{{ seller.description }}</p>
-    </div>
-    <div class="contact-buttons">
-      <a class="whatsapp-button" [href]="'https://wa.me/' + seller.phone" target="_blank">
-        <i class="fab fa-whatsapp"></i> تواصل واتساب
-      </a>
     </div>
   </div>
 
-  <section class="seller-products-section">
-    <h3 class="section-heading">منتجات هذا البائع</h3>
-
-    <div class="products-grid">
-      <div class="product-card" *ngFor="let product of sellerProducts">
-        <div class="product-image">
-          <img [src]="product.imageUrl" alt="{{ product.name }}">
+  <!-- بيانات البائع -->
+  <div class="seller-profile mb-4">
+    <div class="profile-banner">
+      <div class="profile-info">
+        <div class="profile-avatar">
+          <i class="fas fa-store-alt"></i>
         </div>
-        <div class="product-details">
-          <h4>{{ product.name }}</h4>
-          <p class="description">{{ product.description }}</p>
-          <div class="price-block">
-            <span class="price">{{ product.price }} ج.م</span>
-            <span class="old-price" *ngIf="product.oldPrice > product.price">{{ product.oldPrice }} ج.م</span>
+        <div class="profile-details">
+          <h2 class="profile-name">{{ seller.name }}</h2>
+          <div class="profile-rating">
+            <ng-container *ngFor="let star of stars; let i = index">
+              <i class="fas" [ngClass]="i < seller.rating ? 'fa-star' : 'fa-star-half-alt'"></i>
+            </ng-container>
+            <span class="rating-count">({{ seller.rating }}/5)</span>
           </div>
-          <button class="details-btn" [routerLink]="['/parts', product.id]">عرض التفاصيل</button>
+          <p class="profile-bio">{{ seller.description }}</p>
         </div>
       </div>
+      <div class="profile-actions">
+        <a class="contact-btn" [href]="'https://wa.me/' + seller.phone" target="_blank">
+          <i class="fab fa-whatsapp"></i> تواصل واتساب
+        </a>
+      </div>
     </div>
-  </section>
+  </div>
 
+  <!-- منتجات البائع -->
+  <div class="products-section mb-4">
+    <div class="section-header">
+      <h3 class="section-title">منتجات هذا البائع</h3>
+      <span class="product-count">{{ filteredProducts.length }} منتج</span>
+    </div>
+    
+    <div class="products-container">
+      <div class="row g-4">
+        <div class="col-sm-6 col-md-4 col-lg-3" *ngFor="let product of filteredProducts">
+          <div class="product-card">
+            <div class="product-badge" *ngIf="product.oldPrice > product.price">
+              <span>خصم {{ calculateDiscount(product) }}%</span>
+            </div>
+            <div class="product-image">
+              <img [src]="product.imageUrl" alt="{{ product.name }}">
+            </div>
+            <div class="product-info">
+              <h4 class="product-name">{{ product.name }}</h4>
+              <div class="product-category">{{ product.category }}</div>
+              <p class="product-description">{{ product.description }}</p>
+              <div class="product-price">
+                <span class="current-price">{{ product.price }} ج.م</span>
+                <span class="old-price" *ngIf="product.oldPrice > product.price">{{ product.oldPrice }} ج.م</span>
+              </div>
+              <button class="view-details-btn" [routerLink]="['/parts', product.id]">
+                <i class="fas fa-eye me-1"></i> عرض التفاصيل
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <!-- رسالة عند عدم وجود منتجات -->
+      <div class="no-products" *ngIf="filteredProducts.length === 0">
+        <div class="no-products-icon">
+          <i class="fas fa-box-open"></i>
+        </div>
+        <h5>لا توجد منتجات تطابق معايير البحث</h5>
+        <button class="btn btn-outline-primary" (click)="resetFilters()">
+          <i class="fas fa-sync-alt me-1"></i> إعادة ضبط البحث
+        </button>
+      </div>
+    </div>
+  </div>
 
   <!-- تقييمات العملاء -->
   <div class="reviews-section">
-    <h3>تقييمات العملاء</h3>
-    <div class="reviews">
-      <div class="review-card" *ngFor="let review of seller.reviews">
-        <div class="review-header">
-          <strong>{{ review.customer }}</strong>
-          <span class="review-rating">
-            <ng-container *ngFor="let star of stars; let i = index">
-              <i class="fas" [ngClass]="i < review.rating ? 'fa-star' : 'fa-star-half-alt'"></i>
-            </ng-container>
-          </span>
+    <div class="section-header">
+      <h3 class="section-title">تقييمات العملاء</h3>
+      <span class="reviews-count">{{ seller.reviews.length }} تقييم</span>
+    </div>
+    
+    <div class="reviews-container">
+      <div class="row g-4">
+        <div class="col-md-6 col-lg-4" *ngFor="let review of seller.reviews">
+          <div class="review-card">
+            <div class="review-header">
+              <div class="reviewer-avatar">
+                {{ review.customer.charAt(0) }}
+              </div>
+              <div class="reviewer-info">
+                <div class="reviewer-name">{{ review.customer }}</div>
+                <div class="review-rating">
+                  <ng-container *ngFor="let star of stars; let i = index">
+                    <i class="fas" [ngClass]="i < review.rating ? 'fa-star' : 'fa-star-o'"></i>
+                  </ng-container>
+                </div>
+              </div>
+            </div>
+            <div class="review-content">
+              <p class="review-text">{{ review.comment }}</p>
+            </div>
+          </div>
         </div>
-        <p class="comment">{{ review.comment }}</p>
       </div>
     </div>
   </div>
 </div>
-
