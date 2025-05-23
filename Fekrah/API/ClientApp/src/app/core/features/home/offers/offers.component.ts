@@ -162,7 +162,7 @@ export class OffersComponent implements OnInit, AfterViewInit {
         },
         1440: {
           slidesPerView: 5.5,
-          spaceBetween: 6, // حتى في الديسكتوب تبقى المسافة صغيرة
+          spaceBetween: 5, // حتى في الديسكتوب تبقى المسافة صغيرة
         }
       },
       on: {
