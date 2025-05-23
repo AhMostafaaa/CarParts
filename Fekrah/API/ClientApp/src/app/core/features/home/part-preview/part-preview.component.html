@@ -1,6 +1,6 @@
 <section class="part-preview-section">
-  <div class="container-fluid px-4">
-    <!-- Section Header -->
+  <div class="container">
+    <!-- عنوان القسم -->
     <div class="row mb-5">
       <div class="col-12 text-center">
         <div class="section-header" data-aos="fade-up">
@@ -18,120 +18,73 @@
       </div>
     </div>
 
-    <!-- Swiper Container -->
-    <div class="swiper-container part-swiper" dir="rtl" data-aos="fade-up" data-aos-delay="200">
+    <!-- سلايدر Swiper -->
+    <div class="swiper-container part-swiper">
       <div class="swiper-wrapper">
-        <div class="swiper-slide" *ngFor="let part of latestParts; trackBy: trackByPartId">
-          <div class="part-card" (click)="onPartClick(part)">
-            <!-- Product Image Container -->
-            <div class="card-image-container">
-              <img [src]="part.image" [alt]="part.name" class="card-image" loading="lazy">
+        <div class="swiper-slide" *ngFor="let part of latestParts">
+          <div class="part-card">
+            <!-- شارات الخصومات والعلامات -->
+            <!-- شارة خصم مائلة فقط -->
+            <div *ngIf="part.originalPrice && part.originalPrice > part.price" class="discount-badge">
+              <i class="fas fa-tags px-1"></i> وفر {{ part.originalPrice - part.price }} ج.م
+            </div>
 
-              <!-- Badges -->
-              <div class="badges-container">
-                <span *ngIf="part.isNew" class="badge badge-new">
-                  <i class="fas fa-star"></i> جديد
-                </span>
-                <span *ngIf="part.discount" class="badge badge-discount">
-                  {{part.discount}}% خصم
-                </span>
-                <span *ngIf="!part.inStock" class="badge badge-out-of-stock">
-                  غير متوفر
-                </span>
-              </div>
+            <!-- شارة "جديد" فقط إن وجدت -->
+            <div class="badges" *ngIf="part.isNew">
+              <span class="badge new">جديد</span>
+            </div>
 
-              <!-- Action Buttons -->
-              <div class="action-buttons">
-                <button class="btn-action btn-wishlist"
-                        (click)="addToWishlist(part, $event)"
-                        [attr.aria-label]="'إضافة ' + part.name + ' للمفضلة'">
-                  <i class="far fa-heart"></i>
-                </button>
-                <button class="btn-action btn-quick-view"
-                        [attr.aria-label]="'عرض سريع لـ ' + part.name">
-                  <i class="fas fa-eye"></i>
-                </button>
-              </div>
 
-              <!-- Stock Status Overlay -->
-              <div *ngIf="!part.inStock" class="stock-overlay">
-                <span class="stock-text">غير متوفر حالياً</span>
+
+            <div class="image-container">
+              <img [src]="part.image" [alt]="part.name" loading="lazy" />
+            </div>
+
+
+            <h3 class="part-name">
+              {{ part.name }}
+              <span class="origin" *ngIf="part.origin">بلد المنشأ: {{ part.origin }}</span>
+            </h3>
+
+            <a class="category-link" [routerLink]="['/category', part.category]" title="عرض قطع {{ part.category }}">
+              <i class="fas fa-layer-group"></i>
+              {{ part.category }} - {{ part.brand }}
+            </a>
+
+            <p class="part-description">{{ part.description }}</p>
+
+            <a class="seller-name" [routerLink]="['/seller', part.sellerId]">
+              <i class="fas fa-store"></i> {{ part.sellerName }}
+            </a>
+
+            <div class="price-section">
+              <div class="current-old-price">
+                <div class="price">{{ part.price }} ج.م</div>
+                <div class="old-price" *ngIf="part.originalPrice && part.originalPrice > part.price">
+                  {{ part.originalPrice }} ج.م
+                </div>
               </div>
             </div>
 
-            <!-- Card Content -->
-            <div class="card-content">
-              <!-- Category & Brand -->
-              <div class="card-meta">
-                <span class="category">{{part.category}}</span>
-                <span class="brand">{{part.brand}}</span>
-              </div>
-
-              <!-- Product Name -->
-              <h3 class="product-name">{{part.name}}</h3>
-
-              <!-- Rating -->
-              <div class="rating-container">
-                <div class="stars">
-                  <i *ngFor="let star of [1,2,3,4,5]"
-                     class="fas fa-star"
-                     [class.filled]="star <= part.rating"
-                     [class.half]="star > part.rating && star <= part.rating + 0.5">
-                  </i>
-                </div>
-                <span class="rating-text">{{part.rating}} ({{part.reviews}} تقييم)</span>
-              </div>
-
-              <!-- Price Section -->
-              <div class="price-container">
-                <div class="price-main">
-                  <span class="current-price">{{part.price | currency:'SAR':'symbol':'1.0-0'}}</span>
-                  <span *ngIf="part.originalPrice" class="original-price">
-                    {{part.originalPrice | currency:'SAR':'symbol':'1.0-0'}}
-                  </span>
-                </div>
-                <div *ngIf="part.discount" class="savings">
-                  وفر {{part.originalPrice! - part.price | currency:'SAR':'symbol':'1.0-0'}}
-                </div>
-              </div>
-
-              <!-- Add to Cart Button -->
-              <button class="btn-add-to-cart"
-                      [disabled]="!part.inStock"
-                      (click)="addToCart(part, $event)"
-                      [attr.aria-label]="'إضافة ' + part.name + ' للسلة'">
+            <div class="card-actions">
+              <button class="icon-btn cart" title="إضافة إلى السلة" (click)="addToCart(part, $event)">
                 <i class="fas fa-shopping-cart"></i>
-                <span *ngIf="part.inStock; else outOfStockText">أضف للسلة</span>
-                <ng-template #outOfStockText>غير متوفر</ng-template>
               </button>
+              <button class="icon-btn view" title="عرض التفاصيل" [routerLink]="['/parts', part.id]">
+                <i class="fas fa-eye"></i>
+              </button>
+              <a class="icon-btn whatsapp" [href]="getWhatsappLink(part.name)" target="_blank" title="تواصل واتساب">
+                <i class="fab fa-whatsapp"></i>
+              </a>
             </div>
+
           </div>
         </div>
       </div>
 
-      <!-- Navigation -->
-      <div class="swiper-navigation">
-        <div class="swiper-button-prev">
-          <i class="fas fa-chevron-right"></i>
-        </div>
-        <div class="swiper-button-next">
-          <i class="fas fa-chevron-left"></i>
-        </div>
-      </div>
-
-      <!-- Pagination -->
+      <div class="swiper-button-prev"></div>
+      <div class="swiper-button-next"></div>
       <div class="swiper-pagination"></div>
-    </div>
-
-    <!-- View All Button -->
-    <div class="row mt-5">
-      <div class="col-12 text-center" data-aos="fade-up" data-aos-delay="400">
-        <a href="/parts" class="btn btn-view-all">
-          <i class="fas fa-th-large"></i>
-          عرض جميع القطع
-          <i class="fas fa-arrow-left"></i>
-        </a>
-      </div>
     </div>
   </div>
 </section>

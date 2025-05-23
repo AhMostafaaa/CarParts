@@ -1,12 +1,8 @@
 import { Component, OnInit, AfterViewInit, OnDestroy } from '@angular/core';
 import Swiper from 'swiper';
-import {
-  Navigation,
-  Pagination,
-  Autoplay,
-  EffectCoverflow
-} from 'swiper/modules';
+import { Navigation, Pagination, Autoplay, EffectCoverflow } from 'swiper/modules';
 
+Swiper.use([Navigation, Pagination, Autoplay, EffectCoverflow]);
 
 interface CarPart {
   id: number;
@@ -31,17 +27,19 @@ interface CarPart {
 export class PartPreviewComponent implements OnInit, AfterViewInit, OnDestroy {
   private swiper: Swiper | null = null;
 
-  latestParts: CarPart[] = [
+  latestParts: any[] = [
     {
       id: 1,
       name: 'فلتر هواء عالي الأداء',
       brand: 'K&N',
+      origin: 'أمريكي',
       price: 450,
       originalPrice: 520,
       image: 'assets/images/image_100_100.png',
       category: 'فلاتر',
-      rating: 4.8,
-      reviews: 142,
+      sellerId: 1,
+      sellerName: 'مركز الهواء',
+      description: 'فلتر هواء يمنح سيارتك أداءً أفضل ويوفر استهلاك الوقود بشكل ملحوظ.',
       isNew: true,
       discount: 13,
       inStock: true
@@ -50,12 +48,14 @@ export class PartPreviewComponent implements OnInit, AfterViewInit, OnDestroy {
       id: 2,
       name: 'فرامل سيراميك متقدمة',
       brand: 'Brembo',
+      origin: 'إيطالي',
       price: 1200,
       originalPrice: 1450,
       image: 'assets/images/image_100_100.png',
       category: 'فرامل',
-      rating: 4.9,
-      reviews: 89,
+      sellerId: 2,
+      sellerName: 'ورشة السلام',
+      description: 'فرامل عالية الأداء توفر قوة توقف مثالية وتقليل الحرارة والضوضاء.',
       discount: 17,
       inStock: true
     },
@@ -63,56 +63,65 @@ export class PartPreviewComponent implements OnInit, AfterViewInit, OnDestroy {
       id: 3,
       name: 'مصابيح LED للمقدمة',
       brand: 'Philips',
+      origin: 'هولندي',
       price: 280,
       image: 'assets/images/image_100_100.png',
       category: 'إضاءة',
-      rating: 4.7,
-      reviews: 234,
+      sellerId: 3,
+      sellerName: 'الإضاءة الحديثة',
+      description: 'مصابيح أمامية LED بإضاءة قوية ولون أبيض نقي لعمر افتراضي طويل.',
       isNew: true,
       inStock: false
     },
     {
       id: 4,
-      name: 'زيت محرك سينثتيك',
+      name: 'زيت محرك سينثتيك 5W-30',
       brand: 'Mobil 1',
+      origin: 'أمريكي',
       price: 65,
       originalPrice: 80,
       image: 'assets/images/image_100_100.png',
       category: 'زيوت',
-      rating: 4.6,
-      reviews: 567,
+      sellerId: 4,
+      sellerName: 'الزيوت الأصلية',
+      description: 'زيت صناعي يضمن أداء فائق للمحرك في درجات حرارة عالية ومنخفضة.',
       discount: 19,
       inStock: true
     },
     {
       id: 5,
-      name: 'إطارات عالية الأداء',
+      name: 'إطارات ميشلان Pilot Sport',
       brand: 'Michelin',
+      origin: 'فرنسي',
       price: 950,
       image: 'assets/images/image_100_100.png',
       category: 'إطارات',
-      rating: 4.8,
-      reviews: 178,
+      sellerId: 5,
+      sellerName: 'تاير بلس',
+      description: 'إطارات رياضية بمستوى تماسك عالي وثبات فائق عند السرعات العالية.',
       inStock: true
     },
     {
       id: 6,
-      name: 'بطارية سيارة متقدمة',
+      name: 'بطارية سيارة AGM عالية الأداء',
       brand: 'Bosch',
+      origin: 'ألماني',
       price: 340,
       originalPrice: 400,
       image: 'assets/images/image_100_100.png',
       category: 'كهرباء',
-      rating: 4.5,
-      reviews: 298,
+      sellerId: 6,
+      sellerName: 'كهرباء السيارات',
+      description: 'بطارية AGM قوية تدوم طويلاً وتدعم الأنظمة الكهربائية الحديثة بكفاءة.',
       discount: 15,
       inStock: true
     }
   ];
 
-  ngOnInit(): void {
-    // Component initialization logic
-  }
+
+
+
+  ngOnInit(): void { }
 
   ngAfterViewInit(): void {
     this.initializeSwiper();
@@ -124,21 +133,23 @@ export class PartPreviewComponent implements OnInit, AfterViewInit, OnDestroy {
     }
   }
 
+  // part-preview.component.ts
+  // تحديث لضمان عرض الشرائح بترتيب صحيح عبر تعطيل centeredSlides
+  getWhatsappLink(partName: string): string {
+    const message = `استفسار عن المنتج: ${partName}`;
+    return `https://wa.me/?text=${encodeURIComponent(message)}`;
+  }
+
+
   private initializeSwiper(): void {
-    setTimeout(() => {
-      this.swiper = new Swiper('.part-swiper', {
-        slidesPerView: 1,
+    const swiperElement = document.querySelector('.part-swiper');
+    if (swiperElement) {
+      this.swiper = new Swiper(swiperElement as HTMLElement, {
+        slidesPerView: 3, // عدد الكروت الظاهرة على الشاشة
         spaceBetween: 30,
         loop: true,
-        centeredSlides: true,
-        effect: 'coverflow',
-        coverflowEffect: {
-          rotate: 20,
-          stretch: 0,
-          depth: 100,
-          modifier: 1,
-          slideShadows: true,
-        },
+        centeredSlides: false,
+        speed: 500,
         autoplay: {
           delay: 4000,
           disableOnInteraction: false,
@@ -154,51 +165,31 @@ export class PartPreviewComponent implements OnInit, AfterViewInit, OnDestroy {
           prevEl: '.swiper-button-prev'
         },
         breakpoints: {
-          320: {
-            slidesPerView: 1,
-            spaceBetween: 20,
-            effect: 'slide'
-          },
-          768: {
-            slidesPerView: 2,
-            spaceBetween: 25,
-            effect: 'slide'
-          },
-          1024: {
-            slidesPerView: 3,
-            spaceBetween: 30,
-            effect: 'coverflow'
-          },
-          1400: {
-            slidesPerView: 4,
-            spaceBetween: 35,
-            effect: 'coverflow'
-          }
-        },
-        on: {
-          slideChange: () => {
-            // Add any slide change logic here
-          }
+          320: { slidesPerView: 1, spaceBetween: 15 },
+          768: { slidesPerView: 2, spaceBetween: 20 },
+          1024: { slidesPerView: 3, spaceBetween: 30 },
+          1400: { slidesPerView: 4, spaceBetween: 30 }
         }
       });
-    }, 100);
+    }
   }
+
+
+
+
 
   onPartClick(part: CarPart): void {
     console.log('Part clicked:', part);
-    // Handle part click logic here
   }
 
   addToCart(part: CarPart, event: Event): void {
     event.stopPropagation();
     console.log('Added to cart:', part);
-    // Handle add to cart logic here
   }
 
   addToWishlist(part: CarPart, event: Event): void {
     event.stopPropagation();
     console.log('Added to wishlist:', part);
-    // Handle add to wishlist logic here
   }
 
   trackByPartId(index: number, part: CarPart): number {
