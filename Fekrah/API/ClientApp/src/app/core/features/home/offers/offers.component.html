@@ -43,7 +43,7 @@
             <div class="seller-info text-center mb-3">
               <div class="d-flex align-items-center justify-content-center gap-2">
                 <i class="fas fa-store text-success"></i>
-                <span class="seller-name fw-semibold text-success small">
+                <span [routerLink]="['/seller', offer.id]" class="seller-name fw-semibold text-success small">
                   {{ offer.sellerName }}
                 </span>
               </div>
@@ -83,15 +83,15 @@
 
             <!-- Action Button -->
             <div class="text-center mt-auto">
-              <button
-                class="details-btn btn btn-lg rounded-pill px-3 py-2 fw-semibold position-relative border-0 w-100"
-                (click)="viewOfferDetails(offer)" [attr.aria-label]="'عرض تفاصيل ' + offer.name" type="button">
+              <a class="details-btn btn btn-lg rounded-pill px-3 py-2 fw-semibold position-relative border-0 w-100 text-decoration-none"
+                [routerLink]="['/parts', offer.id]" [attr.aria-label]="'عرض تفاصيل ' + offer.name" type="button">
                 <span class="position-relative z-1 d-flex align-items-center justify-content-center gap-2">
                   <i class="fas fa-eye"></i>
                   <span>عرض التفاصيل</span>
                   <i class="fas fa-arrow-left"></i>
                 </span>
-              </button>
+              </a>
+
             </div>
 
           </div>
@@ -123,20 +123,23 @@
   </div>
 </div> -->
 
-<!-- Floating Animation -->
-<style>
-  @keyframes float {
-    0%, 100% {
-      transform: translateY(0px) rotate(0deg);
-      opacity: 0.2;
-    }
-    50% {
-      transform: translateY(-15px) rotate(180deg);
-      opacity: 0.4;
-    }
-  }
+  <!-- Floating Animation -->
+  <style>
+    @keyframes float {
 
-  .blur-sm {
-    filter: blur(30px);
-  }
-</style>
+      0%,
+      100% {
+        transform: translateY(0px) rotate(0deg);
+        opacity: 0.2;
+      }
+
+      50% {
+        transform: translateY(-15px) rotate(180deg);
+        opacity: 0.4;
+      }
+    }
+
+    .blur-sm {
+      filter: blur(30px);
+    }
+  </style>

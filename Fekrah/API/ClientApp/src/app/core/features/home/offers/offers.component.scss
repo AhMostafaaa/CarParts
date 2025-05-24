@@ -86,6 +86,7 @@
   max-width: 260px;
   // margin: 0 auto;
   padding: 0.5rem;
+  cursor: pointer;
 
   &::before {
     content: "";
@@ -344,4 +345,8 @@
   50% {
     transform: scale(1.2);
   }
+}
+
+.seller-name {
+  cursor: pointer;
 }

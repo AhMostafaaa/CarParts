@@ -51,6 +51,7 @@ export class OffersComponent implements OnInit, AfterViewInit, OnDestroy {
   // Animation and interaction states
   isLoading = true;
   activeSlideIndex = 0;
+  router: any;
 
   constructor(
     private cdr: ChangeDetectorRef,
@@ -515,7 +516,7 @@ private updateSlideEffects(): void {
     console.log('Viewing offer details:', offer);
 
     // Example implementations:
-    // this.router.navigate(['/offers', offer.id]);
+    this.router.navigate(['/offers', offer.id]);
     // this.modalService.open(OfferDetailsComponent, { data: offer });
     // this.dialog.open(OfferModalComponent, { data: offer });
   }

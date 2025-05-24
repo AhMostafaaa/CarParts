@@ -23,7 +23,7 @@
   </div>
 
   <!-- Right Menu -->
-  <div class="right-menu">
+  <div class="right-menu" >
     <a routerLink="/AboutUs" class="nav-link">
       <i class="fas fa-info-circle"></i> من نحن
     </a>
@@ -42,17 +42,17 @@
     </a> -->
   </div>
 </header>
-
 <!-- Navigation Menu -->
 <nav class="main-nav">
   <div class="container">
     <ul class="nav-list">
-      <li><a routerLink="/home" routerLinkActive="active">الرئيسية</a></li>
-      <li><a routerLink="/categories" routerLinkActive="active">الأقسام</a></li>
-      <li><a routerLink="/brands" routerLinkActive="active">الماركات</a></li>
-      <li><a routerLink="/offers" routerLinkActive="active">العروض</a></li>
-      <li><a routerLink="/stores" routerLinkActive="active">المتاجر</a></li>
-      <li><a routerLink="/latest" routerLinkActive="active">أحدث القطع</a></li>
+      <li *ngFor="let item of navItems">
+        <a (click)="goToSection(item.target)">
+          {{ item.label }}
+        </a>
+      </li>
     </ul>
+
   </div>
 </nav>
+

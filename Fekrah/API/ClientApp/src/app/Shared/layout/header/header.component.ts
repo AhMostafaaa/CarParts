@@ -11,6 +11,17 @@ export class HeaderComponent implements OnInit {
   isSticky = false;
   searchTerm = '';
   cartCount = 0;
+  navItems = [
+    { label: 'الرئيسية', target: 'home-section' },
+    { label: 'الأقسام', target: 'categories-section' },
+    { label: 'الماركات', target: 'brands-section' },
+    { label: 'العروض', target: 'offers-section' },
+    { label: 'المتاجر', target: 'stores-section' },
+    { label: 'المقترحات', target: 'suggested-offers' },
+    { label: 'أحدث القطع', target: 'latest-section' },
+    { label: 'الأصناف', target: 'part-types' }
+  ];
+
 
   @HostListener('window:scroll', [])
   onWindowScroll() {
@@ -50,4 +61,24 @@ export class HeaderComponent implements OnInit {
       }
     }
   }
+
+  goToSection(sectionId: string) {
+    if (this.router.url.startsWith('/home')) {
+      this.scrollToSection(sectionId);
+    } else {
+      this.router.navigate(['/home'], { queryParams: { scrollTo: sectionId } });
+    }
+  }
+
+  scrollToSection(id: string) {
+    const el = document.getElementById(id);
+    if (el) {
+      const yOffset = window.innerHeight / 2 - el.offsetHeight / 2;
+      const y = el.getBoundingClientRect().top + window.scrollY - yOffset;
+      window.scrollTo({ top: y, behavior: 'smooth' });
+    }
+  }
+
+
+
 }
