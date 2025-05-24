@@ -1,16 +1,29 @@
 <div class="category-parts-page" [class.shifted]="showSidebar">
-
-  <!-- ✅ Header ثابت ويتحرك عند فتح الفلتر -->
+  <!-- ✅ Header -->
   <header class="header">
     <div class="header-right">
-      <h1 class="page-title">
-        🛠️ {{ categoryName }}
-      </h1>
+      <h1 class="page-title">🛠️ {{ categoryName }}</h1>
+    </div>
+
+    <div class="header-center">
+      <div class="search-container" [class.focused]="searchFocused">
+        <input type="text" placeholder="اكتب اسم القطعة أو الماركة..."
+               [(ngModel)]="searchText"
+               (input)="onSearch($event)"
+               (focus)="searchFocused = true"
+               (blur)="searchFocused = false" class="px-5" />
+        <ul class="suggestions" *ngIf="suggestions.length && searchFocused">
+          <li *ngFor="let suggestion of suggestions" (click)="selectSuggestion(suggestion)">
+            <img src="../../assets/images/icon-parts.png" alt="icon" width="24" height="24" />
+            <span>{{ suggestion }}</span>
+          </li>
+        </ul>
+      </div>
     </div>
 
     <div class="header-left">
       <button (click)="toggleSidebar()" class="toggle-sidebar">
-        <i class="fas fa-filter"></i> فلتر
+        <i class="fas fa-filter"></i> فلتر <span class="filter-count">(0)</span>
       </button>
       <select (change)="changePageSize($event)" class="page-size-selector">
         <option *ngFor="let size of pageSizeOptions" [value]="size">
@@ -20,29 +33,22 @@
     </div>
   </header>
 
-  <!-- ✅ المحتوى الرئيسي + الفلتر -->
+  <!-- ✅ Layout -->
   <div class="page-layout">
     <section class="parts-section">
       <div class="parts-grid">
-        <app-card
-          *ngFor="let part of filteredParts | paginate: { itemsPerPage: pageSize, currentPage: currentPage }"
-          [part]="part">
+        <app-card *ngFor="let part of filteredParts | paginate: { itemsPerPage: pageSize, currentPage: currentPage }"
+                  [part]="part">
         </app-card>
       </div>
 
-      <!-- ✅ Pagination Component -->
       <div class="pagination-container">
-        <pagination-controls
-          (pageChange)="pageChanged($event)"
-          previousLabel="‹ السابق"
-          nextLabel="التالي ›"
-          firstLabel="« الأول"
-          lastLabel="الأخير »">
+        <pagination-controls (pageChange)="pageChanged($event)" previousLabel="‹ السابق" nextLabel="التالي ›"
+                             firstLabel="« الأول" lastLabel="الأخير »">
         </pagination-controls>
       </div>
     </section>
 
-    <!-- ✅ Sidebar الفلتر في اليمين -->
     <aside class="filters-sidebar" [class.open]="showSidebar">
       <app-filter-sidebar></app-filter-sidebar>
     </aside>

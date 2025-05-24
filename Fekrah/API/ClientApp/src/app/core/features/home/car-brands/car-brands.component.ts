@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { Router } from '@angular/router';
 import Swiper from 'swiper';
 import { Navigation, Pagination, Autoplay } from 'swiper/modules';
 
@@ -8,23 +9,42 @@ import { Navigation, Pagination, Autoplay } from 'swiper/modules';
   styleUrls: ['./car-brands.component.scss']
 })
 export class CarBrandsComponent implements OnInit {
+  constructor() {}
+
   carBrands = [
-    { name: 'تويوتا', logo: 'assets/images/image_100_100.png' },
-    { name: 'هيونداي', logo: 'assets/images/image_100_100.png' },
-    { name: 'نيسان', logo: 'assets/images/image_100_100.png' },
-    { name: 'شيفروليه', logo: 'assets/images/image_100_100.png' },
-    { name: 'كيا', logo: 'assets/images/image_100_100.png' },
-    { name: 'بي إم دبليو', logo: 'assets/images/image_100_100.png' },
-    { name: 'مرسيدس', logo: 'assets/images/image_100_100.png' },
-    { name: 'تويوتا', logo: 'assets/images/image_100_100.png' },
-    { name: 'هيونداي', logo: 'assets/images/image_100_100.png' },
-    { name: 'نيسان', logo: 'assets/images/image_100_100.png' },
-    { name: 'شيفروليه', logo: 'assets/images/image_100_100.png' },
-    { name: 'كيا', logo: 'assets/images/image_100_100.png' },
-    { name: 'بي إم دبليو', logo: 'assets/images/image_100_100.png' },
-    { name: 'مرسيدس', logo: 'assets/images/image_100_100.png' },
-    { name: 'فورد', logo: 'assets/images/image_100_100.png' }
-  ];
+      { id: 1, name: 'تويوتا', logo: 'assets/images/image_100_100.png' },
+      { id: 2, name: 'هيونداي', logo: 'assets/images/image_100_100.png' },
+      { id: 3, name: 'نيسان', logo: 'assets/images/image_100_100.png' },
+      { id: 4, name: 'شيفروليه', logo: 'assets/images/image_100_100.png' },
+      { id: 5, name: 'كيا', logo: 'assets/images/image_100_100.png' },
+      { id: 1, name: 'تويوتا', logo: 'assets/images/image_100_100.png' },
+      { id: 2, name: 'هيونداي', logo: 'assets/images/image_100_100.png' },
+      { id: 3, name: 'نيسان', logo: 'assets/images/image_100_100.png' },
+      { id: 4, name: 'شيفروليه', logo: 'assets/images/image_100_100.png' },
+      { id: 5, name: 'كيا', logo: 'assets/images/image_100_100.png' },
+      { id: 1, name: 'تويوتا', logo: 'assets/images/image_100_100.png' },
+      { id: 2, name: 'هيونداي', logo: 'assets/images/image_100_100.png' },
+      { id: 3, name: 'نيسان', logo: 'assets/images/image_100_100.png' },
+      { id: 4, name: 'شيفروليه', logo: 'assets/images/image_100_100.png' },
+      { id: 5, name: 'كيا', logo: 'assets/images/image_100_100.png' },
+      { id: 1, name: 'تويوتا', logo: 'assets/images/image_100_100.png' },
+      { id: 2, name: 'هيونداي', logo: 'assets/images/image_100_100.png' },
+      { id: 3, name: 'نيسان', logo: 'assets/images/image_100_100.png' },
+      { id: 4, name: 'شيفروليه', logo: 'assets/images/image_100_100.png' },
+      { id: 5, name: 'كيا', logo: 'assets/images/image_100_100.png' },
+      { id: 1, name: 'تويوتا', logo: 'assets/images/image_100_100.png' },
+      { id: 2, name: 'هيونداي', logo: 'assets/images/image_100_100.png' },
+      { id: 3, name: 'نيسان', logo: 'assets/images/image_100_100.png' },
+      { id: 4, name: 'شيفروليه', logo: 'assets/images/image_100_100.png' },
+      { id: 5, name: 'كيا', logo: 'assets/images/image_100_100.png' },
+      { id: 1, name: 'تويوتا', logo: 'assets/images/image_100_100.png' },
+      { id: 2, name: 'هيونداي', logo: 'assets/images/image_100_100.png' },
+      { id: 3, name: 'نيسان', logo: 'assets/images/image_100_100.png' },
+      { id: 4, name: 'شيفروليه', logo: 'assets/images/image_100_100.png' },
+      { id: 5, name: 'كيا', logo: 'assets/images/image_100_100.png' },
+      // أكمل باقي الماركات
+    ];
+
 
   ngOnInit() {
     const swiper = new Swiper('.swiper', {
@@ -66,7 +86,6 @@ export class CarBrandsComponent implements OnInit {
     });
   }
 
-  goToBrand(name: string) {
-    console.log('انتقال إلى صفحة:', name);
-  }
+
+
 }

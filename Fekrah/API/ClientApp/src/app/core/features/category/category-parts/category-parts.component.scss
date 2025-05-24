@@ -1,106 +1,110 @@
-/* =============== Page Wrapper =============== */
 .category-parts-page {
-  position: relative;
-  background-image: url('/assets/images/background.jpg');
+  background-image: url(/assets/images/background.jpg);
   background-size: cover;
   background-position: center;
-  background-repeat: no-repeat;
-  border-radius: 2px;
+  border-radius: 8px;
   border: 2px solid #ddd;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-  margin: 1px auto;
-  max-width: 100%;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1);
+  margin: 3px auto;
+  max-width: 99%;
   overflow: hidden;
 }
 
-/* =============== Header Styling =============== */
 .header {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  background: linear-gradient(135deg, #4f46e5 0%, #3d7016 100%);
+  background: linear-gradient(135deg, #1e3c72, #2a5298);
   color: white;
-  padding: 8px 20px;
-  height: 70px;
+  padding: 10px 20px;
+  height: 80px;
   border-bottom: 2px solid #1b4016;
   border-radius: 8px;
   margin-bottom: 20px;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
 
-  .header-right {
+  .header-right .page-title {
+    font-size: 1.8rem;
+    font-weight: bold;
     display: flex;
     align-items: center;
-    gap: 15px;
-
-    .page-title {
-      font-size: 1.8rem;
-      font-weight: bold;
-      display: flex;
-      align-items: center;
-      gap: 10px;
-
-      /* ✅ إضافة أيقونة مميزة حسب نوع الفئة */
-      &::before {
-        font-size: 1.5rem;
-      }
-    }
+    gap: 10px;
   }
 
   .header-left {
     display: flex;
     gap: 10px;
+    align-items: center;
 
     .toggle-sidebar {
-      background-color: #1b4016;
+      background: linear-gradient(to right, #4caf50, #2e7d32);
+      color: white;
+      padding: 8px 16px;
+      font-weight: bold;
       border: none;
-      padding: 6px 12px;
-      cursor: pointer;
-      border-radius: 5px;
-      display: flex;
-      align-items: center;
-      gap: 5px;
-      transition: background-color 0.3s;
+      border-radius: 8px;
+      box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
+      transition: all 0.3s ease;
+      position: relative;
 
       i {
         font-size: 16px;
+        margin-right: 5px;
       }
 
       &:hover {
-        background-color: #174d13;
+        background: linear-gradient(to right, #388e3c, #1b5e20);
+        transform: scale(1.05);
       }
     }
 
-    .page-size-selector {
-      padding: 5px;
-      border-radius: 5px;
-      border: 1px solid #ccc;
+    .filter-count {
+      background: #ff4081;
+      color: white;
+      font-size: 12px;
+      padding: 2px 6px;
+      border-radius: 10px;
+      margin-right: 5px;
     }
+
+    .page-size-selector {
+      padding: 6px 12px;
+      border-radius: 8px;
+      border: 1px solid #ccc;
+      font-weight: 500;
+      background-color: #f9f9f9;
+
+      &:focus {
+        border-color: #4caf50;
+        outline: none;
+      }
+    }
+  }
+
+  .header-center {
+    flex-grow: 1;
+    display: flex;
+    justify-content: center;
   }
 }
 
-/* =============== Page Layout =============== */
 .page-layout {
   display: flex;
-  transition: margin-left 0.3s ease;
+  flex-wrap: wrap;
 }
 
 .parts-section {
   width: 100%;
-  transition: margin-left 0.3s ease;
 }
 
 .parts-grid {
   display: flex;
   flex-wrap: wrap;
   justify-content: center;
-  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
   gap: 20px;
   padding: 20px;
-  width: 100%;
-  justify-items: center;
 }
 
-/* =============== Sidebar Styling =============== */
 .filters-sidebar {
   width: 300px;
   background: #eef4f7;
@@ -110,7 +114,6 @@
   right: -300px;
   transition: transform 0.3s ease, box-shadow 0.3s ease;
   box-shadow: -2px 0 8px rgba(0, 0, 0, 0);
-  z-index: 2500;
 
   &.open {
     transform: translateX(-300px);
@@ -118,10 +121,87 @@
   }
 }
 
-/* =============== Pagination Styling =============== */
 .pagination-container {
   display: flex;
   justify-content: center;
-  margin-top: 20px;
-  margin-bottom: 20px;
+  margin: 20px 0;
+}
+
+.search-container {
+  position: relative;
+  display: flex;
+  align-items: center;
+  background: white;
+  border-radius: 50px;
+  padding: 8px 20px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  transition: all 0.3s ease-in-out;
+  width: 100%;
+  max-width: 500px;
+
+  &.focused {
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.2);
+    transform: scale(1.02);
+  }
+
+  input {
+    border: none;
+    outline: none;
+    background: transparent;
+    font-size: 1rem;
+    width: 100%;
+    padding-right: 10px;
+    transition: all 0.3s ease;
+  }
+
+  .suggestions {
+    position: absolute;
+    top: 100%;
+    left: 0;
+    right: 0;
+    background: #fff;
+    border: 1px solid #ccc;
+    border-radius: 0 0 12px 12px;
+    box-shadow: 0 6px 14px rgba(0, 0, 0, 0.15);
+    z-index: 1000;
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    animation: fadeIn 0.2s ease-in-out;
+
+    li {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 12px 16px;
+      cursor: pointer;
+      border-bottom: 1px solid #eee;
+
+      &:last-child {
+        border-radius: 0 0 12px 12px;
+        border-bottom: none;
+      }
+
+      img {
+        width: 24px;
+        height: 24px;
+        object-fit: contain;
+      }
+
+      &:hover {
+        background-color: #f7f9fc;
+      }
+    }
+  }
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(-5px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
