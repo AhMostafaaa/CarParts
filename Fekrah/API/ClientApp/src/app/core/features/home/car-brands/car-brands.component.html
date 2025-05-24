@@ -1,0 +1,18 @@
+<div class="brand-section">
+  <h2>تسوق قطع غيار سيارتك الآن</h2>
+  <div class="swiper">
+    <div class="swiper-wrapper">
+      <div class="swiper-slide" *ngFor="let brand of carBrands" (click)="goToBrand(brand.name)">
+        <div class="brand-card">
+          <div class="brand-image">
+            <img [src]="brand.logo" [alt]="brand.name" />
+          </div>
+          <p>{{ brand.name }}</p>
+        </div>
+      </div>
+    </div>
+    <div class="swiper-pagination"></div>
+    <div class="swiper-button-prev"></div>
+    <div class="swiper-button-next"></div>
+  </div>
+</div>

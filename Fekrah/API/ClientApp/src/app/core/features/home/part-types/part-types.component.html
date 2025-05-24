@@ -1,0 +1,16 @@
+<div class="part-types-section">
+  <h2>ابحث حسب نوع القطعة</h2>
+  <div class="swiper">
+    <div class="swiper-wrapper">
+      <div class="swiper-slide" *ngFor="let part of partTypes" (click)="selectPart(part.name)">
+        <div class="part-type-card">
+          <div class="icon">{{ part.icon }}</div>
+          <p>{{ part.name }}</p>
+        </div>
+      </div>
+    </div>
+    <div class="swiper-pagination"></div>
+    <!-- <div class="swiper-button-prev"></div>
+    <div class="swiper-button-next"></div> -->
+  </div>
+</div>

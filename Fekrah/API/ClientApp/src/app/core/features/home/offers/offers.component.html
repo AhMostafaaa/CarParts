@@ -1,15 +1,142 @@
-<div class="offers-section">
-<h2 class="section-title">أفضل العروض الحصرية</h2>
-<p class="section-subtitle">لا تفوّت الفرص الذهبية – منتجات مميزة بأسعار لا تُقارن!</p>
+<!-- Enhanced offers.component.html -->
+<div class="offers-section rounded-4 p-4 p-lg-5 position-relative">
+  <!-- Header Section -->
+  <div class="text-center mb-4">
+    <h2 class="section-title display-4 fw-bold mb-3 position-relative">
+      أفضل العروض الحصرية
+    </h2>
+    <p class="section-subtitle lead text-muted mb-0 px-3">
+      لا تفوّت الفرص الذهبية – منتجات مميزة بأسعار استثنائية لفترة محدودة!
+    </p>
+  </div>
 
+  <!-- Swiper Container -->
+  <div class="swiper offers-swiper position-relative">
+    <div class="swiper-wrapper align-items-stretch">
 
-  <div class="swiper-container offers-swiper">
-    <div class="swiper-wrapper">
-      <div class="swiper-slide" *ngFor="let offer of bestOffers">
-        <app-offer-card [offer]="offer"></app-offer-card>
+      <!-- Offer Card Template -->
+      <div class="swiper-slide" *ngFor="let offer of bestOffers; let i = index; trackBy: trackByOfferId">
+
+        <div class="offer-card rounded-4 p-3 h-100 d-flex flex-column position-relative overflow-hidden shadow-lg"
+          [class.animate__animated]="true" [class.animate__fadeInUp]="true" [style.animation-delay]="(i * 0.1) + 's'"
+          #offerCard>
+
+          <!-- Product Image Section -->
+          <div class="image-container rounded-3 p-2 mb-3 text-center position-relative">
+            <img [src]="offer.imageUrl" [alt]="offer.name" class="offer-image img-fluid"
+              style="width: 100px; height: 100px; object-fit: contain;" loading="lazy" (error)="onImageError($event)">
+          </div>
+
+          <!-- Content Section -->
+          <div class="flex-grow-1 d-flex flex-column">
+            <!-- Product Title -->
+            <h3 class="offer-title h6 fw-bold text-center mb-2 lh-base">
+              {{ offer.name }}
+            </h3>
+
+            <!-- Product Description -->
+            <p class="offer-description text-muted text-center flex-grow-1 mb-3 small lh-sm">
+              {{ offer.description }}
+            </p>
+
+            <!-- Seller Information -->
+            <div class="seller-info text-center mb-3">
+              <div class="d-flex align-items-center justify-content-center gap-2">
+                <i class="fas fa-store text-success"></i>
+                <span class="seller-name fw-semibold text-success small">
+                  {{ offer.sellerName }}
+                </span>
+              </div>
+              <div class="mt-1" *ngIf="offer.condition">
+                <span class="badge rounded-pill" [class.bg-success]="offer.condition === 'New'"
+                  [class.bg-warning]="offer.condition === 'Used'" style="font-size: 0.7rem;">
+                  {{ offer.condition === 'New' ? 'جديد' : 'مستعمل' }}
+                </span>
+              </div>
+            </div>
+
+            <!-- Price Section -->
+            <div class="price-section rounded-3 p-2 mb-3 text-center position-relative">
+              <div class="d-flex justify-content-center align-items-center gap-2 mb-2 flex-wrap">
+                <span class="current-price h5 fw-bold mb-0">
+                  {{ offer.price | currency:'ج.م':'symbol':'1.0-0' }}
+                </span>
+                <span class="old-price text-decoration-line-through text-muted position-relative"
+                  *ngIf="offer.oldPrice">
+                  {{ offer.oldPrice | currency:'ج.م':'symbol':'1.0-0' }}
+                </span>
+              </div>
+
+              <!-- Discount Badge -->
+              <div *ngIf="offer.discount" class="discount-section">
+                <div class="discount-badge badge rounded-pill px-2 py-1 fw-semibold position-relative">
+                  <i class="fas fa-fire me-1"></i>
+                  خصم {{ offer.discount }}%
+                </div>
+                <div class="mt-2">
+                  <small class="text-success fw-semibold">
+                    وفّر {{ (offer.oldPrice! - offer.price) | currency:'ج.م':'symbol':'1.0-0' }}
+                  </small>
+                </div>
+              </div>
+            </div>
+
+            <!-- Action Button -->
+            <div class="text-center mt-auto">
+              <button
+                class="details-btn btn btn-lg rounded-pill px-3 py-2 fw-semibold position-relative border-0 w-100"
+                (click)="viewOfferDetails(offer)" [attr.aria-label]="'عرض تفاصيل ' + offer.name" type="button">
+                <span class="position-relative z-1 d-flex align-items-center justify-content-center gap-2">
+                  <i class="fas fa-eye"></i>
+                  <span>عرض التفاصيل</span>
+                  <i class="fas fa-arrow-left"></i>
+                </span>
+              </button>
+            </div>
+
+          </div>
+        </div>
       </div>
     </div>
 
-    <div class="swiper-pagination"></div>
+    <!-- Pagination -->
+    <div class="swiper-pagination mt-3 position-relative" *ngIf="bestOffers.length > 3"
+      style="position: relative !important;"></div>
   </div>
-</div>
+
+  <!-- Loading State -->
+  <div class="text-center py-4" *ngIf="bestOffers.length === 0">
+    <div class="spinner-border text-primary" role="status" style="width: 2.5rem; height: 2.5rem;">
+      <span class="visually-hidden">جاري التحميل...</span>
+    </div>
+    <p class="mt-2 text-muted">جاري تحميل العروض...</p>
+  </div>
+
+  <!-- Floating Elements -->
+  <!-- <div class="floating-elements position-absolute w-100 h-100 top-0 start-0 overflow-hidden pointer-events-none">
+    <div class="position-absolute bg-warning opacity-25 rounded-circle blur-sm"
+      style="width: 80px; height: 80px; top: 10%; right: 5%; animation: float 6s ease-in-out infinite;"></div>
+    <div class="position-absolute bg-info opacity-25 rounded-circle blur-sm"
+      style="width: 50px; height: 50px; bottom: 15%; left: 8%; animation: float 4s ease-in-out infinite reverse;"></div>
+    <div class="position-absolute bg-success opacity-25 rounded-circle blur-sm"
+      style="width: 65px; height: 65px; top: 60%; right: 15%; animation: float 5s ease-in-out infinite;"></div>
+  </div>
+</div> -->
+
+<!-- Floating Animation -->
+<style>
+  @keyframes float {
+    0%, 100% {
+      transform: translateY(0px) rotate(0deg);
+      opacity: 0.2;
+    }
+    50% {
+      transform: translateY(-15px) rotate(180deg);
+      opacity: 0.4;
+    }
+  }
+
+  .blur-sm {
+    filter: blur(30px);
+  }
+</style>

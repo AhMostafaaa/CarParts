@@ -10,6 +10,8 @@ import { CategoryPageComponent } from './category-page/category-page.component';
 import { SuggestedOffersComponent } from './suggested-offers/suggested-offers.component';
 import { FeaturedSellersComponent } from './featured-sellers/featured-sellers.component';
 import { SharedModule } from '../../../Shared/shared.module';
+import { CarBrandsComponent } from './car-brands/car-brands.component';
+import { PartTypesComponent } from './part-types/part-types.component';
 
 @NgModule({
   declarations: [
@@ -21,6 +23,8 @@ import { SharedModule } from '../../../Shared/shared.module';
     CategoryPageComponent,
     SuggestedOffersComponent,
     FeaturedSellersComponent,
+    CarBrandsComponent,
+    PartTypesComponent
   ],
   imports: [
     SharedModule,
