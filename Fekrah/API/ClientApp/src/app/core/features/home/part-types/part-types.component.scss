@@ -1,17 +1,49 @@
 .part-types-section {
   text-align: center;
-  margin: 40px auto;
+  margin: 60px auto;
   max-width: 1500px;
-  padding: 20 50px;
+  padding: 0 30px; /* تقليل الحشو الجانبي قليلاً على الشاشات الكبيرة */
+
   h2 {
-    font-size: 24px;
-    margin-bottom: 25px;
-    color: #222;
+    font-size: 30px; /* حجم خط أكبر قليلاً */
+    margin-bottom: 30px;
+    color: #374151; /* لون رمادي داكن أكثر احترافية */
+    position: relative;
+    display: inline-block;
+    font-weight: 700;
+    padding-bottom: 15px; /* مساحة أسفل النص للخط */
+
+    &::after {
+      content: "";
+      position: absolute;
+      bottom: 0;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 100px; /* عرض أطول قليلاً للخط */
+      height: 4px; /* سمك أكبر قليلاً للخط */
+      background: linear-gradient(
+        90deg,
+        #6366f1,
+        #a855f7
+      ); /* تدرج ألوان أحدث */
+      border-radius: 4px;
+    }
   }
 }
 
 .swiper {
-  padding: 20px 0 35px;
+  width: 90vw;
+  padding: 30px 0 50px;
+  overflow: hidden;
+  margin: 0 auto;
+  align-items: center;
+
+  .swiper-wrapper {
+    width: 100%;
+    display: flex; /* لجعل justify-content يعمل */
+    justify-content: center; /* لتوسيط الشرائح أفقياً */
+    align-items: center;
+  }
 
   .swiper-slide {
     width: auto;
@@ -19,88 +51,188 @@
     display: flex;
     justify-content: center;
     padding: 10px;
+    transition: transform 0.3s ease, box-shadow 0.3s ease; /* إضافة انتقال للظل */
+
+    &:hover {
+      transform: scale(1.03); /* تكبير أكبر قليلاً عند المرور */
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15); /* ظل أكثر بروزًا عند المرور */
+    }
   }
 }
 
 .part-type-card {
-  width: 160px; // زيادة العرض
-  height: 160px; // زيادة الارتفاع
-  background: #f9f9f9;
-  border-radius: 16px;
-  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.1);
+  width: 400px; /* زيادة العرض بشكل كبير */
+  height: 250px;
+  background: #f9fafb;
+  border-radius: 12px;
+  box-shadow: 0 6px 15px rgba(0, 0, 0, 0.06);
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
   cursor: pointer;
-  transition: all 0.2s ease-in-out;
+  transition: all 0.3s ease;
   margin: 0 auto;
+  border: 1px solid #e5e7eb;
+  position: relative;
+  overflow: hidden;
+
+  &::before {
+    content: "";
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    height: 5px;
+    background: linear-gradient(90deg, #6366f1, #a855f7);
+    transform: scaleX(0);
+    transition: transform 0.3s ease-in-out;
+  }
 
   &:hover {
     transform: translateY(-5px);
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+
+    &::before {
+      transform: scaleX(1);
+    }
   }
 
   .icon {
-    font-size: 42px; // زيادة حجم الأيقونة
-    margin-bottom: 15px;
+    width: 80px; /* زيادة حجم الأيقونة بما يتناسب مع حجم الكارد */
+    height: 80px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 15px; /* زيادة المسافة قليلاً */
+
+    .part-image {
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
+      transition: transform 0.3s ease;
+      filter: drop-shadow(0 3px 6px rgba(0, 0, 0, 0.08));
+    }
   }
 
   p {
-    font-weight: bold;
-    color: #444;
+    font-weight: 500;
+    color: #4b5563;
     margin: 0;
-    font-size: 16px; // تحديد حجم الخط
-    padding: 0 8px; // إضافة تباعد للنص
+    font-size: 16px; /* زيادة حجم الخط قليلاً */
+    padding: 0 8px;
+    text-align: center;
+    transition: color 0.3s ease;
+  }
+
+  &:hover {
+    p {
+      color: #6366f1;
+    }
+
+    .part-image {
+      transform: scale(1.05);
+      filter: drop-shadow(0 4px 8px rgba(99, 102, 241, 0.2));
+    }
   }
 }
 
+@media (max-width: 768px) {
+  .part-type-card {
+    width: 160px; /* زيادة حجم الكارد على الشاشات الصغيرة أيضاً */
+    height: 160px;
+
+    .icon {
+      width: 50px;
+      height: 50px;
+      margin-bottom: 10px;
+    }
+
+    p {
+      font-size: 14px;
+    }
+  }
+}
 :host ::ng-deep {
   .swiper-pagination {
-    bottom: 0;
+    bottom: 10px;
 
     .swiper-pagination-bullet {
-      width: 8px;
-      height: 8px;
-      background: #ddd;
+      width: 10px;
+      height: 10px;
+      background: #cbd5e0; /* لون أفتح للترقيم */
       opacity: 1;
+      transition: all 0.3s ease;
 
       &-active {
-        background: #666;
+        background: #6366f1; /* لون نشط مطابق للتدرج */
+        transform: scale(1.1); /* تكبير أصغر للعنصر النشط */
       }
     }
   }
 
   .swiper-button-next,
   .swiper-button-prev {
-    color: #666;
-    width: 35px;
+    color: #4b5563; /* لون أغمق لأزرار التنقل */
+    width: 35px; /* حجم أصغر للأزرار */
     height: 35px;
+    background: rgba(255, 255, 255, 0.7); /* خلفية شفافة قليلاً */
+    border-radius: 50%;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08); /* ظل أنعم */
+    backdrop-filter: blur(6px); /* تأثير ضبابي للخلفية */
+    transition: all 0.3s ease;
 
     &:after {
-      font-size: 18px;
+      font-size: 18px; /* حجم أيقونة أصغر */
+      font-weight: bold;
     }
 
     &:hover {
-      color: #333;
+      color: #6366f1;
+      transform: scale(1.05); /* تكبير طفيف عند المرور */
+      box-shadow: 0 3px 10px rgba(0, 0, 0, 0.1); /* ظل عند المرور */
     }
   }
 }
 
 @media (max-width: 768px) {
   .part-types-section {
-    padding: 0 20px;
+    padding: 0 15px;
+    margin: 30px auto;
+
+    h2 {
+      font-size: 24px;
+      margin-bottom: 15px;
+
+      &::after {
+        width: 70px;
+        bottom: -6px;
+      }
+    }
   }
 
   .part-type-card {
-    width: 140px; // تقليل الحجم على الشاشات الصغيرة
-    height: 140px;
+    width: 120px;
+    height: 120px;
+
     .icon {
-      font-size: 36px;
+      width: 40px;
+      height: 40px;
+      margin-bottom: 8px;
     }
 
     p {
-      font-size: 14px;
+      font-size: 13px;
+    }
+  }
+
+  :host ::ng-deep {
+    .swiper-button-next,
+    .swiper-button-prev {
+      display: none !important; /* التأكيد على الإخفاء على الشاشات الصغيرة */
+    }
+
+    .swiper-pagination {
+      bottom: 5px;
     }
   }
 }

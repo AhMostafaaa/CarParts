@@ -1,5 +1,4 @@
 <div class="brand-parts-wrapper">
-  <!-- Header Section -->
   <div class="brand-header">
     <div class="brand-logo">
       <img
@@ -10,7 +9,6 @@
     <p class="brand-subtitle">{{ brandDescription }}</p>
   </div>
 
-  <!-- Enhanced Filters Section -->
   <div class="filters-section">
     <h3 class="filters-title">فلترة النتائج</h3>
     <div class="filters-bar">
@@ -25,21 +23,6 @@
         </select>
       </div>
 
-      <!-- <div class="filter-group price-filter">
-        <label for="priceFilter">نطاق السعر</label>
-        <select id="priceFilter" [(ngModel)]="selectedPrice" (change)="applyFilters()" (focus)="onSelectFocus($event)"
-          (blur)="onSelectBlur($event)">
-          <option value="all">جميع الأسعار</option>
-          <option value="lt500">أقل من 500 ج.م</option>
-          <option value="500-1000">500 - 1000 ج.م</option>
-          <option value="1000-2000">1000 - 2000 ج.م</option>
-          <option value="gt2000">أكثر من 2000 ج.م</option>
-        </select>
-      </div> -->
-
-
-
-      <!-- إضافة فلتر موديل السيارة إلى واجهة HTML -->
       <div class="filter-group model-filter">
         <label for="modelFilter">موديل السيارة</label>
         <select id="modelFilter" [(ngModel)]="selectedCarModel" (change)="applyFilters()"
@@ -48,10 +31,6 @@
           <option *ngFor="let model of carModels" [value]="model">{{ model }}</option>
         </select>
       </div>
-
-      <!-- يمكن وضع الفلتر الجديد بجانب الفلاتر الأخرى في قسم filters-bar -->
-      <!-- يُفترض أن هذا الكود يتم دمجه ضمن قسم .filters-bar الموجود مسبقاً -->
-
 
       <div class="filter-group year-filter">
         <label for="yearFilter">سنة الموديل</label>
@@ -70,25 +49,19 @@
           <option *ngFor="let category of categories" [value]="category">{{ category }}</option>
         </select>
       </div>
-
     </div>
   </div>
 
-
-
-  <!-- Loading State -->
   <div class="loading-container" *ngIf="isLoading">
     <div class="loading-animation"></div>
     <p>جاري تحميل قطع الغيار...</p>
   </div>
 
-  <!-- Parts Grid -->
-  <div class="parts-grid" *ngIf="displayParts.length > 0 && !isLoading">
-    <app-card *ngFor="let part of displayParts; trackBy: trackByPartId" [part]="part" (partClick)="onPartClick($event)">
+  <div class="parts-grid" *ngIf="pagedParts.length > 0 && !isLoading">
+    <app-card *ngFor="let part of pagedParts; trackBy: trackByPartId" [part]="part" (partClick)="onPartClick($event)">
     </app-card>
   </div>
 
-  <!-- No Results -->
   <div class="no-results" *ngIf="displayParts.length === 0 && !isLoading">
     <div class="no-results-icon">🔍</div>
     <h3>لا توجد نتائج</h3>
@@ -96,5 +69,24 @@
     <button class="reset-filters-btn" (click)="resetFilters()">
       إعادة تعيين الفلاتر
     </button>
+  </div>
+
+  <div class="pagination" *ngIf="displayParts.length > 0">
+    <div class="items-per-page-selector">
+      <span>عرض:</span>
+      <button *ngFor="let option of itemsPerPageOptions"
+        (click)="itemsPerPage = option; currentPage = 1; updatePagedParts()" [class.active]="itemsPerPage === option">
+        {{ option }}
+      </button>
+    </div>
+    <button class="pagination-button prev" [disabled]="currentPage === 1" (click)="prevPage()">السابق</button>
+    <div class="pagination-numbers">
+      <button class="pagination-number" *ngFor="let page of getPagesArray()"
+        (click)="page === -1 ? null : goToPage(page)" [class.active]="page === currentPage" [disabled]="page === -1">
+        {{ page === -1 ? '...' : page }}
+      </button>
+    </div>
+    <button class="pagination-button next" [disabled]="currentPage === getTotalPages()"
+      (click)="nextPage()">التالي</button>
   </div>
 </div>

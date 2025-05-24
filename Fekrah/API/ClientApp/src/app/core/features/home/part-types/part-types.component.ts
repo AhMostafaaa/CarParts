@@ -1,5 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { SwiperOptions } from 'swiper/types';
+import Swiper from 'swiper';
+import { Navigation, Pagination } from 'swiper/modules';
 
 @Component({
   selector: 'app-part-types',
@@ -8,70 +10,57 @@ import { SwiperOptions } from 'swiper/types';
 })
 export class PartTypesComponent implements OnInit {
   partTypes = [
-    { name: 'زيوت المحرك', icon: '🛢️' },
-    { name: 'بطاريات', icon: '🔋' },
-    { name: 'فلاتر الهواء', icon: '🌀' },
-    { name: 'إضاءة / لمبات', icon: '🚦' },
-    { name: 'إطارات', icon: '🛞' },
-    { name: 'تيل فرامل', icon: '🧯' },
-    { name: 'فلتر زيت', icon: '🧪' },
-    { name: 'زيوت المحرك', icon: '🛢️' },
-    { name: 'بطاريات', icon: '🔋' },
-    { name: 'فلاتر الهواء', icon: '🌀' },
-    { name: 'إضاءة / لمبات', icon: '🚦' },
-    { name: 'إطارات', icon: '🛞' },
-    { name: 'تيل فرامل', icon: '🧯' },
-    { name: 'فلتر زيت', icon: '🧪' },
-    { name: 'زيوت المحرك', icon: '🛢️' },
-    { name: 'بطاريات', icon: '🔋' },
-    { name: 'فلاتر الهواء', icon: '🌀' },
-    { name: 'إضاءة / لمبات', icon: '🚦' },
-    { name: 'إطارات', icon: '🛞' },
-    { name: 'تيل فرامل', icon: '🧯' },
-    { name: 'فلتر زيت', icon: '🧪' },
-    { name: 'زيوت المحرك', icon: '🛢️' },
-    { name: 'بطاريات', icon: '🔋' },
-    { name: 'فلاتر الهواء', icon: '🌀' },
-    { name: 'إضاءة / لمبات', icon: '🚦' },
-    { name: 'إطارات', icon: '🛞' },
-    { name: 'تيل فرامل', icon: '🧯' },
-    { name: 'فلتر زيت', icon: '🧪' },
-    { name: 'رادياتير', icon: '🚗' }
+    { name: 'زيوت المحرك', imageUrl: '../../assets/images/image100_100.png' },
+    { name: 'بطاريات', imageUrl: '../../assets/images/image100_100.png' },
+    { name: 'فلاتر الهواء', imageUrl: '../../assets/images/image100_100.png' },
+    { name: 'إضاءة / لمبات', imageUrl: '../../assets/images/image100_100.png' },
+    { name: 'إطارات', imageUrl: '../../assets/images/image100_100.png' },
+    { name: 'تيل فرامل', imageUrl: '../../assets/images/image100_100.png' },
+    { name: 'فلتر زيت', imageUrl: '../../assets/images/image100_100.png' },
+    { name: 'رادياتير', imageUrl: '../../assets/images/image100_100.png' },
+    { name: 'شماعات', imageUrl: '../../assets/images/image100_100.png' },
+    { name: 'بوجيهات', imageUrl: '../../assets/images/image100_100.png' }
   ];
 
   swiperConfig: SwiperOptions = {
-    slidesPerView: 'auto',
+    modules: [Navigation, Pagination],
     spaceBetween: 20,
+    centeredSlides: false,
     pagination: {
-      clickable: true
+      clickable: true,
+      dynamicBullets: true
     },
-    navigation: true,
+    navigation: {
+      nextEl: '.swiper-button-next',
+      prevEl: '.swiper-button-prev'
+    },
     breakpoints: {
       320: {
-        slidesPerView: 2,
+        slidesPerView: 1, // عرض شريحة واحدة على الشاشات الصغيرة
         spaceBetween: 10
       },
-      480: {
-        slidesPerView: 3,
+      640: {
+        slidesPerView: 1, // عرض شريحة واحدة على الشاشات المتوسطة
         spaceBetween: 15
       },
-      768: {
-        slidesPerView: 4,
+      960: {
+        slidesPerView: 1, // عرض شريحة واحدة على الشاشات الكبيرة
         spaceBetween: 20
       },
-      1024: {
-        slidesPerView: 6,
-        spaceBetween: 20
+      1200: {
+        slidesPerView: 1, // عرض شريحة واحدة على الشاشات الأكبر
+        spaceBetween: 25
       }
     }
   };
 
   ngOnInit() {
-    // Swiper will be initialized automatically
+    // Swiper initialization is handled automatically by the Angular component
   }
 
   selectPart(type: string) {
     console.log(`عرض قطع: ${type}`);
-    // مثال: this.router.navigate(['/parts', type]);
+    // يمكنك إضافة التنقل هنا مثل:
+    // this.router.navigate(['/parts', type]);
   }
 }

@@ -1,7 +1,12 @@
 // Variables
 $primary-color: #667eea;
 $secondary-color: #764ba2;
-$gradient-primary: linear-gradient(135deg, $primary-color 0%, $secondary-color 100%);
+$tertiary-color: #a78bfa; // لون ثالث إضافي
+$gradient-primary: linear-gradient(
+  135deg,
+  $primary-color 0%,
+  $secondary-color 100%
+);
 $white: #ffffff;
 $gray-light: #f8f9ff;
 $gray-medium: #666;
@@ -14,6 +19,8 @@ $transition-fast: all 0.3s ease;
 $box-shadow-light: 0 8px 25px rgba(102, 126, 234, 0.1);
 $box-shadow-medium: 0 15px 35px rgba(102, 126, 234, 0.25);
 $box-shadow-heavy: 0 20px 40px rgba(118, 75, 162, 0.3);
+$orange-light: #ffe0b2; // برتقالي فاتح
+$orange-medium: #ffb74d; // برتقالي متوسط
 
 // Mixins
 @mixin flex-center {
@@ -45,23 +52,41 @@ $box-shadow-heavy: 0 20px 40px rgba(118, 75, 162, 0.3);
 }
 
 @keyframes shine {
-  0% { transform: translateX(-100%) translateY(-100%) rotate(45deg); }
-  100% { transform: translateX(100%) translateY(100%) rotate(45deg); }
+  0% {
+    transform: translateX(-100%) translateY(-100%) rotate(45deg);
+  }
+  100% {
+    transform: translateX(100%) translateY(100%) rotate(45deg);
+  }
 }
 
 @keyframes gradientShift {
-  0%, 100% { background-position: 0% 50%; }
-  50% { background-position: 100% 50%; }
+  0%,
+  100% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
 }
 
 @keyframes borderGlow {
-  0%, 100% { opacity: 0.5; }
-  50% { opacity: 1; }
+  0%,
+  100% {
+    opacity: 0.5;
+  }
+  50% {
+    opacity: 1;
+  }
 }
 
 @keyframes spin {
-  0% { transform: rotate(0deg); }
-  100% { transform: rotate(360deg); }
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
 }
 
 // Main Component Styles
@@ -73,7 +98,18 @@ $box-shadow-heavy: 0 20px 40px rgba(118, 75, 162, 0.3);
   box-shadow: 0 25px 50px rgba(0, 0, 0, 0.15);
   animation: fadeInUp 0.8s ease-out;
   max-width: 95vw;
+  background: radial-gradient(circle, rgba(0, 0, 0, 0.05) 1px, transparent 1px),
+    linear-gradient(
+      to right bottom,
+      rgba($orange-light, 0.3),
+      rgba($orange-medium, 0.2)
+    );
+  background-size: 20px 20px; /* حجم تكرار النقش */
 }
+
+// ... باقي ال CSS كما هو ...
+
+// ... باقي ال CSS كما هو ...
 
 // Header Section
 .brand-header {
@@ -83,13 +119,18 @@ $box-shadow-heavy: 0 20px 40px rgba(118, 75, 162, 0.3);
   overflow: hidden;
 
   &::before {
-    content: '';
+    content: "";
     position: absolute;
     top: -50%;
     left: -50%;
     width: 200%;
     height: 200%;
-    background: linear-gradient(45deg, transparent, rgba($primary-color, 0.1), transparent);
+    background: linear-gradient(
+      45deg,
+      transparent,
+      rgba($primary-color, 0.1),
+      transparent
+    );
     animation: shine 3s infinite;
   }
 
@@ -144,13 +185,18 @@ $box-shadow-heavy: 0 20px 40px rgba(118, 75, 162, 0.3);
   overflow: hidden;
 
   &::before {
-    content: '';
+    content: "";
     position: absolute;
     top: 0;
     left: 0;
     right: 0;
     height: 3px;
-    background: linear-gradient(90deg, $primary-color 0%, $secondary-color 50%, $primary-color 100%);
+    background: linear-gradient(
+      90deg,
+      $primary-color 0%,
+      $secondary-color 50%,
+      $primary-color 100%
+    );
     background-size: 200% 100%;
     animation: gradientShift 3s ease-in-out infinite;
   }
@@ -165,7 +211,7 @@ $box-shadow-heavy: 0 20px 40px rgba(118, 75, 162, 0.3);
   position: relative;
 
   &::after {
-    content: '';
+    content: "";
     position: absolute;
     bottom: -10px;
     left: 50%;
@@ -207,14 +253,12 @@ $box-shadow-heavy: 0 20px 40px rgba(118, 75, 162, 0.3);
     border: 2px solid rgba($primary-color, 0.2);
     background: linear-gradient(145deg, $white 0%, $gray-light 100%);
     font-size: 1em;
-    font-family: 'Cairo', sans-serif;
+    font-family: "Cairo", sans-serif;
     font-weight: 500;
     transition: $transition-smooth;
     cursor: pointer;
     outline: none;
-    box-shadow:
-      $box-shadow-light,
-      inset 0 1px 0 rgba($white, 0.8);
+    box-shadow: $box-shadow-light, inset 0 1px 0 rgba($white, 0.8);
     appearance: none;
     -webkit-appearance: none;
     -moz-appearance: none;
@@ -239,9 +283,7 @@ $box-shadow-heavy: 0 20px 40px rgba(118, 75, 162, 0.3);
     &:hover {
       border-color: $primary-color;
       @include hover-lift();
-      box-shadow:
-        $box-shadow-medium,
-        0 5px 15px rgba($primary-color, 0.1),
+      box-shadow: $box-shadow-medium, 0 5px 15px rgba($primary-color, 0.1),
         inset 0 1px 0 rgba($white, 0.9);
       background: linear-gradient(145deg, $white 0%, #f0f3ff 100%);
     }
@@ -250,9 +292,7 @@ $box-shadow-heavy: 0 20px 40px rgba(118, 75, 162, 0.3);
     &:focus {
       border-color: $secondary-color;
       @include hover-lift();
-      box-shadow:
-        $box-shadow-heavy,
-        0 8px 20px rgba($secondary-color, 0.15),
+      box-shadow: $box-shadow-heavy, 0 8px 20px rgba($secondary-color, 0.15),
         inset 0 1px 0 rgba($white, 1);
       background: linear-gradient(145deg, $white 0%, #f5f3ff 100%);
     }
@@ -260,15 +300,14 @@ $box-shadow-heavy: 0 20px 40px rgba(118, 75, 162, 0.3);
     // Active State
     &:active {
       transform: translateY(-1px) scale(1.01);
-      box-shadow:
-        0 10px 25px rgba($primary-color, 0.2),
+      box-shadow: 0 10px 25px rgba($primary-color, 0.2),
         inset 0 2px 5px rgba($primary-color, 0.1);
     }
   }
 
   // Custom Arrow
   &::after {
-    content: '▼';
+    content: "▼";
     position: absolute;
     right: 20px;
     bottom: 18px;
@@ -307,10 +346,18 @@ $box-shadow-heavy: 0 20px 40px rgba(118, 75, 162, 0.3);
     z-index: 1;
   }
 
-  &.condition-filter::before { content: '🏷️'; }
-  &.price-filter::before { content: '💰'; }
-  &.category-filter::before { content: '📦'; }
-  &.year-filter::before { content: '📅'; }
+  &.condition-filter::before {
+    content: "🏷️";
+  }
+  &.price-filter::before {
+    content: "💰";
+  }
+  &.category-filter::before {
+    content: "📦";
+  }
+  &.year-filter::before {
+    content: "📅";
+  }
 }
 
 // Stats Bar
@@ -323,7 +370,11 @@ $box-shadow-heavy: 0 20px 40px rgba(118, 75, 162, 0.3);
 }
 
 .stat-card {
-  background: linear-gradient(135deg, rgba($primary-color, 0.1) 0%, rgba($secondary-color, 0.1) 100%);
+  background: linear-gradient(
+    135deg,
+    rgba($primary-color, 0.1) 0%,
+    rgba($secondary-color, 0.1) 100%
+  );
   padding: 15px 25px;
   border-radius: 15px;
   text-align: center;
@@ -463,15 +514,124 @@ $box-shadow-heavy: 0 20px 40px rgba(118, 75, 162, 0.3);
   position: relative;
 
   &::before {
-    content: '';
+    content: "";
     position: absolute;
     top: -2px;
     left: -2px;
     right: -2px;
     bottom: -2px;
-    background: linear-gradient(45deg, $primary-color, $secondary-color, $primary-color);
+    background: linear-gradient(
+      45deg,
+      $primary-color,
+      $secondary-color,
+      $primary-color
+    );
     border-radius: 22px;
     z-index: -1;
     animation: borderGlow 2s ease-in-out infinite;
   }
+}
+
+.pagination {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-top: 30px;
+  padding: 20px;
+  @include glass-effect(0.8);
+  border-radius: $border-radius-medium;
+  box-shadow: $box-shadow-light;
+  gap: 20px;
+  flex-wrap: wrap;
+}
+
+.items-per-page-selector {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+
+  span {
+    font-size: 0.9em;
+    color: $gray-medium;
+  }
+
+  button {
+    background: none;
+    border: 1px solid rgba($primary-color, 0.3);
+    color: $gray-dark;
+    font-size: 0.8em;
+    padding: 6px 10px;
+    border-radius: $border-radius-small;
+    cursor: pointer;
+    transition: $transition-fast;
+
+    &:hover:not(.active) {
+      background-color: rgba($primary-color, 0.1);
+      border-color: $primary-color;
+    }
+
+    &.active {
+      background-color: $primary-color;
+      color: $white;
+      border-color: $primary-color;
+    }
+  }
+}
+
+// ... باقي أنماط الـ pagination كما هي ...
+
+.pagination-button {
+  background: none;
+  border: none;
+  color: $primary-color;
+  font-size: 1em;
+  font-weight: 600;
+  padding: 10px 15px;
+  border-radius: $border-radius-small;
+  cursor: pointer;
+  transition: $transition-fast;
+
+  &:hover:not(:disabled) {
+    background-color: rgba($primary-color, 0.1);
+  }
+
+  &:disabled {
+    color: $gray-medium;
+    cursor: not-allowed;
+  }
+}
+
+.pagination-numbers {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.pagination-number {
+  background: none;
+  border: 1px solid rgba($primary-color, 0.3);
+  color: $gray-dark;
+  font-size: 1em;
+  font-weight: 500;
+  padding: 8px 12px;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: $transition-fast;
+
+  &:hover:not(.active) {
+    background-color: rgba($primary-color, 0.1);
+    border-color: $primary-color;
+  }
+
+  &.active {
+    background-color: $primary-color;
+    color: $white;
+    border-color: $primary-color;
+  }
+}
+
+.pagination-dots {
+  color: $gray-medium;
+  font-size: 1em;
+  margin: 0 5px;
 }

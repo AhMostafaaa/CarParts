@@ -1,7 +1,6 @@
 import { Component, Input, Output, EventEmitter, OnInit, OnDestroy } from '@angular/core';
 import { Subject, debounceTime, takeUntil } from 'rxjs';
 
-
 @Component({
   selector: 'app-brand-parts',
   templateUrl: './brand-parts.component.html',
@@ -23,13 +22,16 @@ export class BrandPartsComponent implements OnInit, OnDestroy {
   selectedCarModel: string = 'all';
 
   displayParts: any[] = [];
+  pagedParts: any[] = []; // لعرض العناصر في الصفحة الحالية
   categories: string[] = [];
   modelYears: number[] = [];
   carModels: string[] = [];
 
+  itemsPerPage: number = 6; // عدد العناصر في كل صفحة
+  currentPage: number = 1;
+  itemsPerPageOptions: number[] = [6, 12, 24];
   private destroy$ = new Subject<void>();
   private filterSubject = new Subject<void>();
-
 
   constructor() {
     if (this.parts.length === 0) {
@@ -70,6 +72,7 @@ export class BrandPartsComponent implements OnInit, OnDestroy {
     this.extractModelYears();
     this.extractCarModels();
     this.displayParts = [...this.parts];
+    this.updatePagedParts(); // عرض الصفحة الأولى عند التحميل
   }
 
   private setupFilterDebounce(): void {
@@ -79,6 +82,7 @@ export class BrandPartsComponent implements OnInit, OnDestroy {
         takeUntil(this.destroy$)
       )
       .subscribe(() => {
+        this.currentPage = 1; // عند تطبيق فلتر جديد، ارجع للصفحة الأولى
         this.performFilter();
       });
   }
@@ -126,6 +130,7 @@ export class BrandPartsComponent implements OnInit, OnDestroy {
     }
 
     this.displayParts = filtered;
+    this.updatePagedParts();
     this.emitFiltersChange();
   }
 
@@ -145,6 +150,7 @@ export class BrandPartsComponent implements OnInit, OnDestroy {
     this.selectedCategory = 'all';
     this.selectedYear = 'all';
     this.selectedCarModel = 'all';
+    this.currentPage = 1;
     this.applyFilters();
   }
 
@@ -231,5 +237,82 @@ export class BrandPartsComponent implements OnInit, OnDestroy {
       'مستعمل': 'used-condition'
     };
     return classMap[condition] || '';
+  }
+
+  // Pagination methods
+
+
+  updatePagedParts(): void {
+    const startIndex = (this.currentPage - 1) * this.itemsPerPage;
+    const endIndex = startIndex + this.itemsPerPage;
+    this.pagedParts = this.displayParts.slice(startIndex, endIndex);
+  }
+
+  nextPage(): void {
+    const totalPages = this.getTotalPages();
+    if (this.currentPage < totalPages) {
+      this.currentPage++;
+      this.updatePagedParts();
+    }
+  }
+
+  prevPage(): void {
+    if (this.currentPage > 1) {
+      this.currentPage--;
+      this.updatePagedParts();
+    }
+  }
+
+  goToPage(pageNumber: number): void {
+    const totalPages = this.getTotalPages();
+    if (pageNumber >= 1 && pageNumber <= totalPages) {
+      this.currentPage = pageNumber;
+      this.updatePagedParts();
+    }
+  }
+
+  getTotalPages(): number {
+    return Math.ceil(this.displayParts.length / this.itemsPerPage);
+  }
+
+  getPagesArray(): number[] {
+    const totalPages = this.getTotalPages();
+    const maxPagesToShow = 5;
+    const pages: number[] = [];
+
+    if (totalPages <= maxPagesToShow) {
+      for (let i = 1; i <= totalPages; i++) {
+        pages.push(i);
+      }
+    } else {
+      const middle = Math.ceil(maxPagesToShow / 2);
+      if (this.currentPage <= middle) {
+        for (let i = 1; i <= maxPagesToShow; i++) {
+          pages.push(i);
+        }
+        pages.push(-1); // Ellipsis
+        pages.push(totalPages);
+      } else if (this.currentPage >= totalPages - middle + 1) {
+        pages.push(1);
+        pages.push(-1); // Ellipsis
+        for (let i = totalPages - maxPagesToShow + 1; i <= totalPages; i++) {
+          pages.push(i);
+        }
+      } else {
+        pages.push(1);
+        pages.push(-1); // Ellipsis
+        for (let i = this.currentPage - Math.floor(middle / 2); i <= this.currentPage + Math.ceil(middle / 2) - 1; i++) {
+          pages.push(i);
+        }
+        pages.push(-1); // Ellipsis
+        pages.push(totalPages);
+      }
+    }
+    return pages;
+  }
+
+  onItemsPerPageChange(): void {
+    this.currentPage = 1; // عند تغيير عدد العناصر، ارجع للصفحة الأولى
+    this.updatePagedParts();
   }
 }
