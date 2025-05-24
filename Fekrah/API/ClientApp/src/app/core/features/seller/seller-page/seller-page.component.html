@@ -1,61 +1,76 @@
-<div class="seller-page">
-  <!-- بيانات البائع -->
-  <div class="seller-header">
-    <div class="seller-info">
-      <h2 class="seller-name">{{ seller.name }}</h2>
-      <div class="rating">
-        <ng-container *ngFor="let star of stars; let i = index">
-          <i class="fas" [ngClass]="i < seller.rating ? 'fa-star' : 'fa-star-half-alt'"></i>
-        </ng-container>
-        <span class="rating-text">({{ seller.rating }}/5)</span>
+<div class="container-fluid p-3">
+  <!-- بيانات التاجر -->
+  <div class="card seller-card mb-4">
+    <div class="card-body p-4 position-relative overflow-hidden">
+      <div class="row align-items-center text-white">
+        <div class="col-auto">
+          <div class="seller-avatar pulse-animation">
+            <i class="fas fa-store-alt fa-3x"></i>
+          </div>
+        </div>
+
+        <div class="col">
+          <h2 class="mb-2 text-gradient display-6">{{seller.name}}</h2>
+          <div class="mb-2">
+            <i class="fas star-animation" *ngFor="let star of stars; let i = index" [class.fa-star]="i < seller.rating"
+              [class.fa-star-half-alt]="i >= seller.rating"></i>
+            <span class="ms-2 opacity-75">({{seller.rating}}/5)</span>
+          </div>
+          <p class="mb-2 seller-description">{{seller.description}}</p>
+          <div class="seller-info">
+            <span class="me-3"><i class="fas fa-map-marker-alt me-2"></i>{{seller.location}}</span>
+            <span><i class="far fa-clock me-2"></i>{{seller.workingHours}}</span>
+          </div>
+        </div>
+
+        <div class="col-auto">
+          <a [href]="'https://wa.me/' + seller.phone" target="_blank" class="whatsapp-btn pulse-animation">
+            <i class="fab fa-whatsapp me-2"></i>
+            <span class="px-2">تواصل واتساب</span>
+          </a>
+        </div>
       </div>
-      <p class="description">{{ seller.description }}</p>
-    </div>
-    <div class="contact-buttons">
-      <a class="whatsapp-button" [href]="'https://wa.me/' + seller.phone" target="_blank">
-        <i class="fab fa-whatsapp"></i> تواصل واتساب
-      </a>
     </div>
   </div>
 
-  <section class="seller-products-section">
-    <h3 class="section-heading">منتجات هذا البائع</h3>
-
-    <div class="products-grid">
-      <div class="product-card" *ngFor="let product of sellerProducts">
-        <div class="product-image">
-          <img [src]="product.imageUrl" alt="{{ product.name }}">
-        </div>
-        <div class="product-details">
-          <h4>{{ product.name }}</h4>
-          <p class="description">{{ product.description }}</p>
-          <div class="price-block">
-            <span class="price">{{ product.price }} ج.م</span>
-            <span class="old-price" *ngIf="product.oldPrice > product.price">{{ product.oldPrice }} ج.م</span>
-          </div>
-          <button class="details-btn" [routerLink]="['/parts', product.id]">عرض التفاصيل</button>
-        </div>
-      </div>
-    </div>
-  </section>
-
-
-  <!-- تقييمات العملاء -->
-  <div class="reviews-section">
-    <h3>تقييمات العملاء</h3>
-    <div class="reviews">
-      <div class="review-card" *ngFor="let review of seller.reviews">
-        <div class="review-header">
-          <strong>{{ review.customer }}</strong>
-          <span class="review-rating">
-            <ng-container *ngFor="let star of stars; let i = index">
-              <i class="fas" [ngClass]="i < review.rating ? 'fa-star' : 'fa-star-half-alt'"></i>
-            </ng-container>
+  <!-- المنتجات -->
+  <div class="row g-3" style="    padding: 20px;">
+    <div class="col-6 col-md-4 col-lg-3" *ngFor="let product of filteredProducts">
+      <div class="card product-card h-100" [class.has-discount]="product.oldPrice > product.price"
+        [class.free-shipping]="product.freeShipping">
+        <div class="product-badges">
+          <span class="badge discount-badge shine-animation" *ngIf="product.oldPrice > product.price">
+            خصم {{calculateDiscount(product)}}%
+          </span>
+          <span class="badge shipping-badge bounce-animation" *ngIf="product.freeShipping">
+            <i class="fas fa-truck me-1"></i>شحن مجاني
           </span>
         </div>
-        <p class="comment">{{ review.comment }}</p>
+
+        <div class="product-image">
+          <img [src]="product.imageUrl" [alt]="product.name" class="img-fluid zoom-animation">
+        </div>
+
+        <div class="card-body d-flex flex-column">
+          <h5 class="product-title text-truncate">{{product.name}}</h5>
+          <span class="product-category">{{product.category}}</span>
+          <p class="product-description text-muted">{{product.description}}</p>
+
+          <div class="product-price mt-auto">
+            <span class="current-price">{{product.price}} ج.م</span>
+            <span class="old-price" *ngIf="product.oldPrice > product.price">
+              {{product.oldPrice}} ج.م
+            </span>
+          </div>
+
+          <div class="text-center">
+            <button class="btn details-btn mt-3" [routerLink]="['/parts', product.id]">
+              <i class="fas fa-eye"></i>
+              عرض التفاصيل
+            </button>
+          </div>
+        </div>
       </div>
     </div>
   </div>
 </div>
-

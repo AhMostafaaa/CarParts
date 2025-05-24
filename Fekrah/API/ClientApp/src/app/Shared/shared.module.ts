@@ -7,7 +7,8 @@ import { PartCardComponent } from './components/part-card/part-card.component';
 import { FilterSidebarComponent } from './components/filter-sidebar/filter-sidebar.component';
 import { NgxPaginationModule } from 'ngx-pagination';
 import { CardComponent } from './components/card/card.component';
-// import { FooterComponent } from './layout/footer/footer.component'; // 👈 أضفها هنا كمان
+import { BreadcrumbComponent } from './components/breadcrumb/breadcrumb.component';
+import { OfferCardComponent } from './components/offer-card/offer-card.component';
 
 @NgModule({
   imports: [
@@ -15,7 +16,8 @@ import { CardComponent } from './components/card/card.component';
     FormsModule,
     HttpClientModule,
     RouterModule,
-    NgxPaginationModule
+    NgxPaginationModule,
+
 
   ],
   exports: [
@@ -26,13 +28,19 @@ import { CardComponent } from './components/card/card.component';
     PartCardComponent,
     FilterSidebarComponent,
     NgxPaginationModule,
-    CardComponent
+    CardComponent,
+    OfferCardComponent,
+    BreadcrumbComponent,
+
 
   ],
   declarations: [
     PartCardComponent,
     FilterSidebarComponent,
     CardComponent,
+    BreadcrumbComponent,
+    OfferCardComponent,
+
 
   ]
 })

@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using Data.Models;
+using Microsoft.EntityFrameworkCore;
 using System.Collections.Generic;
 using System.Reflection.Emit;
 
@@ -12,6 +13,7 @@ public class DatabaseContext : DbContext
     public DbSet<Seller> Sellers { get; set; }
     public DbSet<User> Users { get; set; }
     public DbSet<Category> Categories { get; set; } // Added
+    public DbSet<Localization> Localizations { get; set; }
 
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)

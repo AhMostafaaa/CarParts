@@ -1,41 +1,316 @@
-<div class="part-details-page" *ngIf="part">
+<app-breadcrumb [items]="breadcrumbItems"></app-breadcrumb>
 
-  <div class="part-details-container">
-    <div class="part-image">
-      <img [src]="part.imageUrl" alt="{{ part.name }}">
+
+<section class="container py-5">
+  <div class="row d-flex align-items-stretch">
+    <!-- عمود الصور -->
+    <div class="col-lg-5 d-flex">
+      <div class="border rounded shadow-sm p-3 bg-white position-relative w-100 d-flex flex-column">
+        <div class="magnifier-container position-relative mb-3">
+          <img [src]="selectedImage" id="mainImage" class="img-fluid w-100 main-image border" data-bs-toggle="modal"
+            data-bs-target="#zoomModal">
+
+          <div id="lens" class="magnifier-lens"></div>
+
+          <!-- الأسهم يمين ويسار -->
+          <button class="carousel-arrow left" (click)="prevImage()">
+            <i class="fas fa-chevron-left"></i>
+          </button>
+          <button class="carousel-arrow right" (click)="nextImage()">
+            <i class="fas fa-chevron-right"></i>
+          </button>
+        </div>
+
+        <div
+          class="position-absolute top-50 start-50 translate-middle bg-dark text-white px-3 py-2 rounded opacity-0 group-hover-opacity">
+          اضغط للتكبير
+        </div>
+        <div class="d-flex gap-2 flex-wrap justify-content-center mt-auto">
+          <img *ngFor="let thumb of part.thumbnails" [src]="thumb" class="img-thumbnail"
+            style="width: 60px; height: 60px; cursor: pointer" [class.border-primary]="thumb === selectedImage"
+            (click)="openImageInModal(thumb)">
+        </div>
+        <div class="text-center mt-3">
+          <button class="btn btn-outline-dark btn-sm" data-bs-toggle="modal" data-bs-target="#zoomModal">
+            <i class="fas fa-search-plus"></i> تكبير الصورة
+          </button>
+        </div>
+      </div>
     </div>
 
-    <div class="part-info">
-      <h1 class="part-title">{{ part.name }}</h1>
+    <!-- عمود التفاصيل -->
+    <div class="col-lg-7 d-flex">
+      <div class="bg-white p-4 rounded shadow-sm w-100 d-flex flex-column justify-content-between">
 
-      <div class="price-box">
-        <h2 class="price">{{ part.price }} جنيه</h2>
-        <span class="condition">{{ part.condition === 'New' ? 'جديد' : 'مستعمل' }}</span>
+        <div>
+          <!-- اسم القطعة -->
+          <div class="mb-3">
+            <h1 class="product-title text-dark fw-bold mb-2" style="font-size: 1.8rem; line-height: 1.4;">
+              {{ part.name }}
+            </h1>
+          </div>
+
+          <!-- شارات المنتج -->
+          <div class="mb-3 d-flex flex-wrap gap-2">
+            <span class="badge bg-success rounded-pill fw-medium px-3 py-1" *ngIf="part.condition === 'جديد'">
+              جديد
+            </span>
+            <span class="badge bg-danger rounded-pill fw-medium px-3 py-1" *ngIf="part.onSale">
+              خصم
+            </span>
+            <span class="badge bg-warning text-dark rounded-pill fw-medium px-3 py-1">
+              الأكثر مبيعًا
+            </span>
+          </div>
+
+          <!-- وصف المنتج -->
+          <div class="card bg-white border rounded shadow-sm mb-4">
+            <div class="card-body">
+              <p class="mb-0" style="font-size: 1rem; line-height: 1.8; color: #555;">
+                {{ part.description }}
+              </p>
+            </div>
+          </div>
+
+          <!-- معلومات التاجر -->
+          <div class="bg-light border rounded p-3 mb-4">
+            <div class="text-muted small mb-1">يباع عن طريق</div>
+            <a [routerLink]="['/seller', part.seller.id]" class="text-decoration-none fw-bold text-primary fs-5">
+              {{ part.seller.name }}
+            </a>
+            <div class="text-muted mt-1 small">
+              موثوق به – خدمة ممتازة وتقييمات عالية
+            </div>
+          </div>
+
+          <!-- السعر والخصم -->
+          <!-- بدون خصم -->
+          <div *ngIf="!part.onSale"
+            class="discount-card bg-white border border-primary rounded p-3 mb-3 d-flex flex-column align-items-start shadow-sm">
+            <span class="text-muted small mb-1">السعر</span>
+            <div class="d-flex align-items-baseline gap-2">
+              <span class="text-primary fw-bold fs-3">{{ part.price | number }} ج.م</span>
+            </div>
+            <small class="text-muted mt-2 opacity-75 fs-6">✔ السعر شامل الضريبة</small>
+          </div>
+
+          <!-- مع خصم -->
+          <div *ngIf="part.onSale"
+            class="special-offer-banner bg-warning text-dark p-3 rounded mb-3 d-flex justify-content-between align-items-center shadow-sm">
+            <div class="d-flex flex-column" style="z-index: 1;">
+              <strong class="fs-5">💥 سعر خاص لفترة محدودة</strong>
+              <small class="text-dark">لا تفوت الفرصة! العرض ساري حتى نفاد الكمية.</small>
+            </div>
+            <div class="text-end">
+              <span class="text-danger fw-bold fs-4">{{ part.price | number }} ج.م</span>
+              <span class="text-muted text-decoration-line-through fs-6 ms-2">
+                {{ part.originalPrice | number }} ج.م
+              </span>
+              <span class="badge bg-danger ms-2">-{{ calculateDiscount() }}%</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- الأزرار -->
+        <div class="d-flex flex-column flex-md-row gap-3 mt-3">
+          <button class="btn btn-warning text-dark fw-bold flex-fill" (click)="addToCart(); showToast = true"
+            style="min-height: 48px;">
+            <i class="fas fa-cart-plus me-1"></i> أضف إلى السلة
+          </button>
+          <button class="btn btn-outline-success fw-semibold flex-fill" (click)="contactViaWhatsApp()"
+            style="min-height: 48px;">
+            <i class="fab fa-whatsapp me-1"></i> تواصل عبر واتساب
+          </button>
+          <button class="btn btn-outline-primary flex-fill" data-bs-toggle="modal" data-bs-target="#ratingModal"
+            style="min-height: 48px;">
+            <i class="fas fa-star me-1"></i> تقييم
+          </button>
+        </div>
       </div>
+    </div>
 
-      <div class="part-meta">
-        <p><strong>البائع:</strong> {{ part.sellerShopName }}</p>
-        <p><strong>التصنيف:</strong> {{ part.categoryName }}</p>
+  </div>
+
+
+
+  <!-- تفاصيل إضافية -->
+  <!-- صف متساوي الأعمدة -->
+  <div class="row d-flex align-items-stretch mt-5" style="min-height: 100%;">
+
+    <!-- عمود تفاصيل المنتج -->
+    <div class="col-lg-8 d-flex">
+      <div
+        class="product-details-card bg-white border rounded shadow-sm p-4 w-100 h-100 overflow-auto animate__animated animate__fadeInUp">
+
+        <!-- العنوان -->
+        <h5 class="fw-bold mb-4 border-bottom pb-2">
+          <i class="fas fa-info-circle text-primary me-2"></i> تفاصيل المنتج
+        </h5>
+
+        <!-- وصف المنتج -->
+        <div class="mb-4">
+          <p class="text-muted" style="font-size: 1rem; line-height: 1.8;">
+            {{ part.description }}
+          </p>
+        </div>
+
+        <!-- العروض المتاحة -->
+        <div *ngIf="part.offers.length > 0">
+          <h6 class="fw-semibold text-success mb-3">
+            <i class="fas fa-tags me-1"></i> العروض المتاحة
+          </h6>
+          <ul class="list-unstyled ps-2">
+            <li *ngFor="let offer of part.offers; let i = index" class="mb-3 d-flex align-items-start">
+              <i class="fas fa-check-circle text-success me-2 mt-1"></i>
+              <span class="text-dark" style="line-height: 1.6;">
+                {{ offer }}
+                <span *ngIf="i === 0" class="badge bg-danger text-white ms-2">🔥 الأقوى</span>
+              </span>
+            </li>
+          </ul>
+        </div>
+
+        <!-- لا توجد عروض -->
+        <div *ngIf="!part.offers || part.offers.length === 0" class="text-muted mt-3">
+          <i class="fas fa-info-circle me-1"></i> لا توجد عروض حالياً على هذا المنتج.
+        </div>
+
       </div>
+    </div>
 
-      <p class="description">{{ part.description }}</p>
 
-      <button class="btn btn-primary">تواصل مع البائع</button>
+    <div class="col-lg-4 d-flex">
+      <div class="bg-white border rounded shadow-sm p-4 w-100 review-container d-flex flex-column"
+        style="min-height: 0;">
+        <!-- العنوان وعدد التقييمات -->
+        <div class="d-flex align-items-center justify-content-between mb-3">
+          <h5 class="fw-bold mb-0">
+            <i class="fas fa-comments text-primary me-2"></i> تقييمات العملاء
+          </h5>
+          <span class="badge bg-primary text-white rounded-pill px-3">
+            {{ part.comments.length }} تقييم
+          </span>
+        </div>
+
+        <!-- مربع التقييمات مع Scroll داخلي -->
+        <div #reviewsContainer class="review-scroll-container flex-grow-1" style="max-height: 400px; overflow-y: auto;">
+          <div class="reviews-fade-in">
+            <div *ngFor="let comment of part.comments" class="review-card bg-light rounded shadow-sm mb-3 p-3">
+              <div class="d-flex justify-content-between align-items-center mb-2">
+                <strong class="text-dark">{{ comment.user }}</strong>
+                <small class="text-muted">{{ comment.date | date:'mediumDate' }}</small>
+              </div>
+              <div class="mb-2">
+                <ng-container *ngFor="let star of [1,2,3,4,5]">
+                  <i class="fa-star" [class.fas]="star <= comment.rating" [class.far]="star > comment.rating"
+                    [ngClass]="{'text-warning': star <= comment.rating, 'text-muted': star > comment.rating}">
+                  </i>
+                </ng-container>
+              </div>
+              <p class="text-dark mb-0">
+                {{ comment.text }}
+              </p>
+            </div>
+            <div *ngIf="part.comments.length === 0" class="no-reviews-message text-center py-4">
+              <i class="fas fa-info-circle d-block fs-1 text-muted mx-auto" style="width: 60px;"></i>
+              <p class="mb-0">لا توجد تقييمات حتى الآن</p>
+            </div>
+          </div>
+        </div>
+
+
+
+        <!-- زر الإضافة -->
+        <div class="mt-3 pt-3 border-top">
+          <button class="btn btn-primary w-100" data-bs-toggle="modal" data-bs-target="#ratingModal">
+            <i class="fas fa-plus-circle me-1"></i> أضف تقييمك
+          </button>
+        </div>
+      </div>
+    </div>
+
+
+
+
+
+
+  </div>
+
+
+  <!-- Toast -->
+  <div class="toast-container position-fixed bottom-0 end-0 p-3">
+    <div *ngIf="showToast" class="toast show text-bg-success border-0 animate__animated animate__fadeInUp" role="alert">
+      <div class="d-flex">
+        <div class="toast-body">✅ تمت إضافة المنتج إلى السلة</div>
+        <button type="button" class="btn-close btn-close-white me-2 m-auto" (click)="showToast = false"></button>
+      </div>
     </div>
   </div>
 
-  <!-- 👇 منتجات مرتبطة -->
-  <div class="related-parts-section">
-    <h3>منتجات مشابهة</h3>
-
-    <div class="related-parts-grid">
-      <div class="related-card" *ngFor="let related of relatedParts">
-        <img [src]="related.imageUrl" alt="{{ related.name }}">
-        <h4>{{ related.name }}</h4>
-        <p class="price">{{ related.price }} جنيه</p>
-        <button [routerLink]="['/parts', related.id]" class="btn btn-secondary">عرض التفاصيل</button>
+  <!-- Modal: تكبير الصورة -->
+  <div class="modal fade" id="zoomModal" tabindex="-1">
+    <div class="modal-dialog modal-dialog-centered modal-lg">
+      <div class="modal-content">
+        <div class="modal-body p-0">
+          <img [src]="selectedImage" class="img-fluid w-100 rounded" alt="تكبير الصورة">
+        </div>
       </div>
     </div>
   </div>
 
-</div>
+
+  <!-- Modal: التقييم -->
+  <div class="modal fade" id="ratingModal" tabindex="-1" aria-labelledby="ratingModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+      <div class="modal-content">
+
+        <!-- رأس المودال -->
+        <div class="modal-header d-flex justify-content-between">
+          <div>
+            <h5 class="modal-title" id="ratingModalLabel">أضف تقييمك</h5>
+          </div>
+          <div>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="إغلاق"></button>
+          </div>
+        </div>
+
+        <!-- جسم المودال -->
+        <div class="modal-body">
+          <!-- النجوم -->
+          <div class="text-center mb-3">
+            <div class="d-flex justify-content-center mb-2">
+              <ng-container *ngFor="let star of [1,2,3,4,5]">
+                <i [ngClass]="{
+                  'fas fa-star text-warning': star <= newRating,
+                  'far fa-star text-muted': star > newRating
+                }" class="fs-4 mx-1" (click)="setRating(star)" style="cursor: pointer">
+                </i>
+              </ng-container>
+            </div>
+            <div class="text-muted fw-semibold" *ngIf="newRating > 0">
+              {{ getRatingText(newRating) }}
+            </div>
+          </div>
+
+          <!-- نص التقييم -->
+          <div class="form-group">
+            <textarea class="form-control" rows="3" placeholder="اكتب رأيك هنا..." [(ngModel)]="newComment"></textarea>
+          </div>
+        </div>
+
+        <!-- أسفل المودال -->
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">إغلاق</button>
+          <button type="button" class="btn btn-primary" (click)="submitComment()"
+            [disabled]="newRating === 0 || !newComment.trim()" data-bs-dismiss="modal">
+            إرسال
+          </button>
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+
+
+</section>

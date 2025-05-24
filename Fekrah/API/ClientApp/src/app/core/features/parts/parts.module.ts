@@ -8,6 +8,7 @@ import { PartCardComponent } from './part-card/part-card.component';
 import { PartDetailsComponent } from './part-details/part-details.component';
 import { SharedModule } from '../../../Shared/shared.module';
 import { PartSearchComponent } from './part-search/part-search.component';
+import { NgImageSliderModule } from 'ng-image-slider';
 
 
 @NgModule({
@@ -21,7 +22,8 @@ import { PartSearchComponent } from './part-search/part-search.component';
   ],
   imports: [
     SharedModule,
-    PartsRoutingModule
+    PartsRoutingModule,
+    NgImageSliderModule
   ]
 })
 export class PartsModule { }

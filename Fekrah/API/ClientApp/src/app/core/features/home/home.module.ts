@@ -7,7 +7,6 @@ import { PartPreviewComponent } from './part-preview/part-preview.component';
 import { OffersComponent } from './offers/offers.component';
 import { CategoriesComponent } from './categories/categories.component';
 import { CategoryPageComponent } from './category-page/category-page.component';
-import { CarouselModule } from 'ngx-owl-carousel-o';
 import { SuggestedOffersComponent } from './suggested-offers/suggested-offers.component';
 import { FeaturedSellersComponent } from './featured-sellers/featured-sellers.component';
 import { SharedModule } from '../../../Shared/shared.module';
@@ -25,7 +24,6 @@ import { SharedModule } from '../../../Shared/shared.module';
   ],
   imports: [
     SharedModule,
-    CarouselModule ,
     HomeRoutingModule
   ]
 })

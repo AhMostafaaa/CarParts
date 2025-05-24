@@ -24,7 +24,8 @@ export class OffersComponent implements OnInit, AfterViewInit {
         sellerName: 'مؤسسة البطاريات',
         sellerId: '1',
         description: 'بطارية قوية تدوم طويلاً مناسبة لجميع أنواع السيارات.',
-        imageUrl: 'assets/images/image100_100.png'
+        imageUrl: 'assets/images/image100_100.png',
+
       },
       {
         id: 2,
@@ -135,49 +136,55 @@ export class OffersComponent implements OnInit, AfterViewInit {
         imageUrl: 'assets/images/image100_100.png'
       }
     ];
-
-
-
-
-
-
-
-
   }
+
+
+  swiper!: Swiper;
+
   ngAfterViewInit(): void {
-    new Swiper('.offers-swiper', {
-      slidesPerView: 6,
-      spaceBetween: 30,
-      loop: true,
-      autoplay: {
-        delay: 4000,
-        disableOnInteraction: true,
-        reverseDirection: true, // ✅ الحركة من اليمين لليسار
-      },
-      navigation: {
-        nextEl: '.swiper-button-next',
-        prevEl: '.swiper-button-prev',
-      },
-      pagination: {
-        el: '.swiper-pagination',
-        clickable: true,
-      },
-      speed: 800,
+    this.swiper = new Swiper('.offers-swiper', {
+      slidesPerView: 3,
+      spaceBetween: 0, // ← تقليل المسافة إلى 0 بكسل
+      loop: false,
+
       breakpoints: {
-        320: {
-          slidesPerView: 2,
-          spaceBetween: 10,
+        0: {
+          slidesPerView: 1.1,
+          spaceBetween: 4, // مسافة بسيطة في الجوال
         },
         768: {
-          slidesPerView: 4,
-          spaceBetween: 20,
+          slidesPerView: 2.2,
+          spaceBetween: 4,
         },
         1024: {
-          slidesPerView: 5,
-          spaceBetween: 30,
+          slidesPerView: 3.5,
+          spaceBetween: 4,
         },
+        1440: {
+          slidesPerView: 5.5,
+          spaceBetween: 5, // حتى في الديسكتوب تبقى المسافة صغيرة
+        }
+      },
+      on: {
+        init: () => this.applyScaling(),
+        slideChange: () => this.applyScaling()
       }
     });
+  }
+
+
+
+  applyScaling(): void {
+    const slides = document.querySelectorAll('.offers-swiper .swiper-slide');
+
+    slides.forEach(slide => slide.classList.remove('active-slide'));
+
+    const activeIndex = this.swiper.realIndex;
+
+    const activeSlide = slides[activeIndex];
+    if (activeSlide) {
+      activeSlide.classList.add('active-slide');
+    }
   }
 
 

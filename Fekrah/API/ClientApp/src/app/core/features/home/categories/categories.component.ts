@@ -1,73 +1,48 @@
-import { Component, OnInit, AfterViewInit } from '@angular/core';
-declare var Swiper: any;
+import {
+  Component,
+  OnInit,
+  ViewChild,
+  ElementRef
+} from '@angular/core';
 
 @Component({
   selector: 'app-categories',
   templateUrl: './categories.component.html',
   styleUrls: ['./categories.component.scss']
 })
-export class CategoriesComponent implements OnInit, AfterViewInit {
-  categories: { name: string; image: string; count: number; }[] = [];
+export class CategoriesComponent implements OnInit {
+  @ViewChild('scrollContainer', { static: false }) scrollContainer!: ElementRef;
 
-  constructor() { }
+  categories = [
+    { name: 'كهرباء' },
+    { name: 'ميكانيكا' },
+    { name: 'عفشة' },
+    { name: 'سمكرة' },
+    { name: 'دهانات' },
+    { name: 'بطاريات' },
+    { name: 'أكسسوارات' },
+    { name: 'زيوت' },
+    { name: 'أنوار' },
+    { name: 'كهرباء' },
+    { name: 'ميكانيكا' },
+    { name: 'عفشة' },
+    { name: 'سمكرة' },
+    { name: 'دهانات' },
+    { name: 'بطاريات' },
+    { name: 'أكسسوارات' },
+    { name: 'زيوت' },
+    { name: 'أنوار' },
+    { name: 'مكيفات' },
+    { name: 'فلتر' }
+  ];
 
-  ngOnInit(): void {
-    this.categories = [
-      { name: 'كهرباء', image: 'assets/images/image_100_100.png', count: 34 },
-      { name: 'ميكانيكا', image: 'assets/images/image_100_100.png', count: 28 },
-      { name: 'عفشة', image: 'assets/images/image_100_100.png', count: 19 },
-      { name: 'سمكرة', image: 'assets/images/image_100_100.png', count: 22 },
-      { name: 'دهانات', image: 'assets/images/image_100_100.png', count: 12 },
-      { name: 'بطاريات', image: 'assets/images/image_100_100.png', count: 16 },
-      { name: 'كهرباء', image: 'assets/images/image_100_100.png', count: 34 },
-      { name: 'ميكانيكا', image: 'assets/images/image_100_100.png', count: 28 },
-      { name: 'عفشة', image: 'assets/images/image_100_100.png', count: 19 },
-      { name: 'سمكرة', image: 'assets/images/image_100_100.png', count: 22 },
-      { name: 'دهانات', image: 'assets/images/image_100_100.png', count: 12 },
-      { name: 'بطاريات', image: 'assets/images/image_100_100.png', count: 16 },
-      { name: 'كهرباء', image: 'assets/images/image_100_100.png', count: 34 },
-      { name: 'ميكانيكا', image: 'assets/images/image_100_100.png', count: 28 },
-      { name: 'عفشة', image: 'assets/images/image_100_100.png', count: 19 },
-      { name: 'سمكرة', image: 'assets/images/image_100_100.png', count: 22 },
-      { name: 'دهانات', image: 'assets/images/image_100_100.png', count: 12 },
-      { name: 'بطاريات', image: 'assets/images/image_100_100.png', count: 16 },
-      { name: 'أكسسوارات', image: 'assets/images/image_100_100.png', count: 40 }
-    ];
+  ngOnInit(): void {}
+
+  scrollLeft(): void {
+    this.scrollContainer.nativeElement.scrollBy({ left: -200, behavior: 'smooth' });
   }
 
-  ngAfterViewInit(): void {
-    new Swiper('.swiper-container', {
-      slidesPerView: 7,
-      spaceBetween: 8,
-      loop: true,
-      autoplay: {
-        delay: 3000,
-        disableOnInteraction: false,
-      },
-      navigation: {
-        nextEl: '.swiper-button-next',
-        prevEl: '.swiper-button-prev',
-      },
-      pagination: {
-        el: '.swiper-pagination',
-        clickable: true,
-      },
-      speed: 800,
-      rtl: true,
-      breakpoints: {
-        640: {
-          slidesPerView: 4,
-          spaceBetween: 5,
-        },
-        768: {
-          slidesPerView: 5,
-          spaceBetween: 6,
-        },
-        1024: {
-          slidesPerView: 7,
-          spaceBetween: 8,
-        }
-      }
-    });
+  scrollRight(): void {
+    this.scrollContainer.nativeElement.scrollBy({ left: 200, behavior: 'smooth' });
   }
 }
