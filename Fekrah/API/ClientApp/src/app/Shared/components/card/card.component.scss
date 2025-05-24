@@ -1,112 +1,243 @@
 /* ✅ تصميم الهيدر */
 .category-header {
   width: 100%;
-  background-color: #4f46e5;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
   color: white;
   text-align: center;
-  padding: 20px 0;
-  margin-bottom: 20px;
-  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
-  border-radius: 12px;
+  padding: 25px 0;
+  margin-bottom: 30px;
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+  border-radius: 20px;
+  position: relative;
+  overflow: hidden;
+
+  &::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: linear-gradient(
+      45deg,
+      rgba(255, 255, 255, 0.1) 25%,
+      transparent 25%,
+      transparent 75%,
+      rgba(255, 255, 255, 0.1) 75%
+    );
+    background-size: 30px 30px;
+    animation: shimmer 3s ease-in-out infinite;
+  }
 
   .category-title {
-    font-size: 26px;
-    font-weight: bold;
+    font-size: 28px;
+    font-weight: 700;
     display: flex;
     align-items: center;
     justify-content: center;
-    gap: 10px;
+    gap: 12px;
+    position: relative;
+    z-index: 2;
+    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
 
     i {
-      font-size: 28px;
+      font-size: 32px;
+      animation: pulse 2s ease-in-out infinite;
     }
   }
 }
 
-/* ✅ تصميم الكارد */
+@keyframes shimmer {
+  0%,
+  100% {
+    transform: translateX(-100px);
+  }
+  50% {
+    transform: translateX(100px);
+  }
+}
+
+@keyframes pulse {
+  0%,
+  100% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.1);
+  }
+}
+
+/* ✅ تصميم الكارد المحسن */
 .card {
-  background-color: #ffffff;
-  border-radius: 16px;
+  background: linear-gradient(145deg, #ffffff 0%, #f8fafc 100%);
+  border-radius: 24px;
   overflow: hidden;
   width: 100%;
-  max-width: 360px;
-  height: 500px;
-  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+  max-width: 250px; /* حد أقصى للعرض */
+  height: auto;
+  max-height: 480px; /* حد أقصى للطول */
+  min-height: 380px; /* حد أدنى للطول */
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1), 0 20px 48px rgba(0, 0, 0, 0.08),
+    inset 0 1px 0 rgba(255, 255, 255, 0.6);
   display: flex;
   flex-direction: column;
   justify-content: space-between;
-  transition: 0.3s ease;
-  margin-bottom: 20px;
+  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+  margin-bottom: 25px;
   position: relative;
+  border: 1px solid rgba(255, 255, 255, 0.2);
 
+  &::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: linear-gradient(
+      135deg,
+      rgba(255, 255, 255, 0.1) 0%,
+      rgba(255, 255, 255, 0.05) 50%,
+      rgba(0, 0, 0, 0.02) 100%
+    );
+    pointer-events: none;
+    z-index: 1;
+  }
 
   &:hover {
-    transform: translateY(-5px);
-    box-shadow: 0 15px 30px rgba(0, 0, 0, 0.15);
+    transform: translateY(-8px) scale(1.02);
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15), 0 30px 60px rgba(0, 0, 0, 0.1),
+      inset 0 1px 0 rgba(255, 255, 255, 0.8);
+
+    .image-container::after {
+      opacity: 0.8;
+    }
   }
 
   .image-container {
     width: 100%;
-    height: 220px;
-    background-color: #e5e7eb;
+    height: 180px;
+    background: linear-gradient(135deg, #e2e8f0 0%, #cbd5e1 100%);
     display: flex;
     justify-content: center;
     align-items: center;
     overflow: hidden;
+    position: relative;
+
+    &::after {
+      content: "";
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: linear-gradient(
+        45deg,
+        transparent 30%,
+        rgba(255, 255, 255, 0.1) 50%,
+        transparent 70%
+      );
+      opacity: 0;
+      transition: opacity 0.3s ease;
+      pointer-events: none;
+    }
 
     img {
       width: 100%;
       height: 100%;
       object-fit: cover;
-      border-bottom: 2px solid #e2e8f0;
-      transition: 0.3s ease;
+      transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+      filter: brightness(0.95) contrast(1.05);
     }
 
     &:hover img {
-      transform: scale(1.05);
+      transform: scale(1.08);
+      filter: brightness(1) contrast(1.1);
     }
   }
 
   .content {
-    padding: 16px;
+    padding: 14px;
     display: flex;
     flex-direction: column;
     align-items: center;
     gap: 8px;
+    position: relative;
+    z-index: 2;
+    flex-grow: 1;
   }
 
   .part-name {
-    font-size: 20px;
-    font-weight: bold;
-    color: #1f2937;
+    font-size: 18px;
+    font-weight: 700;
+    color: #1e293b;
     text-align: center;
+    line-height: 1.3;
+    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
+    background: linear-gradient(135deg, #1e293b 0%, #334155 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
   }
 
   .store-name {
-    font-size: 14px;
-    color: #6b7280;
+    font-size: 13px;
+    color: #64748b;
     text-align: center;
+    font-weight: 500;
+    padding: 6px 12px;
+    background: linear-gradient(135deg, #f1f5f9 0%, #e2e8f0 100%);
+    border-radius: 20px;
+    border: 1px solid rgba(100, 116, 139, 0.1);
+    box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.05);
   }
 
   .part-info {
     display: flex;
     justify-content: center;
-    gap: 8px;
+    gap: 12px;
+
+    .condition,
+    .type {
+      padding: 4px 10px;
+      border-radius: 16px;
+      font-size: 11px;
+      font-weight: 600;
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+      position: relative;
+      overflow: hidden;
+
+      &::before {
+        content: "";
+        position: absolute;
+        top: 0;
+        left: -100%;
+        width: 100%;
+        height: 100%;
+        background: linear-gradient(
+          90deg,
+          transparent,
+          rgba(255, 255, 255, 0.3),
+          transparent
+        );
+        transition: left 0.5s;
+      }
+
+      &:hover::before {
+        left: 100%;
+      }
+    }
 
     .condition {
-      background-color: #d1fae5;
+      background: linear-gradient(135deg, #d1fae5 0%, #a7f3d0 100%);
       color: #065f46;
-      padding: 3px 8px;
-      border-radius: 8px;
-      font-size: 12px;
+      border: 1px solid rgba(6, 95, 70, 0.2);
     }
 
     .type {
-      background-color: #bfdbfe;
+      background: linear-gradient(135deg, #bfdbfe 0%, #93c5fd 100%);
       color: #1e3a8a;
-      padding: 3px 8px;
-      border-radius: 8px;
-      font-size: 12px;
+      border: 1px solid rgba(30, 58, 138, 0.2);
     }
   }
 
@@ -114,131 +245,251 @@
     display: flex;
     flex-direction: column;
     align-items: center;
-    background-color: #fef3c7;
+    background: linear-gradient(135deg, #fef3c7 0%, #fde68a 100%);
     color: #1f2937;
     padding: 8px 16px;
-    border-radius: 12px;
+    border-radius: 16px;
     margin-bottom: 10px;
-    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
-  }
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1),
+      inset 0 1px 0 rgba(255, 255, 255, 0.6);
+    border: 1px solid rgba(217, 119, 6, 0.2);
+    position: relative;
+    overflow: hidden;
 
-  .price {
-    font-size: 20px;
-    font-weight: bold;
-    color: #d97706;
+    &::before {
+      content: "";
+      position: absolute;
+      top: -50%;
+      left: -50%;
+      width: 200%;
+      height: 200%;
+      background: radial-gradient(
+        circle,
+        rgba(255, 255, 255, 0.3) 0%,
+        transparent 70%
+      );
+      animation: shimmer-price 3s ease-in-out infinite;
+    }
+
+    .price {
+      font-size: 18px;
+      font-weight: 800;
+      color: #d97706;
+      text-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+      position: relative;
+      z-index: 1;
+    }
   }
 
   .action-buttons {
     display: flex;
-    gap: 15px;
-    // align-items: center;
+    gap: 12px;
     justify-content: center;
-    margin-bottom: 15px;
+    margin-bottom: 12px;
+    position: relative;
+    z-index: 2;
   }
 
-  .whatsapp-icon, .view-icon {
+  .whatsapp-icon,
+  .view-icon,
+  .add-icon {
     color: white;
-    background-color: #0284c7;
     border-radius: 50%;
-    width: 42px;
-    height: 42px;
+    width: 40px;
+    height: 40px;
     display: flex;
     justify-content: center;
     align-items: center;
-    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-    transition: background-color 0.3s, transform 0.3s;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15), 0 8px 16px rgba(0, 0, 0, 0.1);
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    border: 2px solid rgba(255, 255, 255, 0.2);
+    position: relative;
+    overflow: hidden;
+
+    &::before {
+      content: "";
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      width: 0;
+      height: 0;
+      background: rgba(255, 255, 255, 0.3);
+      border-radius: 50%;
+      transition: all 0.3s ease;
+      transform: translate(-50%, -50%);
+    }
 
     &:hover {
-      transform: scale(1.1);
+      transform: translateY(-3px) scale(1.1);
+      box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2), 0 12px 24px rgba(0, 0, 0, 0.15);
+
+      &::before {
+        width: 100%;
+        height: 100%;
+      }
+    }
+
+    i {
+      font-size: 16px;
+      position: relative;
+      z-index: 1;
     }
   }
 
   .whatsapp-icon {
-    background-color: #25D366;
+    background: linear-gradient(135deg, #25d366 0%, #128c7e 100%);
 
     &:hover {
-      background-color: #128C7E;
+      background: linear-gradient(135deg, #128c7e 0%, #075e54 100%);
     }
   }
 
   .view-icon {
-    background-color: #0284c7;
+    background: linear-gradient(135deg, #0284c7 0%, #0369a1 100%);
 
     &:hover {
-      background-color: #0369a1;
+      background: linear-gradient(135deg, #0369a1 0%, #075985 100%);
     }
   }
 
-  .view-icon i {
-    font-size: 18px;
+  .add-icon {
+    background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+    border: none;
+    cursor: pointer;
+
+    &:hover {
+      background: linear-gradient(135deg, #059669 0%, #047857 100%);
+    }
   }
 }
 
-.add-icon {
-  background-color:#9ead0f; // أخضر
-  color: white;
-  border: none;
-  border-radius: 50%;
-  width: 42px;
-  height: 42px;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  cursor: pointer;
-  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-  transition: background-color 0.3s, transform 0.3s;
-
-  i {
-    font-size: 18px;
+@keyframes shimmer-price {
+  0%,
+  100% {
+    transform: rotate(0deg);
   }
-
-  &:hover {
-    background-color: #059669;
-    transform: scale(1.1);
+  50% {
+    transform: rotate(180deg);
   }
 }
 
-
+/* ✅ الشريط المحسن */
 .ribbon {
   position: absolute;
-  top: 18px;
-  left: -40px;
-  width: 160px;
-  padding: 5px 0;
-  background-color: #16a34a;
+  top: 20px;
+  left: -45px;
+  width: 180px;
+  padding: 8px 0;
+  background: linear-gradient(135deg, #16a34a 0%, #15803d 100%);
   color: white;
   text-align: center;
   font-size: 14px;
-  font-weight: bold;
+  font-weight: 700;
   transform: rotate(-45deg);
-  box-shadow: 0 3px 6px rgba(0, 0, 0, 0.2);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3),
+    inset 0 1px 0 rgba(255, 255, 255, 0.3);
   z-index: 10;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
+
+  &::before,
+  &::after {
+    content: "";
+    position: absolute;
+    top: 100%;
+    width: 0;
+    height: 0;
+    border-style: solid;
+  }
+
+  &::before {
+    left: 0;
+    border-color: #15803d transparent transparent #15803d;
+    border-width: 5px 0 0 5px;
+  }
+
+  &::after {
+    right: 0;
+    border-color: #15803d #15803d transparent transparent;
+    border-width: 5px 5px 0 0;
+  }
 }
 
-
+/* ✅ شريط الدرجة المحسن */
 .grade-ribbon {
   position: absolute;
-  top: 10px;
-  right: 10px;
-  padding: 4px 10px;
-  font-size: 12px;
-  font-weight: bold;
-  border-radius: 8px;
+  top: 15px;
+  right: 15px;
+  padding: 6px 14px;
+  font-size: 13px;
+  font-weight: 700;
+  border-radius: 20px;
   z-index: 2;
-  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
+  border: 2px solid rgba(255, 255, 255, 0.3);
 }
 
 .grade-primary {
-  background-color: #10b981; // أخضر
+  background: linear-gradient(135deg, #10b981 0%, #059669 100%);
   color: white;
 }
 
 .grade-secondary {
-  background-color: #3b82f6; // أزرق
+  background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%);
   color: white;
 }
 
 .grade-default {
-  background-color: #6b7280; // رمادي
+  background: linear-gradient(135deg, #6b7280 0%, #4b5563 100%);
   color: white;
 }
+
+/* ✅ وصف المنتج المحسن */
+.part-description {
+  font-size: 15px;
+  font-weight: 500;
+  color: #334155;
+  line-height: 1.6;
+  text-align: center;
+  background: linear-gradient(
+    135deg,
+    rgba(219, 219, 253, 0.8) 0%,
+    rgba(212, 255, 235, 0.8) 100%
+  );
+  padding: 14px 16px;
+  border-radius: 16px;
+  margin-bottom: 12px;
+  height: 70px;
+  overflow: hidden;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  text-overflow: ellipsis;
+  box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.05), 0 1px 3px rgba(0, 0, 0, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.5);
+  position: relative;
+  overflow: hidden;
+
+  &::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(
+      90deg,
+      transparent,
+      rgba(255, 255, 255, 0.4),
+      transparent
+    );
+    transition: left 0.5s;
+  }
+
+  &:hover::before {
+    left: 100%;
+  }
+}
+
+
+

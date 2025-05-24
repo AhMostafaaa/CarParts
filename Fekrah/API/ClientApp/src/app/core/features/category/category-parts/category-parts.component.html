@@ -37,8 +37,9 @@
   <div class="page-layout">
     <section class="parts-section">
       <div class="parts-grid">
-        <app-card *ngFor="let part of filteredParts | paginate: { itemsPerPage: pageSize, currentPage: currentPage }"
-                  [part]="part">
+        <app-card *ngFor="let part of displayParts; trackBy: trackByPartId"
+                  [part]="part"
+                  (partClick)="onPartClick($event)">
         </app-card>
       </div>
 

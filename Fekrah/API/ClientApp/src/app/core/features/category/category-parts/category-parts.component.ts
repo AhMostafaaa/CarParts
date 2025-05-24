@@ -1,5 +1,27 @@
 import { Component, OnInit } from '@angular/core';
 
+interface Part {
+  id: number;
+  name: string;
+  category: string;
+  brand: string;
+  condition: string;
+  type: string;
+  price: number;
+  oldPrice: number | null;
+  imageUrl: string;
+  storeName: string;
+  sellerId: number;
+  sellerPhone: string;
+  isOnSale: boolean;
+  freeDelivery: boolean;
+  quantity: number;
+  availability: string;
+  grade: string | null;
+  description: string;
+}
+
+
 @Component({
   selector: 'app-category-parts',
   templateUrl: './category-parts.component.html',
@@ -12,15 +34,23 @@ export class CategoryPartsComponent implements OnInit {
   currentPage = 1;
   pageSizeOptions = [12, 24, 36];
   searchText = '';
-  allParts = this.getMockData();
-  filteredParts = [...this.allParts];
   categoryName = 'كهرباء';
   suggestions: string[] = [];
   searchFocused = false;
 
-  constructor() {}
+  allParts: Part[] = [];
+filteredParts: Part[] = [];
+displayParts: Part[] = [];
 
-  ngOnInit(): void {}
+
+  constructor() { }
+
+  ngOnInit(): void {
+    this.allParts = this.getMockData();
+    this.filteredParts = [...this.allParts];
+    this.updateDisplayParts();
+    this.updateDisplayParts();
+  }
 
   toggleSidebar() {
     this.showSidebar = !this.showSidebar;
@@ -28,10 +58,28 @@ export class CategoryPartsComponent implements OnInit {
 
   changePageSize(event: any) {
     this.pageSize = +event.target.value;
+    this.currentPage = 1;
+    this.updateDisplayParts();
   }
 
   pageChanged(event: number) {
     this.currentPage = event;
+    this.updateDisplayParts();
+  }
+
+  updateDisplayParts() {
+    const start = (this.currentPage - 1) * this.pageSize;
+    const end = start + this.pageSize;
+    this.displayParts = this.filteredParts.slice(start, end);
+  }
+
+  trackByPartId(index: number, part: any): number {
+    return part.id;
+  }
+
+  onPartClick(part: any) {
+    console.log('Part clicked:', part);
+    // مثال: فتح مودال أو توجيه لصفحة تفاصيل
   }
 
   getMockData() {
@@ -64,7 +112,8 @@ export class CategoryPartsComponent implements OnInit {
         freeDelivery: index % 5 === 0,
         quantity: quantity,
         availability: quantity > 0 ? 'متوفر' : 'غير متوفر',
-        grade: grade
+        grade: grade,
+        description: `قطعة اختبارية عالية الجودة مصممة لتناسب العديد من موديلات السيارات. تتميز بمتانتها وأدائها الممتاز، وتعد خيارًا مثاليًا للصيانة أو التبديل الدائم.`
       };
     });
   }
@@ -75,11 +124,13 @@ export class CategoryPartsComponent implements OnInit {
       part.name.toLowerCase().includes(text)
     );
 
-    // Suggestions
     this.suggestions = this.allParts
       .map(part => part.name)
       .filter(name => name.toLowerCase().includes(text))
       .slice(0, 5);
+
+    this.currentPage = 1;
+    this.updateDisplayParts();
   }
 
   selectSuggestion(suggestion: string) {
@@ -88,5 +139,7 @@ export class CategoryPartsComponent implements OnInit {
       part.name === suggestion
     );
     this.suggestions = [];
+    this.currentPage = 1;
+    this.updateDisplayParts();
   }
 }

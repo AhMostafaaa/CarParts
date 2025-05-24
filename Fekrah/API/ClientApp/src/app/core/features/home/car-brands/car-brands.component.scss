@@ -2,12 +2,6 @@
   text-align: center;
   margin: 25px 0;
   padding: 30px 70px;
-  // background: linear-gradient(
-  //   145deg,
-  //   rgba(255, 255, 255, 0.6),
-  //   rgba(255, 255, 255, 0.2)
-  // );
-  // backdrop-filter: blur(10px);
   border-radius: 20px;
   box-shadow: inset 0 0 15px rgba(255, 255, 255, 0.5);
   border: 1px solid rgba(255, 255, 255, 0.3);
@@ -41,7 +35,6 @@
   padding: 37px 41px 62px;
   margin: 5px 10px;
   overflow: hidden;
-  // background-color: red;
 
   .swiper-wrapper {
     align-items: center;
@@ -98,14 +91,15 @@
 
 .brand-card {
   cursor: pointer;
-  width: 90px;
-  background: rgba(255, 255, 255, 0.9);
-  border-radius: 12px;
-  padding: 12px 8px;
-  margin: 0 5px;
+  width: 120px;
+  background: rgba(255, 255, 255, 0.95);
+  border-radius: 16px;
+  padding: 16px 10px;
+  margin: 0 6px;
   transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
   position: relative;
   overflow: hidden;
+  box-shadow: 0 3px 10px rgba(0, 0, 0, 0.05);
 
   &:before {
     content: "";
@@ -126,16 +120,16 @@
 
   &:hover {
     transform: translateY(-5px);
-    box-shadow: 0 10px 20px rgba(52, 152, 219, 0.2);
-    background: white;
+    box-shadow: 0 15px 25px rgba(52, 152, 219, 0.3);
+    background: linear-gradient(145deg, #ffffff, #ecf0f1);
 
     &:before {
       transform: translateX(100%);
     }
 
     .brand-image {
-      transform: scale(1.1);
-      box-shadow: 0 5px 15px rgba(52, 152, 219, 0.3);
+      transform: scale(1.2);
+      box-shadow: 0 8px 20px rgba(52, 152, 219, 0.25);
     }
 
     p {
@@ -145,14 +139,14 @@
   }
 
   .brand-image {
-    width: 45px;
-    height: 45px;
-    margin: 0 auto 10px;
-    border-radius: 10px;
+    width: 60px;
+    height: 60px;
+    margin: 0 auto 12px;
+    border-radius: 12px;
     padding: 8px;
-    background: white;
+    background: #fff;
     transition: all 0.3s ease;
-    box-shadow: 0 3px 10px rgba(0, 0, 0, 0.1);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
     display: flex;
     align-items: center;
     justify-content: center;
@@ -162,7 +156,7 @@
       content: "";
       position: absolute;
       inset: 0;
-      border-radius: 10px;
+      border-radius: 12px;
       padding: 2px;
       background: linear-gradient(45deg, #3498db, #2ecc71);
       -webkit-mask: linear-gradient(#fff 0 0) content-box,
@@ -182,13 +176,14 @@
 
   p {
     margin: 0;
-    font-size: 0.8rem;
-    font-weight: 500;
+    font-size: 0.9rem;
+    font-weight: 600;
     color: #34495e;
     transition: all 0.3s ease;
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
+    text-shadow: 0 1px 1px rgba(255, 255, 255, 0.8);
   }
 }
 
@@ -203,21 +198,17 @@
   }
 
   .brand-card {
-    width: 80px;
-    padding: 10px 6px;
+    width: 100px;
+    padding: 12px 8px;
 
     .brand-image {
-      width: 35px;
-      height: 35px;
-      margin-bottom: 8px;
+      width: 45px;
+      height: 45px;
+      margin-bottom: 10px;
     }
 
     p {
-      font-size: 0.75rem;
+      font-size: 0.8rem;
     }
   }
-
-  // .swiper {
-  //   padding: 10px 25px 30px;
-  // }
 }
