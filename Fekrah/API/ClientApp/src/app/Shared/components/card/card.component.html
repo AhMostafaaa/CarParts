@@ -11,7 +11,7 @@
       <img [src]="part.imageUrl" [alt]="part.name" (error)="onImageError($event)">
       <div class="image-overlay"></div>
     </div>
-    
+
     <!-- Grade Badge -->
     <div class="grade-badge" *ngIf="part.grade" [ngClass]="getGradeClass(part.grade)">
       <i class="fas fa-medal"></i>
@@ -54,7 +54,6 @@
         </div>
         <div class="info-content">
           <span class="store-name">{{ part.storeName || 'متجر غير معروف' }}</span>
-          <i class="fas fa-external-link-alt external-icon"></i>
         </div>
       </div>
 
@@ -77,20 +76,12 @@
     <!-- Enhanced Price Section -->
     <div class="enhanced-price-section">
       <div class="price-container">
-        <div class="price-header">
-          <span class="price-label">السعر</span>
-          <div class="discount-tag" *ngIf="part.discount">
-            <i class="fas fa-tag"></i>
-            <span>خصم {{ part.discount }}%</span>
-          </div>
-        </div>
-        
         <div class="price-display">
           <div class="current-price-container">
             <span class="price-amount">{{ formatPrice(part.priceAfterDiscount || part.price) }}</span>
             <span class="currency-symbol">ج.م</span>
           </div>
-          
+
           <div class="price-details" *ngIf="part.discount">
             <span class="original-price">{{ formatPrice(part.price) }}</span>
             <div class="savings-highlight">
@@ -104,18 +95,15 @@
 
     <!-- Action Buttons -->
     <div class="action-section">
-      <button class="primary-btn whatsapp-btn" (click)="onWhatsAppClick(part)">
-        <i class="fab fa-whatsapp"></i>
-        <span>واتساب</span>
-      </button>
-      
-      <div class="secondary-actions">
-        <button class="secondary-btn view-btn" [routerLink]="['/parts', part.id]">
+      <div class="action-buttons">
+        <button class="action-btn" [routerLink]="['/parts', part.id]" title="عرض التفاصيل">
           <i class="fas fa-eye"></i>
         </button>
-        
-        <button class="secondary-btn cart-btn" (click)="onAdd(part)">
+        <button class="action-btn" (click)="onAdd(part)" title="إضافة إلى السلة">
           <i class="fas fa-cart-plus"></i>
+        </button>
+        <button class="action-btn whatsapp" (click)="onWhatsAppClick(part)" title="تواصل عبر الواتساب">
+          <i class="fab fa-whatsapp"></i>
         </button>
       </div>
     </div>
