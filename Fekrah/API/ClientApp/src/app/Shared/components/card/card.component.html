@@ -1,111 +1,107 @@
 <div class="modern-card">
   <!-- Free Delivery Ribbon -->
-  <div class="delivery-ribbon" *ngIf="part.freeDelivery">
-    <i class="fas fa-shipping-fast"></i>
-    <span>توصيل مجاني</span>
+  <div class="delivery-ribbon">
+      <i class="fas fa-shipping-fast"></i>
+      <span>توصيل مجاني</span>
   </div>
 
   <!-- Main Image Container -->
   <div class="image-section">
-    <div class="image-wrapper">
-      <img [src]="part.imageUrl" [alt]="part.name" (error)="onImageError($event)">
-      <div class="image-overlay"></div>
-    </div>
+      <div class="image-placeholder">
+          <i class="fas fa-cog"></i>
+      </div>
 
-    <!-- Grade Badge -->
-    <div class="grade-badge" *ngIf="part.grade" [ngClass]="getGradeClass(part.grade)">
-      <i class="fas fa-medal"></i>
-      <span>{{ part.grade }}</span>
-    </div>
+      <!-- Grade Badge -->
+      <div class="grade-badge">
+          <i class="fas fa-medal"></i>
+          <span>فرز أول</span>
+      </div>
 
-    <!-- Favorite Button -->
-    <button class="favorite-btn" (click)="toggleFavorite(part)" [class.active]="part.isFavorite">
-      <i class="fas fa-heart"></i>
-    </button>
+      <!-- Favorite Button -->
+      <button class="favorite-btn">
+          <i class="fas fa-heart"></i>
+      </button>
 
-    <!-- Discount Badge -->
-    <div class="discount-overlay" *ngIf="part.discount">
-      <span>-{{ part.discount }}%</span>
-    </div>
+      <!-- Discount Badge -->
+      <div class="discount-overlay">
+          <span>25%-</span>
+      </div>
   </div>
 
   <!-- Card Content -->
   <div class="content-section">
-    <!-- Part Name Section -->
-    <div class="part-name-section">
-      <div class="name-wrapper">
-        <h3 class="part-title">{{ part.name }}</h3>
-        <div class="part-subtitle">قطعة غيار أصلية</div>
-      </div>
-      <div class="condition-badge" [ngClass]="getConditionClass(part.condition)">
-        <i [class]="getConditionIcon(part.condition)"></i>
-        <span>{{ part.condition }}</span>
-      </div>
-    </div>
-
-    <!-- Store & Car Info Grid -->
-    <div class="info-grid">
-      <div class="info-card store-card" [routerLink]="['/store', part.storeId]">
-        <div class="info-header">
-          <div class="info-icon store-icon">
-            <i class="fas fa-store-alt"></i>
+      <!-- Part Name Section -->
+      <div class="part-name-section">
+          <h3 class="part-title">فلتر زيت محرك أصلي</h3>
+          <div class="part-subtitle">قطعة غيار أصلية</div>
+          <div class="condition-badge">
+              <i class="fas fa-star"></i>
+              <span>جديد</span>
           </div>
-          <div class="info-label">المتجر</div>
-        </div>
-        <div class="info-content">
-          <span class="store-name">{{ part.storeName || 'متجر غير معروف' }}</span>
-        </div>
       </div>
 
-      <div class="info-card car-card">
-        <div class="info-header">
-          <div class="info-icon car-icon">
-            <i class="fas fa-car"></i>
-          </div>
-          <div class="info-label">السيارة</div>
-        </div>
-        <div class="info-content">
-          <div class="car-details">
-            <span class="car-brand">{{ part.carBrand }}</span>
-            <span class="car-model">{{ part.carModel }} {{ part.modelYear }}</span>
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <!-- Enhanced Price Section -->
-    <div class="enhanced-price-section">
-      <div class="price-container">
-        <div class="price-display">
-          <div class="current-price-container">
-            <span class="price-amount">{{ formatPrice(part.priceAfterDiscount || part.price) }}</span>
-            <span class="currency-symbol">ج.م</span>
+      <!-- Store & Car Info Grid -->
+      <div class="info-grid">
+          <div class="info-card store-card">
+              <div class="info-header">
+                  <div class="info-icon store-icon">
+                      <i class="fas fa-store-alt"></i>
+                  </div>
+                  <div class="info-label">المتجر</div>
+              </div>
+              <div class="info-content">
+                  <span class="store-name">متجر السيارات الذهبي</span>
+              </div>
           </div>
 
-          <div class="price-details" *ngIf="part.discount">
-            <span class="original-price">{{ formatPrice(part.price) }}</span>
-            <div class="savings-highlight">
-              <i class="fas fa-arrow-down"></i>
-              <span>توفير {{ getFormattedSavings(part.price, part.priceAfterDiscount || part.price) }}</span>
-            </div>
+          <div class="info-card car-card">
+              <div class="info-header">
+                  <div class="info-icon car-icon">
+                      <i class="fas fa-car"></i>
+                  </div>
+                  <div class="info-label">السيارة</div>
+              </div>
+              <div class="info-content">
+                  <div class="car-details">
+                      <span class="car-brand">تويوتا</span>
+                      <span class="car-model">كامري 2020</span>
+                  </div>
+              </div>
           </div>
-        </div>
       </div>
-    </div>
 
-    <!-- Action Buttons -->
-    <div class="action-section">
-      <div class="action-buttons">
-        <button class="action-btn" [routerLink]="['/parts', part.id]" title="عرض التفاصيل">
-          <i class="fas fa-eye"></i>
-        </button>
-        <button class="action-btn" (click)="onAdd(part)" title="إضافة إلى السلة">
-          <i class="fas fa-cart-plus"></i>
-        </button>
-        <button class="action-btn whatsapp" (click)="onWhatsAppClick(part)" title="تواصل عبر الواتساب">
-          <i class="fab fa-whatsapp"></i>
-        </button>
+      <!-- Enhanced Price Section -->
+      <div class="enhanced-price-section">
+          <div class="price-container">
+              <div class="price-row">
+                  <div class="current-price-container">
+                      <span class="price-amount">750</span>
+                      <span class="currency-symbol">ج.م</span>
+                  </div>
+                  
+                  <span class="original-price">1000 ج.م</span>
+                  
+                  <div class="savings-highlight">
+                      <i class="fas fa-arrow-down"></i>
+                      <span>توفير 250</span>
+                  </div>
+              </div>
+          </div>
       </div>
-    </div>
+
+      <!-- Action Buttons -->
+      <div class="action-section">
+          <div class="action-buttons">
+              <button class="action-btn whatsapp" title="تواصل عبر الواتساب">
+                  <i class="fab fa-whatsapp"></i>
+              </button>
+              <button class="action-btn view-details" title="عرض التفاصيل" [routerLink]="['/parts', part.id]">
+                <i class="fas fa-eye"></i>
+              </button>
+              <button class="action-btn add-cart" title="إضافة إلى السلة">
+                  <i class="fas fa-cart-plus"></i>
+              </button>
+          </div>
+      </div>
   </div>
 </div>

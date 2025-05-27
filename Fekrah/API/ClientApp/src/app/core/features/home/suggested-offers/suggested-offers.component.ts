@@ -67,8 +67,7 @@ export class SuggestedOffersComponent implements OnInit, AfterViewInit {
       sellerId: '114',
       description: 'زمارة صوت عالي تعمل بكفاءة وبدون أعطال.',
       imageUrl: 'assets/images/image100_100.png'
-    }
-    ,
+    },
     {
       id: 100,
       name: 'فلتر هواء',
@@ -179,15 +178,15 @@ export class SuggestedOffersComponent implements OnInit, AfterViewInit {
     }
   ];
 
+  pagedParts = this.suggestedParts;
 
-
-  ngOnInit(): void { }
+  ngOnInit(): void {}
 
   ngAfterViewInit(): void {
     new Swiper('.suggested-offers-swiper', {
       slidesPerView: 6,
       spaceBetween: 30,
-        centeredSlides: false,
+      centeredSlides: false,
       loop: true,
       autoplay: {
         delay: 4000,
@@ -203,5 +202,17 @@ export class SuggestedOffersComponent implements OnInit, AfterViewInit {
         1024: { slidesPerView: 5, spaceBetween: 30 }
       }
     });
+  }
+
+  trackByPartId(index: number, part: { id: number }): number {
+    return part.id;
+  }
+
+  onAddToCart(part: any): void {
+    console.log('✅ Add to cart:', part);
+  }
+
+  onFavoriteToggled(part: any): void {
+    console.log('❤️ Favorite toggled:', part);
   }
 }

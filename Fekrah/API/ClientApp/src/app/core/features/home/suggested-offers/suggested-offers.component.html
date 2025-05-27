@@ -3,8 +3,12 @@
 
   <div class="swiper-container suggested-offers-swiper" dir="ltr">
     <div class="swiper-wrapper">
-      <div class="swiper-slide" *ngFor="let part of suggestedParts">
-        <app-part-card [part]="part"></app-part-card>
+      <div class="swiper-slide" *ngFor="let part of pagedParts; trackBy: trackByPartId">
+        <app-card
+          [part]="part"
+          (addToCart)="onAddToCart($event)"
+          (favoriteToggled)="onFavoriteToggled($event)">
+        </app-card>
       </div>
     </div>
 

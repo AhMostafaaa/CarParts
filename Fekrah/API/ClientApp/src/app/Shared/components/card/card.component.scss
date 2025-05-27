@@ -1,491 +1,424 @@
-@import url('https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;500;600;700;800&display=swap');
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: 'Cairo', sans-serif;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  min-height: 100vh;
+  padding: 20px;
+  direction: rtl;
+}
+
+/* Container للكروت */
+.cards-container {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+  gap: 20px;
+  max-width: 1400px;
+  margin: 0 auto;
+  justify-items: center;
+}
+
+/* تخطيط responsive للكروت */
+@media (min-width: 768px) {
+  .cards-container {
+      grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (min-width: 1200px) {
+  .cards-container {
+      grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+@media (min-width: 1600px) {
+  .cards-container {
+      grid-template-columns: repeat(4, 1fr);
+      gap: 24px;
+  }
+}
 
 .modern-card {
-  width: 320px;
-  height: 480px;
-  background: #ffffff;
-  border-radius: 24px;
-  box-shadow:
-    0 8px 40px rgba(0, 0, 0, 0.08),
-    0 2px 16px rgba(0, 0, 0, 0.04);
+  width: 330px;
+  height: 580px;
+  background: rgba(255, 255, 255, 0.95);
+  backdrop-filter: blur(20px);
+  border-radius: 28px;
   overflow: hidden;
   position: relative;
-  transition: all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  transition: all 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94);
   font-family: 'Cairo', sans-serif;
   display: flex;
   flex-direction: column;
-  border: 1px solid rgba(226, 232, 240, 0.6);
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  box-shadow: 
+      0 15px 60px rgba(0, 0, 0, 0.15),
+      0 5px 25px rgba(0, 0, 0, 0.1),
+      inset 0 1px 0 rgba(255, 255, 255, 0.6);
+}
 
-  &:hover {
-    transform: translateY(-8px) scale(1.02);
-    box-shadow:
-      0 20px 60px rgba(0, 0, 0, 0.12),
-      0 8px 32px rgba(0, 0, 0, 0.08);
+.modern-card:hover {
+  transform: translateY(-8px) scale(1.02);
+  box-shadow: 
+      0 25px 80px rgba(0, 0, 0, 0.25),
+      0 15px 40px rgba(0, 0, 0, 0.15);
+}
 
-    .image-wrapper img {
-      transform: scale(1.05);
-    }
+/* Delivery Ribbon */
+.delivery-ribbon {
+  position: absolute;
+  top: 15px;
+  left: -35px;
+  background: linear-gradient(135deg, #81ffd5 0%, #04785f 100%);
+  color: white;
+  padding: 8px 40px;
+  transform: rotate(-45deg);
+  z-index: 20;
+  font-size: 0.7rem;
+  font-weight: 700;
+  box-shadow: 0 4px 15px rgba(16, 185, 129, 0.4);
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
 
-    .image-overlay {
-      opacity: 0.1;
-    }
+/* Main Image Section - زيادة الطول */
+.image-section {
+  width: 100%;
+  height: 240px; /* زيادة من 200px */
+  position: relative;
+  background: linear-gradient(135deg, #f0f9ff 0%, #e0f2fe 100%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.image-placeholder {
+  width: 140px; /* زيادة من 120px */
+  height: 140px; /* زيادة من 120px */
+  background: linear-gradient(135deg, #e2e8f0 0%, #cbd5e1 100%);
+  border-radius: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #64748b;
+  font-size: 3.5rem; /* زيادة الأيقونة */
+}
+
+/* Grade Badge */
+.grade-badge {
+  position: absolute;
+  top: 15px;
+  right: 15px;
+  padding: 6px 12px;
+  border-radius: 20px;
+  font-size: 0.7rem;
+  font-weight: 700;
+  background: linear-gradient(135deg, #10b981 0%, #047857 100%);
+  color: white;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  z-index: 15;
+}
+
+/* Favorite Button */
+.favorite-btn {
+  position: absolute;
+  top: 15px;
+  left: 15px;
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.9);
+  border: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  z-index: 15;
+  color: #64748b;
+  transition: all 0.3s ease;
+}
+
+.favorite-btn:hover {
+  background: rgba(239, 68, 68, 0.1);
+  color: #ef4444;
+  transform: scale(1.1);
+}
+
+/* Discount Badge */
+.discount-overlay {
+  position: absolute;
+  bottom: 15px;
+  right: 15px;
+  background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%);
+  color: white;
+  padding: 6px 12px;
+  border-radius: 15px;
+  font-size: 0.75rem;
+  font-weight: 800;
+  z-index: 15;
+}
+
+/* Content Section */
+.content-section {
+  padding: 18px;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 14px; /* تقليل من 16px */
+}
+
+/* Part Name Section - تقليل الحجم */
+.part-name-section {
+  text-align: center;
+  padding: 12px; /* تقليل من 16px */
+  background: linear-gradient(135deg, rgba(248, 250, 252, 0.8) 0%, rgba(241, 245, 249, 0.9) 100%);
+  border-radius: 16px; /* تقليل من 20px */
+  border: 1px solid rgba(148, 163, 184, 0.1);
+}
+
+.part-title {
+  font-size: 1rem; /* تقليل من 1.1rem */
+  font-weight: 800;
+  color: #1e293b;
+  margin-bottom: 4px; /* تقليل من 6px */
+  line-height: 1.3; /* تقليل من 1.4 */
+}
+
+.part-subtitle {
+  font-size: 0.7rem; /* تقليل من 0.75rem */
+  color: #6366f1;
+  font-weight: 600;
+}
+
+.condition-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px; /* تقليل من 6px */
+  padding: 4px 10px; /* تقليل من 6px 12px */
+  border-radius: 16px; /* تقليل من 20px */
+  font-size: 0.65rem; /* تقليل من 0.7rem */
+  font-weight: 700;
+  background: linear-gradient(135deg, #10b981 0%, #047857 100%);
+  color: white;
+  margin-top: 6px; /* تقليل من 8px */
+}
+
+/* Info Grid */
+.info-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+}
+
+.info-card {
+  padding: 12px; /* تقليل من 14px */
+  border-radius: 16px; /* تقليل من 18px */
+  border: 1px solid rgba(226, 232, 240, 0.4);
+  transition: all 0.3s ease;
+  cursor: pointer;
+  text-align: center;
+}
+
+.info-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
+}
+
+.store-card {
+  background: linear-gradient(135deg, #f0fdf4 0%, #dcfce7 100%);
+}
+
+.car-card {
+  background: linear-gradient(135deg, #eff6ff 0%, #dbeafe 100%);
+}
+
+.info-header {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px; /* تقليل من 8px */
+  margin-bottom: 6px; /* تقليل من 8px */
+}
+
+.info-icon {
+  width: 22px; /* تقليل من 24px */
+  height: 22px; /* تقليل من 24px */
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+}
+
+.store-icon {
+  background: linear-gradient(135deg, #22c55e 0%, #16a34a 100%);
+}
+
+.car-icon {
+  background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%);
+}
+
+.info-label {
+  font-size: 0.65rem; /* تقليل من 0.7rem */
+  color: #64748b;
+  font-weight: 600;
+}
+
+.store-name {
+  font-size: 0.75rem; /* تقليل من 0.8rem */
+  font-weight: 700;
+  color: #166534;
+}
+
+/* تمييز السيارة عن الموديل */
+.car-details {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.car-brand {
+  font-size: 0.8rem;
+  font-weight: 800; /* زيادة الوزن لتمييز اسم السيارة */
+  color: #1e40af;
+  text-shadow: 0 1px 2px rgba(30, 64, 175, 0.1); /* إضافة ظل خفيف */
+}
+
+.car-model {
+  font-size: 0.65rem; /* تقليل حجم الموديل */
+  color: #64748b; /* لون أفتح للموديل */
+  font-weight: 500;
+}
+
+/* Price Section - تحسين التخطيط */
+.enhanced-price-section {
+  background: linear-gradient(135deg, rgba(255, 255, 255, 0.9) 0%, rgba(248, 250, 252, 0.95) 100%);
+  border-radius: 18px; /* تقليل من 20px */
+  border: 1px solid rgba(226, 232, 240, 0.4);
+  overflow: hidden;
+  position: relative;
+}
+
+.enhanced-price-section::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 3px;
+  background: linear-gradient(90deg, #3b82f6 0%, #8b5cf6 50%, #ef4444 100%);
+}
+
+.price-container {
+  padding: 12px; /* تقليل من 16px */
+  text-align: center;
+}
+
+/* تخطيط السعر في صف واحد */
+.price-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.current-price-container {
+  display: flex;
+  align-items: baseline;
+  gap: 4px;
+}
+
+.price-amount {
+  font-size: 1.6rem; /* تقليل من 1.8rem */
+  font-weight: 800;
+  background: linear-gradient(135deg, #2563eb 0%, #7c3aed 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.currency-symbol {
+  font-size: 0.9rem; /* تقليل من 1rem */
+  color: #64748b;
+  font-weight: 600;
+}
+
+.original-price {
+  font-size: 0.8rem; /* تقليل من 0.9rem */
+  color: #94a3b8;
+  text-decoration: line-through;
+  font-weight: 500;
+}
+
+.savings-highlight {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  padding: 4px 8px; /* تقليل من 6px 12px */
+  background: linear-gradient(135deg, #fb0018 0%, #7f108891 100%);  border-radius: 12px; /* تقليل من 15px */
+  color: white;
+  font-size: 0.65rem; /* تقليل من 0.7rem */
+  font-weight: 700;
+  white-space: nowrap;
+}
+
+/* Action Buttons */
+.action-section {
+  margin-top: auto;
+}
+
+.action-buttons {
+  display: flex;
+  gap: 12px;
+  justify-content: center;
+}
+
+.action-btn {
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  border: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  color: white;
+  font-size: 1.1rem;
+}
+
+.action-btn:hover {
+  transform: translateY(-2px) scale(1.05);
+}
+
+.action-btn.whatsapp {
+  background: linear-gradient(135deg, #25D366 0%, #128C7E 100%);
+}
+
+.action-btn.add-cart {
+  background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%);
+}
+
+.action-btn.view-details {
+  background: linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%);
+}
+
+/* تحسينات للأجهزة الصغيرة */
+@media (max-width: 380px) {
+  .price-row {
+      flex-direction: column;
+      gap: 6px;
   }
-
-  // Free Delivery Ribbon
-  .delivery-ribbon {
-    position: absolute;
-    top: 12px;
-    right: -28px;
-    background: linear-gradient(135deg, #10b981 0%, #059669 100%);
-    color: white;
-    padding: 6px 32px;
-    transform: rotate(45deg);
-    z-index: 10;
-    font-size: 0.7rem;
-    font-weight: 600;
-    box-shadow: 0 4px 12px rgba(16, 185, 129, 0.3);
-    display: flex;
-    align-items: center;
-    gap: 4px;
-
-    i {
-      font-size: 0.65rem;
-    }
-  }
-
-  // Image Section
-  .image-section {
-    width: 100%;
-    height: 300px;
-    position: relative;
-    border-radius: 24px 24px 0 0;
-    overflow: hidden;
-
-    .image-wrapper {
-      width: 100%;
-      height: 100%;
-      position: relative;
-
-      img {
-        width: 100%;
-        height: 100%;
-        object-fit: cover;
-        transition: transform 0.5s ease;
-      }
-
-      .image-overlay {
-        position: absolute;
-        top: 0;
-        left: 0;
-        right: 0;
-        bottom: 0;
-        background: linear-gradient(135deg, rgba(59, 130, 246, 0.05) 0%, rgba(147, 51, 234, 0.05) 100%);
-        opacity: 0;
-        transition: opacity 0.3s ease;
-      }
-    }
-
-    // Grade Badge
-    .grade-badge {
-      position: absolute;
-      top: 12px;
-      left: 12px;
-      padding: 6px 10px;
-      border-radius: 20px;
-      font-size: 0.7rem;
-      font-weight: 600;
-      display: flex;
-      align-items: center;
-      gap: 4px;
-      backdrop-filter: blur(12px);
-      border: 1px solid rgba(255, 255, 255, 0.3);
-
-      i {
-        font-size: 0.65rem;
-      }
-
-      &.grade-primary {
-        background: rgba(34, 197, 94, 0.9);
-        color: white;
-      }
-
-      &.grade-secondary {
-        background: rgba(249, 115, 22, 0.9);
-        color: white;
-      }
-
-      &.grade-default {
-        background: rgba(71, 85, 105, 0.9);
-        color: white;
-      }
-    }
-
-    // Favorite Button
-    .favorite-btn {
-      position: absolute;
-      top: 12px;
-      right: 12px;
-      width: 36px;
-      height: 36px;
-      border-radius: 50%;
-      background: rgba(255, 255, 255, 0.9);
-      border: none;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      cursor: pointer;
-      transition: all 0.3s ease;
-      backdrop-filter: blur(10px);
-
-      &:hover, &.active {
-        background: rgba(239, 68, 68, 0.1);
-        transform: scale(1.1);
-      }
-
-      i {
-        font-size: 0.9rem;
-        color: #64748b;
-        transition: color 0.3s ease;
-      }
-
-      &.active i {
-        color: #ef4444;
-      }
-    }
-
-    // Discount Badge
-    .discount-overlay {
-      position: absolute;
-      bottom: 12px;
-      left: 12px;
-      background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%);
-      color: white;
-      padding: 6px 12px;
-      border-radius: 16px;
-      font-size: 0.75rem;
-      font-weight: 700;
-      box-shadow: 0 4px 12px rgba(239, 68, 68, 0.4);
-    }
-  }
-
-  // Content Section
-  .content-section {
-    padding: 16px;
-    flex: 1;
-    display: flex;
-    flex-direction: column;
-    gap: 12px;
-
-    // Part Name Section
-    .part-name-section {
-      display: flex;
-      justify-content: space-between;
-      align-items: flex-start;
-      gap: 12px;
-      padding: 12px;
-      background: linear-gradient(135deg, #fafbff 0%, #f0f4ff 100%);
-      border-radius: 16px;
-      border: 1px solid rgba(99, 102, 241, 0.1);
-      position: relative;
-      height: 60px;
-
-      .name-wrapper {
-        flex: 1;
-        text-align: right;
-
-        .part-title {
-          font-size: 1rem;
-          font-weight: 700;
-          color: #1e293b;
-          margin: 0 0 4px 0;
-          line-height: 1.4;
-          overflow: hidden;
-          display: -webkit-box;
-          -webkit-line-clamp: 2;
-          -webkit-box-orient: vertical;
-        }
-
-        .part-subtitle {
-          font-size: 0.7rem;
-          color: #6366f1;
-          font-weight: 500;
-          opacity: 0.8;
-        }
-      }
-
-      .condition-badge {
-        padding: 6px 12px;
-        border-radius: 20px;
-        font-size: 0.7rem;
-        font-weight: 600;
-        display: flex;
-        align-items: center;
-        gap: 4px;
-        white-space: nowrap;
-
-        i {
-          font-size: 0.65rem;
-        }
-
-        &.condition-new {
-          background: linear-gradient(135deg, #10b981 0%, #059669 100%);
-          color: white;
-        }
-
-        &.condition-used {
-          background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%);
-          color: white;
-        }
-
-        &.condition-default {
-          background: linear-gradient(135deg, #64748b 0%, #475569 100%);
-          color: white;
-        }
-      }
-    }
-
-    // Info Grid
-    .info-grid {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 8px;
-      height: 80px;
-
-      .info-card {
-        padding: 10px;
-        border-radius: 12px;
-        border: 1px solid #e2e8f0;
-        transition: all 0.3s ease;
-        cursor: pointer;
-
-        .info-header {
-          display: flex;
-          align-items: center;
-          gap: 6px;
-          margin-bottom: 6px;
-
-          .info-icon {
-            width: 20px;
-            height: 20px;
-            border-radius: 6px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-
-            i {
-              font-size: 0.65rem;
-              color: white;
-            }
-          }
-
-          .info-label {
-            font-size: 0.65rem;
-            color: #64748b;
-            font-weight: 500;
-          }
-        }
-
-        &.store-card {
-          background: linear-gradient(135deg, #f0fdf4 0%, #dcfce7 100%);
-
-          &:hover {
-            border-color: #22c55e;
-          }
-
-          .store-icon {
-            background: linear-gradient(135deg, #22c55e 0%, #16a34a 100%);
-          }
-
-          .store-name {
-            font-size: 0.75rem;
-            font-weight: 600;
-            color: #166534;
-          }
-        }
-
-        &.car-card {
-          background: linear-gradient(135deg, #eff6ff 0%, #dbeafe 100%);
-
-          &:hover {
-            border-color: #3b82f6;
-          }
-
-          .car-icon {
-            background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%);
-          }
-
-          .car-details {
-            display: flex;
-            flex-direction: column;
-            gap: 2px;
-
-            .car-brand {
-              font-size: 0.75rem;
-              font-weight: 600;
-              color: #1e40af;
-            }
-
-            .car-model {
-              font-size: 0.65rem;
-              color: #3b82f6;
-            }
-          }
-        }
-      }
-    }
-
-    // Enhanced Price Section
-    .enhanced-price-section {
-      background: linear-gradient(135deg, #fefefe 0%, #f8fafc 100%);
-      border-radius: 16px;
-      border: 1px solid #e2e8f0;
-      overflow: hidden;
-      height: 70px;
-
-      .price-container {
-        padding: 12px;
-
-        .price-display {
-          .current-price-container {
-            display: flex;
-            align-items: baseline;
-            gap: 4px;
-            justify-content: flex-end;
-
-            .price-amount {
-              font-size: 1.3rem;
-              font-weight: 700;
-              color: #2563eb;
-            }
-
-            .currency-symbol {
-              font-size: 0.9rem;
-              color: #64748b;
-            }
-          }
-
-          .price-details {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-top: 4px;
-
-            .original-price {
-              font-size: 0.9rem;
-              color: #94a3b8;
-              text-decoration: line-through;
-            }
-
-            .savings-highlight {
-              display: flex;
-              align-items: center;
-              gap: 4px;
-              padding: 4px 8px;
-              background: linear-gradient(135deg, #10b981 0%, #059669 100%);
-              border-radius: 10px;
-              color: white;
-              font-size: 0.7rem;
-              font-weight: 600;
-
-              i {
-                font-size: 0.65rem;
-              }
-            }
-          }
-        }
-      }
-    }
-
-    // Action Buttons
-    .action-section {
-      margin-top: auto;
-
-      .action-buttons {
-        display: flex;
-        gap: 8px;
-        justify-content: center;
-
-        .action-btn {
-          width: 40px;
-          height: 40px;
-          border-radius: 50%;
-          border: none;
-          background: #f1f5f9;
-          color: #64748b;
-          display: flex;
-          align-items: center;
-          justify-content: center;
-          cursor: pointer;
-          transition: all 0.3s ease;
-
-          &:hover {
-            transform: translateY(-2px);
-          }
-
-          &.whatsapp {
-            background: #25D366;
-            color: white;
-
-            &:hover {
-              background: #128C7E;
-            }
-          }
-
-          i {
-            font-size: 18px;
-          }
-        }
-      }
-    }
-  }
-
-  // Responsive Design
-  @media (max-width: 768px) {
-    width: 280px;
-
-    .image-section {
-      height: 260px;
-    }
-
-    .content-section {
-      padding: 12px;
-
-      .part-name-section {
-        padding: 10px;
-
-        .part-title {
-          font-size: 0.9rem;
-        }
-      }
-
-      .info-grid {
-        gap: 6px;
-
-        .info-card {
-          padding: 8px;
-
-          .info-header .info-label {
-            font-size: 0.6rem;
-          }
-        }
-      }
-
-      .enhanced-price-section .price-container {
-        padding: 10px;
-
-        .price-display .current-price-container .price-amount {
-          font-size: 1.2rem;
-        }
-      }
-
-      .action-buttons .action-btn {
-        width: 36px;
-        height: 36px;
-
-        i {
-          font-size: 16px;
-        }
-      }
-    }
+  
+  .savings-highlight {
+      align-self: center;
   }
 }
