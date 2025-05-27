@@ -1,46 +1,123 @@
-<div class="card">
-  <div class="ribbon" *ngIf="part.freeDelivery">توصيل مجانى</div>
-
-  <div class="image-container">
-    <img [src]="part.imageUrl" [alt]="part.name">
-   <div class="grade-ribbon" *ngIf="part.grade" [ngClass]="getGradeClass(part.grade)">
-  {{ part.grade }}
-</div>
-
+<div class="modern-card">
+  <!-- Free Delivery Ribbon -->
+  <div class="delivery-ribbon" *ngIf="part.freeDelivery">
+    <i class="fas fa-shipping-fast"></i>
+    <span>توصيل مجاني</span>
   </div>
 
-
-  <div class="content">
-    <h2 class="part-name">{{ part.name }}</h2>
-    <p class="part-description">{{ part.description }}</p>
-
-    <div class="store-name">
-      🏪 {{ part.storeName || 'متجر غير معروف' }}
+  <!-- Main Image Container -->
+  <div class="image-section">
+    <div class="image-wrapper">
+      <img [src]="part.imageUrl" [alt]="part.name" (error)="onImageError($event)">
+      <div class="image-overlay"></div>
+    </div>
+    
+    <!-- Grade Badge -->
+    <div class="grade-badge" *ngIf="part.grade" [ngClass]="getGradeClass(part.grade)">
+      <i class="fas fa-medal"></i>
+      <span>{{ part.grade }}</span>
     </div>
 
-    <div class="part-info">
-      <span class="condition">{{ part.condition === 'New' ? 'جديد' : 'استيراد' }}</span>
-      <span class="type">{{ part.type }}</span>
-    </div>
+    <!-- Favorite Button -->
+    <button class="favorite-btn" (click)="toggleFavorite(part)" [class.active]="part.isFavorite">
+      <i class="fas fa-heart"></i>
+    </button>
 
-    <div class="price-tag">
-      <span class="price">{{ part.price }} ج.م</span>
+    <!-- Discount Badge -->
+    <div class="discount-overlay" *ngIf="part.discount">
+      <span>-{{ part.discount }}%</span>
     </div>
   </div>
 
-  <!-- ✅ الأيقونات جنب بعض بشكل مرتب -->
-<div class="action-buttons">
-  <a class="whatsapp-icon" [href]="'https://wa.me/' + part.sellerPhone" target="_blank">
-    <i class="fa-brands fa-whatsapp"></i>
-  </a>
+  <!-- Card Content -->
+  <div class="content-section">
+    <!-- Part Name Section -->
+    <div class="part-name-section">
+      <div class="name-wrapper">
+        <h3 class="part-title">{{ part.name }}</h3>
+        <div class="part-subtitle">قطعة غيار أصلية</div>
+      </div>
+      <div class="condition-badge" [ngClass]="getConditionClass(part.condition)">
+        <i [class]="getConditionIcon(part.condition)"></i>
+        <span>{{ part.condition }}</span>
+      </div>
+    </div>
 
-  <a class="view-icon" [routerLink]="['/parts', part.id]">
-    <i class="fa-solid fa-eye"></i>
-  </a>
+    <!-- Store & Car Info Grid -->
+    <div class="info-grid">
+      <div class="info-card store-card" [routerLink]="['/store', part.storeId]">
+        <div class="info-header">
+          <div class="info-icon store-icon">
+            <i class="fas fa-store-alt"></i>
+          </div>
+          <div class="info-label">المتجر</div>
+        </div>
+        <div class="info-content">
+          <span class="store-name">{{ part.storeName || 'متجر غير معروف' }}</span>
+          <i class="fas fa-external-link-alt external-icon"></i>
+        </div>
+      </div>
 
-  <a class="add-icon" (click)="onAdd(part)">
-   <i class="fa-solid fa-cart-plus"></i>
-  </a>
-</div>
+      <div class="info-card car-card">
+        <div class="info-header">
+          <div class="info-icon car-icon">
+            <i class="fas fa-car"></i>
+          </div>
+          <div class="info-label">السيارة</div>
+        </div>
+        <div class="info-content">
+          <div class="car-details">
+            <span class="car-brand">{{ part.carBrand }}</span>
+            <span class="car-model">{{ part.carModel }} {{ part.modelYear }}</span>
+          </div>
+        </div>
+      </div>
+    </div>
 
+    <!-- Enhanced Price Section -->
+    <div class="enhanced-price-section">
+      <div class="price-container">
+        <div class="price-header">
+          <span class="price-label">السعر</span>
+          <div class="discount-tag" *ngIf="part.discount">
+            <i class="fas fa-tag"></i>
+            <span>خصم {{ part.discount }}%</span>
+          </div>
+        </div>
+        
+        <div class="price-display">
+          <div class="current-price-container">
+            <span class="price-amount">{{ formatPrice(part.priceAfterDiscount || part.price) }}</span>
+            <span class="currency-symbol">ج.م</span>
+          </div>
+          
+          <div class="price-details" *ngIf="part.discount">
+            <span class="original-price">{{ formatPrice(part.price) }}</span>
+            <div class="savings-highlight">
+              <i class="fas fa-arrow-down"></i>
+              <span>توفير {{ getFormattedSavings(part.price, part.priceAfterDiscount || part.price) }}</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Action Buttons -->
+    <div class="action-section">
+      <button class="primary-btn whatsapp-btn" (click)="onWhatsAppClick(part)">
+        <i class="fab fa-whatsapp"></i>
+        <span>واتساب</span>
+      </button>
+      
+      <div class="secondary-actions">
+        <button class="secondary-btn view-btn" [routerLink]="['/parts', part.id]">
+          <i class="fas fa-eye"></i>
+        </button>
+        
+        <button class="secondary-btn cart-btn" (click)="onAdd(part)">
+          <i class="fas fa-cart-plus"></i>
+        </button>
+      </div>
+    </div>
+  </div>
 </div>

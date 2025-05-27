@@ -187,6 +187,7 @@ export class SuggestedOffersComponent implements OnInit, AfterViewInit {
     new Swiper('.suggested-offers-swiper', {
       slidesPerView: 6,
       spaceBetween: 30,
+        centeredSlides: false,
       loop: true,
       autoplay: {
         delay: 4000,

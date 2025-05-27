@@ -419,10 +419,14 @@ $orange-medium: #ffb74d; // برتقالي متوسط
 
 // Parts Grid
 .parts-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-  gap: 25px;
-  margin-top: 30px;
+  // display: grid;
+  // grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  // gap: 2px;
+  // margin-top: 30px;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: start;
+  gap: 20px;
 }
 
 // No Results Section

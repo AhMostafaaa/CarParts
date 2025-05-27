@@ -22,12 +22,12 @@ export class BrandPartsComponent implements OnInit, OnDestroy {
   selectedCarModel: string = 'all';
 
   displayParts: any[] = [];
-  pagedParts: any[] = []; // لعرض العناصر في الصفحة الحالية
+  pagedParts: any[] = [];
   categories: string[] = [];
   modelYears: number[] = [];
   carModels: string[] = [];
 
-  itemsPerPage: number = 6; // عدد العناصر في كل صفحة
+  itemsPerPage: number = 6;
   currentPage: number = 1;
   itemsPerPageOptions: number[] = [6, 12, 24];
   private destroy$ = new Subject<void>();
@@ -41,20 +41,57 @@ export class BrandPartsComponent implements OnInit, OnDestroy {
 
   private initializeSampleData(): void {
     const types = ['كوري', 'ياباني', 'صيني'];
-    this.parts = Array.from({ length: 20 }, (_, index) => ({
-      id: (index + 1).toString(),
-      name: `قطعة ${index + 1}`,
-      category: index % 2 === 0 ? 'قطع المحرك' : 'نظام الفرامل',
-      condition: index % 3 === 0 ? 'جديد' : index % 3 === 1 ? 'استيراد' : 'مستعمل',
-      price: 200 + index * 50,
-      modelYear: 2021 + (index % 4),
-      availability: index % 4 !== 0,
-      description: 'قطعة اختبارية',
-      imageUrl: 'assets/images/image_100_100.png',
-      storeName: `متجر ${index % 3 + 1}`,
-      type: types[index % types.length],
-      carModel: ['ريو', 'بيكانتو', 'سيراتو'][index % 3]
-    }));
+    const carBrands = ['تويوتا', 'هيونداي', 'نيسان', 'كيا', 'شيفروليه'];
+    const carModels = ['كورولا', 'النترا', 'صني', 'سبورتاج', 'أفيو'];
+    const categories = ['قطع المحرك', 'نظام التعليق', 'نظام الفرامل', 'النظام الكهربائي', 'قطع الهيكل'];
+  
+    const descriptions = [
+      'فلتر زيت أصلي يدعم أداء المحرك ويوفر حماية ممتازة.',
+      'ردياتير عالي الجودة مناسب للأجواء الحارة ومصمم لتبريد فعال.',
+      'كمبروسر تكييف يعمل بكفاءة ويضمن تبريد ممتاز في الصيف.',
+      'مساعد خلفي يوفر ثباتًا إضافيًا للسيارة على الطرق الوعرة.',
+      'كارتيرة زيت محكمة الإغلاق لمنع أي تسريب وضمان أداء مستقر.',
+      'دينامو كهربائي بقدرة عالية وتشغيل مستقر لجميع الأنظمة.',
+      'مراية جانبية كهربائية قابلة للطي مع خاصية التسخين.',
+      'سير كاتينة مقاوم للتآكل يدعم توقيت المحرك بدقة.',
+      'طقم فرامل أمامي مع بطانة ممتازة لعمر أطول وأداء عالي.',
+      'عفشة كاملة للجهة اليمنى مناسبة للسير على الطرق غير الممهدة.'
+    ];
+  
+    this.parts = Array.from({ length: 50 }, (_, index) => {
+      const brandIndex = index % carBrands.length;
+      const modelIndex = index % carModels.length;
+      const categoryIndex = index % categories.length;
+      const descriptionIndex = index % descriptions.length;
+      const price = 500 + index * 25;
+      const discount = index % 4 === 0 ? 10 : index % 5 === 0 ? 20 : 0;
+  
+      return {
+        id: (index + 1).toString(),
+        name: `${categories[categoryIndex]} - ${carModels[modelIndex]} - ${carBrands[brandIndex]}`,
+        description: descriptions[descriptionIndex],
+        imageUrl: 'assets/images/image_100_100.png',
+        price: price,
+        discount: discount,
+        priceAfterDiscount: this.calculatePriceAfterDiscount(price, discount),
+        condition: index % 3 === 0 ? 'جديد' : index % 3 === 1 ? 'استيراد' : 'مستعمل',
+        carBrand: carBrands[brandIndex],
+        carModel: carModels[modelIndex],
+        modelYear: (2018 + (index % 6)).toString(),
+        storeName: `مركز قطع غيار ${brandIndex + 1}`,
+        storeId: `store-${brandIndex + 1}`,
+        sellerPhone: `010${Math.floor(10000000 + Math.random() * 89999999)}`,
+        type: types[index % types.length],
+        freeDelivery: index % 6 === 0,
+        isFavorite: false
+      };
+    });
+  }
+  
+
+  private calculatePriceAfterDiscount(price: number, discount: number): number {
+    if (!discount) return price;
+    return price - (price * discount / 100);
   }
 
   ngOnInit(): void {
@@ -72,7 +109,7 @@ export class BrandPartsComponent implements OnInit, OnDestroy {
     this.extractModelYears();
     this.extractCarModels();
     this.displayParts = [...this.parts];
-    this.updatePagedParts(); // عرض الصفحة الأولى عند التحميل
+    this.updatePagedParts();
   }
 
   private setupFilterDebounce(): void {
@@ -82,7 +119,7 @@ export class BrandPartsComponent implements OnInit, OnDestroy {
         takeUntil(this.destroy$)
       )
       .subscribe(() => {
-        this.currentPage = 1; // عند تطبيق فلتر جديد، ارجع للصفحة الأولى
+        this.currentPage = 1;
         this.performFilter();
       });
   }
@@ -114,7 +151,7 @@ export class BrandPartsComponent implements OnInit, OnDestroy {
     }
 
     if (this.selectedPrice !== 'all') {
-      filtered = filtered.filter(part => this.isPriceInRange(part.price));
+      filtered = filtered.filter(part => this.isPriceInRange(part.priceAfterDiscount || part.price));
     }
 
     if (this.selectedCategory !== 'all') {
@@ -211,12 +248,17 @@ export class BrandPartsComponent implements OnInit, OnDestroy {
       this.selectedCarModel !== 'all';
   }
 
-  formatPrice(price: number): string {
-    return new Intl.NumberFormat('ar-EG', {
+  formatPrice(price: number, discount?: number, priceAfterDiscount?: number): string {
+    const formatter = new Intl.NumberFormat('ar-EG', {
       style: 'currency',
       currency: 'EGP',
       minimumFractionDigits: 0
-    }).format(price);
+    });
+
+    if (discount && priceAfterDiscount) {
+      return `${formatter.format(priceAfterDiscount)} بدلاً من ${formatter.format(price)} (خصم ${discount}%)`;
+    }
+    return formatter.format(price);
   }
 
   getCategoryIcon(category: string): string {
@@ -238,9 +280,6 @@ export class BrandPartsComponent implements OnInit, OnDestroy {
     };
     return classMap[condition] || '';
   }
-
-  // Pagination methods
-
 
   updatePagedParts(): void {
     const startIndex = (this.currentPage - 1) * this.itemsPerPage;
@@ -290,29 +329,40 @@ export class BrandPartsComponent implements OnInit, OnDestroy {
         for (let i = 1; i <= maxPagesToShow; i++) {
           pages.push(i);
         }
-        pages.push(-1); // Ellipsis
+        pages.push(-1);
         pages.push(totalPages);
       } else if (this.currentPage >= totalPages - middle + 1) {
         pages.push(1);
-        pages.push(-1); // Ellipsis
+        pages.push(-1);
         for (let i = totalPages - maxPagesToShow + 1; i <= totalPages; i++) {
           pages.push(i);
         }
       } else {
         pages.push(1);
-        pages.push(-1); // Ellipsis
+        pages.push(-1);
         for (let i = this.currentPage - Math.floor(middle / 2); i <= this.currentPage + Math.ceil(middle / 2) - 1; i++) {
           pages.push(i);
         }
-        pages.push(-1); // Ellipsis
+        pages.push(-1);
         pages.push(totalPages);
       }
     }
     return pages;
   }
 
+  onAddToCart(part: any): void {
+    console.log('تمت الإضافة إلى السلة:', part);
+    // تقدر تضيف هنا أي لوجيك حقيقي للسلة
+  }
+  
+  onFavoriteToggled(part: any): void {
+    console.log('تغيير حالة المفضلة:', part);
+    // تقدر تحفظ حالة المفضلة هنا
+  }
+
+  
   onItemsPerPageChange(): void {
-    this.currentPage = 1; // عند تغيير عدد العناصر، ارجع للصفحة الأولى
+    this.currentPage = 1;
     this.updatePagedParts();
   }
 }
