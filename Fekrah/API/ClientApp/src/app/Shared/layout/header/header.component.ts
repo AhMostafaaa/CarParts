@@ -12,7 +12,7 @@ export class HeaderComponent implements OnInit {
   searchTerm = '';
   cartCount = 0;
   navItems = [
-    { label: 'الرئيسية', target: 'home-section' },
+    { label: 'الرئيسية', target: 'category' },
     { label: 'الأقسام', target: 'categories-section' },
     { label: 'الماركات', target: 'brands-section' },
     { label: 'العروض', target: 'offers-section' },
@@ -63,9 +63,13 @@ export class HeaderComponent implements OnInit {
   }
 
   goToSection(sectionId: string) {
+    if (sectionId == 'category') {
+      this.router.navigateByUrl('/category');
+    }
     if (this.router.url.startsWith('/home')) {
       this.scrollToSection(sectionId);
-    } else {
+    }
+    else {
       this.router.navigate(['/home'], { queryParams: { scrollTo: sectionId } });
     }
   }

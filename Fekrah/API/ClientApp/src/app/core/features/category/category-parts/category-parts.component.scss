@@ -58,7 +58,8 @@ $elastic-timing: cubic-bezier(0.175, 0.885, 0.32, 1.275);
 }
 
 @keyframes pulse {
-  0%, 100% {
+  0%,
+  100% {
     transform: scale(1);
   }
   50% {
@@ -76,7 +77,8 @@ $elastic-timing: cubic-bezier(0.175, 0.885, 0.32, 1.275);
 }
 
 @keyframes glow {
-  0%, 100% {
+  0%,
+  100% {
     box-shadow: 0 0 5px rgba(76, 175, 80, 0.3);
   }
   50% {
@@ -102,12 +104,13 @@ $elastic-timing: cubic-bezier(0.175, 0.885, 0.32, 1.275);
 .category-parts-page {
   background: rgba(255, 255, 255, 0.95);
   border-radius: 20px;
-  margin: 20px;
+  margin: 10px;
   overflow-x: hidden;
-  box-shadow: $box-shadow;
+  box-shadow: none;
   position: relative;
   z-index: 1;
-  transition: margin-right 0.3s $smooth-timing;
+  transition: margin-right 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  margin-top: 3px;
 
   &.shifted {
     margin-right: 330px;
@@ -278,7 +281,7 @@ $elastic-timing: cubic-bezier(0.175, 0.885, 0.32, 1.275);
   }
 
   .filter-header {
-    padding: 30px;
+    padding: 15px;
     background: rgba(255, 255, 255, 0.1);
     border-bottom: 1px solid rgba(255, 255, 255, 0.2);
     backdrop-filter: blur(10px);
@@ -344,7 +347,7 @@ $elastic-timing: cubic-bezier(0.175, 0.885, 0.32, 1.275);
         transition: all 0.3s $smooth-timing;
 
         &::before {
-          content: '';
+          content: "";
           position: absolute;
           top: 0;
           left: -100%;
@@ -422,11 +425,21 @@ $elastic-timing: cubic-bezier(0.175, 0.885, 0.32, 1.275);
           transform: translateY(20px);
           animation: fadeInUp 0.3s ease forwards;
 
-          &:nth-child(1) { animation-delay: 0.1s; }
-          &:nth-child(2) { animation-delay: 0.15s; }
-          &:nth-child(3) { animation-delay: 0.2s; }
-          &:nth-child(4) { animation-delay: 0.25s; }
-          &:nth-child(5) { animation-delay: 0.3s; }
+          &:nth-child(1) {
+            animation-delay: 0.1s;
+          }
+          &:nth-child(2) {
+            animation-delay: 0.15s;
+          }
+          &:nth-child(3) {
+            animation-delay: 0.2s;
+          }
+          &:nth-child(4) {
+            animation-delay: 0.25s;
+          }
+          &:nth-child(5) {
+            animation-delay: 0.3s;
+          }
 
           &:hover {
             background: rgba(255, 255, 255, 0.2);
@@ -437,7 +450,7 @@ $elastic-timing: cubic-bezier(0.175, 0.885, 0.32, 1.275);
           &.active {
             background: rgba(76, 175, 80, 0.3);
             border-color: rgba(76, 175, 80, 0.5);
-            animation: glow 2s infinite alternate;
+            // animation: glow 2s infinite alternate;
 
             .filter-label {
               font-weight: 600;
@@ -570,7 +583,7 @@ $elastic-timing: cubic-bezier(0.175, 0.885, 0.32, 1.275);
     overflow: hidden;
 
     &::before {
-      content: '';
+      content: "";
       position: absolute;
       top: 0;
       left: -100%;
@@ -636,7 +649,25 @@ $elastic-timing: cubic-bezier(0.175, 0.885, 0.32, 1.275);
 
 // Main Content
 .parts-section {
+  min-height: 60vh;
   padding: 30px;
+
+  .no-results {
+    text-align: center;
+    padding: 100px 20px;
+    color: #555;
+
+    img {
+      max-width: 150px;
+      margin-bottom: 20px;
+      opacity: 0.6;
+    }
+
+    p {
+      font-size: 1.2rem;
+      font-weight: 500;
+    }
+  }
 
   .parts-grid {
     display: grid;
@@ -665,7 +696,11 @@ $elastic-timing: cubic-bezier(0.175, 0.885, 0.32, 1.275);
 }
 
 ::-webkit-scrollbar-thumb {
-  background: linear-gradient(135deg, rgba(255, 255, 255, 0.4), rgba(255, 255, 255, 0.6));
+  background: linear-gradient(
+    135deg,
+    rgba(255, 255, 255, 0.4),
+    rgba(255, 255, 255, 0.6)
+  );
   border-radius: 10px;
   border: 2px solid transparent;
   background-clip: content-box;
@@ -673,7 +708,11 @@ $elastic-timing: cubic-bezier(0.175, 0.885, 0.32, 1.275);
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background: linear-gradient(135deg, rgba(255, 255, 255, 0.6), rgba(255, 255, 255, 0.8));
+  background: linear-gradient(
+    135deg,
+    rgba(255, 255, 255, 0.6),
+    rgba(255, 255, 255, 0.8)
+  );
   transform: scale(1.1);
 }
 
@@ -693,5 +732,65 @@ $elastic-timing: cubic-bezier(0.175, 0.885, 0.32, 1.275);
     );
     background-size: 200% 100%;
     animation: shimmer 1.5s infinite;
+  }
+}
+
+.no-results {
+  animation: fadeInUp 0.6s ease;
+}
+
+.no-results-message {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  padding: 100px 20px;
+  color: #333;
+  animation: fadeInUp 0.6s ease;
+
+  svg {
+    width: 160px;
+    height: 160px;
+    margin-bottom: 25px;
+    opacity: 0.8;
+  }
+
+  h2 {
+    font-size: 1.8rem;
+    margin-bottom: 10px;
+    color: #444;
+    font-weight: 700;
+  }
+
+  p {
+    font-size: 1.1rem;
+    margin-bottom: 25px;
+    color: #666;
+  }
+
+  .retry-button {
+    background: linear-gradient(135deg, #ff8a00, #e52e71);
+    border: none;
+    color: #fff;
+    padding: 12px 24px;
+    border-radius: 25px;
+    font-size: 1rem;
+    font-weight: 600;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin: 0 auto;
+    cursor: pointer;
+    transition: all 0.3s ease;
+
+    i {
+      font-size: 1.1rem;
+    }
+
+    &:hover {
+      transform: scale(1.05);
+      box-shadow: 0 8px 25px rgba(229, 46, 113, 0.4);
+    }
   }
 }
