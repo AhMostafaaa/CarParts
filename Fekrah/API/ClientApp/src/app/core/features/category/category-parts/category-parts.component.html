@@ -1,31 +1,31 @@
+<!-- الصفحة الرئيسية -->
 <div class="category-parts-page" [class.shifted]="showSidebar">
-  <!-- ✅ Header -->
+  <!-- Modern Header -->
   <header class="header">
-    <div class="header-right">
-      <h1 class="page-title">🛠️ {{ categoryName }}</h1>
+    <h1 class="page-title">
+      <i class="fas fa-cogs"></i>
+      {{ categoryName }}
+    </h1>
+
+    <div class="search-container">
+      <input type="text" class="search-input" placeholder="ابحث عن قطعة غيار..." [(ngModel)]="searchText"
+        (input)="onSearch($event)" (focus)="searchFocused = true" (blur)="searchFocused = false">
+      <ul class="suggestions" *ngIf="suggestions.length && searchFocused">
+        <li *ngFor="let suggestion of suggestions" (click)="selectSuggestion(suggestion)">
+          <img src="../../assets/images/icon-parts.png" alt="icon" width="24" height="24" />
+          <span>{{ suggestion }}</span>
+        </li>
+      </ul>
     </div>
 
-    <div class="header-center">
-      <div class="search-container" [class.focused]="searchFocused">
-        <input type="text" placeholder="اكتب اسم القطعة أو الماركة..."
-               [(ngModel)]="searchText"
-               (input)="onSearch($event)"
-               (focus)="searchFocused = true"
-               (blur)="searchFocused = false" class="px-5" />
-        <ul class="suggestions" *ngIf="suggestions.length && searchFocused">
-          <li *ngFor="let suggestion of suggestions" (click)="selectSuggestion(suggestion)">
-            <img src="../../assets/images/icon-parts.png" alt="icon" width="24" height="24" />
-            <span>{{ suggestion }}</span>
-          </li>
-        </ul>
-      </div>
-    </div>
-
-    <div class="header-left">
-      <button (click)="toggleSidebar()" class="toggle-sidebar">
-        <i class="fas fa-filter"></i> فلتر <span class="filter-count">(0)</span>
+    <div class="header-actions">
+      <button class="filter-btn" [class.active]="showSidebar" (click)="toggleSidebar()">
+        <i class="fas fa-filter"></i>
+        فلتر
+        <span class="filter-count">({{ getActiveFiltersCount() }})</span>
       </button>
-      <select (change)="changePageSize($event)" class="page-size-selector">
+
+      <select class="page-size-selector" (change)="changePageSize($event)">
         <option *ngFor="let size of pageSizeOptions" [value]="size">
           {{ size }} لكل صفحة
         </option>
@@ -33,25 +33,149 @@
     </div>
   </header>
 
-  <!-- ✅ Layout -->
-  <div class="page-layout">
-    <section class="parts-section">
-      <div class="parts-grid">
-        <app-card *ngFor="let part of displayParts; trackBy: trackByPartId"
-                  [part]="part"
-                  (partClick)="onPartClick($event)">
-        </app-card>
-      </div>
+  <!-- Main Content -->
+  <section class="parts-section">
+    <div class="parts-grid">
+      <app-card *ngFor="let part of displayParts; trackBy: trackByPartId" [part]="part"
+        (partClick)="onPartClick($event)">
+      </app-card>
+    </div>
 
-      <div class="pagination-container">
-        <pagination-controls (pageChange)="pageChanged($event)" previousLabel="‹ السابق" nextLabel="التالي ›"
-                             firstLabel="« الأول" lastLabel="الأخير »">
-        </pagination-controls>
-      </div>
-    </section>
-
-    <aside class="filters-sidebar" [class.open]="showSidebar">
-      <app-filter-sidebar></app-filter-sidebar>
-    </aside>
-  </div>
+    <!-- Pagination -->
+    <div class="pagination-container">
+      <pagination-controls (pageChange)="pageChanged($event)" previousLabel="‹ السابق" nextLabel="التالي ›"
+        firstLabel="« الأول" lastLabel="الأخير »">
+      </pagination-controls>
+    </div>
+  </section>
 </div>
+
+<!-- Overlay للخلفية عند فتح الفلتر -->
+<div class="sidebar-overlay" [class.show]="showSidebar" (click)="closeSidebar()"></div>
+
+<!-- الفلتر الجانبي (خارج الصفحة) -->
+<!-- الفلتر الجانبي (خارج الصفحة) -->
+<div class="filters-sidebar" [class.open]="showSidebar">
+  <div class="filter-header">
+    <div style="display: flex; align-items: center; justify-content: space-between;">
+      <div class="filter-title">
+        <i class="fas fa-filter"></i>
+        فلترة النتائج
+      </div>
+      <button class="close-filters" (click)="closeSidebar()">
+        <i class="fas fa-times"></i>
+      </button>
+    </div>
+  </div>
+
+  <div class="filter-content">
+    <!-- أقسام الفلتر القابلة للفتح -->
+    <div class="filter-group" *ngFor="let section of filterSections">
+      <div class="filter-group-title clickable"
+           [ngClass]="{ 'expanded': activeFilterSection === section.key }"
+           (click)="toggleFilterSection(section.key)">
+        <i class="fas" [ngClass]="section.icon"></i> {{ section.title }}
+        <i class="fas"
+           [ngClass]="{
+             'fa-chevron-down': activeFilterSection !== section.key,
+             'fa-chevron-up': activeFilterSection === section.key
+           }"></i>
+      </div>
+
+      <div class="filter-options"
+           [ngClass]="{ 'expanded': activeFilterSection === section.key }">
+        <ng-container [ngSwitch]="section.key">
+
+          <!-- الماركات -->
+          <ng-container *ngSwitchCase="'brands'">
+            <div class="filter-option" *ngFor="let brand of availableBrands"
+              [class.active]="selectedFilters.brands.includes(brand)"
+              (click)="toggleFilter('brands', brand)">
+              <input type="checkbox" class="filter-checkbox" [checked]="selectedFilters.brands.includes(brand)">
+              <label class="filter-label">{{ brand }}</label>
+            </div>
+          </ng-container>
+
+          <!-- السنوات -->
+          <ng-container *ngSwitchCase="'years'">
+            <div class="filter-option" *ngFor="let year of availableYears"
+              [class.active]="selectedFilters.years.includes(year)"
+              (click)="toggleFilter('years', year)">
+              <input type="checkbox" class="filter-checkbox" [checked]="selectedFilters.years.includes(year)">
+              <label class="filter-label">{{ year }}</label>
+            </div>
+          </ng-container>
+
+          <!-- الأنواع -->
+          <ng-container *ngSwitchCase="'types'">
+            <div class="filter-option" *ngFor="let type of availableTypes"
+              [class.active]="selectedFilters.types.includes(type)"
+              (click)="toggleFilter('types', type)">
+              <input type="checkbox" class="filter-checkbox" [checked]="selectedFilters.types.includes(type)">
+              <label class="filter-label">{{ type }}</label>
+            </div>
+          </ng-container>
+
+          <!-- السعر -->
+          <ng-container *ngSwitchCase="'price'">
+            <div class="price-slider-wrapper">
+              <input type="range" min="0" max="10000" step="100"
+                     [(ngModel)]="selectedFilters.priceRange.min" class="range-slider" />
+              <input type="range" min="0" max="10000" step="100"
+                     [(ngModel)]="selectedFilters.priceRange.max" class="range-slider" />
+            </div>
+
+            <div class="price-range-inputs">
+              <input type="number" class="price-input" placeholder="من"
+                     [(ngModel)]="selectedFilters.priceRange.min">
+              <span class="dash">-</span>
+              <input type="number" class="price-input" placeholder="إلى"
+                     [(ngModel)]="selectedFilters.priceRange.max">
+            </div>
+          </ng-container>
+
+          <!-- التصنيفات -->
+          <ng-container *ngSwitchCase="'categories'">
+            <div class="filter-option" *ngFor="let category of availableCategories"
+              [class.active]="selectedFilters.categories.includes(category)"
+              (click)="toggleFilter('categories', category)">
+              <input type="checkbox" class="filter-checkbox"
+                     [checked]="selectedFilters.categories.includes(category)">
+              <label class="filter-label">{{ category }}</label>
+            </div>
+          </ng-container>
+
+          <!-- التوفر -->
+          <ng-container *ngSwitchCase="'availability'">
+            <div class="filter-option" [class.active]="selectedFilters.availability.includes('متوفر')"
+              (click)="toggleFilter('availability', 'متوفر')">
+              <input type="checkbox" class="filter-checkbox"
+                     [checked]="selectedFilters.availability.includes('متوفر')">
+              <label class="filter-label">متوفر</label>
+            </div>
+
+            <div class="filter-option" [class.active]="selectedFilters.availability.includes('غير متوفر')"
+              (click)="toggleFilter('availability', 'غير متوفر')">
+              <input type="checkbox" class="filter-checkbox"
+                     [checked]="selectedFilters.availability.includes('غير متوفر')">
+              <label class="filter-label">غير متوفر</label>
+            </div>
+          </ng-container>
+
+        </ng-container>
+      </div>
+    </div>
+  </div>
+
+  <!-- أزرار تطبيق/مسح -->
+  <button class="apply-filters" (click)="applyFilters()">
+    <i class="fas fa-check"></i>
+    تطبيق الفلاتر
+  </button>
+
+  <button class="clear-filters" (click)="clearAllFilters()" *ngIf="getActiveFiltersCount() > 0">
+    <i class="fas fa-times"></i>
+    مسح جميع الفلاتر
+  </button>
+</div>
+
