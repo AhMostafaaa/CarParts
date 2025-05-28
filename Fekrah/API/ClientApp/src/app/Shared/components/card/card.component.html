@@ -1,107 +1,94 @@
+<!-- ✅ HTML المعدل -->
 <div class="modern-card">
-  <!-- Free Delivery Ribbon -->
-  <div class="delivery-ribbon">
-      <i class="fas fa-shipping-fast"></i>
-      <span>توصيل مجاني</span>
+  <div class="delivery-ribbon" *ngIf="part.hasDelivery">
+    <i class="fas fa-shipping-fast"></i>
+    <span>توصيل مجاني</span>
   </div>
 
-  <!-- Main Image Container -->
   <div class="image-section">
-      <div class="image-placeholder">
-          <i class="fas fa-cog"></i>
-      </div>
-
-      <!-- Grade Badge -->
-      <div class="grade-badge">
-          <i class="fas fa-medal"></i>
-          <span>فرز أول</span>
-      </div>
-
-      <!-- Favorite Button -->
-      <button class="favorite-btn">
-          <i class="fas fa-heart"></i>
-      </button>
-
-      <!-- Discount Badge -->
-      <div class="discount-overlay">
-          <span>25%-</span>
-      </div>
+    <div class="image-placeholder">
+      <i class="fas fa-cog"></i>
+    </div>
+    <div class="grade-badge">
+      <i class="fas fa-medal"></i>
+      <span>{{ part.grade }}</span>
+    </div>
+    <button class="favorite-btn" (click)="toggleFavorite(part)">
+      <i class="fas fa-heart" [class.active]="part.isFavorite"></i>
+    </button>
+    <div class="origin-badge">
+      <i class="fas fa-globe"></i>
+      <span>{{ part.origin || 'غير معروف' }}</span>
+    </div>
   </div>
 
-  <!-- Card Content -->
   <div class="content-section">
-      <!-- Part Name Section -->
-      <div class="part-name-section">
-          <h3 class="part-title">فلتر زيت محرك أصلي</h3>
-          <div class="part-subtitle">قطعة غيار أصلية</div>
-          <div class="condition-badge">
-              <i class="fas fa-star"></i>
-              <span>جديد</span>
-          </div>
+    <div class="part-name-section">
+      <h3 class="part-title">{{ part.name }}</h3>
+      <div class="part-subtitle">{{ part.subtitle }}</div>
+      <div class="condition-badge">
+        <i class="fas fa-star"></i>
+        <span>{{ part.condition }}</span>
+      </div>
+    </div>
+
+    <div class="info-grid">
+      <div class="info-card store-card">
+        <div class="info-header">
+          <div class="info-icon store-icon"><i class="fas fa-store-alt"></i></div>
+          <div class="info-label">المتجر</div>
+        </div>
+        <div class="info-content">
+          <span class="store-name">{{ part.store.name }}</span>
+        </div>
       </div>
 
-      <!-- Store & Car Info Grid -->
-      <div class="info-grid">
-          <div class="info-card store-card">
-              <div class="info-header">
-                  <div class="info-icon store-icon">
-                      <i class="fas fa-store-alt"></i>
-                  </div>
-                  <div class="info-label">المتجر</div>
-              </div>
-              <div class="info-content">
-                  <span class="store-name">متجر السيارات الذهبي</span>
-              </div>
+      <div class="info-card car-card">
+        <div class="info-header">
+          <div class="info-icon car-icon"><i class="fas fa-car"></i></div>
+          <div class="info-label">السيارة</div>
+        </div>
+        <div class="info-content">
+          <div class="car-details">
+            <span class="car-brand">{{ part.car.brand }}</span>
+            <span class="car-model">{{ part.car.model }} {{ part.car.year }}</span>
           </div>
-
-          <div class="info-card car-card">
-              <div class="info-header">
-                  <div class="info-icon car-icon">
-                      <i class="fas fa-car"></i>
-                  </div>
-                  <div class="info-label">السيارة</div>
-              </div>
-              <div class="info-content">
-                  <div class="car-details">
-                      <span class="car-brand">تويوتا</span>
-                      <span class="car-model">كامري 2020</span>
-                  </div>
-              </div>
-          </div>
+        </div>
       </div>
+    </div>
 
-      <!-- Enhanced Price Section -->
-      <div class="enhanced-price-section">
-          <div class="price-container">
-              <div class="price-row">
-                  <div class="current-price-container">
-                      <span class="price-amount">750</span>
-                      <span class="currency-symbol">ج.م</span>
-                  </div>
-                  
-                  <span class="original-price">1000 ج.م</span>
-                  
-                  <div class="savings-highlight">
-                      <i class="fas fa-arrow-down"></i>
-                      <span>توفير 250</span>
-                  </div>
-              </div>
-          </div>
-      </div>
+    <!-- ✅ السعر النهائي داخل بوكس -->
+    <div class="price-section">
+      <div class="price-container">
+        <span class="original-price" *ngIf="part.priceAfterDiscount">
+          {{ part.price }} ج.م
+        </span>
 
-      <!-- Action Buttons -->
-      <div class="action-section">
-          <div class="action-buttons">
-              <button class="action-btn whatsapp" title="تواصل عبر الواتساب">
-                  <i class="fab fa-whatsapp"></i>
-              </button>
-              <button class="action-btn view-details" title="عرض التفاصيل" [routerLink]="['/parts', part.id]">
-                <i class="fas fa-eye"></i>
-              </button>
-              <button class="action-btn add-cart" title="إضافة إلى السلة">
-                  <i class="fas fa-cart-plus"></i>
-              </button>
-          </div>
+        <div [ngClass]="getDiscountClass(part.discount)" class="price-box">
+          <span class="price-text">
+            {{ part.priceAfterDiscount || part.price }}
+            <span class="currency-inline">ج.م</span>
+          </span>
+        </div>
+
+        <span class="discount-badge" *ngIf="part.discount">
+          خصم {{ part.discount }}%
+        </span>
       </div>
+    </div>
+  </div>
+
+  <div class="action-section">
+    <div class="action-buttons">
+      <button class="action-btn whatsapp" (click)="onWhatsAppClick(part)">
+        <i class="fab fa-whatsapp"></i>
+      </button>
+      <button class="action-btn view-details" [routerLink]="['/parts', part.id]">
+        <i class="fas fa-eye"></i>
+      </button>
+      <button class="action-btn add-cart" (click)="onAdd(part)">
+        <i class="fas fa-cart-plus"></i>
+      </button>
+    </div>
   </div>
 </div>

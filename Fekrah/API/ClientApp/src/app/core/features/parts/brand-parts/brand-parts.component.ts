@@ -1,5 +1,6 @@
 import { Component, Input, Output, EventEmitter, OnInit, OnDestroy } from '@angular/core';
 import { Subject, debounceTime, takeUntil } from 'rxjs';
+import { CarPart } from 'src/app/Shared/Models/car-card';
 
 @Component({
   selector: 'app-brand-parts',
@@ -40,53 +41,50 @@ export class BrandPartsComponent implements OnInit, OnDestroy {
   }
 
   private initializeSampleData(): void {
-    const types = ['كوري', 'ياباني', 'صيني'];
+    const types: CarPart['partType'][] = ['كوري', 'ياباني', 'صيني'];
     const carBrands = ['تويوتا', 'هيونداي', 'نيسان', 'كيا', 'شيفروليه'];
     const carModels = ['كورولا', 'النترا', 'صني', 'سبورتاج', 'أفيو'];
     const categories = ['قطع المحرك', 'نظام التعليق', 'نظام الفرامل', 'النظام الكهربائي', 'قطع الهيكل'];
+    const grades: CarPart['grade'][] = ['فرز أول', 'فرز تاني'];
   
-    const descriptions = [
-      'فلتر زيت أصلي يدعم أداء المحرك ويوفر حماية ممتازة.',
-      'ردياتير عالي الجودة مناسب للأجواء الحارة ومصمم لتبريد فعال.',
-      'كمبروسر تكييف يعمل بكفاءة ويضمن تبريد ممتاز في الصيف.',
-      'مساعد خلفي يوفر ثباتًا إضافيًا للسيارة على الطرق الوعرة.',
-      'كارتيرة زيت محكمة الإغلاق لمنع أي تسريب وضمان أداء مستقر.',
-      'دينامو كهربائي بقدرة عالية وتشغيل مستقر لجميع الأنظمة.',
-      'مراية جانبية كهربائية قابلة للطي مع خاصية التسخين.',
-      'سير كاتينة مقاوم للتآكل يدعم توقيت المحرك بدقة.',
-      'طقم فرامل أمامي مع بطانة ممتازة لعمر أطول وأداء عالي.',
-      'عفشة كاملة للجهة اليمنى مناسبة للسير على الطرق غير الممهدة.'
-    ];
-  
-    this.parts = Array.from({ length: 50 }, (_, index) => {
+    this.parts = Array.from({ length: 50 }, (_, index): CarPart => {
       const brandIndex = index % carBrands.length;
       const modelIndex = index % carModels.length;
       const categoryIndex = index % categories.length;
-      const descriptionIndex = index % descriptions.length;
+  
       const price = 500 + index * 25;
       const discount = index % 4 === 0 ? 10 : index % 5 === 0 ? 20 : 0;
+  
+      const partType = types[index % types.length];
+      const grade = grades[index % grades.length];
   
       return {
         id: (index + 1).toString(),
         name: `${categories[categoryIndex]} - ${carModels[modelIndex]} - ${carBrands[brandIndex]}`,
-        description: descriptions[descriptionIndex],
-        imageUrl: 'assets/images/image_100_100.png',
-        price: price,
-        discount: discount,
+        condition: index % 3 === 0 ? 'جديد' : 'مستعمل',
+        subtitle: `وصف للقطعة رقم ${index + 1}`, // ✅ أضف هذا السطر
+        store: {
+          name: `مركز ${carBrands[brandIndex]} لقطع الغيار`,
+          phone: `010${Math.floor(10000000 + Math.random() * 89999999)}`
+        },
+        car: {
+          brand: carBrands[brandIndex],
+          model: carModels[modelIndex],
+          year: (2018 + (index % 6)).toString()
+        },
+        price,
+        discount,
         priceAfterDiscount: this.calculatePriceAfterDiscount(price, discount),
-        condition: index % 3 === 0 ? 'جديد' : index % 3 === 1 ? 'استيراد' : 'مستعمل',
-        carBrand: carBrands[brandIndex],
-        carModel: carModels[modelIndex],
-        modelYear: (2018 + (index % 6)).toString(),
-        storeName: `مركز قطع غيار ${brandIndex + 1}`,
-        storeId: `store-${brandIndex + 1}`,
-        sellerPhone: `010${Math.floor(10000000 + Math.random() * 89999999)}`,
-        type: types[index % types.length],
-        freeDelivery: index % 6 === 0,
-        isFavorite: false
+        isFavorite: false,
+        hasDelivery: index % 6 === 0,
+        grade,
+        partType,
+        origin: partType === 'كوري' ? 'كوريا' : partType === 'ياباني' ? 'اليابان' : 'الصين'
       };
     });
   }
+  
+  
   
 
   private calculatePriceAfterDiscount(price: number, discount: number): number {

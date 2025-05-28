@@ -1,25 +1,6 @@
 import { Component, OnInit } from '@angular/core';
+import { CarPart } from 'src/app/Shared/Models/car-card';
 
-interface Part {
-  id: number;
-  name: string;
-  category: string;
-  brand: string;
-  condition: string;
-  type: string;
-  price: number;
-  oldPrice: number | null;
-  imageUrl: string;
-  storeName: string;
-  sellerId: number;
-  sellerPhone: string;
-  isOnSale: boolean;
-  freeDelivery: boolean;
-  quantity: number;
-  availability: string;
-  grade: string | null;
-  description: string;
-}
 
 
 @Component({
@@ -38,15 +19,15 @@ export class CategoryPartsComponent implements OnInit {
   suggestions: string[] = [];
   searchFocused = false;
 
-  allParts: Part[] = [];
-filteredParts: Part[] = [];
-displayParts: Part[] = [];
+  allParts: CarPart[] = [];
+filteredParts: CarPart[] = [];
+displayParts: CarPart[] = [];
 
 
   constructor() { }
 
   ngOnInit(): void {
-    this.allParts = this.getMockData();
+    this.getMockData();
     this.filteredParts = [...this.allParts];
     this.updateDisplayParts();
     this.updateDisplayParts();
@@ -83,39 +64,91 @@ displayParts: Part[] = [];
   }
 
   getMockData() {
-    const types = ['كوري', 'ياباني', 'صيني'];
-    const categories = ['محرك', 'إطارات', 'بطاريات', 'زيوت'];
-    const brands = ['تويوتا', 'هيونداي', 'كيا', 'نيسان'];
-    const grades = ['فرز أول', 'فرز تاني', null];
+   
+    this.allParts = [
+      {
+        id: '1000',
+        name: 'فلتر مكيف داخلي',
+        subtitle: 'فلتر مكيف داخلي أصلي وجديد',
+        condition: 'جديد',
+        store: { name: 'العفشة العالمية', phone: '01000000007' },
+        car: { brand: 'ميتسوبيشي', model: 'كورولا', year: '2016' },
+        price: 212,
+        priceAfterDiscount: 159,
+        discount: 25,
+        isFavorite: false,
+        hasDelivery: true,
+        grade: 'فرز تاني',
+        partType: 'كوري',
+        origin: 'كوريا'
+      },
+      {
+        id: '1001',
+        name: 'بطارية فارتا',
+        subtitle: 'بطارية فارتا أصلي وجديد',
+        condition: 'جديد',
+        store: { name: 'ورشة التبريد العالمية', phone: '01000000002' },
+        car: { brand: 'نيسان', model: 'إلنترا', year: '2017' },
+        price: 535,
+        priceAfterDiscount: 428,
+        discount: 20,
+        isFavorite: false,
+        hasDelivery: true,
+        grade: 'فرز أول',
+        partType: 'ياباني',
+        origin: 'اليابان'
+      },
+      {
+        id: '1002',
+        name: 'بطارية فارتا',
+        subtitle: 'بطارية فارتا أصلي وجديد',
+        condition: 'جديد',
+        store: { name: 'تكييف السيارات الحديث', phone: '01000000004' },
+        car: { brand: 'تويوتا', model: 'سيراتو', year: '2020' },
+        price: 1541,
+        priceAfterDiscount: 1232,
+        discount: 20,
+        isFavorite: false,
+        hasDelivery: true,
+        grade: 'فرز تاني',
+        partType: 'صيني',
+        origin: 'الصين'
+      },
+      {
+        id: '1003',
+        name: 'طرمبة بنزين',
+        subtitle: 'طرمبة بنزين أصلي وجديد',
+        condition: 'جديد',
+        store: { name: 'قطع الغيار الممتازة', phone: '01000000006' },
+        car: { brand: 'نيسان', model: 'سيراتو', year: '2012' },
+        price: 1637,
+        priceAfterDiscount: 1227,
+        discount: 25,
+        isFavorite: false,
+        hasDelivery: true,
+        grade: 'فرز تاني',
+        partType: 'صيني',
+        origin: 'الصين'
+      },
+      {
+        id: '1004',
+        name: 'فلتر هواء',
+        subtitle: 'فلتر هواء أصلي وجديد',
+        condition: 'جديد',
+        store: { name: 'الإلكترونيات الحديثة', phone: '01000000009' },
+        car: { brand: 'تويوتا', model: 'سيراتو', year: '2022' },
+        price: 407,
+        priceAfterDiscount: 386,
+        discount: 5,
+        isFavorite: false,
+        hasDelivery: true,
+        grade: 'فرز أول',
+        partType: 'صيني',
+        origin: 'الصين'
+      }
+    ];
+    
 
-    return Array.from({ length: 100 }).map((_, index) => {
-      const isOnSale = index % 3 === 0;
-      const basePrice = Math.floor(Math.random() * 1000) + 100;
-      const quantity = Math.floor(Math.random() * 20);
-      const condition = index % 2 === 0 ? 'جديد' : 'استيراد';
-      const grade = condition === 'استيراد' ? grades[Math.floor(Math.random() * grades.length)] : null;
-
-      return {
-        id: index + 1,
-        name: `قطعة غيار ${index + 1}`,
-        category: categories[index % categories.length],
-        brand: brands[index % brands.length],
-        condition: condition,
-        type: types[index % types.length],
-        price: basePrice,
-        oldPrice: isOnSale ? basePrice + Math.floor(Math.random() * 500) + 100 : null,
-        imageUrl: `../../assets/images/image100_100.png`,
-        storeName: `متجر ${index + 1}`,
-        sellerId: index + 100,
-        sellerPhone: `201000000${String(index).padStart(3, '0')}`,
-        isOnSale: isOnSale,
-        freeDelivery: index % 5 === 0,
-        quantity: quantity,
-        availability: quantity > 0 ? 'متوفر' : 'غير متوفر',
-        grade: grade,
-        description: `قطعة اختبارية عالية الجودة مصممة لتناسب العديد من موديلات السيارات. تتميز بمتانتها وأدائها الممتاز، وتعد خيارًا مثاليًا للصيانة أو التبديل الدائم.`
-      };
-    });
   }
 
   onSearch(event: any) {
