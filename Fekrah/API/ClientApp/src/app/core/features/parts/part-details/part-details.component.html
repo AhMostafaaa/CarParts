@@ -113,8 +113,8 @@
 
         <!-- الأزرار -->
         <div class="d-flex flex-column flex-md-row gap-3 mt-3">
-          <button class="btn btn-warning text-dark fw-bold flex-fill" (click)="addToCart(); showToast = true"
-            style="min-height: 48px;">
+          <button class="btn btn-warning text-dark fw-bold flex-fill" [routerLink]="['/addCart']"
+            (click)="addToCart(); showToast = true" style="min-height: 48px;">
             <i class="fas fa-cart-plus me-1"></i> أضف إلى السلة
           </button>
           <button class="btn btn-outline-success fw-semibold flex-fill" (click)="contactViaWhatsApp()"

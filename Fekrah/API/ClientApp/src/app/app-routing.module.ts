@@ -11,6 +11,7 @@ const routes: Routes = [
   { path: 'auth', loadChildren: () => import('./core/features/auth/auth.module').then(m => m.AuthModule) },
   { path: 'admin', loadChildren: () => import('./core/features/admin/admin.module').then(m => m.AdminModule) },
   { path: 'category', loadChildren: () => import('./core/features/category/category.module').then(m => m.CategoryModule) },
+  { path: 'addCart', loadChildren: () => import('./core/add-to-cart/add-to-cart.module').then(m => m.AddToCartModule) },
   { path: 'category/:name', component: CategoryPageComponent },
   { path: 'AboutUs', component: AboutUsComponent },
   {

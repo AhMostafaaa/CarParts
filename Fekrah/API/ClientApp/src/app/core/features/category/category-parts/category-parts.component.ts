@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { Subject } from 'rxjs';
 import { CarPart } from 'src/app/Shared/Models/car-card';
 
 // مفاتيح الفلاتر المدعومة
@@ -20,6 +21,11 @@ export class CategoryPartsComponent implements OnInit {
   suggestions: string[] = [];
   searchFocused = false;
 
+
+  itemsPerPage: number = 6;
+  itemsPerPageOptions: number[] = [6, 12, 24];
+  private destroy$ = new Subject<void>();
+
   allParts: CarPart[] = [];
   filteredParts: CarPart[] = [];
   displayParts: CarPart[] = [];
@@ -36,14 +42,14 @@ export class CategoryPartsComponent implements OnInit {
       max: number | null;
     };
   } = {
-    brands: [],
-    models: [],
-    years: [],
-    types: [],
-    categories: [],
-    condition: [],
-    priceRange: { min: null, max: null }
-  };
+      brands: [],
+      models: [],
+      years: [],
+      types: [],
+      categories: [],
+      condition: [],
+      priceRange: { min: null, max: null }
+    };
 
   availableBrands = ['تويوتا', 'نيسان', 'هيونداي', 'كيا'];
   availableModels = [
@@ -125,8 +131,9 @@ export class CategoryPartsComponent implements OnInit {
   availableTypes = ['أصلي', 'تجاري'];
   availableCategories = ['قطع المحرك', 'قطع كهربائية', 'الفلاتر', 'القطع الداخلية'];
   availableConditions = ['جديد', 'مستعمل', 'مستورد']; // ✅ الحالات المتاحة
+  pagedParts!: CarPart[];
 
-  constructor() {}
+  constructor() { }
 
   ngOnInit(): void {
     this.selectedFilters.priceRange.min = 1000;
@@ -243,7 +250,7 @@ export class CategoryPartsComponent implements OnInit {
       const matchesMaxPrice = this.selectedFilters.priceRange.max == null || part.priceAfterDiscount <= this.selectedFilters.priceRange.max;
 
       return matchesBrand && matchesModels && matchesYear && matchesType &&
-             matchesCategory && matchesCondition && matchesMinPrice && matchesMaxPrice;
+        matchesCategory && matchesCondition && matchesMinPrice && matchesMaxPrice;
     });
 
     this.currentPage = 1;
@@ -356,5 +363,73 @@ export class CategoryPartsComponent implements OnInit {
     ];
   }
 
+  updatePagedParts(): void {
+    const startIndex = (this.currentPage - 1) * this.itemsPerPage;
+    const endIndex = startIndex + this.itemsPerPage;
+    this.pagedParts = this.displayParts.slice(startIndex, endIndex);
+  }
+
+  nextPage(): void {
+    const totalPages = this.getTotalPages();
+    if (this.currentPage < totalPages) {
+      this.currentPage++;
+      this.updatePagedParts();
+    }
+  }
+
+  prevPage(): void {
+    if (this.currentPage > 1) {
+      this.currentPage--;
+      this.updatePagedParts();
+    }
+  }
+
+  goToPage(pageNumber: number): void {
+    const totalPages = this.getTotalPages();
+    if (pageNumber >= 1 && pageNumber <= totalPages) {
+      this.currentPage = pageNumber;
+      this.updatePagedParts();
+    }
+  }
+
+  getTotalPages(): number {
+    return Math.ceil(this.displayParts.length / this.itemsPerPage);
+  }
+
+  getPagesArray(): number[] {
+    const totalPages = this.getTotalPages();
+    const maxPagesToShow = 5;
+    const pages: number[] = [];
+
+    if (totalPages <= maxPagesToShow) {
+      for (let i = 1; i <= totalPages; i++) {
+        pages.push(i);
+      }
+    } else {
+      const middle = Math.ceil(maxPagesToShow / 2);
+      if (this.currentPage <= middle) {
+        for (let i = 1; i <= maxPagesToShow; i++) {
+          pages.push(i);
+        }
+        pages.push(-1);
+        pages.push(totalPages);
+      } else if (this.currentPage >= totalPages - middle + 1) {
+        pages.push(1);
+        pages.push(-1);
+        for (let i = totalPages - maxPagesToShow + 1; i <= totalPages; i++) {
+          pages.push(i);
+        }
+      } else {
+        pages.push(1);
+        pages.push(-1);
+        for (let i = this.currentPage - Math.floor(middle / 2); i <= this.currentPage + Math.ceil(middle / 2) - 1; i++) {
+          pages.push(i);
+        }
+        pages.push(-1);
+        pages.push(totalPages);
+      }
+    }
+    return pages;
+  }
 
 }

@@ -71,10 +71,23 @@
 
 
     <!-- الصفحات -->
-    <div class="pagination-container" *ngIf="displayParts.length">
-      <pagination-controls (pageChange)="pageChanged($event)" previousLabel="‹ السابق" nextLabel="التالي ›"
-        firstLabel="« الأول" lastLabel="الأخير »">
-      </pagination-controls>
+    <div class="pagination" *ngIf="displayParts.length > 0">
+      <div class="items-per-page-selector">
+        <span>عرض:</span>
+        <button *ngFor="let option of itemsPerPageOptions"
+          (click)="itemsPerPage = option; currentPage = 1; updatePagedParts()" [class.active]="itemsPerPage === option">
+          {{ option }}
+        </button>
+      </div>
+      <button class="pagination-button prev" [disabled]="currentPage === 1" (click)="prevPage()">السابق</button>
+      <div class="pagination-numbers">
+        <button class="pagination-number" *ngFor="let page of getPagesArray()"
+          (click)="page === -1 ? null : goToPage(page)" [class.active]="page === currentPage" [disabled]="page === -1">
+          {{ page === -1 ? '...' : page }}
+        </button>
+      </div>
+      <button class="pagination-button next" [disabled]="currentPage === getTotalPages()"
+        (click)="nextPage()">التالي</button>
     </div>
   </section>
 
