@@ -44,10 +44,11 @@
   <div class="container">
     <ul class="nav-list">
       <li *ngFor="let item of navItems">
-        <a (click)="goToSection(item.target)">
+        <a (click)="goToNavItem(item)">
           {{ item.label }}
         </a>
       </li>
     </ul>
   </div>
 </nav>
+

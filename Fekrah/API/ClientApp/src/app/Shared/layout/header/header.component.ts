@@ -38,15 +38,17 @@ export class HeaderComponent implements OnInit {
 
   // قائمة التنقل الرئيسية
   navItems = [
-    { label: 'الرئيسية', target: 'category' },
-    { label: 'الأقسام', target: 'categories-section' },
-    { label: 'الماركات', target: 'brands-section' },
-    { label: 'العروض', target: 'offers-section' },
-    { label: 'المتاجر', target: 'stores-section' },
-    { label: 'المقترحات', target: 'suggested-offers' },
-    { label: 'أحدث القطع', target: 'latest-section' },
-    { label: 'الأصناف', target: 'part-types' }
+    { label: 'الرئيسية', type: 'route', target: '/category' },
+    { label: 'المتاجر', type: 'section', target: 'stores-section', page: '/' },
+    { label: 'الماركات', type: 'section', target: 'brands-section', page: '/' },
+    { label: 'العروض', type: 'section', target: 'offers-section', page: '/' },
+    { label: 'أحدث القطع', type: 'section', target: 'latest-section', page: '/' },
+    { label: 'المقترحات', type: 'section', target: 'suggested-offers', page: '/' },
+    // { label: 'الأقسام', type: 'section', target: 'categories-section', page: '/' },
+    { label: 'الأصناف', type: 'section', target: 'part-types', page: '/' }
   ];
+
+
 
   @HostListener('window:scroll', [])
   onWindowScroll() {
@@ -72,6 +74,23 @@ export class HeaderComponent implements OnInit {
       });
     }
   }
+
+  goToNavItem(item: any) {
+    if (item.type === 'route') {
+      this.router.navigateByUrl(item.target);
+    } else if (item.type === 'section') {
+      // item.page هو اسم الصفحة التي يوجد فيها الـ section
+      if (this.router.url.split('?')[0] === item.page) {
+        // أنت بالفعل في الصفحة المناسبة، اعمل scroll
+        this.scrollToSection(item.target);
+      } else {
+        // انتقل للصفحة المطلوبة، وأرسل الـ section مع الـ queryParams
+        this.router.navigate([item.page], { queryParams: { scrollTo: item.target } });
+      }
+    }
+  }
+
+
 
   updateCartCount(): void {
     this.cartCount = 0;
