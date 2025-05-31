@@ -674,7 +674,7 @@ $elastic-timing: cubic-bezier(0.175, 0.885, 0.32, 1.275);
   .parts-grid {
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-    gap: 25px;
+    gap: 20px;
     margin-bottom: 40px;
   }
 

@@ -4,21 +4,17 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { AppComponent } from './app.component';
 import { AppRoutingModule } from './app-routing.module';
 import { HeaderComponent } from './Shared/layout/header/header.component';
-import { FooterComponent } from './Shared/layout/footer/footer.component';
 import { PromoTickerComponent } from './Shared/components/promo-ticker/promo-ticker.component';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { AboutUsComponent } from './Shared/layout/about-us/about-us.component';
-import { ContactUsComponent } from './Shared/layout/contact-us/contact-us.component';
+import { FooterModule } from './Shared/layout/footer/footer.module';
 
 
 @NgModule({
   declarations: [
     AppComponent,
     HeaderComponent,
-    FooterComponent,
     PromoTickerComponent,
-    AboutUsComponent,
-    ContactUsComponent,
+
 
 
   ],
@@ -27,7 +23,8 @@ import { ContactUsComponent } from './Shared/layout/contact-us/contact-us.compon
     AppRoutingModule,
     BrowserAnimationsModule,
     FormsModule,
-    ReactiveFormsModule
+    ReactiveFormsModule,
+    FooterModule
 
   ],
   providers: [],

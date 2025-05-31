@@ -1,8 +1,6 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { CategoryPageComponent } from './core/features/home/category-page/category-page.component';
-import { AboutUsComponent } from './Shared/layout/about-us/about-us.component';
-import { ContactUsComponent } from './Shared/layout/contact-us/contact-us.component';
 
 const routes: Routes = [
   { path: '', redirectTo: 'home', pathMatch: 'full' },
@@ -12,11 +10,9 @@ const routes: Routes = [
   { path: 'admin', loadChildren: () => import('./core/features/admin/admin.module').then(m => m.AdminModule) },
   { path: 'category', loadChildren: () => import('./core/features/category/category.module').then(m => m.CategoryModule) },
   { path: 'addCart', loadChildren: () => import('./core/add-to-cart/add-to-cart.module').then(m => m.AddToCartModule) },
+  { path: 'footer', loadChildren: () => import('./Shared/layout/footer/footer.module').then(m => m.FooterModule) },
   { path: 'category/:name', component: CategoryPageComponent },
-  { path: 'AboutUs', component: AboutUsComponent },
-  {
-    path: 'contact-us', component: ContactUsComponent,
-  },
+
   { path: 'seller', loadChildren: () => import('./core/features/seller/seller-page.module').then(m => m.SellerModule) },
 
   // أي مسارات تانية
