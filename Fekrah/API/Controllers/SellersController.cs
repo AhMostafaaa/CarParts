@@ -53,7 +53,7 @@ public class SellersController : ControllerBase
          await _unitOfWork.Sellers.AddAsync(dto);
         await _unitOfWork.CompleteAsync();
 
-        return StatusCode(StatusCodes.Status201Created);
+        return StatusCode(StatusCodes.Status200OK);
     }
 
     // PUT: api/Sellers/{id}

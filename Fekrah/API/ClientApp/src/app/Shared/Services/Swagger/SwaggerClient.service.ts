@@ -926,6 +926,65 @@ export class SwaggerClient {
         }
         return _observableOf(null as any);
     }
+
+    apiLookupGetLookupGet(lookupName: string | undefined): Observable<LookupDTO[]> {
+        let url_ = this.baseUrl + "/api/Lookup/GetLookup?";
+        if (lookupName === null)
+            throw new Error("The parameter 'lookupName' cannot be null.");
+        else if (lookupName !== undefined)
+            url_ += "lookupName=" + encodeURIComponent("" + lookupName) + "&";
+        url_ = url_.replace(/[?&]$/, "");
+
+        let options_ : any = {
+            observe: "response",
+            responseType: "blob",
+            headers: new HttpHeaders({
+                "Accept": "application/json"
+            })
+        };
+
+        return this.http.request("get", url_, options_).pipe(_observableMergeMap((response_ : any) => {
+            return this.processApiLookupGetLookupGet(response_);
+        })).pipe(_observableCatch((response_: any) => {
+            if (response_ instanceof HttpResponseBase) {
+                try {
+                    return this.processApiLookupGetLookupGet(response_ as any);
+                } catch (e) {
+                    return _observableThrow(e) as any as Observable<LookupDTO[]>;
+                }
+            } else
+                return _observableThrow(response_) as any as Observable<LookupDTO[]>;
+        }));
+    }
+
+    protected processApiLookupGetLookupGet(response: HttpResponseBase): Observable<LookupDTO[]> {
+        const status = response.status;
+        const responseBlob =
+            response instanceof HttpResponse ? response.body :
+            (response as any).error instanceof Blob ? (response as any).error : undefined;
+
+        let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); }}
+        if (status === 200) {
+            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
+            let result200: any = null;
+            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            if (Array.isArray(resultData200)) {
+                result200 = [] as any;
+                for (let item of resultData200)
+                    result200!.push(LookupDTO.fromJS(item));
+            }
+            else {
+                result200 = <any>null;
+            }
+            return _observableOf(result200);
+            }));
+        } else if (status !== 200 && status !== 204) {
+            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            }));
+        }
+        return _observableOf(null as any);
+    }
 }
 
 export class CategoryViewModel implements ICategoryViewModel {
@@ -1307,6 +1366,46 @@ export interface ISellerDto {
     shopName: string;
     phoneNumber: string;
     password: string;
+}
+
+export class LookupDTO implements ILookupDTO {
+    id!: any;
+    text!: string;
+
+    constructor(data?: ILookupDTO) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            this.id = _data["id"];
+            this.text = _data["text"];
+        }
+    }
+
+    static fromJS(data: any): LookupDTO {
+        data = typeof data === 'object' ? data : {};
+        let result = new LookupDTO();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["id"] = this.id;
+        data["text"] = this.text;
+        return data;
+    }
+}
+
+export interface ILookupDTO {
+    id: any;
+    text: string;
 }
 
 export class ApiException extends Error {

@@ -1,113 +1,360 @@
-.offers-page-container {
-  margin: 40px 20px;
+.offers-section {
+  background: linear-gradient(135deg, #e65100 0%, #ff6b00 50%, #ff9248 100%);
+  min-height: 500px;
+  position: relative;
 
-  .page-title {
-    font-size: 28px;
-    margin-bottom: 20px;
-    text-align: right;
-    color: #333;
-  }
-
-  .swiper-container {
-    position: relative;
-    width: 100%;
-    padding: 20px 40px 60px 40px; /* 👈 خلي فيه padding يمين وشمال */
-    overflow: hidden;
-  }
-
-
-  .swiper-wrapper {
-    display: flex;
-    align-items: center;
-  }
-
-  .swiper-slide {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    height: auto;
-  }
-
-  .offer-card {
-      width: 180px;
-      height: 280px;
-      background: white;
-      border: 1px solid #ddd;
-      border-radius: 10px;
-      padding: 15px;
-      margin: 0 auto; /* 👈 خلي الكارت دايمًا في النص */
-      text-align: center;
-      display: flex;
-      flex-direction: column;
-      justify-content: space-between;
-      transition: transform 0.3s;
-      z-index: 1; // لو موجود مفيش مشكلة
-
-
-
-    img {
-      width: 100px;
-      height: 100px;
-      margin: 0 auto 10px;
-      object-fit: contain;
-    }
-
-    h3 {
-      font-size: 16px;
-      color: #333;
-      height: 40px;
-      overflow: hidden;
-    }
-
-    .price {
-      color: #b12704;
-      font-weight: bold;
-      margin-bottom: 10px;
-    }
-
-    .btn {
-      background-color: #febd69;
-      border: none;
-      padding: 6px 12px;
-      border-radius: 4px;
-      font-weight: bold;
-      cursor: pointer;
-    }
-
-    &:hover {
-      transform: translateY(-5px);
-      box-shadow: 0 4px 10px rgba(0,0,0,0.2);
-    }
-  }
-
-  .swiper-button-next,
-  .swiper-button-prev {
+  &::before {
+    content: "";
     position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-image: radial-gradient(
+        circle at 25% 25%,
+        rgba(255, 255, 255, 0.2) 2px,
+        transparent 2px
+      ),
+      radial-gradient(
+        circle at 75% 75%,
+        rgba(255, 255, 255, 0.2) 1px,
+        transparent 1px
+      );
+    background-size: 50px 50px, 30px 30px;
+    animation: patternMove 20s linear infinite;
+  }
+}
+
+.section-title {
+  color: var(--white);
+  font-weight: 900;
+  font-size: 2.5rem;
+  text-shadow: 3px 3px 6px rgba(0, 0, 0, 0.3);
+  position: relative;
+  z-index: 10;
+
+  &::before {
+    content: "🔥";
+    position: absolute;
+    left: 10px;
     top: 50%;
-    width: 40px;
-    height: 40px;
-    background-color: rgba(0, 0, 0, 0.5);
-    color: white;
-    border-radius: 50%;
     transform: translateY(-50%);
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    font-size: 18px;
-    z-index: 100; /* 👈 خليه عالي جدا فوق أي حاجة */
+    font-size: 2rem;
+    animation: bounce 2s infinite;
   }
 
+  &::after {
+    content: "";
+    position: absolute;
+    bottom: -10px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 100px;
+    height: 4px;
+    background: var(--gradient-warning);
+    border-radius: 2px;
+    box-shadow: 0 4px 15px rgba(255, 78, 0, 0.3);
+  }
+}
 
-  .swiper-button-next {
-    left: 10px; /* 👈 مش 0، نبعده شوية لجوه */
+.section-subtitle {
+  color: var(--white);
+  font-size: 1rem;
+  font-weight: 600;
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+  position: relative;
+  z-index: 10;
+}
+
+.offers-swiper {
+  position: relative;
+  z-index: 10;
+  padding: 20px 0;
+}
+
+.offer-card {
+  background-color: #f8f9fa;
+  border-radius: var(--radius);
+  box-shadow: var(--shadow-card);
+  border: 2px solid transparent;
+  background-clip: padding-box;
+  position: relative;
+  overflow: hidden;
+  transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  display: flex;
+  flex-direction: column;
+  max-width: 260px;
+  // margin: 0 auto;
+  padding: 0.5rem;
+  cursor: pointer;
+
+  &::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 6px;
+    background: var(--gradient-primary);
+    z-index: 2;
   }
 
-  .swiper-button-prev {
-    right: 10px; /* 👈 ومثله لليسار */
+  &:hover {
+    transform: translateY(-10px) rotateY(3deg) rotateX(3deg);
+    box-shadow: var(--shadow-hover);
+    border-color: #13e600;
+    border-width: 1px;
+
+    &::before {
+      height: 8px;
+      background: var(--gradient-warning);
+    }
+
+    .offer-image {
+      transform: scale(1.1) rotate(3deg);
+    }
+
+    .price-section {
+      background: var(--gradient-success);
+
+      .current-price {
+        color: var(--white) !important;
+        text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+      }
+    }
+  }
+}
+
+.image-container {
+  background: var(--white);
+  position: relative;
+  border-radius: 12px;
+  overflow: hidden;
+  padding: 0.5rem;
+  margin-bottom: 0.75rem;
+
+  &::after {
+    content: "⭐";
+    position: absolute;
+    top: 8px;
+    right: 8px;
+    font-size: 1.2rem;
+    animation: sparkle 2s infinite;
+  }
+}
+
+.offer-image {
+  transition: all 0.4s ease;
+  border-radius: 8px;
+  width: 100px;
+  height: 100px;
+  object-fit: contain;
+}
+
+.offer-title {
+  color: var(--dark);
+  font-weight: 800;
+  font-size: 1rem;
+  line-height: 1.2;
+  transition: all 0.3s ease;
+  height: 2.4rem;
+  overflow: hidden;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  margin-bottom: 0.5rem !important;
+}
+
+.offer-description {
+  font-size: 13px;
+  font-weight: 500;
+  color: #2c2c2c;
+  line-height: 1.6;
+  text-align: center;
+
+  background: linear-gradient(to right, #fddbdb, #f3d157);
+
+  padding: 3px 10px;
+  border-radius: 12px;
+  margin-bottom: 10px;
+
+  height: 65px;
+  overflow: hidden;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  text-overflow: ellipsis;
+}
+
+.price-section {
+  background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+  border-radius: 12px;
+  padding: 0.5rem;
+  transition: all 0.3s ease;
+
+  .current-price {
+    color: var(--primary);
+    font-size: 1.3rem;
+    font-weight: 900;
+    text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.1);
+    position: relative;
+    display: inline-block;
+
+    &::after {
+      content: "";
+      position: absolute;
+      bottom: -2px;
+      left: 0;
+      width: 100%;
+      height: 2px;
+      background: var(--gradient-primary);
+      border-radius: 1px;
+      transform: scaleX(0.8);
+      transition: transform 0.3s ease;
+    }
+
+    &:hover::after {
+      transform: scaleX(1);
+    }
   }
 
+  .old-price {
+    color: #bd0505 !important;
+    font-size: 0.9rem;
+    position: relative;
 
-  .swiper-pagination {
-    bottom: 10px !important;
+    &::after {
+      content: "";
+      position: absolute;
+      top: 50%;
+      left: -5%;
+      width: 110%;
+      height: 2px;
+      background: var(--gradient-warning);
+      transform: rotate(-10deg);
+    }
   }
+}
+
+.discount-badge {
+  background: linear-gradient(45deg, #e77e51, #ff7b4b, #ff4e00);
+  color: #fff;
+  font-size: 0.8rem;
+  padding: 0.3rem 0.8rem;
+  border-radius: 20px;
+  box-shadow: 0 4px 15px rgba(255, 78, 0, 0.2);
+  position: relative;
+  overflow: hidden;
+
+  &::before {
+    content: "";
+    position: absolute;
+    top: -50%;
+    left: -50%;
+    width: 200%;
+    height: 200%;
+    background: linear-gradient(
+      45deg,
+      transparent,
+      rgba(255, 255, 255, 0.1),
+      transparent
+    );
+    transform: rotate(45deg);
+    animation: shimmer 2s infinite;
+  }
+
+  i {
+    animation: pulse 1s infinite;
+  }
+}
+
+.details-btn {
+  background: linear-gradient(45deg, #ff6b00, #ff9248, #ff6b00);
+  color: #fff;
+  font-weight: bold;
+  font-size: 0.8rem;
+  padding: 0.5rem 1rem;
+  transition: all 0.3s ease;
+  overflow: hidden;
+  position: relative;
+
+  &::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(
+      120deg,
+      transparent,
+      rgba(255, 255, 255, 0.3),
+      transparent
+    );
+    transform: translateX(-100%);
+    transition: 0.5s;
+  }
+
+  &:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 5px 15px rgba(255, 107, 0, 0.3);
+
+    &::before {
+      transform: translateX(100%);
+    }
+  }
+}
+
+@keyframes patternMove {
+  0% {
+    background-position: 0 0;
+  }
+  100% {
+    background-position: 50px 50px;
+  }
+}
+
+@keyframes bounce {
+  0%,
+  100% {
+    transform: translateY(-50%);
+  }
+  50% {
+    transform: translateY(-65%);
+  }
+}
+
+@keyframes sparkle {
+  0%,
+  100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 0.6;
+    transform: scale(0.8);
+  }
+}
+
+@keyframes shimmer {
+  0% {
+    transform: rotate(45deg) translateX(-100%);
+  }
+  100% {
+    transform: rotate(45deg) translateX(100%);
+  }
+}
+
+@keyframes pulse {
+  0%,
+  100% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.2);
+  }
+}
+
+.seller-name {
+  cursor: pointer;
 }

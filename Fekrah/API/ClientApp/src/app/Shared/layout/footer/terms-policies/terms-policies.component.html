@@ -1,0 +1,74 @@
+<div class="terms-policies-container">
+  <div class="container">
+    <h2 class="section-title">الشروط والسياسات</h2>
+
+    <div class="policies-grid">
+      <div
+        class="policy-card"
+        *ngFor="let policy of policyLinks"
+        (click)="navigateToPolicy(policy.route)"
+      >
+        <div class="policy-icon">
+          <ng-container [ngSwitch]="policy.icon">
+            <!-- Privacy Icon -->
+            <svg *ngSwitchCase="'privacy'" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
+              <path d="M9 12l2 2 4-4"/>
+            </svg>
+
+            <!-- Terms Icon -->
+            <svg *ngSwitchCase="'terms'" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
+              <polyline points="14,2 14,8 20,8"/>
+              <line x1="16" y1="13" x2="8" y2="13"/>
+              <line x1="16" y1="17" x2="8" y2="17"/>
+              <polyline points="10,9 9,9 8,9"/>
+            </svg>
+
+            <!-- Return Icon -->
+            <svg *ngSwitchCase="'return'" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <polyline points="1,4 1,10 7,10"/>
+              <path d="M3.51 15a9 9 0 1 0 2.13-9.36L1 10"/>
+            </svg>
+
+            <!-- Shipping Icon -->
+            <svg *ngSwitchCase="'shipping'" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <rect x="1" y="3" width="15" height="13"/>
+              <polygon points="16,8 20,8 23,11 23,16 16,16 16,8"/>
+              <circle cx="5.5" cy="18.5" r="2.5"/>
+              <circle cx="18.5" cy="18.5" r="2.5"/>
+            </svg>
+
+            <!-- Warranty Icon -->
+            <svg *ngSwitchCase="'warranty'" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
+              <path d="M9 9h6v6H9z"/>
+            </svg>
+
+            <!-- Usage Icon -->
+            <svg *ngSwitchDefault width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <circle cx="12" cy="12" r="10"/>
+              <polyline points="12,6 12,12 16,14"/>
+            </svg>
+          </ng-container>
+        </div>
+
+        <h3 class="policy-title">{{ policy.title }}</h3>
+
+        <div class="policy-arrow">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <polyline points="9,18 15,12 9,6"></polyline>
+          </svg>
+        </div>
+      </div>
+    </div>
+
+    <div class="legal-note">
+      <p>
+        <strong>ملاحظة مهمة:</strong>
+        يرجى قراءة جميع الشروط والسياسات بعناية قبل استخدام الموقع أو إتمام عملية الشراء.
+        استخدامك للموقع يعني موافقتك على جميع الشروط والأحكام المذكورة.
+      </p>
+    </div>
+  </div>
+</div>

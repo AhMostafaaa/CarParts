@@ -53,7 +53,7 @@ public class CategoriesController : ControllerBase
          await _unitOfWork.Categories.AddAsync(dto);
         await _unitOfWork.CompleteAsync();
 
-        return StatusCode(StatusCodes.Status201Created);
+        return StatusCode(StatusCodes.Status200OK);
     }
 
     // PUT: api/Categories/{id}

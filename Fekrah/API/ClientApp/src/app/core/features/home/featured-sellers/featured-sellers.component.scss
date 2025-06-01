@@ -1,0 +1,136 @@
+.featured-sellers-section {
+  background: linear-gradient(135deg, #6a11cb, #2575fc);
+  padding: 30px 20px;
+  border-radius: 12px;
+  margin: 20px 0;
+  color: #fff;
+  overflow: hidden;
+  .section-title {
+    text-align: center;
+    font-size: 50px;
+    font-weight: bold;
+    margin-bottom: 20px;
+  }
+
+  .swiper-container {
+    position: relative;
+    padding-bottom: 80px;
+  }
+
+  .swiper-pagination {
+    bottom: 0 !important;
+
+    .swiper-pagination-bullet {
+      background: rgba(255, 255, 255, 0.5);
+    }
+
+    .swiper-pagination-bullet-active {
+      background: #ffc107;
+    }
+  }
+
+  .swiper-button-prev,
+  .swiper-button-next {
+    color: #fff;
+    top: 45%;
+  }
+
+  .swiper-slide {
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+    position: relative;
+  }
+
+  .seller-card {
+    position: relative;
+    width: 160px;
+    background: #fff;
+    color: #333;
+    border-radius: 16px;
+    padding: 16px 12px 30px;
+    box-shadow: 0 6px 16px rgba(0, 0, 0, 0.1);
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    transition: transform 0.3s, box-shadow 0.3s;
+    cursor: pointer;
+    min-height: 220px;
+
+    &:hover {
+      transform: translateY(-6px);
+      box-shadow: 0 12px 24px rgba(0, 0, 0, 0.15);
+    }
+
+    .seller-image {
+      width: 70px;
+      height: 70px;
+      border-radius: 50%;
+      overflow: hidden;
+      margin-bottom: 12px;
+
+      img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+      }
+    }
+
+    .seller-name {
+      font-size: 16px;
+      font-weight: 700;
+      margin-bottom: 6px;
+      color: #333;
+    }
+
+    .seller-location {
+      font-size: 13px;
+      color: #666;
+      margin-bottom: 6px;
+      display: flex;
+      align-items: center;
+      gap: 4px;
+
+      i {
+        color: #007bff;
+      }
+    }
+
+    .seller-category {
+      display: inline-block;
+      font-size: 12px;
+      background: #f0f0f0;
+      color: #333;
+      padding: 4px 10px;
+      border-radius: 12px;
+      margin-bottom: 6px;
+    }
+  }
+
+  .whatsapp-button {
+    position: absolute;
+    bottom: -12px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 38px;
+    height: 38px;
+    background: #25d366;
+    color: #fff;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 18px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    transition: background 0.3s;
+
+    transition: background 0.3s, transform 0.3s, box-shadow 0.3s;
+
+    &:hover {
+      background: #1da851;
+      transform: translateX(-50%) scale(1.1);
+      box-shadow: 0 6px 12px rgba(0, 0, 0, 0.25);
+    }
+  }
+}

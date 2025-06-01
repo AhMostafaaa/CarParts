@@ -1,0 +1,433 @@
+body {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  padding: 20px;
+  font-family: 'Cairo', sans-serif;
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.modern-card {
+  width: 310px;
+  height: 580px;
+  background: #fff;
+  border-radius: 16px;
+  position: relative;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  font-family: 'Cairo', sans-serif;
+  display: flex;
+  flex-direction: column;
+  border: 1px solid rgba(0, 0, 0, 0.1);
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+  overflow: hidden;
+}
+
+.modern-card:hover {
+  transform: translateY(-8px);
+  box-shadow: 0 15px 35px rgba(0, 0, 0, 0.2);
+}
+
+.delivery-ribbon {
+  position: absolute;
+  top: 15px;
+  left: -45px;
+  background: linear-gradient(45deg, #04785f, #059669);
+  color: white;
+  padding: 8px 16px;
+  z-index: 2;
+  font-size: 0.7rem;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+  transform: rotate(-45deg);
+  width: 160px;
+  justify-content: center;
+}
+
+.image-section {
+  width: 100%;
+  height: 240px;
+  background: linear-gradient(135deg, #f0f9ff, #e0f2fe);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+}
+
+.image-placeholder {
+  width: 140px;
+  height: 140px;
+  background: linear-gradient(135deg, #e2e8f0, #cbd5e1);
+  border-radius: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #64748b;
+  font-size: 3.5rem;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.grade-badge {
+  position: absolute;
+  top: 15px;
+  right: 15px;
+  padding: 6px 12px;
+  border-radius: 20px;
+  font-size: 0.7rem;
+  font-weight: 700;
+  background: linear-gradient(45deg, #10b981, #059669);
+  color: white;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  box-shadow: 0 2px 8px rgba(16, 185, 129, 0.3);
+}
+
+.favorite-btn {
+  position: absolute;
+  top: 15px;
+  left: 15px;
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.9);
+  backdrop-filter: blur(10px);
+  border: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  color: #64748b;
+  transition: all 0.3s ease;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.favorite-btn:hover {
+  transform: scale(1.1);
+  color: #ef4444;
+  background: rgba(255, 255, 255, 1);
+}
+
+.origin-badge {
+  position: absolute;
+  bottom: 15px;
+  right: 15px;
+  background: linear-gradient(45deg, #f59e0b, #d97706);
+  color: white;
+  padding: 6px 10px;
+  font-size: 0.65rem;
+  font-weight: 700;
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  box-shadow: 0 2px 8px rgba(245, 158, 11, 0.3);
+}
+
+.content-section {
+  padding: 16px;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.part-name-section {
+  text-align: center;
+  padding: 12px;
+  background: linear-gradient(135deg, #f8fafc, #f1f5f9);
+  border-radius: 16px;
+  border: 1px solid #e2e8f0;
+}
+
+.part-title {
+  font-size: 1rem;
+  font-weight: 800;
+  color: #1e293b;
+  margin-bottom: 4px;
+}
+
+.part-subtitle {
+  font-size: 0.7rem;
+  color: #6366f1;
+  font-weight: 600;
+}
+
+.condition-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 4px 10px;
+  border-radius: 16px;
+  font-size: 0.65rem;
+  font-weight: 700;
+  background: linear-gradient(45deg, #10b981, #059669);
+  color: white;
+  margin-top: 6px;
+  box-shadow: 0 2px 6px rgba(16, 185, 129, 0.2);
+}
+
+.info-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+}
+
+.info-card {
+  padding: 12px;
+  border-radius: 16px;
+  border: 1px solid rgba(0, 0, 0, 0.1);
+  text-align: center;
+  transition: all 0.3s ease;
+  cursor: pointer;
+  position: relative;
+  overflow: hidden;
+}
+
+.info-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: linear-gradient(135deg, transparent, rgba(255, 255, 255, 0.1));
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.info-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.1);
+}
+
+.info-card:hover::before {
+  opacity: 1;
+}
+
+.store-card {
+  background: linear-gradient(135deg, #f0fdf4, #dcfce7);
+}
+
+.car-card {
+  background: linear-gradient(135deg, #eff6ff, #dbeafe);
+}
+
+.info-header {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  margin-bottom: 6px;
+}
+
+.info-icon {
+  width: 22px;
+  height: 22px;
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
+}
+
+.store-icon {
+  background: linear-gradient(45deg, #22c55e, #16a34a);
+}
+
+.car-icon {
+  background: linear-gradient(45deg, #3b82f6, #2563eb);
+}
+
+.info-label {
+  font-size: 0.65rem;
+  color: #64748b;
+  font-weight: 600;
+}
+
+.store-name {
+  font-size: 0.75rem;
+  font-weight: 700;
+  color: #166534;
+}
+
+.car-details {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.car-brand {
+  font-size: 0.8rem;
+  font-weight: 800;
+  color: #1e40af;
+}
+
+.car-model {
+  font-size: 0.65rem;
+  color: #64748b;
+  font-weight: 500;
+}
+
+/* تصميم السعر الجديد المحسن */
+.price-section {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 0;
+  background: #ffffff;
+  border-radius: 16px;
+  margin-top: 8px;
+  position: relative;
+}
+
+.price-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0px;
+  width: 100%;
+}
+
+.original-price {
+  font-size: 0.85rem;
+  color: #94a3b8;
+  text-decoration: line-through;
+  font-weight: 500;
+  margin-bottom: 4px;
+}
+
+.current-price {
+  display: flex;
+  align-items: baseline;
+  justify-content: center;
+  gap: 6px;
+  margin-bottom: 8px;
+}
+
+.price-number {
+  font-size: 2rem;
+  font-weight: 900;
+  color: #1e293b;
+  letter-spacing: -0.5px;
+}
+
+.price-currency {
+  font-size: 1rem;
+  font-weight: 700;
+  color: #64748b;
+}
+
+.discount-info {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+}
+
+.discount-percentage {
+  background: linear-gradient(135deg, #ef4444, #dc2626);
+  color: white;
+  padding: 4px 10px;
+  border-radius: 20px;
+  font-size: 0.75rem;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.savings-amount {
+  background: linear-gradient(135deg, #10b981, #059669);
+  color: white;
+  padding: 4px 10px;
+  border-radius: 20px;
+  font-size: 0.75rem;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+/* ألوان مختلفة حسب نسبة الخصم */
+.price-section.high-discount .price-number {
+  color: #dc2626;
+}
+
+.price-section.medium-discount .price-number {
+  color: #d97706;
+}
+
+.price-section.low-discount .price-number {
+  color: #059669;
+}
+
+.action-section {
+  margin-top: auto;
+  padding: 16px;
+  background: linear-gradient(135deg, #f8fafc, #f1f5f9);
+  border-radius: 0 0 16px 16px;
+  border-top: 1px solid #e2e8f0;
+  display: flex;
+  justify-content: center;
+}
+
+.action-buttons {
+  display: inline-flex;
+  gap: 10px;
+}
+
+.action-btn {
+  width: 46px;
+  height: 46px;
+  border-radius: 50%;
+  border: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  color: white;
+  font-size: 1.1rem;
+  transition: all 0.3s ease;
+  position: relative;
+  overflow: hidden;
+}
+
+.action-btn::before {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 0;
+  height: 0;
+  background: rgba(255, 255, 255, 0.2);
+  border-radius: 50%;
+  transition: all 0.3s ease;
+  transform: translate(-50%, -50%);
+}
+
+.action-btn:hover::before {
+  width: 100%;
+  height: 100%;
+}
+
+.action-btn:hover {
+  transform: scale(1.1);
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.2);
+}
+
+.action-btn.whatsapp {
+  background: linear-gradient(45deg, #25d366, #128c7e);
+}
+
+.action-btn.add-cart {
+  background: linear-gradient(45deg, #3b82f6, #2563eb);
+}
+
+.action-btn.view-details {
+  background: linear-gradient(45deg, #6366f1, #4f46e5);
+}

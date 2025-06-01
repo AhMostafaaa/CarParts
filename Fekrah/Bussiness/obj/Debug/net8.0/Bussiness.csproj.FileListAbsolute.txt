@@ -1,0 +1,16 @@
+C:\Users\TIGEER2\Source\Repos\CarParts\Fekrah\Bussiness\bin\Debug\net8.0\Bussiness.deps.json
+C:\Users\TIGEER2\Source\Repos\CarParts\Fekrah\Bussiness\bin\Debug\net8.0\Bussiness.dll
+C:\Users\TIGEER2\Source\Repos\CarParts\Fekrah\Bussiness\bin\Debug\net8.0\Bussiness.pdb
+C:\Users\TIGEER2\Source\Repos\CarParts\Fekrah\Bussiness\bin\Debug\net8.0\Data.dll
+C:\Users\TIGEER2\Source\Repos\CarParts\Fekrah\Bussiness\bin\Debug\net8.0\Data.pdb
+C:\Users\TIGEER2\Source\Repos\CarParts\Fekrah\Bussiness\obj\Debug\net8.0\Bussiness.csproj.AssemblyReference.cache
+C:\Users\TIGEER2\Source\Repos\CarParts\Fekrah\Bussiness\obj\Debug\net8.0\Bussiness.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\TIGEER2\Source\Repos\CarParts\Fekrah\Bussiness\obj\Debug\net8.0\Bussiness.AssemblyInfoInputs.cache
+C:\Users\TIGEER2\Source\Repos\CarParts\Fekrah\Bussiness\obj\Debug\net8.0\Bussiness.AssemblyInfo.cs
+C:\Users\TIGEER2\Source\Repos\CarParts\Fekrah\Bussiness\obj\Debug\net8.0\Bussiness.csproj.CoreCompileInputs.cache
+C:\Users\TIGEER2\Source\Repos\CarParts\Fekrah\Bussiness\obj\Debug\net8.0\Bussiness.sourcelink.json
+C:\Users\TIGEER2\Source\Repos\CarParts\Fekrah\Bussiness\obj\Debug\net8.0\Bussiness.csproj.Up2Date
+C:\Users\TIGEER2\Source\Repos\CarParts\Fekrah\Bussiness\obj\Debug\net8.0\Bussiness.dll
+C:\Users\TIGEER2\Source\Repos\CarParts\Fekrah\Bussiness\obj\Debug\net8.0\refint\Bussiness.dll
+C:\Users\TIGEER2\Source\Repos\CarParts\Fekrah\Bussiness\obj\Debug\net8.0\Bussiness.pdb
+C:\Users\TIGEER2\Source\Repos\CarParts\Fekrah\Bussiness\obj\Debug\net8.0\ref\Bussiness.dll

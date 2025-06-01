@@ -16,7 +16,7 @@ namespace API.Middlewares.Middlewares
                 app.UseSpaStaticFiles();
                 app.UseSpa(spa =>
                 {
-                    spa.Options.SourcePath = "ClientApp/FokkerahClient";
+                    spa.Options.SourcePath = "ClientApp";
                     if (env.IsDevelopment())
                     {
                         spa.UseAngularCliServer(npmScript: "start");

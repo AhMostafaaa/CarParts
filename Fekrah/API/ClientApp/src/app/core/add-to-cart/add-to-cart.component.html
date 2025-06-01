@@ -1,0 +1,276 @@
+<div class="modern-cart-wizard">
+  <!-- Progress Steps -->
+  <div class="wizard-steps mb-4">
+    <div class="step-container">
+      <div class="step-item" [ngClass]="{'active': step >= 1, 'completed': step > 1}">
+        <div class="step-circle">
+          <i class="fas" [ngClass]="step > 1 ? 'fa-check' : 'fa-shopping-cart'"></i>
+        </div>
+        <div class="step-label">السلة</div>
+      </div>
+      <div class="step-item" [ngClass]="{'active': step >= 2, 'completed': step > 2}">
+        <div class="step-circle">
+          <i class="fas" [ngClass]="step > 2 ? 'fa-check' : 'fa-credit-card'"></i>
+        </div>
+        <div class="step-label">الدفع</div>
+      </div>
+      <div class="step-item" [ngClass]="{'active': step >= 3}">
+        <div class="step-circle">
+          <i class="fas fa-truck"></i>
+        </div>
+        <div class="step-label">التوصيل</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- سلة المشتريات -->
+  <div *ngIf="step === 1" class="step-content cart-step">
+
+    <!-- الهيدر العصري -->
+    <div class="step-header">
+      <div class="header-icon">
+        <i class="fas fa-shopping-cart"></i>
+      </div>
+      <div>
+        <h2>سلة المشتريات</h2>
+        <p>راجع العناصر المحددة قبل المتابعة</p>
+      </div>
+    </div>
+
+    <!-- السلة فارغة -->
+    <div *ngIf="cartItems.length === 0" class="empty-cart">
+      <div class="empty-icon">
+        <i class="fas fa-shopping-cart"></i>
+      </div>
+      <h3>السلة فارغة</h3>
+      <p>لم تقم بإضافة أي قطع غيار بعد</p>
+      <button class="btn-modern primary mt-2">تصفح المنتجات</button>
+    </div>
+
+    <!-- ======= layout: المنتجات يمين & ملخص الطلب يسار ======= -->
+    <div *ngIf="cartItems.length > 0" class="cart-layout">
+      <!-- قائمة المنتجات (يمين) -->
+      <div class="cart-products-list">
+        <div *ngFor="let item of cartItems; trackBy: trackByItemId" class="cart-item-frame row align-items-center">
+          <ng-container *ngIf="item?.carPart as part">
+            <!-- صورة المنتج -->
+            <div class="item-image col-auto">
+              <img *ngIf="part.image" [src]="part.image" [alt]="part.name">
+            </div>
+            <!-- تفاصيل المنتج -->
+            <div class="item-details col">
+              <h4>{{ part.name }}</h4>
+              <p class="item-subtitle">{{ part.subtitle }}</p>
+              <div class="car-info">
+                <span>{{ part.car?.brand }}</span>
+                <span>{{ part.car?.model }}</span>
+                <span>{{ part.car?.year }}</span>
+              </div>
+              <div class="store-info mt-1">
+                <i class="fas fa-store"></i>
+                {{ part.store?.name }}
+              </div>
+            </div>
+            <!-- الأسعار والأزرار -->
+            <div class="item-actions col-auto">
+              <div class="price-section">
+                <div *ngIf="part.discount > 0" class="original-price">
+                  {{ part.price }} ج.م
+                </div>
+                <div class="current-price">
+                  {{ part.priceAfterDiscount }} ج.م
+                </div>
+                <div *ngIf="part.discount > 0" class="discount-badge">
+                  خصم {{ part.discount }}%
+                </div>
+              </div>
+              <div class="quantity-controls">
+                <button class="qty-btn minus" (click)="updateQuantity(part.id, item.quantity - 1)">
+                  <i class="fas fa-minus"></i>
+                </button>
+                <span class="quantity">{{ item.quantity }}</span>
+                <button class="qty-btn plus" (click)="updateQuantity(part.id, item.quantity + 1)">
+                  <i class="fas fa-plus"></i>
+                </button>
+              </div>
+              <button class="remove-btn" (click)="removeFromCart(part.id)">
+                <i class="fas fa-trash-alt"></i>
+              </button>
+            </div>
+          </ng-container>
+        </div>
+      </div>
+
+      <!-- ملخص الطلب في الجهة اليسرى -->
+      <div class="cart-summary-side">
+        <div class="cart-summary-frame">
+          <div class="summary-header">
+            <i class="fas fa-receipt"></i>
+            <h3>ملخص الطلب</h3>
+          </div>
+          <div class="summary-details">
+            <div class="summary-row">
+              <span>عدد القطع:</span>
+              <span>{{ getTotalItems() }}</span>
+            </div>
+            <div class="summary-row">
+              <span>المجموع الفرعي:</span>
+              <span>{{ getSubtotal() }} ج.م</span>
+            </div>
+            <div class="summary-row">
+              <span>رسوم التوصيل:</span>
+              <span>50 ج.م</span>
+            </div>
+            <div class="summary-divider"></div>
+            <div class="summary-row total">
+              <span>المجموع الكلي:</span>
+              <span>{{ getTotalPrice() + 50 }} ج.م</span>
+            </div>
+          </div>
+          <button class="btn-modern primary full-width mt-3" (click)="nextStep()">
+            المتابعة للدفع
+            <i class="fas fa-arrow-left"></i>
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+
+
+  <!-- Step 2: Payment -->
+  <div *ngIf="step === 2" class="payment-section">
+    <div class="payment-methods">
+      <div class="payment-option" [class.selected]="paymentMethod === 'cash'">
+        <input type="radio" id="cash" name="payment" value="cash" [(ngModel)]="paymentMethod">
+        <label for="cash">
+          <div class="option-icon"><i class="fas fa-money-bill-wave"></i></div>
+          <div class="option-details">
+            <h4>الدفع عند الاستلام</h4>
+            <p>ادفع نقداً عند وصول الطلب</p>
+          </div>
+          <div class="option-check"><i class="fas fa-check-circle"></i></div>
+        </label>
+      </div>
+      <div class="payment-option" [class.selected]="paymentMethod === 'online'">
+        <input type="radio" id="online" name="payment" value="online" [(ngModel)]="paymentMethod">
+        <label for="online">
+          <div class="option-icon"><i class="fas fa-credit-card"></i></div>
+          <div class="option-details">
+            <h4>الدفع الإلكتروني</h4>
+            <p>فيزا - ماستر كارد - فوري</p>
+          </div>
+          <div class="option-check"><i class="fas fa-check-circle"></i></div>
+        </label>
+      </div>
+    </div>
+    <!-- ملخص سريع -->
+    <div class="quick-summary-card">
+      <div class="summary-title"><i class="fas fa-receipt"></i> ملخص سريع</div>
+      <div class="summary-row">
+        <span>المجموع:</span>
+        <span>6250 ج.م</span>
+      </div>
+      <div class="summary-actions">
+        <button (click)="goBackToCart()">العودة للسلة</button>
+        <button class="primary" (click)="goToDelivery()">المتابعة للتوصيل</button>
+      </div>
+    </div>
+  </div>
+
+
+
+  <!-- Step 3: Delivery -->
+  <div *ngIf="step === 3" class="step-content delivery-step">
+    <div class="step-header">
+      <div class="header-icon">
+        <i class="fas fa-truck"></i>
+      </div>
+      <h2>بيانات التوصيل</h2>
+      <p>أدخل عنوانك لإتمام الطلب</p>
+    </div>
+
+    <form [formGroup]="deliveryForm" (ngSubmit)="submitOrder()" class="delivery-form">
+      <div class="form-grid">
+        <div class="form-group">
+          <label>الاسم كاملاً *</label>
+          <div class="input-wrapper">
+            <i class="fas fa-user"></i>
+            <input type="text" formControlName="customerName" placeholder="أدخل اسمك الكامل">
+          </div>
+        </div>
+        <div class="form-group">
+          <label>رقم الهاتف *</label>
+          <div class="input-wrapper">
+            <i class="fas fa-phone"></i>
+            <input type="tel" formControlName="phone" placeholder="01xxxxxxxxx">
+          </div>
+        </div>
+        <div class="form-group">
+          <label>المحافظة *</label>
+          <div class="input-wrapper">
+            <i class="fas fa-map-marker-alt"></i>
+            <select formControlName="governorate">
+              <option value="">اختر المحافظة</option>
+              <option *ngFor="let gov of governorates" [value]="gov">{{ gov }}</option>
+            </select>
+          </div>
+        </div>
+        <div class="form-group">
+          <label>المدينة *</label>
+          <div class="input-wrapper">
+            <i class="fas fa-city"></i>
+            <input type="text" formControlName="city" placeholder="أدخل المدينة">
+          </div>
+        </div>
+        <div class="form-group full-width">
+          <label>العنوان التفصيلي *</label>
+          <div class="input-wrapper">
+            <i class="fas fa-home"></i>
+            <textarea formControlName="address" rows="3" placeholder="الشارع، رقم المبنى، الدور، الشقة..."></textarea>
+          </div>
+        </div>
+      </div>
+      <div class="delivery-info-card">
+        <h4><i class="fas fa-info-circle"></i> معلومات التوصيل</h4>
+        <ul>
+          <li>التوصيل خلال 2-3 أيام عمل</li>
+          <li>رسوم التوصيل 50 جنيه فقط</li>
+          <li>فحص القطعة قبل الاستلام</li>
+          <li>إمكانية الإرجاع خلال 7 أيام</li>
+        </ul>
+      </div>
+      <div class="final-summary">
+        <div class="summary-header">
+          <h4>الطلب النهائي</h4>
+        </div>
+        <div class="items-preview">
+          <div *ngFor="let item of cartItems" class="preview-item">
+            <ng-container *ngIf="item.carPart as part">
+              <img *ngIf="part.image" [src]="part.image" [alt]="part.name">
+              <div class="preview-details">
+                <span>{{ part.name }}</span>
+                <span>{{ item.quantity }}x</span>
+              </div>
+              <span class="preview-price">{{ part.priceAfterDiscount * item.quantity }} ج.م</span>
+            </ng-container>
+          </div>
+        </div>
+        <div class="final-total">
+          <span>المجموع النهائي:</span>
+          <span>{{ getTotalPrice() + 50 }} ج.م</span>
+        </div>
+      </div>
+      <div class="step-actions">
+        <button type="button" class="btn-modern secondary" (click)="previousStep()">
+          <i class="fas fa-arrow-right"></i>
+          العودة للدفع
+        </button>
+        <button type="submit" class="btn-modern success" [disabled]="deliveryForm.invalid">
+          <i class="fas fa-check"></i>
+          تأكيد الطلب
+        </button>
+      </div>
+    </form>
+  </div>
+</div>

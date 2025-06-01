@@ -1,78 +1,198 @@
-import { Component, OnInit, AfterViewInit } from '@angular/core';
-declare var Swiper: any;
+import { Component, OnInit, AfterViewInit, OnDestroy } from '@angular/core';
+import Swiper from 'swiper';
+import { Navigation, Pagination, Autoplay, EffectCoverflow } from 'swiper/modules';
+
+Swiper.use([Navigation, Pagination, Autoplay, EffectCoverflow]);
+
+interface CarPart {
+  id: number;
+  name: string;
+  brand: string;
+  price: number;
+  originalPrice?: number;
+  image: string;
+  category: string;
+  rating: number;
+  reviews: number;
+  isNew?: boolean;
+  discount?: number;
+  inStock: boolean;
+}
 
 @Component({
   selector: 'app-part-preview',
   templateUrl: './part-preview.component.html',
   styleUrls: ['./part-preview.component.scss']
 })
-export class PartPreviewComponent implements OnInit, AfterViewInit {
+export class PartPreviewComponent implements OnInit, AfterViewInit, OnDestroy {
+  private swiper: Swiper | null = null;
 
-  parts: any[] = [];
+  latestParts: any[] = [
+    {
+      id: 1,
+      name: 'فلتر هواء عالي الأداء',
+      brand: 'K&N',
+      origin: 'أمريكي',
+      price: 450,
+      originalPrice: 520,
+      image: 'assets/images/image_100_100.png',
+      category: 'فلاتر',
+      sellerId: 1,
+      sellerName: 'مركز الهواء',
+      description: 'فلتر هواء يمنح سيارتك أداءً أفضل ويوفر استهلاك الوقود بشكل ملحوظ.',
+      isNew: true,
+      discount: 13,
+      inStock: true
+    },
+    {
+      id: 2,
+      name: 'فرامل سيراميك متقدمة',
+      brand: 'Brembo',
+      origin: 'إيطالي',
+      price: 1200,
+      originalPrice: 1450,
+      image: 'assets/images/image_100_100.png',
+      category: 'فرامل',
+      sellerId: 2,
+      sellerName: 'ورشة السلام',
+      description: 'فرامل عالية الأداء توفر قوة توقف مثالية وتقليل الحرارة والضوضاء.',
+      discount: 17,
+      inStock: true
+    },
+    {
+      id: 3,
+      name: 'مصابيح LED للمقدمة',
+      brand: 'Philips',
+      origin: 'هولندي',
+      price: 280,
+      image: 'assets/images/image_100_100.png',
+      category: 'إضاءة',
+      sellerId: 3,
+      sellerName: 'الإضاءة الحديثة',
+      description: 'مصابيح أمامية LED بإضاءة قوية ولون أبيض نقي لعمر افتراضي طويل.',
+      isNew: true,
+      inStock: false
+    },
+    {
+      id: 4,
+      name: 'زيت محرك سينثتيك 5W-30',
+      brand: 'Mobil 1',
+      origin: 'أمريكي',
+      price: 65,
+      originalPrice: 80,
+      image: 'assets/images/image_100_100.png',
+      category: 'زيوت',
+      sellerId: 4,
+      sellerName: 'الزيوت الأصلية',
+      description: 'زيت صناعي يضمن أداء فائق للمحرك في درجات حرارة عالية ومنخفضة.',
+      discount: 19,
+      inStock: true
+    },
+    {
+      id: 5,
+      name: 'إطارات ميشلان Pilot Sport',
+      brand: 'Michelin',
+      origin: 'فرنسي',
+      price: 950,
+      image: 'assets/images/image_100_100.png',
+      category: 'إطارات',
+      sellerId: 5,
+      sellerName: 'تاير بلس',
+      description: 'إطارات رياضية بمستوى تماسك عالي وثبات فائق عند السرعات العالية.',
+      inStock: true
+    },
+    {
+      id: 6,
+      name: 'بطارية سيارة AGM عالية الأداء',
+      brand: 'Bosch',
+      origin: 'ألماني',
+      price: 340,
+      originalPrice: 400,
+      image: 'assets/images/image_100_100.png',
+      category: 'كهرباء',
+      sellerId: 6,
+      sellerName: 'كهرباء السيارات',
+      description: 'بطارية AGM قوية تدوم طويلاً وتدعم الأنظمة الكهربائية الحديثة بكفاءة.',
+      discount: 15,
+      inStock: true
+    }
+  ];
 
-  constructor() { }
 
-  ngOnInit(): void {
-    this.parts = [
-      { id: 1, name: 'فلتر زيت تويوتا', price: 150, imageUrl: 'assets/images/image100_100.png' },
-      { id: 2, name: 'بطارية AC Delco', price: 950, imageUrl: 'assets/images/image100_100.png' },
-      { id: 3, name: 'مساعد أمامي هونداي', price: 1200, imageUrl: 'assets/images/image100_100.png' },
-      { id: 4, name: 'ردياتير نيسان صني', price: 800, imageUrl: 'assets/images/image100_100.png' },
-      { id: 5, name: 'لمبة أمامية LED', price: 250, imageUrl: 'assets/images/image100_100.png' },
-      { id: 6, name: 'طقم تيل فرامل أمامي', price: 400, imageUrl: 'assets/images/image100_100.png' },
-      { id: 7, name: 'دينامو شحن هونداي', price: 1300, imageUrl: 'assets/images/image100_100.png' },
-      { id: 8, name: 'طقم مساعدين خلفي نيسان', price: 1450, imageUrl: 'assets/images/image100_100.png' },
-      { id: 9, name: 'كمبروسر تكييف كيا سيراتو', price: 2800, imageUrl: 'assets/images/image100_100.png' },
-      { id: 10, name: 'زيت محرك Mobile 1', price: 350, imageUrl: 'assets/images/image100_100.png' },
-      { id: 11, name: 'فلتر هواء تويوتا', price: 180, imageUrl: 'assets/images/image100_100.png' },
-      { id: 12, name: 'بطارية جافة فارتا', price: 1000, imageUrl: 'assets/images/image100_100.png' },
-      { id: 13, name: 'طقم سيور كيا سبورتاج', price: 850, imageUrl: 'assets/images/image100_100.png' },
-      { id: 14, name: 'رادياتير مياه هونداي', price: 950, imageUrl: 'assets/images/image100_100.png' },
-      { id: 15, name: 'طقم لمبات زينون', price: 500, imageUrl: 'assets/images/image100_100.png' },
-      { id: 16, name: 'فلتر بنزين أصلي', price: 300, imageUrl: 'assets/images/image100_100.png' },
-      { id: 17, name: 'مراية جانبية نيسان', price: 600, imageUrl: 'assets/images/image100_100.png' },
-      { id: 18, name: 'طقم بوجيهات بوش', price: 700, imageUrl: 'assets/images/image100_100.png' },
-      { id: 19, name: 'كمبروسر تبريد أصلي', price: 3200, imageUrl: 'assets/images/image100_100.png' },
-      { id: 20, name: 'مساعدين أمامي ميتسوبيشي', price: 1500, imageUrl: 'assets/images/image100_100.png' }
-    ];
-  }
+
+
+  ngOnInit(): void { }
 
   ngAfterViewInit(): void {
-    new Swiper('.parts-preview-swiper', {
-      slidesPerView: 4,
-      spaceBetween: 20,
-      loop: true,
-      autoplay: {
-        delay: 4000,
-        disableOnInteraction: false,
-      },
-      navigation: {
-        nextEl: '.swiper-button-next',
-        prevEl: '.swiper-button-prev',
-      },
-      pagination: {
-        el: '.swiper-pagination',
-        clickable: true,
-      },
-      rtl: true,
-      breakpoints: {
-        320: {
-          slidesPerView: 1,
-          spaceBetween: 10,
+    this.initializeSwiper();
+  }
+
+  ngOnDestroy(): void {
+    if (this.swiper) {
+      this.swiper.destroy(true, true);
+    }
+  }
+
+  // part-preview.component.ts
+  // تحديث لضمان عرض الشرائح بترتيب صحيح عبر تعطيل centeredSlides
+  getWhatsappLink(partName: string): string {
+    const message = `استفسار عن المنتج: ${partName}`;
+    return `https://wa.me/?text=${encodeURIComponent(message)}`;
+  }
+
+
+  private initializeSwiper(): void {
+    const swiperElement = document.querySelector('.part-swiper');
+    if (swiperElement) {
+      this.swiper = new Swiper(swiperElement as HTMLElement, {
+        slidesPerView: 3, // عدد الكروت الظاهرة على الشاشة
+        spaceBetween: 30,
+        loop: true,
+        centeredSlides: false,
+        speed: 500,
+        autoplay: {
+          delay: 4000,
+          disableOnInteraction: false,
+          pauseOnMouseEnter: true
         },
-        640: {
-          slidesPerView: 2,
-          spaceBetween: 15,
+        pagination: {
+          el: '.swiper-pagination',
+          clickable: true,
+          dynamicBullets: true
         },
-        768: {
-          slidesPerView: 3,
-          spaceBetween: 20,
+        navigation: {
+          nextEl: '.swiper-button-next',
+          prevEl: '.swiper-button-prev'
         },
-        1024: {
-          slidesPerView: 4,
-          spaceBetween: 25,
+        breakpoints: {
+          320: { slidesPerView: 1, spaceBetween: 15 },
+          768: { slidesPerView: 2, spaceBetween: 20 },
+          1024: { slidesPerView: 3, spaceBetween: 30 },
+          1400: { slidesPerView: 4, spaceBetween: 30 }
         }
-      }
-    });
+      });
+    }
+  }
+
+
+
+
+
+  onPartClick(part: CarPart): void {
+    console.log('Part clicked:', part);
+  }
+
+  addToCart(part: CarPart, event: Event): void {
+    event.stopPropagation();
+    console.log('Added to cart:', part);
+  }
+
+  addToWishlist(part: CarPart, event: Event): void {
+    event.stopPropagation();
+    console.log('Added to wishlist:', part);
+  }
+
+  trackByPartId(index: number, part: CarPart): number {
+    return part.id;
   }
 }

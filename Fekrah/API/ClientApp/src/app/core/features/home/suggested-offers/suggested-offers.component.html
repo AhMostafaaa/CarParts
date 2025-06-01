@@ -1,19 +1,17 @@
 <div class="suggested-offers-section">
   <h2 class="section-title">مقترحات لك</h2>
 
-  <div class="swiper-container suggested-swiper">
+  <div class="swiper-container suggested-offers-swiper" dir="ltr">
     <div class="swiper-wrapper">
-      <div class="swiper-slide" *ngFor="let offer of suggestedOffers">
-        <div class="offer-card">
-          <div class="image-container">
-            <img [src]="offer.imageUrl" alt="{{ offer.name }}">
-          </div>
-          <h3>{{ offer.name }}</h3>
-          <p class="price">{{ offer.price }} جنيه</p>
-        </div>
+      <div class="swiper-slide" *ngFor="let part of carPartsSample; trackBy: trackByPartId">
+        <app-card
+          [part]="part"
+          (addToCart)="onAddToCart($event)"
+          (favoriteToggled)="onFavoriteToggled($event)">
+        </app-card>
       </div>
     </div>
 
-  
+    <div class="swiper-pagination"></div>
   </div>
 </div>

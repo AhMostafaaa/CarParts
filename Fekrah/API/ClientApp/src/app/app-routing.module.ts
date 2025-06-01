@@ -7,10 +7,14 @@ const routes: Routes = [
   { path: 'home', loadChildren: () => import('./core/features/home/home.module').then(m => m.HomeModule) },
   { path: 'parts', loadChildren: () => import('./core/features/parts/parts.module').then(m => m.PartsModule) },
   { path: 'auth', loadChildren: () => import('./core/features/auth/auth.module').then(m => m.AuthModule) },
-  { path: 'seller', loadChildren: () => import('./core/features/seller/seller.module').then(m => m.SellerModule) },
   { path: 'admin', loadChildren: () => import('./core/features/admin/admin.module').then(m => m.AdminModule) },
   { path: 'category', loadChildren: () => import('./core/features/category/category.module').then(m => m.CategoryModule) },
+  { path: 'addCart', loadChildren: () => import('./core/add-to-cart/add-to-cart.module').then(m => m.AddToCartModule) },
+  { path: 'footer', loadChildren: () => import('./Shared/layout/footer/footer.module').then(m => m.FooterModule) },
   { path: 'category/:name', component: CategoryPageComponent },
+
+  { path: 'seller', loadChildren: () => import('./core/features/seller/seller-page.module').then(m => m.SellerModule) },
+
   // أي مسارات تانية
 
 
@@ -18,7 +22,7 @@ const routes: Routes = [
 ];
 
 @NgModule({
-  imports: [RouterModule.forRoot(routes)],
+  imports: [RouterModule.forRoot(routes, { scrollPositionRestoration: 'enabled' })],
   exports: [RouterModule]
 })
 export class AppRoutingModule { }

@@ -1,28 +1,28 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\tafeel-pc4\\Source\\Repos\\CarParts\\Fekrah\\Data\\Data.csproj": {}
+    "D:\\Projects\\CarParts\\Fekrah\\Data\\Data.csproj": {}
   },
   "projects": {
-    "C:\\Users\\tafeel-pc4\\Source\\Repos\\CarParts\\Fekrah\\Data\\Data.csproj": {
+    "D:\\Projects\\CarParts\\Fekrah\\Data\\Data.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\tafeel-pc4\\Source\\Repos\\CarParts\\Fekrah\\Data\\Data.csproj",
+        "projectUniqueName": "D:\\Projects\\CarParts\\Fekrah\\Data\\Data.csproj",
         "projectName": "Data",
-        "projectPath": "C:\\Users\\tafeel-pc4\\Source\\Repos\\CarParts\\Fekrah\\Data\\Data.csproj",
-        "packagesPath": "C:\\Users\\tafeel-pc4\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\tafeel-pc4\\Source\\Repos\\CarParts\\Fekrah\\Data\\obj\\",
+        "projectPath": "D:\\Projects\\CarParts\\Fekrah\\Data\\Data.csproj",
+        "packagesPath": "C:\\Users\\BAYAA\\.nuget\\packages\\",
+        "outputPath": "D:\\Projects\\CarParts\\Fekrah\\Data\\obj\\",
         "projectStyle": "PackageReference",
         "fallbackFolders": [
           "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
         ],
         "configFilePaths": [
-          "C:\\Users\\tafeel-pc4\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Users\\BAYAA\\AppData\\Roaming\\NuGet\\NuGet.Config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
         ],
         "originalTargetFrameworks": [
-          "net7.0"
+          "net8.0"
         ],
         "sources": {
           "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
@@ -30,8 +30,8 @@
           "https://api.nuget.org/v3/index.json": {}
         },
         "frameworks": {
-          "net7.0": {
-            "targetAlias": "net7.0",
+          "net8.0": {
+            "targetAlias": "net8.0",
             "projectReferences": {}
           }
         },
@@ -39,30 +39,11 @@
           "warnAsError": [
             "NU1605"
           ]
-        },
-        "restoreAuditProperties": {
-          "enableAudit": "true",
-          "auditLevel": "low",
-          "auditMode": "direct"
         }
       },
       "frameworks": {
-        "net7.0": {
-          "targetAlias": "net7.0",
-          "dependencies": {
-            "Microsoft.EntityFrameworkCore": {
-              "target": "Package",
-              "version": "[7.0.0, )"
-            },
-            "Microsoft.EntityFrameworkCore.Relational": {
-              "target": "Package",
-              "version": "[7.0.0, )"
-            },
-            "Microsoft.EntityFrameworkCore.SqlServer": {
-              "target": "Package",
-              "version": "[7.0.0, )"
-            }
-          },
+        "net8.0": {
+          "targetAlias": "net8.0",
           "imports": [
             "net461",
             "net462",
@@ -74,12 +55,7 @@
           ],
           "assetTargetFallback": true,
           "warn": true,
-          "frameworkReferences": {
-            "Microsoft.NETCore.App": {
-              "privateAssets": "all"
-            }
-          },
-          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\8.0.404\\RuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\7.0.401\\RuntimeIdentifierGraph.json"
         }
       }
     }

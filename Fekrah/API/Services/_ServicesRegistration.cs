@@ -1,7 +1,7 @@
 ﻿using API.Services;
 using Microsoft.AspNetCore.Mvc;
 
-namespace Moia.Services
+namespace Api.Services
 {
     public static partial class ServicesRegistration
     {

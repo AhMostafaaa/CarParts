@@ -1,60 +1,20 @@
 <div class="home-page">
-
-  <!-- ✅ زرار فتح الفلتر ثابت -->
-  <button class="filter-open-button" [class.shifted]="filtersOpened" (click)="toggleFilters()" *ngIf="!filtersOpened">
-     <i class="fas fa-sliders-h"></i>a
-  </button>
-
-
   <div class="page-layout">
-
-    <!-- ✅ Sidebar الفلتر -->
-    <aside class="filters-sidebar" [class.open]="filtersOpened">
-
-      <!-- ✅ اسم الموقع داخل الفلتر -->
-      <div class="filter-header">
-        <div class="filter-site-name">قطع غيار</div>
-
-        <!-- ✅ زرار الغلق بجانب الاسم بشكل سليم -->
-        <button class="filter-toggle-inside" (click)="toggleFilters()">
-          X<i class="fas fa-times"></i>
-        </button>
-      </div>
-
-
-      <h4>تصفية حسب:</h4>
-
-      <div class="filter-group">
-        <label>الحالة:</label>
-        <select>
-          <option>الكل</option>
-          <option>جديد</option>
-          <option>مستعمل</option>
-        </select>
-      </div>
-
-      <div class="filter-group">
-        <label>السعر:</label>
-        <select>
-          <option>الكل</option>
-          <option>أقل من 500</option>
-          <option>أكثر من 500</option>
-        </select>
-      </div>
-
-    </aside>
-
     <!-- ✅ المحتوى الرئيسي -->
     <section class="parts-section" [class.shrink]="filtersOpened">
+      <!-- <a routerLink="home/offers" class="promo-strip">
+        🔥 خصومات صيفية تصل إلى 50% على جميع قطع الغيار! 🔥
+      </a> -->
+      <app-categories></app-categories>
 
       <app-banner></app-banner>
-      <app-categories></app-categories>
-      <app-offers></app-offers>
-      <app-part-preview></app-part-preview>
-      <app-suggested-offers></app-suggested-offers>
+      <app-featured-sellers id="stores-section"></app-featured-sellers>
+      <app-car-brands id="brands-section"></app-car-brands>
 
+      <app-offers id="offers-section"></app-offers>
+      <app-part-preview id="latest-section"></app-part-preview>
+      <app-suggested-offers id="suggested-offers"></app-suggested-offers>
+      <app-part-types id="part-types"></app-part-types>
     </section>
-
   </div>
-
 </div>

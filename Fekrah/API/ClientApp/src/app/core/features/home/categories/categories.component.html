@@ -1,21 +1,14 @@
-<div class="categories-section">
-  <h2 class="section-title">التصنيفات</h2>
+<div class="categories-scroll-wrapper">
+  <button class="scroll-btn prev" (click)="scrollLeft()">‹</button>
 
-  <div class="swiper-container">
-    <div class="swiper-wrapper">
-      <div class="swiper-slide" *ngFor="let category of categories">
-        <div class="category-card" [routerLink]="['/category', category.name]">
-          <img [src]="category.image" alt="{{ category.name }}">
-          <p>{{ category.name }}</p>
-        </div>
-      </div>
-    </div>
+  <div #scrollContainer class="categories-scroll-container">
+    <a class="category-tab" *ngFor="let category of categories" [routerLink]="['/category', category.name]"
+      routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }">
+      {{ category.name }}
+    </a>
 
-    <!-- أزرار التنقل -->
-    <div class="swiper-button-next"></div>
-    <div class="swiper-button-prev"></div>
 
-    <!-- النقاط -->
-    <div class="swiper-pagination"></div>
   </div>
+
+  <button class="scroll-btn next" (click)="scrollRight()">›</button>
 </div>

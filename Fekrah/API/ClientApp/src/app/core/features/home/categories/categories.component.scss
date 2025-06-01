@@ -1,101 +1,74 @@
-.categories-section {
-  margin: 40px 20px;
-  background: linear-gradient(to right, #f8fbff, #e6f0fa); /* ✅ تدرج ناعم بدلاً من رمادي ممل */
-  padding: 50px 30px;
+.categories-scroll-wrapper {
+  display: flex;
+  align-items: center;
+  position: relative;
+  padding: 5px 0;
+  background: #fffaf4; // تدرج فاتح
+  border-bottom: 1px solid #e0e0e0;
+  overflow: hidden;
   border-radius: 12px;
-  margin-bottom: 30px;
-  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08); /* ✅ ظل أنعم وأعمق شوية */
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.03);
 
-  .section-title {
-    font-size: 30px;
-    margin-bottom: 30px;
-    color: #0d2c54; /* ✅ لون أزرق داكن أنيق */
-    text-align: center;
-    font-weight: bold;
-  }
-
-  .swiper-container {
-    margin-top: 20px;
-  }
-
-  .swiper-wrapper {
-    display: flex;
-    align-items: center;
-  }
-
-  .swiper-slide {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    height: auto;
-  }
-
-  .category-card {
-    width: 110px;
-    height: 150px;
-    background: white;
+  .scroll-btn {
+    background: #f57c00;
+    color: #fff;
     border: none;
-    border-radius: 10px;
+    padding: 8px 14px;
+    font-size: 22px;
+    cursor: pointer;
+    border-radius: 6px;
+    margin: 0 4px;
+    transition: background 0.2s ease;
+
+    &:hover {
+      background: #ef6c00;
+    }
+  }
+
+  .categories-scroll-container {
+    display: flex;
+    overflow-x: auto;
+    flex: 1;
+    gap: 12px;
+    padding: 0 12px;
+    scroll-behavior: smooth;
+
+    &::-webkit-scrollbar {
+      display: none;
+    }
+  }
+
+  .category-tab {
+    flex: 0 0 auto;
+    min-width: 120px;
+    padding: 10px 18px;
+    background: linear-gradient(135deg, #fff8f0, #fff5eb); // تدرج فاتح
+    color: #000000;
+    font-weight: bold;
     text-align: center;
-    padding: 15px 10px;
-    transition: all 0.3s ease;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.08); /* ✅ ظل خفيف محترم */
-
-    img {
-      width: 65px;
-      height: 65px;
-      margin-bottom: 12px;
-      object-fit: contain;
-    }
-
-    p {
-      font-size: 14px;
-      font-weight: bold;
-      color: #2a2a2a;
-      margin: 0;
-    }
-
-    &:hover {
-      transform: translateY(-8px) scale(1.05); /* ✅ حركة لطيفة عند الهوفر */
-      box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
-    }
-  }
-
-  .swiper-button-next,
-  .swiper-button-prev {
-    position: absolute;
-    top: 50%;
-    width: 32px;
-    height: 32px;
-    background: #0d2c54; /* ✅ لون ثابت للأزرار */
-    color: white;
-    border-radius: 50%;
-    transform: translateY(-50%);
-    z-index: 10;
+    border-radius: 8px;
+    text-decoration: none;
     font-size: 18px;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    transition: background 0.3s;
+    border: 1px solid #fbc49b;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+    transition: all 0.3s ease;
 
     &:hover {
-      background: #febd69; /* ✅ يتغير لبرتقالي فاتح عند الهوفر */
+      background: linear-gradient(
+        135deg,
+        #ffd8a6,
+        #f57c00
+      ); // تدرج غامق عند Hover
+      color: #ffffff;
+      box-shadow: 0 5px 12px rgba(0, 0, 0, 0.12);
+      border-color: #f57c00;
     }
-  }
 
-  .swiper-button-next {
-    left: 0px;
-  }
-
-  .swiper-button-prev {
-    left: 0px;
-  }
-
-  .swiper-pagination {
-    bottom: 10px !important;
+    &.active {
+      background: linear-gradient(135deg, #f57c00, #ef6c00);
+      color: #ffffff;
+      border-color: #f57c00;
+      box-shadow: 0 6px 14px rgba(0, 0, 0, 0.15);
+    }
   }
 }

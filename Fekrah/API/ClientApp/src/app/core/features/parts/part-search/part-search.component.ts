@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { PartViewModel, SwaggerClient } from '../../../Shared/Services/Swagger/SwaggerClient.service';
+import { PartViewModel, SwaggerClient } from '../../../../Shared/Services/Swagger/SwaggerClient.service';
 
 @Component({
   selector: 'app-part-search',
