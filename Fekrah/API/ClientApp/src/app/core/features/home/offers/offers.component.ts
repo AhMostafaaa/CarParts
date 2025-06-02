@@ -23,10 +23,11 @@ export interface Offer {
   discount?: number;
   condition: 'New' | 'Used' | 'Refurbished';
   sellerName: string;
-  sellerId: string;
+  sellerId: number;
   description: string;
   imageUrl: string;
   category?: string;
+  categoryId?: number;
   rating?: number;
   reviewsCount?: number;
   inStock?: boolean;
@@ -93,10 +94,11 @@ export class OffersComponent implements OnInit, AfterViewInit, OnDestroy {
         discount: 16,
         condition: 'New',
         sellerName: 'متجر الإنارة المتطورة',
-        sellerId: '4',
+        sellerId: 4,
         description: 'كشاف LED عالي الكفاءة من هونداي يوفر إضاءة قوية وواضحة للقيادة الآمنة في جميع الأوقات.',
         imageUrl: 'assets/images/image_100_100.png',
         category: 'إضاءة',
+        categoryId: 4,
         rating: 4.6,
         reviewsCount: 89,
         inStock: true,
@@ -110,10 +112,11 @@ export class OffersComponent implements OnInit, AfterViewInit, OnDestroy {
         discount: 15,
         condition: 'New',
         sellerName: 'شركة التبريد المتخصصة',
-        sellerId: '5',
+        sellerId: 4,
         description: 'ردياتير تبريد أصلي من نيسان مصنوع من أجود المواد لضمان تحكم مثالي في درجة حرارة المحرك.',
         imageUrl: 'assets/images/image_100_100.png',
         category: 'تبريد',
+        categoryId: 4,
         rating: 4.8,
         reviewsCount: 167,
         inStock: true,
@@ -127,10 +130,11 @@ export class OffersComponent implements OnInit, AfterViewInit, OnDestroy {
         discount: 15,
         condition: 'New',
         sellerName: 'ورشة الجودة المعتمدة',
-        sellerId: '6',
+        sellerId: 4,
         description: 'طرمبة بنزين قوية ومتينة تضمن ضخ الوقود بكفاءة عالية وثبات تام لجميع أنواع السيارات.',
         imageUrl:'assets/images/image_100_100.png',
         category: 'وقود',
+        categoryId: 4,
         rating: 4.5,
         reviewsCount: 112,
         inStock: true,
@@ -144,10 +148,11 @@ export class OffersComponent implements OnInit, AfterViewInit, OnDestroy {
         discount: 30,
         condition: 'New',
         sellerName: 'التبريد المركزي المحدود',
-        sellerId: '7',
+        sellerId: 4,
         description: 'كمبروسر تكييف عالي الأداء يوفر تبريداً فائقاً وكفاءة في استهلاك الطاقة حتى في أقسى الظروف.',
         imageUrl: 'assets/images/image_100_100.png',
         category: 'تكييف',
+        categoryId: 4,
         rating: 4.9,
         reviewsCount: 234,
         inStock: true,
@@ -161,10 +166,11 @@ export class OffersComponent implements OnInit, AfterViewInit, OnDestroy {
         discount: 18,
         condition: 'New',
         sellerName: 'محل زيوت السيارات الممتاز',
-        sellerId: '8',
+        sellerId: 4,
         description: 'زيت شل هيليكس الأصلي يوفر حماية فائقة للمحرك وأداءً استثنائياً في جميع ظروف القيادة.',
         imageUrl: 'assets/images/image_100_100.png',
         category: 'زيوت',
+        categoryId: 4,
         rating: 4.8,
         reviewsCount: 189,
         inStock: true,
@@ -178,10 +184,11 @@ export class OffersComponent implements OnInit, AfterViewInit, OnDestroy {
         discount: 14,
         condition: 'New',
         sellerName: 'العفشة الأصلية المعتمدة',
-        sellerId: '9',
+        sellerId: 4,
         description: 'مساعدين أمامي أصلي من تويوتا يوفر راحة قصوى وثبات مثالي أثناء القيادة على جميع الطرق.',
         imageUrl: 'assets/images/image_100_100.png',
         category: 'تعليق',
+        categoryId: 4,
         rating: 4.7,
         reviewsCount: 143,
         inStock: true,
@@ -195,10 +202,11 @@ export class OffersComponent implements OnInit, AfterViewInit, OnDestroy {
         discount: 11,
         condition: 'Used',
         sellerName: 'الورشة الإلكترونية المتقدمة',
-        sellerId: '10',
+        sellerId: 4,
         description: 'وحدة تحكم إلكترونية شاملة ومتطورة لجميع أنظمة السيارة مع ضمان الجودة والأداء.',
         imageUrl: 'assets/images/image_100_100.png',
         category: 'إلكترونيات',
+        categoryId: 4,
         rating: 4.4,
         reviewsCount: 67,
         inStock: false,
