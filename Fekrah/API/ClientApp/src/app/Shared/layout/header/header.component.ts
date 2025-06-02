@@ -33,7 +33,7 @@ export class HeaderComponent implements OnInit {
   rightMenuItems = [
     // { label: 'من نحن', route: '/AboutUs', icon: 'fas fa-info-circle' },
     // { label: 'اتصل بنا', route: '/contact-us', icon: 'fas fa-envelope' },
-    { label: 'لوحة التحكم', route: '/seller/dashboard', icon: 'fas fa-user-cog' }
+    { label: 'لوحة التحكم', route: '/dashboard', icon: 'fas fa-user-cog' }
   ];
 
   // قائمة التنقل الرئيسية

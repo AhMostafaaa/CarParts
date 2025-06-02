@@ -1,0 +1,329 @@
+<!-- quick-add-form.component.html -->
+<div class="quick-add-form">
+    <div class="form-header">
+      <h2>إضافة قطعة جديدة</h2>
+      <button class="btn-close" (click)="onCancel()">
+        <i class="fas fa-times"></i>
+      </button>
+    </div>
+  
+    <form [formGroup]="partForm" (ngSubmit)="onSubmit()" class="form-content">
+      
+      <!-- Quick Templates -->
+      <div class="quick-templates" *ngIf="!useTemplate">
+        <h3>قوالب سريعة</h3>
+        <div class="template-grid">
+          <button 
+            type="button"
+            *ngFor="let template of quickTemplates" 
+            class="template-btn"
+            (click)="applyTemplate(template)">
+            <i [class]="template.icon"></i>
+            <span>{{ template.name }}</span>
+          </button>
+        </div>
+        <button type="button" class="btn-link" (click)="useTemplate = true">
+          أو املأ البيانات يدوياً
+        </button>
+      </div>
+  
+      <!-- Manual Form -->
+      <div class="manual-form" *ngIf="useTemplate">
+        
+        <!-- Part Basic Info -->
+        <div class="form-section">
+          <h3>معلومات القطعة</h3>
+          <div class="form-row">
+            <div class="form-group">
+              <label>اسم القطعة *</label>
+              <input 
+                type="text" 
+                formControlName="name"
+                placeholder="مثال: فرامل أمامية"
+                class="form-control"
+                #nameInput>
+              <div class="suggestions" *ngIf="nameSuggestions.length > 0">
+                <button 
+                  type="button"
+                  *ngFor="let suggestion of nameSuggestions"
+                  class="suggestion-item"
+                  (click)="selectSuggestion('name', suggestion)">
+                  {{ suggestion }}
+                </button>
+              </div>
+            </div>
+            
+            <div class="form-group">
+              <label>وصف إضافي</label>
+              <input 
+                type="text" 
+                formControlName="subtitle"
+                placeholder="وصف قصير أو ملاحظات"
+                class="form-control">
+            </div>
+          </div>
+  
+          <div class="form-row">
+            <div class="form-group">
+              <label>الحالة *</label>
+              <select formControlName="condition" class="form-control">
+                <option value="جديد">جديد</option>
+                <option value="مستعمل">مستعمل</option>
+              </select>
+            </div>
+            
+            <div class="form-group">
+              <label>الجودة *</label>
+              <select formControlName="grade" class="form-control">
+                <option value="فرز أول">فرز أول</option>
+                <option value="فرز تاني">فرز تاني</option>
+              </select>
+            </div>
+            
+            <div class="form-group">
+              <label>النوع *</label>
+              <select formControlName="partType" class="form-control">
+                <option value="ياباني">ياباني</option>
+                <option value="كوري">كوري</option>
+                <option value="صيني">صيني</option>
+              </select>
+            </div>
+          </div>
+        </div>
+  
+        <!-- Car Info -->
+        <div class="form-section">
+          <h3>معلومات السيارة</h3>
+          <div class="form-row">
+            <div class="form-group">
+              <label>الماركة *</label>
+              <input 
+                type="text" 
+                formControlName="carBrand"
+                placeholder="مثال: تويوتا"
+                class="form-control"
+                (input)="onBrandInput($event)">
+              <div class="suggestions" *ngIf="brandSuggestions.length > 0">
+                <button 
+                  type="button"
+                  *ngFor="let suggestion of brandSuggestions"
+                  class="suggestion-item"
+                  (click)="selectSuggestion('carBrand', suggestion)">
+                  {{ suggestion }}
+                </button>
+              </div>
+            </div>
+            
+            <div class="form-group">
+              <label>الموديل *</label>
+              <input 
+                type="text" 
+                formControlName="carModel"
+                placeholder="مثال: كورولا"
+                class="form-control"
+                (input)="onModelInput($event)">
+              <div class="suggestions" *ngIf="modelSuggestions.length > 0">
+                <button 
+                  type="button"
+                  *ngFor="let suggestion of modelSuggestions"
+                  class="suggestion-item"
+                  (click)="selectSuggestion('carModel', suggestion)">
+                  {{ suggestion }}
+                </button>
+              </div>
+            </div>
+            
+            <div class="form-group">
+              <label>السنة *</label>
+              <select formControlName="carYear" class="form-control">
+                <option value="">اختر السنة</option>
+                <option *ngFor="let year of availableYears" [value]="year">{{ year }}</option>
+              </select>
+            </div>
+          </div>
+        </div>
+  
+        <!-- Store Info -->
+        <div class="form-section">
+          <h3>معلومات المتجر</h3>
+          <div class="form-row">
+            <div class="form-group">
+              <label>اسم المتجر *</label>
+              <input 
+                type="text" 
+                formControlName="storeName"
+                placeholder="اسم المتجر أو الورشة"
+                class="form-control"
+                (input)="onStoreInput($event)">
+              <div class="suggestions" *ngIf="storeSuggestions.length > 0">
+                <button 
+                  type="button"
+                  *ngFor="let suggestion of storeSuggestions"
+                  class="suggestion-item"
+                  (click)="selectSuggestion('storeName', suggestion)">
+                  {{ suggestion }}
+                </button>
+              </div>
+            </div>
+            
+            <div class="form-group">
+              <label>رقم التواصل *</label>
+              <input 
+                type="tel" 
+                formControlName="storePhone"
+                placeholder="01xxxxxxxxx"
+                class="form-control"
+                maxlength="11">
+            </div>
+          </div>
+        </div>
+  
+        <!-- Price Info -->
+        <div class="form-section">
+          <h3>معلومات السعر</h3>
+          <div class="form-row">
+            <div class="form-group">
+              <label>السعر الأصلي *</label>
+              <input 
+                type="number" 
+                formControlName="price"
+                placeholder="0"
+                class="form-control"
+                (input)="calculateDiscount()">
+            </div>
+            
+            <div class="form-group">
+              <label>نسبة الخصم %</label>
+              <input 
+                type="number" 
+                formControlName="discount"
+                placeholder="0"
+                class="form-control"
+                min="0"
+                max="100"
+                (input)="calculateDiscountedPrice()">
+            </div>
+            
+            <div class="form-group">
+              <label>السعر النهائي</label>
+              <input 
+                type="number" 
+                formControlName="priceAfterDiscount"
+                placeholder="0"
+                class="form-control"
+                readonly>
+            </div>
+          </div>
+        </div>
+  
+        <!-- Additional Info -->
+        <div class="form-section">
+          <h3>معلومات إضافية</h3>
+          <div class="form-row">
+            <div class="form-group">
+              <label>بلد المنشأ</label>
+              <input 
+                type="text" 
+                formControlName="origin"
+                placeholder="مثال: اليابان"
+                class="form-control">
+            </div>
+          </div>
+          
+          <div class="form-row">
+            <div class="form-group checkbox-group">
+              <label class="checkbox-label">
+                <input 
+                  type="checkbox" 
+                  formControlName="hasDelivery">
+                <span class="checkmark"></span>
+                يتوفر توصيل
+              </label>
+            </div>
+            
+            <div class="form-group checkbox-group">
+              <label class="checkbox-label">
+                <input 
+                  type="checkbox" 
+                  formControlName="isFavorite">
+                <span class="checkmark"></span>
+                إضافة للمفضلة
+              </label>
+            </div>
+          </div>
+        </div>
+  
+        <!-- Image Upload -->
+        <div class="form-section">
+          <h3>الصور</h3>
+          <div class="image-upload-area" 
+               (dragover)="onDragOver($event)"
+               (dragleave)="onDragLeave($event)"
+               (drop)="onDrop($event)"
+               [class.dragover]="isDragOver">
+            
+            <div class="upload-content" *ngIf="!selectedImages.length">
+              <i class="fas fa-cloud-upload-alt"></i>
+              <p>اسحب الصور هنا أو اضغط للاختيار</p>
+              <button type="button" class="btn btn-outline" (click)="selectImages()">
+                اختيار صور
+              </button>
+            </div>
+            
+            <div class="image-preview" *ngIf="selectedImages.length">
+              <div class="image-item" *ngFor="let image of selectedImages; let i = index">
+                <img [src]="image.preview" [alt]="'صورة ' + (i + 1)">
+                <button type="button" class="btn-remove" (click)="removeImage(i)">
+                  <i class="fas fa-times"></i>
+                </button>
+                <label class="main-image" *ngIf="i === 0">الصورة الرئيسية</label>
+              </div>
+              <button type="button" class="btn btn-outline add-more" (click)="selectImages()">
+                <i class="fas fa-plus"></i>
+                إضافة المزيد
+              </button>
+            </div>
+            
+            <input 
+              type="file" 
+              #fileInput
+              accept="image/*"
+              multiple
+              style="display: none"
+              (change)="onImageSelected($event)">
+          </div>
+        </div>
+      </div>
+  
+      <!-- Form Actions -->
+      <div class="form-actions">
+        <button type="button" class="btn btn-secondary" (click)="onCancel()">
+          إلغاء
+        </button>
+        <button 
+          type="submit" 
+          class="btn btn-primary"
+          [disabled]="partForm.invalid || isSubmitting">
+          <i class="fas fa-spinner fa-spin" *ngIf="isSubmitting"></i>
+          <i class="fas fa-plus" *ngIf="!isSubmitting"></i>
+          {{ isSubmitting ? 'جاري الحفظ...' : 'إضافة القطعة' }}
+        </button>
+        <button 
+          type="button" 
+          class="btn btn-success"
+          (click)="onSubmitAndAddAnother()"
+          [disabled]="partForm.invalid || isSubmitting">
+          <i class="fas fa-plus"></i>
+          حفظ وإضافة أخرى
+        </button>
+      </div>
+    </form>
+    
+    <!-- Keyboard Shortcuts Info -->
+    <div class="shortcuts-info">
+      <small>
+        <strong>اختصارات لوحة المفاتيح:</strong>
+        Ctrl+Enter للحفظ | Ctrl+Shift+Enter للحفظ وإضافة أخرى | Esc للإلغاء
+      </small>
+    </div>
+  </div>

@@ -1,0 +1,239 @@
+<!-- dashboard.component.html -->
+<div class="dashboard-container">
+  <!-- Header -->
+  <header class="dashboard-header">
+    <div class="header-content">
+      <h1>لوحة تحكم قطع الغيار</h1>
+      <div class="header-actions">
+        <button class="btn btn-primary" (click)="openQuickAddModal()">
+          <i class="fas fa-plus"></i>
+          إضافة سريعة
+        </button>
+        <button class="btn btn-secondary" (click)="openBulkImport()">
+          <i class="fas fa-upload"></i>
+          استيراد مجمع
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- Quick Stats -->
+  <div class="stats-grid">
+    <div class="stat-card">
+      <div class="stat-icon">
+        <i class="fas fa-cog"></i>
+      </div>
+      <div class="stat-info">
+        <h3>{{ totalParts }}</h3>
+        <p>إجمالي القطع</p>
+      </div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-icon">
+        <i class="fas fa-star"></i>
+      </div>
+      <div class="stat-info">
+        <h3>{{ favoritePartsCount }}</h3>
+        <p>القطع المفضلة</p>
+      </div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-icon">
+        <i class="fas fa-money-bill"></i>
+      </div>
+      <div class="stat-info">
+        <h3>{{ totalValue | currency:'EGP' }}</h3>
+        <p>إجمالي القيمة</p>
+      </div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-icon">
+        <i class="fas fa-truck"></i>
+      </div>
+      <div class="stat-info">
+        <h3>{{ deliveryAvailableCount }}</h3>
+        <p>متوفر توصيل</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Filters and Search -->
+  <div class="filters-section">
+    <div class="search-box">
+      <i class="fas fa-search"></i>
+      <input 
+        type="text" 
+        placeholder="البحث عن قطعة..." 
+        [(ngModel)]="searchTerm"
+        (input)="onSearch()"
+        class="search-input">
+    </div>
+    
+    <div class="filter-chips">
+      <select [(ngModel)]="selectedBrand" (change)="applyFilters()" class="filter-select">
+        <option value="">جميع الماركات</option>
+        <option *ngFor="let brand of availableBrands" [value]="brand">{{ brand }}</option>
+      </select>
+      
+      <select [(ngModel)]="selectedCondition" (change)="applyFilters()" class="filter-select">
+        <option value="">جميع الحالات</option>
+        <option value="جديد">جديد</option>
+        <option value="مستعمل">مستعمل</option>
+      </select>
+      
+      <select [(ngModel)]="selectedGrade" (change)="applyFilters()" class="filter-select">
+        <option value="">جميع الدرجات</option>
+        <option value="فرز أول">فرز أول</option>
+        <option value="فرز تاني">فرز تاني</option>
+      </select>
+      
+      <button class="btn btn-outline" (click)="clearFilters()">
+        <i class="fas fa-times"></i>
+        مسح الفلاتر
+      </button>
+    </div>
+  </div>
+
+  <!-- Parts Grid -->
+  <div class="parts-grid" *ngIf="!isLoading; else loadingTemplate">
+    <div 
+      *ngFor="let part of filteredParts; trackBy: trackByPartId" 
+      class="part-card"
+      [class.favorite]="part.isFavorite">
+      
+      <!-- Part Image -->
+      <div class="part-image">
+        <img [src]="part.image || 'assets/images/no-image.jpg'" [alt]="part.name">
+        <div class="image-overlay">
+          <button class="btn-icon" (click)="toggleFavorite(part)">
+            <i [class]="part.isFavorite ? 'fas fa-heart' : 'far fa-heart'"></i>
+          </button>
+          <button class="btn-icon" (click)="openImageGallery(part)">
+            <i class="fas fa-images"></i>
+          </button>
+        </div>
+        <div class="badges">
+          <span class="badge condition" [class]="part.condition">{{ part.condition }}</span>
+          <span class="badge grade">{{ part.grade }}</span>
+          <span class="badge type">{{ part.partType }}</span>
+        </div>
+      </div>
+
+      <!-- Part Info -->
+      <div class="part-info">
+        <h3 class="part-name">{{ part.name }}</h3>
+        <p class="part-subtitle" *ngIf="part.subtitle">{{ part.subtitle }}</p>
+        
+        <div class="car-info">
+          <i class="fas fa-car"></i>
+          <span>{{ part.car.brand }} {{ part.car.model }} - {{ part.car.year }}</span>
+        </div>
+        
+        <div class="store-info">
+          <i class="fas fa-store"></i>
+          <span>{{ part.store.name }}</span>
+          <a href="tel:{{ part.store.phone }}" class="phone-link">
+            <i class="fas fa-phone"></i>
+            {{ part.store.phone }}
+          </a>
+        </div>
+        
+        <div class="price-section">
+          <div class="price-main">
+            <span class="current-price">{{ part.priceAfterDiscount | currency:'EGP' }}</span>
+            <span class="original-price" *ngIf="part.discount > 0">{{ part.price | currency:'EGP' }}</span>
+          </div>
+          <span class="discount-badge" *ngIf="part.discount > 0">
+            خصم {{ part.discount }}%
+          </span>
+        </div>
+        
+        <div class="part-features">
+          <span class="feature" *ngIf="part.hasDelivery">
+            <i class="fas fa-truck"></i>
+            توصيل متاح
+          </span>
+          <span class="feature origin">
+            <i class="fas fa-globe"></i>
+            {{ part.origin }}
+          </span>
+        </div>
+      </div>
+
+      <!-- Actions -->
+      <div class="part-actions">
+        <button class="btn btn-primary btn-sm" (click)="editPart(part)">
+          <i class="fas fa-edit"></i>
+          تعديل
+        </button>
+        <button class="btn btn-danger btn-sm" (click)="deletePart(part)">
+          <i class="fas fa-trash"></i>
+          حذف
+        </button>
+        <button class="btn btn-secondary btn-sm" (click)="duplicatePart(part)">
+          <i class="fas fa-copy"></i>
+          نسخ
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Loading Template -->
+  <ng-template #loadingTemplate>
+    <div class="loading-container">
+      <div class="spinner"></div>
+      <p>جاري تحميل البيانات...</p>
+    </div>
+  </ng-template>
+
+  <!-- Empty State -->
+  <div class="empty-state" *ngIf="filteredParts.length === 0 && !isLoading">
+    <i class="fas fa-search"></i>
+    <h3>لا توجد نتائج</h3>
+    <p>لم يتم العثور على قطع تطابق معايير البحث</p>
+    <button class="btn btn-primary" (click)="clearFilters()">مسح الفلاتر</button>
+  </div>
+
+  <!-- Pagination -->
+  <div class="pagination-container" *ngIf="totalPages > 1">
+    <button 
+      class="btn btn-outline"
+      [disabled]="currentPage === 1"
+      (click)="goToPage(currentPage - 1)">
+      السابق
+    </button>
+    
+    <div class="page-numbers">
+      <button 
+        *ngFor="let page of getPageNumbers()"
+        class="btn"
+        [class.active]="page === currentPage"
+        (click)="goToPage(page)">
+        {{ page }}
+      </button>
+    </div>
+    
+    <button 
+      class="btn btn-outline"
+      [disabled]="currentPage === totalPages"
+      (click)="goToPage(currentPage + 1)">
+      التالي
+    </button>
+  </div>
+</div>
+
+<!-- Quick Add Modal (will be separate component) -->
+<div class="modal-overlay" *ngIf="showQuickAddModal" (click)="closeQuickAddModal()">
+  <div class="modal-content" (click)="$event.stopPropagation()">
+    <app-quick-add-form 
+      (partAdded)="onPartAdded($event)"
+      (cancel)="closeQuickAddModal()">
+    </app-quick-add-form>
+  </div>
+</div>
+
+
+
+
+
+
