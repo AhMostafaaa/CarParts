@@ -1,0 +1,785 @@
+// dashboard.component.scss
+.dashboard-container {
+  min-height: 100vh;
+  background: #f4f7f6; // NEW: لون خلفية أفتح وأنعم قليلاً
+  font-family: 'Cairo', Arial, sans-serif;
+  direction: rtl;
+  
+  // Header Styles
+  .dashboard-header {
+    background: linear-gradient(135deg, #5E72E4 0%, #825EE4 100%); // MODIFIED: تدرج لوني مختلف قليلاً وأكثر حداثة
+    color: white;
+    padding: 2.5rem 0; // MODIFIED: زيادة الـ padding
+    margin-bottom: 2.5rem; // MODIFIED: زيادة الهامش السفلي
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.12); // MODIFIED: ظل أكثر نعومة وعمقاً
+    
+    .header-content {
+      max-width: 1300px; // MODIFIED: زيادة العرض الأقصى قليلاً
+      margin: 0 auto;
+      padding: 0 1.5rem; // MODIFIED: زيادة الـ padding الجانبي
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      
+      h1 {
+        font-size: 2.8rem; // MODIFIED: تكبير حجم الخط قليلاً
+        font-weight: 700;
+        margin: 0;
+        text-shadow: 0 2px 5px rgba(0, 0, 0, 0.15); // MODIFIED: تعديل ظل النص
+      }
+      
+      .header-actions {
+        display: flex;
+        gap: 1.2rem; // MODIFIED: زيادة المسافة بين الأزرار
+      }
+    }
+  }
+  
+  // Stats Grid
+  .stats-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); // MODIFIED: تعديل العرض الأدنى
+    gap: 2rem; // MODIFIED: زيادة المسافة بين البطاقات
+    max-width: 1300px; // MODIFIED: زيادة العرض الأقصى
+    margin: 0 auto 2.5rem; // MODIFIED: تعديل الهامش السفلي
+    padding: 0 1.5rem; // MODIFIED: تعديل الـ padding الجانبي
+    
+    .stat-card {
+      background: white;
+      border-radius: 16px; // MODIFIED: زيادة استدارة الحواف
+      padding: 2rem; // MODIFIED: زيادة الـ padding الداخلي
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08); // MODIFIED: ظل أنعم
+      display: flex;
+      align-items: center;
+      gap: 1.5rem; // MODIFIED: زيادة المسافة بين الأيقونة والمعلومات
+      transition: transform 0.25s ease-out, box-shadow 0.25s ease-out; // MODIFIED: تعديل الانتقال
+      
+      &:hover {
+        transform: translateY(-5px); // MODIFIED: زيادة تأثير الرفع
+        box-shadow: 0 8px 20px rgba(0, 0, 0, 0.12); // MODIFIED: ظل أعمق عند الـ hover
+      }
+      
+      .stat-icon {
+        width: 64px;  // MODIFIED: تكبير حجم الأيقونة
+        height: 64px; // MODIFIED: تكبير حجم الأيقونة
+        border-radius: 12px; // MODIFIED: تعديل استدارة الحواف
+        background: linear-gradient(45deg, #5E72E4, #825EE4); // MODIFIED: استخدام نفس تدرج الهيدر
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: white;
+        font-size: 1.8rem; // MODIFIED: تكبير حجم الأيقونة الداخلية
+        box-shadow: 0 2px 4px rgba(94, 114, 228, 0.4); // NEW: ظل للأيقونة
+      }
+      
+      .stat-info {
+        h3 {
+          font-size: 2.2rem; // MODIFIED: تكبير حجم الخط
+          font-weight: 700; // MODIFIED: جعل الخط أثقل
+          margin: 0 0 0.3rem; // MODIFIED: تعديل الهامش
+          color: #32325d; // MODIFIED: لون أغمق قليلاً للنص
+        }
+        
+        p {
+          font-size: 0.95rem; // MODIFIED: تكبير حجم الخط قليلاً
+          color: #6c757d; // MODIFIED: لون رمادي أفتح قليلاً
+          margin: 0;
+        }
+      }
+    }
+  }
+  
+  // Filters Section
+  .filters-section {
+    max-width: 1300px; // MODIFIED: زيادة العرض الأقصى
+    margin: 0 auto 2.5rem; // MODIFIED: تعديل الهامش السفلي
+    padding: 1.5rem; // MODIFIED: إضافة padding للقسم
+    background: white; // NEW: إضافة خلفية بيضاء للقسم
+    border-radius: 16px; // NEW: استدارة الحواف
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.06); // NEW: ظل للقسم
+
+    .search-box {
+      position: relative;
+      margin-bottom: 1.5rem; // MODIFIED: زيادة الهامش السفلي
+      
+      i {
+        position: absolute;
+        right: 1.2rem; // MODIFIED: تعديل الموقع لـ RTL
+        left: auto; // MODIFIED: تعديل الموقع لـ RTL
+        top: 50%;
+        transform: translateY(-50%);
+        color: #adb5bd; // MODIFIED: لون أيقونة أفتح
+        z-index: 2;
+        font-size: 1.1rem; // NEW: تكبير أيقونة البحث
+      }
+      
+      .search-input {
+        width: 100%;
+        padding: 1rem 3.5rem 1rem 1.5rem; // MODIFIED: تعديل الـ padding لـ RTL وأيقونة البحث
+        border: 1px solid #dee2e6; // MODIFIED: إطار أنعم
+        border-radius: 10px; // MODIFIED: زيادة استدارة الحواف
+        font-size: 1rem;
+        transition: border-color 0.2s, box-shadow 0.2s;
+        background: #f8f9fa; // NEW: لون خلفية فاتح للحقل
+        
+        &:focus {
+          outline: none;
+          border-color: #5E72E4; // MODIFIED: لون الإطار عند التركيز
+          box-shadow: 0 0 0 4px rgba(94, 114, 228, 0.15); // MODIFIED: ظل عند التركيز
+          background: white; // NEW: تغيير الخلفية عند التركيز
+        }
+        &::placeholder { // NEW: تخصيص لون النص النائب
+            color: #adb5bd;
+        }
+      }
+    }
+    
+    .filter-chips {
+      display: flex;
+      gap: 1.2rem; // MODIFIED: زيادة المسافة
+      flex-wrap: wrap;
+      align-items: center;
+      
+      .filter-select {
+        padding: 0.75rem 1.2rem; // MODIFIED: زيادة الـ padding
+        border: 1px solid #dee2e6; // MODIFIED: إطار أنعم
+        border-radius: 8px; // MODIFIED: تعديل استدارة الحواف
+        background: white;
+        font-size: 0.9rem;
+        min-width: 140px; // MODIFIED: زيادة العرض الأدنى
+        transition: border-color 0.2s, box-shadow 0.2s; // NEW: إضافة انتقال
+        
+        &:focus {
+          outline: none;
+          border-color: #5E72E4; // MODIFIED: لون الإطار عند التركيز
+          box-shadow: 0 0 0 3px rgba(94, 114, 228, 0.1); // NEW: ظل عند التركيز
+        }
+      }
+      .btn-outline { // NEW: تعديل زر مسح الفلاتر ليتناسق
+        padding: 0.75rem 1.2rem;
+        i {
+          margin-left: 0.5rem; // تعديل لـ RTL
+          margin-right: 0;
+        }
+      }
+    }
+  }
+  
+  // Parts Grid
+  .parts-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(360px, 1fr)); // MODIFIED: زيادة العرض الأدنى قليلاً
+    gap: 2rem; // MODIFIED: زيادة المسافة
+    max-width: 1300px; // MODIFIED: زيادة العرض الأقصى
+    margin: 0 auto;
+    padding: 0 1.5rem; // MODIFIED: تعديل الـ padding
+    
+    .part-card {
+      background: white;
+      border-radius: 16px; // MODIFIED: زيادة استدارة الحواف
+      overflow: hidden;
+      box-shadow: 0 5px 15px rgba(0, 0, 0, 0.08); // MODIFIED: ظل أنعم
+      transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1); // MODIFIED: تعديل الانتقال
+      position: relative;
+      display: flex; // NEW: استخدام flex لتوزيع المحتوى بشكل أفضل
+      flex-direction: column; // NEW: ترتيب العناصر عمودياً
+
+      &:hover {
+        transform: translateY(-6px); // MODIFIED: زيادة تأثير الرفع
+        box-shadow: 0 10px 25px rgba(0, 0, 0, 0.12); // MODIFIED: ظل أعمق عند الـ hover
+      }
+      
+      &.favorite { // MODIFIED: تصميم مختلف قليلاً للمفضلة
+        border: none; // إزالة الإطار الخارجي
+        box-shadow: 0 5px 15px rgba(239, 68, 68, 0.3); // ظل خاص بالمفضلة
+
+        .part-image::before { // NEW: استخدام pseudo-element لعلامة المفضلة
+          content: '\f004'; // FontAwesome heart icon
+          font-family: 'Font Awesome 5 Free';
+          font-weight: 900;
+          position: absolute;
+          top: 1rem;
+          right: 1rem;
+          color: #ef4444;
+          font-size: 1.5rem;
+          z-index: 3;
+          background: white;
+          border-radius: 50%;
+          width: 36px;
+          height: 36px;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+        }
+        .part-image::after { // إزالة المثلث القديم
+          display: none;
+        }
+      }
+      
+      .part-image {
+        position: relative;
+        height: 220px; // MODIFIED: زيادة ارتفاع الصورة
+        overflow: hidden;
+        
+        img {
+          width: 100%;
+          height: 100%;
+          object-fit: cover;
+          transition: transform 0.35s ease-out; // MODIFIED: تعديل الانتقال
+        }
+        
+        &:hover img {
+          transform: scale(1.1); // MODIFIED: زيادة تأثير التكبير
+        }
+        
+        .image-overlay {
+          position: absolute;
+          top: 1rem;
+          left: 1rem; // تم تعديل موقع القلب، يمكن ترك هذه الأزرار هنا أو نقلها
+          display: flex;
+          gap: 0.75rem; // MODIFIED: زيادة المسافة
+          opacity: 0;
+          transition: opacity 0.3s ease-in-out; // MODIFIED: تعديل الانتقال
+          z-index: 2; // NEW: ضمان أن الأزرار فوق الصورة
+          
+          .btn-icon {
+            width: 40px; // MODIFIED: تكبير الأزرار
+            height: 40px; // MODIFIED: تكبير الأزرار
+            border-radius: 8px; // MODIFIED: تعديل استدارة الحواف
+            background: rgba(255, 255, 255, 0.95); // MODIFIED: خلفية أوضح
+            border: none;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.25s ease-out; // MODIFIED: تعديل الانتقال
+            color: #333; // NEW: لون الأيقونة
+            
+            &:hover {
+              background: white;
+              transform: scale(1.1) translateY(-2px); // MODIFIED: تأثير hover أفضل
+              box-shadow: 0 4px 8px rgba(0,0,0,0.15); // NEW: ظل عند الـ hover
+            }
+            
+            i {
+              font-size: 1rem; // MODIFIED: تكبير الأيقونة
+              &.fa-heart { // NEW: لون خاص للقلب الممتلئ
+                color: #ef4444;
+              }
+            }
+          }
+        }
+        
+        &:hover .image-overlay {
+          opacity: 1;
+        }
+        
+        .badges {
+          position: absolute;
+          bottom: 1rem;
+          right: 1rem;
+          display: flex;
+          flex-direction: column; // MODIFIED: ترتيب الشارات عمودياً أفضل
+          align-items: flex-end; // NEW: محاذاة لليمين
+          gap: 0.35rem; // MODIFIED: زيادة المسافة
+          z-index: 1; // NEW
+          
+          .badge {
+            padding: 0.3rem 0.7rem; // MODIFIED: تعديل الـ padding
+            border-radius: 6px; // MODIFIED: تعديل استدارة الحواف
+            font-size: 0.78rem; // MODIFIED: تعديل حجم الخط
+            font-weight: 600;
+            text-align: center;
+            color: white; // NEW: ضمان لون النص أبيض لمعظم الشارات
+            box-shadow: 0 1px 3px rgba(0,0,0,0.2); // NEW: ظل خفيف للشارات
+            
+            &.condition { // MODIFIED: ألوان أكثر تميزاً
+              &.جديد {
+                background: #28a745; // أخضر
+              }
+              &.مستعمل {
+                background: #ffc107; // أصفر
+                color: #212529; // نص أغمق لتباين أفضل
+              }
+            }
+            
+            &.grade {
+              background: #17a2b8; // أزرق فاتح/تركواز
+            }
+            
+            &.type {
+              background: #6f42c1; // بنفسجي
+            }
+          }
+        }
+      }
+      
+      .part-info {
+        padding: 1.5rem;
+        flex-grow: 1; // NEW: لجعل هذا الجزء يملأ المساحة المتاحة
+        display: flex; // NEW
+        flex-direction: column; // NEW
+
+        .part-name {
+          font-size: 1.35rem; // MODIFIED: تكبير حجم الخط
+          font-weight: 700;
+          margin: 0 0 0.25rem; // MODIFIED: تعديل الهامش
+          color: #32325d; // MODIFIED: لون أغمق وأكثر دفئاً
+          line-height: 1.4; // MODIFIED: تحسين ارتفاع السطر
+        }
+        
+        .part-subtitle {
+          font-size: 0.9rem;
+          color: #6c757d;
+          margin: 0 0 1rem;
+          text-overflow: ellipsis;
+          overflow: hidden;
+          // white-space: nowrap; // يمكن إزالته للسماح بسطرين إذا لزم الأمر
+          height: 2.7em; // NEW: تحديد ارتفاع يسمح بسطرين كحد أقصى تقريباً
+          line-height: 1.35em; // NEW
+        }
+        
+        .car-info,
+        .store-info {
+          display: flex;
+          align-items: center;
+          gap: 0.6rem; // MODIFIED: زيادة المسافة
+          margin-bottom: 0.85rem; // MODIFIED: زيادة الهامش
+          font-size: 0.9rem;
+          color: #495057; // MODIFIED: لون أغمق قليلاً
+          
+          i {
+            color: #868e96; // MODIFIED: لون أفتح قليلاً للأيقونة
+            width: 18px; // MODIFIED: تعديل حجم الأيقونة
+            text-align: center; // NEW
+          }
+          
+          .phone-link {
+            margin-right: auto; // صحيح لـ RTL
+            color: #5E72E4; // MODIFIED: استخدام لون أساسي
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 0.3rem; // MODIFIED: تعديل المسافة
+            font-weight: 500; // NEW: جعل الخط أثقل قليلاً
+            
+            &:hover {
+              text-decoration: underline;
+              color: #485ac1; // MODIFIED: لون أغمق عند الـ hover
+            }
+          }
+        }
+        .store-info .phone-link { // NEW: محاذاة الهاتف لليسار في RTL
+            margin-left: 0;
+            margin-right: auto;
+        }
+        
+        .price-section {
+          margin: 1rem 0 1.2rem; // MODIFIED: تعديل الهامش
+          display: flex;
+          align-items: flex-end; // MODIFIED: محاذاة أفضل للعناصر
+          justify-content: space-between;
+          
+          .price-main {
+            display: flex;
+            align-items: baseline; // MODIFIED: محاذاة أفضل للأسعار
+            gap: 0.6rem; // MODIFIED: زيادة المسافة
+            
+            .current-price {
+              font-size: 1.5rem; // MODIFIED: تكبير حجم الخط
+              font-weight: 700;
+              color: #007bff; // MODIFIED: لون أزرق مميز للسعر
+            }
+            
+            .original-price {
+              font-size: 1rem;
+              color: #adb5bd; // MODIFIED: لون أفتح للسعر الأصلي
+              text-decoration: line-through;
+            }
+          }
+          
+          .discount-badge {
+            background: #e83e8c; // MODIFIED: لون وردي/فوشيا للخصم
+            color: white;
+            padding: 0.3rem 0.6rem; // MODIFIED: تعديل الـ padding
+            border-radius: 6px; // MODIFIED: تعديل استدارة الحواف
+            font-size: 0.78rem; // MODIFIED: تعديل حجم الخط
+            font-weight: 600;
+          }
+        }
+        
+        .part-features {
+          display: flex;
+          gap: 0.75rem; // MODIFIED: زيادة المسافة
+          flex-wrap: wrap;
+          margin-top: auto; // NEW: دفع هذا الجزء لأسفل البطاقة
+          padding-top: 1rem; // NEW: مسافة قبل المميزات
+          border-top: 1px solid #f1f3f5; // NEW: خط فاصل رقيق
+          
+          .feature {
+            display: flex;
+            align-items: center;
+            gap: 0.35rem; // MODIFIED: تعديل المسافة
+            padding: 0.35rem 0.7rem; // MODIFIED: تعديل الـ padding
+            background: #e9ecef; // MODIFIED: لون خلفية أفتح
+            border-radius: 6px; // MODIFIED: تعديل استدارة الحواف
+            font-size: 0.82rem; // MODIFIED: تعديل حجم الخط
+            color: #495057; // MODIFIED: لون نص أغمق
+            
+            i {
+              font-size: 0.75rem; // MODIFIED: تعديل حجم الأيقونة
+              color: #868e96; // NEW: لون للأيقونة
+            }
+            
+            &.origin {
+              background: #d1e7dd; // MODIFIED: لون أخضر فاتح للمنشأ
+              color: #0f5132; // MODIFIED: لون نص أغمق للمنشأ
+              i { color: #0f5132; } // NEW
+            }
+            &.delivery-available { // NEW: يمكن إضافة كلاس خاص للتوصيل
+                background: #cce5ff;
+                color: #004085;
+                i { color: #004085; }
+            }
+          }
+        }
+      }
+      
+      .part-actions {
+        padding: 1rem 1.5rem;
+        border-top: 1px solid #f1f3f5; // MODIFIED: لون أفتح للخط
+        display: flex;
+        gap: 0.75rem; // MODIFIED: زيادة المسافة
+        justify-content: space-between; // أو flex-end إذا كنت تفضل محاذاة الأزرار لطرف واحد
+        background-color: #fcfdff; // NEW: لون خلفية خفيف جداً لقسم الأزرار
+      }
+    }
+  }
+  
+  // Loading State
+  .loading-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 5rem; // MODIFIED: زيادة الـ padding
+    
+    .spinner {
+      width: 48px; // MODIFIED: تكبير حجم الدوار
+      height: 48px; // MODIFIED: تكبير حجم الدوار
+      border: 5px solid #e9ecef; // MODIFIED: لون أفتح للخلفية
+      border-top: 5px solid #5E72E4; // MODIFIED: استخدام اللون الأساسي
+      border-radius: 50%;
+      animation: spin 0.8s linear infinite; // MODIFIED: تعديل سرعة الدوران
+      margin-bottom: 1.5rem; // MODIFIED: زيادة الهامش
+    }
+    
+    p {
+      color: #6c757d;
+      font-size: 1.1rem; // MODIFIED: تكبير حجم الخط
+      font-weight: 500; // NEW
+    }
+  }
+  
+  // Empty State
+  .empty-state {
+    text-align: center;
+    padding: 5rem 2rem; // MODIFIED: زيادة الـ padding
+    color: #868e96; // MODIFIED: لون أفتح قليلاً
+    background-color: white; // NEW
+    border-radius: 16px; // NEW
+    margin: 2rem auto; // NEW
+    max-width: 600px; // NEW
+    box-shadow: 0 4px 12px rgba(0,0,0,0.05); // NEW
+    
+    i {
+      font-size: 4.5rem; // MODIFIED: تكبير حجم الأيقونة
+      margin-bottom: 1.5rem; // MODIFIED: زيادة الهامش
+      color: #dee2e6; // MODIFIED: لون أفتح للأيقونة
+    }
+    
+    h3 {
+      font-size: 1.75rem; // MODIFIED: تكبير حجم الخط
+      margin: 0 0 0.75rem; // MODIFIED: تعديل الهامش
+      color: #343a40; // MODIFIED: لون أغمق للعنوان
+      font-weight: 600; // NEW
+    }
+    
+    p {
+      margin: 0 0 2.5rem; // MODIFIED: زيادة الهامش
+      font-size: 1.05rem; // MODIFIED: تكبير حجم الخط
+    }
+    .btn-primary { // NEW: تعديل حجم الزر في الحالة الفارغة
+        padding: 0.75rem 1.5rem;
+        font-size: 1rem;
+    }
+  }
+  
+  // Pagination
+  .pagination-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 1rem; // لا تغيير
+    margin: 3rem 0; // MODIFIED: زيادة الهامش
+    
+    .page-numbers {
+      display: flex;
+      gap: 0.5rem; // MODIFIED: زيادة المسافة
+      
+      .btn {
+        min-width: 44px; // MODIFIED: تكبير حجم الأزرار
+        height: 44px; // MODIFIED: تكبير حجم الأزرار
+        font-size: 0.9rem; // NEW
+        border-radius: 8px; // NEW
+        transition: all 0.2s ease-in-out; // NEW
+        
+        &.active {
+          background: #5E72E4; // MODIFIED: استخدام اللون الأساسي
+          color: white;
+          box-shadow: 0 2px 6px rgba(94, 114, 228, 0.5); // NEW: ظل للزر النشط
+          transform: translateY(-2px); // NEW: تأثير رفع خفيف للزر النشط
+        }
+        &:not(.active):hover { // NEW: تأثير hover للأزرار غير النشطة
+            background-color: #e9ecef;
+            color: #343a40;
+        }
+      }
+    }
+    .btn-outline { // NEW: تنسيق أزرار التالي والسابق
+        padding: 0.65rem 1.2rem;
+        font-size: 0.9rem;
+        border-radius: 8px;
+        &:disabled {
+            border-color: #e9ecef;
+        }
+    }
+  }
+}
+
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(30, 30, 50, 0.65); // MODIFIED: زيادة التعتيم قليلاً
+  display: flex;
+  // align-items: center; // MODIFIED: إزالة هذه للسماح للمودال بالنمو لأعلى ولأسفل
+  justify-content: center;
+  z-index: 1050;
+  padding: 2rem 1rem; // MODIFIED: تعديل الـ padding الجانبي إذا لزم الأمر
+  overflow-y: auto; // IMPORTANT: هذا يجعل الغلاف الخارجي قابلاً للتمرير إذا تجاوز المودال ارتفاع الشاشة
+}
+
+.modal-content { // هذه هي الحاوية المباشرة لـ <app-quick-add-form>
+  background: transparent; // NEW: اجعلها شفافة، لأن app-quick-add-form سيعتني بخلفيته وظلاله
+  border-radius: 0;    // NEW: إزالة أي استدارة هنا
+  width: auto;         // NEW: دع app-quick-add-form يحدد عرضه الخاص
+  max-width: none;     // NEW: إزالة أي تحديد للعرض الأقصى هنا
+  max-height: none;    // NEW: الأهم، اسمح للمودال بالنمو للارتفاع الكامل
+  overflow-y: visible; // NEW: اسمح للمحتوى بأن يكون مرئيًا بالكامل
+  box-shadow: none;    // NEW: إزالة أي ظل هنا
+  margin: auto 0;      // NEW: لتوسيط المودال عموديًا إذا كان أقصر من الشاشة، أو يبدأ من الأعلى إذا كان أطول
+}
+
+
+// Button Styles
+.btn {
+  padding: 0.65rem 1.2rem; // MODIFIED: تعديل الـ padding الافتراضي
+  border: none;
+  border-radius: 8px; // MODIFIED: زيادة استدارة الحواف
+  font-size: 0.9rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.25s cubic-bezier(0.175, 0.885, 0.32, 1.275); // MODIFIED: انتقال أفضل
+  display: inline-flex;
+  align-items: center;
+  justify-content: center; // NEW: لضمان محاذاة الأيقونة والنص في المنتصف
+  gap: 0.5rem;
+  text-decoration: none;
+  line-height: 1.5; // NEW: تحسين ارتفاع السطر
+  
+  i { // NEW: تعديل بسيط للأيقونات داخل الأزرار
+    font-size: 0.9em; // حجم نسبي للأيقونة
+    // margin-right: -0.125rem; // ضبط دقيق إذا لزم الأمر
+  }
+
+  &.btn-primary {
+    background: #5E72E4; // MODIFIED: اللون الأساسي الجديد
+    color: white;
+    box-shadow: 0 2px 4px rgba(94, 114, 228, 0.3); // NEW: ظل خفيف للزر الأساسي
+    
+    &:hover {
+      background: #4a5cc0; // MODIFIED: لون أغمق قليلاً عند الـ hover
+      transform: translateY(-2px); // MODIFIED: تأثير رفع أفضل
+      box-shadow: 0 4px 8px rgba(94, 114, 228, 0.4); // NEW: ظل أعمق عند الـ hover
+    }
+  }
+  
+  &.btn-secondary {
+    background: #f7fafc; // MODIFIED: لون أفتح وأكثر حيادية
+    color: #525f7f; // MODIFIED: لون نص أغمق للتباين
+    border: 1px solid #dee2e6; // NEW: إضافة إطار خفيف
+    
+    &:hover {
+      background: #e9ecef; // MODIFIED: لون أغمق قليلاً عند الـ hover
+      border-color: #adb5bd; // NEW
+      color: #32325d; // NEW
+      transform: translateY(-1px); // NEW
+    }
+  }
+  
+  &.btn-danger {
+    background: #F5365C; // MODIFIED: لون أحمر مختلف قليلاً
+    color: white;
+    box-shadow: 0 2px 4px rgba(245, 54, 92, 0.3); // NEW
+    
+    &:hover {
+      background: #ec0c3b; // MODIFIED
+      transform: translateY(-2px); // MODIFIED
+      box-shadow: 0 4px 8px rgba(245, 54, 92, 0.4); // NEW
+    }
+  }
+  
+  &.btn-outline {
+    background: transparent;
+    border: 2px solid #dee2e6; // MODIFIED: إطار أفتح
+    color: #525f7f; // MODIFIED: لون نص أغمق
+    
+    &:hover {
+      border-color: #5E72E4; // MODIFIED: استخدام اللون الأساسي للإطار
+      color: #5E72E4; // MODIFIED: استخدام اللون الأساسي للنص
+      background: rgba(94, 114, 228, 0.05); // NEW: خلفية فاتحة جداً عند الـ hover
+    }
+  }
+  
+  &.btn-sm { // MODIFIED: تعديل أحجام الزر الصغير
+    padding: 0.4rem 0.8rem;
+    font-size: 0.8rem;
+    border-radius: 6px; // MODIFIED
+    i { font-size: 0.85em; }
+  }
+  
+  &:disabled {
+    opacity: 0.6; // MODIFIED: زيادة الوضوح قليلاً للعناصر المعطلة
+    cursor: not-allowed;
+    box-shadow: none; // NEW: إزالة الظل عند التعطيل
+    
+    &:hover {
+      transform: none;
+      background-color: initial; // NEW: منع تغيير الخلفية عند الـ hover للزر المعطل
+      // ألوان أخرى حسب نوع الزر إذا لزم الأمر
+    }
+  }
+}
+
+// Animations
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+// Responsive Design
+@media (max-width: 992px) { // NEW: نقطة توقف إضافية للحواسيب اللوحية
+    .parts-grid {
+        grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+    }
+    .dashboard-header .header-content h1 {
+        font-size: 2.4rem;
+    }
+}
+
+@media (max-width: 768px) {
+  .dashboard-container {
+    .dashboard-header {
+      padding: 2rem 0; // MODIFIED
+      .header-content {
+        flex-direction: column;
+        gap: 1.5rem; // MODIFIED
+        text-align: center;
+        
+        h1 {
+          font-size: 2.2rem; // MODIFIED
+        }
+        .header-actions { // NEW: جعل الأزرار تملأ العرض على الشاشات الصغيرة
+            width: 100%;
+            justify-content: center;
+            .btn {
+                flex-grow: 1;
+                max-width: 200px; // تحديد عرض أقصى
+            }
+        }
+      }
+    }
+    
+    .stats-grid {
+      grid-template-columns: 1fr; // يبقى كما هو
+      padding: 0 1rem; // يبقى كما هو
+      gap: 1.5rem; // MODIFIED
+    }
+    .stat-card {
+        padding: 1.5rem; // MODIFIED
+        .stat-icon {
+            width: 56px; height: 56px; font-size: 1.6rem;
+        }
+        .stat-info h3 { font-size: 2rem; }
+    }
+    
+    .parts-grid {
+      grid-template-columns: 1fr; // يبقى كما هو
+      padding: 0 1rem; // يبقى كما هو
+      gap: 1.5rem; // MODIFIED
+    }
+    .part-card .part-image { height: 200px; } // MODIFIED: تعديل ارتفاع الصورة للموبايل
+
+    .filters-section {
+      padding: 1rem; // MODIFIED
+      .search-box i { right: 1rem; } // MODIFIED
+      .search-input { padding: 0.9rem 3rem 0.9rem 1rem; } // MODIFIED
+
+      .filter-chips {
+        flex-direction: column;
+        align-items: stretch;
+        gap: 0.8rem; // MODIFIED
+        
+        .filter-select {
+          width: 100%;
+        }
+        .btn-outline { // NEW: تعديل زر مسح الفلاتر في الموبايل
+            width: 100%;
+            justify-content: center;
+        }
+      }
+    }
+    .pagination-container {
+        flex-direction: column; // NEW: تغيير اتجاه الأزرار في الموبايل
+        gap: 0.8rem;
+        .page-numbers .btn { min-width: 38px; height: 38px; }
+    }
+    .modal-content {
+        max-width: 95vw; // MODIFIED: جعل المودال أعرض قليلاً على الشاشات الصغيرة جداً
+        margin: 1rem; // NEW: إضافة هامش للمودال
+        padding: 0; // إزالة الـ padding إذا كان app-quick-add-form يعالجه
+    }
+    // .modal-overlay { padding: 1rem; } // تعديل الـ padding للمودال
+  }
+}
+
+@media (max-width: 480px) { // NEW: نقطة توقف للشاشات الصغيرة جداً
+    .dashboard-header .header-content h1 {
+        font-size: 1.8rem;
+    }
+    .btn {
+        padding: 0.55rem 1rem;
+        font-size: 0.85rem;
+    }
+    .btn-sm {
+        padding: 0.35rem 0.7rem;
+        font-size: 0.75rem;
+    }
+    .parts-grid .part-card .part-info { padding: 1rem; }
+    .parts-grid .part-card .part-name { font-size: 1.2rem; }
+
+}

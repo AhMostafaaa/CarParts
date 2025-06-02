@@ -1,0 +1,976 @@
+// quick-add-form.component.scss
+:host { // NEW: استخدام :host لتطبيق الأنماط على العنصر المضيف مباشرة
+    display: block; // NEW: ضمان أن العنصر يأخذ حيزًا
+    width: 50vw; // MODIFIED: تعديل العرض قليلاً، يمكن ضبطه حسب الحاجة
+    max-width: 700px; // NEW: تحديد عرض أقصى للمحافظة على التناسق على الشاشات الكبيرة
+    min-width: 450px; // NEW: تحديد عرض أدنى
+    max-height: 90vh;
+    background: #ffffff; // MODIFIED: لون خلفية أبيض نقي
+    border-radius: 16px; // MODIFIED: زيادة استدارة الحواف لتتناسق مع الداشبورد
+    overflow: hidden;
+    font-family: 'Cairo', Arial, sans-serif;
+    direction: rtl;
+    box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25), 0 15px 35px -15px rgba(50, 50, 93, 0.2); // MODIFIED: ظل أكثر بروزاً يتناسب مع المودال
+    display: flex; // NEW: استخدام flex لتنظيم الهيدر والمحتوى
+    flex-direction: column; // NEW
+  }
+  
+  .quick-add-form { // MODIFIED: سنجعل :host هو الحاوية الرئيسية، وهذا سيكون مجرد wrapper داخلي إذا لزم الأمر، أو يمكن إزالته إذا كانت الأنماط تطبق على :host
+      display: flex;
+      flex-direction: column;
+      height: 100%; // NEW: ليأخذ كامل ارتفاع :host
+  }
+  
+  .form-header {
+    background: linear-gradient(135deg, #5E72E4 0%, #825EE4 100%); // MODIFIED: استخدام نفس تدرج الداشبورد
+    color: white;
+    padding: 1.25rem 1.75rem; // MODIFIED: تعديل الـ padding
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-shrink: 0; // NEW: منع التقلص
+    
+    h2 {
+      margin: 0;
+      font-size: 1.4rem; // MODIFIED: تعديل حجم الخط
+      font-weight: 600; // MODIFIED: تعديل سماكة الخط
+    }
+    
+    .btn-close {
+      background: none;
+      border: none;
+      color: white;
+      font-size: 1.25rem; // MODIFIED: تعديل حجم الأيقونة
+      cursor: pointer;
+      padding: 0.5rem;
+      line-height: 1; // NEW: لضبط محاذاة الأيقونة
+      border-radius: 50%;
+      transition: background-color 0.2s ease-out, transform 0.2s ease-out;
+      
+      &:hover {
+        background: rgba(255, 255, 255, 0.15); // MODIFIED: لون hover أوضح
+        transform: rotate(90deg); // NEW: تأثير دوران خفيف
+      }
+    }
+  }
+  
+  .form-content {
+    padding: 1.75rem; // MODIFIED: تعديل الـ padding
+    flex-grow: 1; // NEW: لجعل المحتوى يملأ المساحة المتاحة
+    overflow-y: auto;
+    background-color: #f8f9fe; // NEW: لون خلفية فاتح جداً للمحتوى لتمييزه عن :host
+    
+    // Custom scrollbar (يمكن الإبقاء عليه أو استخدام تصميم المتصفح الافتراضي)
+    &::-webkit-scrollbar {
+      width: 8px; // MODIFIED: تعديل عرض الشريط
+    }
+    
+    &::-webkit-scrollbar-track {
+      background: #e9ecef; // MODIFIED: لون أفتح للخلفية
+      border-radius: 4px; // MODIFIED
+    }
+    
+    &::-webkit-scrollbar-thumb {
+      background: #adb5bd; // MODIFIED: لون أغمق قليلاً للمقبض
+      border-radius: 4px; // MODIFIED
+      
+      &:hover {
+        background: #868e96; // MODIFIED: لون أغمق عند الـ hover
+      }
+    }
+  }
+  
+  // Quick Templates
+  .quick-templates {
+    text-align: center;
+    padding: 1rem 0 2rem; // MODIFIED: تعديل الـ padding
+    border-bottom: 1px solid #e0e5f0; // NEW: خط فاصل
+    margin-bottom: 2rem; // NEW
+    
+    h3 {
+      margin-bottom: 1.5rem; // MODIFIED
+      color: #32325d; // MODIFIED: لون أغمق
+      font-size: 1.15rem; // MODIFIED
+      font-weight: 600;
+    }
+    
+    .template-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(130px, 1fr)); // MODIFIED: تعديل العرض الأدنى والأقصى
+      gap: 1.25rem; // MODIFIED: زيادة المسافة
+      margin-bottom: 1.5rem; // MODIFIED
+      
+      .template-btn {
+        background: #ffffff; // MODIFIED: خلفية بيضاء
+        border: 1px solid #dee2e6; // MODIFIED: إطار أنعم
+        border-radius: 10px; // MODIFIED: زيادة استدارة الحواف
+        padding: 1.25rem 0.75rem; // MODIFIED
+        cursor: pointer;
+        transition: all 0.25s cubic-bezier(0.25, 0.8, 0.25, 1);
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 0.6rem; // MODIFIED
+        color: #495057; // NEW: لون للنص
+        
+        &:hover {
+          border-color: #5E72E4; // MODIFIED: استخدام اللون الأساسي
+          transform: translateY(-4px); // MODIFIED: زيادة تأثير الرفع
+          box-shadow: 0 6px 18px rgba(94, 114, 228, 0.2); // MODIFIED: ظل أوضح
+          color: #5E72E4; // NEW: تغيير لون النص عند الـ hover
+        }
+        
+        &:active {
+          transform: translateY(-1px); // MODIFIED: تأثير ضغط طفيف
+          box-shadow: 0 3px 10px rgba(94, 114, 228, 0.15); // MODIFIED
+        }
+        
+        i {
+          font-size: 1.8rem; // MODIFIED
+          color: #5E72E4; // MODIFIED: استخدام اللون الأساسي
+          transition: transform 0.2s ease-out;
+        }
+        
+        span {
+          font-weight: 500; // MODIFIED
+          // color: #32325d; // MODIFIED: تم تعيين اللون في .template-btn
+          font-size: 0.85rem; // MODIFIED
+          line-height: 1.3; // NEW
+        }
+        
+        &:hover i {
+          transform: scale(1.15); // MODIFIED: زيادة تأثير التكبير
+        }
+      }
+    }
+    
+    .btn-link { // MODIFIED: تصميم زر "املأ البيانات يدوياً"
+      background: transparent;
+      border: none;
+      color: #5E72E4; // MODIFIED
+      cursor: pointer;
+      text-decoration: none; // إزالة الخط
+      font-size: 0.9rem;
+      font-weight: 500; // NEW
+      padding: 0.6rem 1.2rem; // MODIFIED
+      border-radius: 8px; // MODIFIED
+      transition: all 0.2s ease-out;
+      
+      &:hover {
+        color: #485ac1; // MODIFIED
+        background: rgba(94, 114, 228, 0.1); // MODIFIED: خلفية فاتحة عند الـ hover
+        text-decoration: underline; // إضافة الخط عند الـ hover
+      }
+    }
+  }
+  
+  // Form Sections
+  .form-section {
+    margin-bottom: 2rem; // لا تغيير
+    padding: 1.5rem; // لا تغيير
+    background: #ffffff; // MODIFIED: خلفية بيضاء للأقسام
+    border-radius: 12px; // MODIFIED: زيادة استدارة الحواف
+    border: 1px solid #e0e5f0; // NEW: إضافة إطار خفيف
+    // border-left: 4px solid #5E72E4; // MODIFIED: استخدام خط علوي بدلاً من خط جانبي
+    border-top: 3px solid #5E72E4; // NEW: خط علوي مميز
+    box-shadow: 0 4px 12px rgba(0,0,0,0.04); // NEW: ظل خفيف جداً
+  
+    h3 {
+      color: #32325d; // MODIFIED: لون أغمق للعنوان
+      font-size: 1.1rem; // لا تغيير
+      font-weight: 600; // لا تغيير
+      margin: -1.5rem -1.5rem 1.5rem -1.5rem; // MODIFIED: ليمتد العنوان على عرض القسم مع الـ padding
+      padding: 1rem 1.5rem; // NEW: padding للعنوان داخل الشريط
+      background-color: #f8f9fe; // NEW: خلفية فاتحة لشريط العنوان
+      border-bottom: 1px solid #e0e5f0; // NEW: خط فاصل أسفل العنوان
+      border-radius: 11px 11px 0 0; // NEW: استدارة الحواف العلوية للعنوان لتتناسب مع القسم
+      display: flex; // لا تغيير
+      align-items: center; // لا تغيير
+      gap: 0.75rem; // MODIFIED: زيادة المسافة
+      
+      &::before { // MODIFIED: تغيير تصميم العلامة بجانب العنوان
+        // content: '';
+        // width: 8px;
+        // height: 8px;
+        // background: #5E72E4;
+        // border-radius: 50%;
+        // content: '\f0da'; // FontAwesome icon (e.g., angle-right)
+        // font-family: 'Font Awesome 5 Free';
+        // font-weight: 900;
+        // font-size: 0.9em;
+        // color: #5E72E4;
+        display: none; // إزالة العلامة القديمة، الخط العلوي يكفي
+      }
+    }
+  }
+  
+  // Form Layout
+  .form-row {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); // MODIFIED: تعديل العرض الأدنى
+    gap: 1.25rem; // MODIFIED: زيادة المسافة
+    margin-bottom: 1.25rem; // MODIFIED
+    
+    &:last-child {
+      margin-bottom: 0;
+    }
+  }
+  
+  .form-group {
+    display: flex;
+    flex-direction: column;
+    position: relative; // لا تغيير
+    
+    label {
+      font-weight: 500; // MODIFIED: خط أنعم قليلاً
+      color: #495057; // MODIFIED: لون أغمق قليلاً
+      margin-bottom: 0.6rem; // MODIFIED: زيادة الهامش
+      font-size: 0.88rem; // MODIFIED: تعديل حجم الخط
+    }
+    
+    .form-control {
+      padding: 0.8rem 1.1rem; // MODIFIED: زيادة الـ padding
+      border: 1px solid #cad1d9; // MODIFIED: لون إطار أغمق قليلاً
+      border-radius: 8px; // MODIFIED: زيادة استدارة الحواف
+      font-size: 0.9rem; // لا تغيير
+      transition: all 0.2s ease-in-out;
+      background: #ffffff; // MODIFIED: خلفية بيضاء
+      color: #333; // NEW: لون النص داخل الحقل
+      
+      &:focus {
+        outline: none;
+        border-color: #5E72E4; // MODIFIED: استخدام اللون الأساسي
+        box-shadow: 0 0 0 3px rgba(94, 114, 228, 0.2); // MODIFIED: تعديل لون الظل
+        background: #ffffff; // NEW: التأكيد على الخلفية البيضاء عند التركيز
+      }
+      
+      &.ng-invalid.ng-touched {
+        border-color: #F5365C; // MODIFIED: استخدام لون الخطأ المتناسق
+        
+        &:focus {
+          box-shadow: 0 0 0 3px rgba(245, 54, 92, 0.15); // MODIFIED
+        }
+      }
+      
+      &[readonly] {
+        background: #e9ecef; // MODIFIED: لون أفتح قليلاً
+        color: #6c757d; // MODIFIED
+        cursor: not-allowed; // NEW
+      }
+      &::placeholder { // NEW: تخصيص لون النص النائب
+          color: #adb5bd;
+      }
+    }
+    
+    // Suggestions dropdown
+    .suggestions {
+      position: absolute;
+      top: calc(100% + 2px); // MODIFIED: مسافة صغيرة بين الحقل والقائمة
+      left: 0;
+      right: 0;
+      background: white;
+      border: 1px solid #d1d5db;
+      // border-top: none; // يمكن إبقاؤه أو إزالته حسب التصميم
+      border-radius: 8px; // MODIFIED: استدارة لجميع الحواف
+      box-shadow: 0 8px 16px -4px rgba(0, 0, 0, 0.12); // MODIFIED: ظل أوضح
+      z-index: 100; // MODIFIED: زيادة z-index
+      max-height: 180px; // MODIFIED: تعديل الارتفاع الأقصى
+      overflow-y: auto;
+      animation: fadeInSuggestions 0.15s ease-out; // NEW: انميشن خفيف
+      
+      .suggestion-item {
+        display: block;
+        width: 100%;
+        padding: 0.8rem 1.1rem; // MODIFIED: نفس padding الحقول
+        text-align: right;
+        background: none;
+        border: none;
+        cursor: pointer;
+        font-size: 0.9rem;
+        color: #333; // NEW
+        transition: background-color 0.15s ease-out, color 0.15s ease-out;
+        border-bottom: 1px solid #f1f3f5; // NEW: خط فاصل بين العناصر
+        
+        &:last-child {
+          border-bottom: none; // NEW: إزالة الخط من آخر عنصر
+        }
+  
+        &:hover {
+          background: #5E72E4; // MODIFIED: استخدام اللون الأساسي للخلفية
+          color: white; // NEW: لون نص أبيض عند الـ hover
+        }
+      }
+    }
+    
+    // Error message styling (مثال، لم يتم استخدامه في HTML المقدم)
+    .error-message {
+      color: #F5365C;
+      font-size: 0.8rem;
+      margin-top: 0.35rem; // MODIFIED
+      display: flex;
+      align-items: center;
+      gap: 0.3rem; // MODIFIED
+      
+      i {
+        font-size: 0.8em; // MODIFIED: حجم نسبي
+      }
+    }
+  }
+  
+  // Checkbox styling
+  .checkbox-group {
+    // margin-top: auto; // NEW: إذا أردت دفعها لأسفل في form-row
+    .checkbox-label {
+      display: inline-flex; // MODIFIED: استخدام inline-flex
+      align-items: center;
+      gap: 0.6rem; // MODIFIED
+      cursor: pointer;
+      padding: 0.6rem 0.8rem; // MODIFIED
+      border-radius: 8px; // MODIFIED
+      transition: background-color 0.2s ease-out;
+      position: relative; // NEW
+      
+      &:hover {
+        background: rgba(94, 114, 228, 0.08); // MODIFIED
+      }
+      
+      input[type="checkbox"] {
+        appearance: none;
+        width: 20px; // MODIFIED: تكبير حجم المربع
+        height: 20px; // MODIFIED
+        border: 2px solid #adb5bd; // MODIFIED: لون إطار أغمق
+        border-radius: 5px; // MODIFIED: تعديل استدارة الحواف
+        position: relative;
+        cursor: pointer;
+        transition: all 0.2s ease-out;
+        flex-shrink: 0; // NEW
+        
+        &:checked {
+          background: #5E72E4; // MODIFIED: استخدام اللون الأساسي
+          border-color: #5E72E4; // MODIFIED
+          
+          &::after {
+            content: '\f00c'; // FontAwesome check icon
+            font-family: 'Font Awesome 5 Free';
+            font-weight: 900;
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            color: white;
+            font-size: 10px; // MODIFIED: تعديل حجم الأيقونة
+          }
+        }
+        
+        &:focus {
+          outline: none;
+          box-shadow: 0 0 0 3px rgba(94, 114, 228, 0.2); // MODIFIED
+        }
+      }
+      
+      // .checkmark { display: none; } // إزالة الـ span القديم إذا لم يعد مستخدماً
+      
+      // span (النص بجانب المربع)
+      // إذا كان النص داخل <label> مباشرةً، يمكن تنسيقه هنا
+      // وإذا كان في <span class="checkmark"> في HTML، عدّل هذا الـ selector
+      // في HTML المقدم، النص مباشرة داخل الـ label
+      // لا حاجة لـ span.checkmark إذا كان التصميم الجديد لا يستخدمه
+    }
+  }
+  
+  // Radio button styling (غير مستخدم في HTML الحالي، لكن يمكن الاحتفاظ به للمستقبل)
+  /*
+  .radio-group {
+    display: flex;
+    gap: 1rem;
+    flex-wrap: wrap;
+    
+    .radio-option {
+      // ... (يمكن تحديثه ليتناسب مع التصميم الجديد إذا تم استخدامه)
+    }
+  }
+  */
+  
+  // Image Upload Section
+  // HTML uses .image-upload-area, .upload-content, .image-preview
+  .image-upload-area { // MODIFIED: هذا هو الـ selector الصحيح من HTML
+    border: 2px dashed #cad1d9; // MODIFIED: لون إطار أنعم
+    border-radius: 12px; // MODIFIED: زيادة استدارة الحواف
+    padding: 1.5rem; // MODIFIED
+    text-align: center;
+    cursor: pointer;
+    transition: all 0.25s ease-in-out;
+    background: #fcfdff; // NEW: خلفية فاتحة جداً
+    position: relative; // NEW
+    
+    &.dragover { // MODIFIED: استخدام الكلاس من TS
+      border-color: #5E72E4;
+      background: rgba(94, 114, 228, 0.05); // MODIFIED
+      transform: scale(1.02); // NEW: تأثير تكبير طفيف
+    }
+    
+    .upload-content { // MODIFIED: هذا هو الـ selector الصحيح من HTML
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 0.75rem; // NEW
+      color: #6c757d; // NEW
+  
+      i {
+        font-size: 2.5rem; // MODIFIED
+        color: #868e96; // MODIFIED: لون أفتح للأيقونة
+        margin-bottom: 0.5rem; // MODIFIED
+      }
+      
+      p {
+        color: #495057; // MODIFIED: لون أغمق للنص
+        margin: 0;
+        font-size: 0.95rem; // NEW
+        font-weight: 500; // NEW
+      }
+      .btn-outline { // NEW: تنسيق زر "اختيار صور"
+          margin-top: 0.5rem;
+          padding: 0.6rem 1.2rem;
+          font-size: 0.85rem;
+      }
+    }
+    
+    .image-preview { // MODIFIED: هذا هو الـ selector الصحيح من HTML
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(100px, 1fr)); // MODIFIED: تعديل حجم الصور المصغرة
+      gap: 1rem; // لا تغيير
+      margin-top: 0; // إزالة الهامش إذا كان .upload-content مخفياً
+  
+      .image-item {
+        position: relative;
+        aspect-ratio: 1 / 1; // MODIFIED: ضمان المربعية
+        border-radius: 10px; // MODIFIED: زيادة استدارة الحواف
+        overflow: hidden;
+        border: 1px solid #dee2e6; // MODIFIED: إطار أنعم
+        box-shadow: 0 2px 6px rgba(0,0,0,0.08); // NEW: ظل خفيف للصور
+  
+        img {
+          width: 100%;
+          height: 100%;
+          object-fit: cover;
+          transition: transform 0.25s ease-out; // NEW
+        }
+        &:hover img {
+          transform: scale(1.05); // NEW
+        }
+        
+        .btn-remove { // MODIFIED: اسم الكلاس من HTML
+          position: absolute;
+          top: 0.4rem; // MODIFIED: تعديل الموقع
+          right: 0.4rem; // MODIFIED: تعديل الموقع
+          background: rgba(245, 54, 92, 0.85); // MODIFIED: استخدام لون الخطأ
+          color: white;
+          border: none;
+          border-radius: 50%;
+          width: 28px; // MODIFIED: تكبير الزر
+          height: 28px; // MODIFIED
+          cursor: pointer;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          font-size: 0.8rem; // MODIFIED
+          transition: all 0.2s ease-out;
+          box-shadow: 0 1px 3px rgba(0,0,0,0.2); // NEW
+          
+          &:hover {
+            background: #F5365C; // MODIFIED
+            transform: scale(1.1); // NEW
+          }
+        }
+        
+        .main-image { // MODIFIED: اسم الكلاس من HTML
+          position: absolute;
+          bottom: 0;
+          left: 0;
+          right: 0;
+          background: rgba(94, 114, 228, 0.85); // MODIFIED: استخدام اللون الأساسي
+          color: white;
+          font-size: 0.65rem; // MODIFIED
+          padding: 0.3rem; // MODIFIED
+          text-align: center;
+          font-weight: 500; // NEW
+        }
+      }
+      .btn.add-more { // NEW: تنسيق زر "إضافة المزيد"
+          display: flex;
+          flex-direction: column;
+          align-items: center;
+          justify-content: center;
+          aspect-ratio: 1 / 1;
+          border-radius: 10px;
+          border: 2px dashed #cad1d9;
+          color: #5E72E4;
+          background-color: #f8f9fe;
+          transition: all 0.2s ease-out;
+          min-height: 100px; // لضمان ارتفاع مناسب
+          i { font-size: 1.5rem; margin-bottom: 0.25rem;}
+          &:hover {
+              border-color: #5E72E4;
+              background-color: rgba(94, 114, 228, 0.05);
+          }
+      }
+    }
+    // input[type="file"] يبقى مخفياً
+  }
+  
+  
+  // Form Actions
+  .form-actions {
+    display: flex;
+    gap: 0.75rem; // MODIFIED: تعديل المسافة
+    justify-content: flex-end; // لا تغيير
+    padding: 1.25rem 1.75rem; // MODIFIED: تعديل الـ padding
+    background: #f8f9fe; // MODIFIED: لون خلفية متناسق مع .form-content
+    border-top: 1px solid #e0e5f0; // MODIFIED: لون إطار أفتح
+    flex-shrink: 0; // NEW: منع التقلص
+    
+    // استخدام نفس كلاسات الأزرار العامة من dashboard.component.scss
+    // إذا كانت هذه الأزرار تحتاج لتخصيص إضافي، يمكن إضافته هنا
+    // .btn { ... }
+    // .btn-secondary { ... }
+    // .btn-primary { ... }
+    // .btn-success { ... }
+  
+    // التأكد من أن الأيقونات داخل الأزرار لها حجم مناسب
+    .btn {
+      i {
+        font-size: 0.9em; // حجم نسبي للأيقونة
+        // إذا كان هناك أيقونة loading (fa-spinner)، يمكن تخصيصها
+        &.fa-spin {
+          margin-right: 0.5em; // تعديل المسافة إذا كان النص بجانبها
+        }
+      }
+    }
+  }
+  
+  .shortcuts-info { // NEW: تنسيق معلومات الاختصارات
+      padding: 0.75rem 1.75rem;
+      background-color: #e9ecef; // لون خلفية هادئ
+      text-align: center;
+      border-top: 1px solid #dee2e6;
+      flex-shrink: 0;
+  
+      small {
+          font-size: 0.78rem;
+          color: #6c757d;
+          strong {
+              color: #495057;
+          }
+          kbd { // NEW: تنسيق لـ kbd
+              background: #f8f9fa;
+              border: 1px solid #ced4da;
+              border-radius: 3px;
+              padding: 0.1rem 0.4rem;
+              font-size: 0.7rem;
+              font-family: 'SFMono-Regular', Consolas, 'Liberation Mono', Menlo, Courier, monospace;
+              color: #32325d;
+              box-shadow: 0 1px 1px rgba(0,0,0,0.1);
+              margin: 0 0.1rem;
+          }
+      }
+  }
+  
+  // Responsive Design
+  @media (max-width: 1200px) { // NEW: نقطة توقف للحواسيب اللوحية الكبيرة
+      :host {
+          width: 65vw;
+      }
+  }
+  
+  @media (max-width: 992px) { // NEW: نقطة توقف للحواسيب اللوحية
+      :host {
+          width: 80vw;
+          min-width: unset; // إزالة العرض الأدنى
+      }
+      .form-row {
+          grid-template-columns: 1fr; // جعل كل حقل يأخذ سطرًا كاملاً
+      }
+  }
+  
+  @media (max-width: 768px) {
+    :host { // MODIFIED: استخدام :host بدلاً من .quick-add-form لتطبيق العرض والارتفاع
+      width: 90vw; // MODIFIED: تعديل العرض للشاشات الأصغر
+      max-height: 90vh; // MODIFIED
+    }
+    
+    .form-content {
+      padding: 1.25rem; // MODIFIED
+    }
+    
+    // .form-row { // تم تعديله في 992px
+    //   grid-template-columns: 1fr;
+    // }
+    
+    .template-grid {
+      grid-template-columns: repeat(auto-fit, minmax(120px, 1fr)); // MODIFIED
+      gap: 0.75rem; // MODIFIED
+    }
+    
+    // .price-row (إذا كان هناك price-row، لم أجده في HTML)
+    
+    .form-actions {
+      flex-direction: column-reverse; // MODIFIED: عكس ترتيب الأزرار وجعلها عمودية
+      gap: 0.75rem; // MODIFIED
+      align-items: stretch; // NEW: جعل الأزرار تملأ العرض
+      
+      .btn { // NEW: تعديل الأزرار داخل .form-actions
+          width: 100%;
+          justify-content: center;
+      }
+      
+      // .keyboard-hint (تم نقله إلى .shortcuts-info)
+    }
+    .image-upload-area .image-preview {
+      grid-template-columns: repeat(auto-fill, minmax(90px, 1fr)); // MODIFIED
+    }
+  }
+  
+  @media (max-width: 480px) {
+    .form-header {
+      padding: 1rem 1.25rem;
+      h2 { font-size: 1.2rem; }
+      .btn-close { font-size: 1.1rem; }
+    }
+    .form-content { padding: 1rem; }
+    .form-section { padding: 1rem; }
+    .form-section h3 {
+      margin: -1rem -1rem 1rem -1rem;
+      padding: 0.75rem 1rem;
+      font-size: 1rem;
+    }
+    .form-group label { font-size: 0.85rem; }
+    .form-control { padding: 0.7rem 0.9rem; font-size: 0.85rem; }
+  
+    .template-grid {
+      grid-template-columns: repeat(auto-fit, minmax(100px, 1fr)); // MODIFIED
+    }
+    
+    .image-upload-area .image-preview {
+      grid-template-columns: repeat(auto-fill, minmax(80px, 1fr)); // MODIFIED
+      gap: 0.5rem; // MODIFIED
+    }
+    .image-upload-area .image-preview .image-item .btn-remove {
+      width: 24px; height: 24px; font-size: 0.7rem;
+    }
+  
+    // .radio-group (إذا استخدم)
+  }
+  
+  // Loading spinner animation
+  @keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+  }
+  
+  // Fade in animation for suggestions
+  @keyframes fadeInSuggestions { // MODIFIED: اسم مختلف للأنميشن
+    from {
+      opacity: 0;
+      transform: translateY(-5px); // MODIFIED: مسافة أقل
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+
+
+
+  // quick-add-form.component.scss
+:host {
+    display: block;
+    width: 55vw; // MODIFIED: يمكن تعديل العرض حسب الحاجة
+    max-width: 750px; // MODIFIED: تعديل العرض الأقصى
+    min-width: 400px;
+    // max-height: 90vh; // REMOVED: إزالة هذا للسماح بالنمو الكامل
+    background: #ffffff;
+    border-radius: 14px; // MODIFIED: تعديل طفيف
+    overflow: hidden; // IMPORTANT: الحفاظ على هذا لقص المحتوى الزائد عن الحواف المستديرة
+    font-family: 'Cairo', Arial, sans-serif;
+    direction: rtl;
+    box-shadow: 0 20px 45px -10px rgba(0, 0, 0, 0.2), 0 10px 25px -15px rgba(50, 50, 93, 0.25); // MODIFIED: تعديل الظل
+    display: flex;
+    flex-direction: column;
+    margin-top: 0; // NEW: ضمان البدء من الأعلى داخل .modal-overlay إذا كان المحتوى طويلاً
+    margin-bottom: 0; // NEW: ضمان عدم وجود هوامش سفلية إضافية
+  }
+  
+  .quick-add-form {
+      display: flex;
+      flex-direction: column;
+      height: 100%;
+  }
+  
+  .form-header {
+    background: linear-gradient(135deg, #5E72E4 0%, #7B60E8 100%); // MODIFIED: تعديل طفيف في التدرج
+    color: white;
+    padding: 1.2rem 1.5rem; // MODIFIED
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-shrink: 0;
+    border-bottom: 1px solid rgba(255,255,255,0.1); // NEW: خط فاصل خفيف
+    
+    h2 {
+      margin: 0;
+      font-size: 1.35rem; // MODIFIED
+      font-weight: 600;
+    }
+    
+    .btn-close {
+      // ... (نفس النمط السابق، يمكن الإبقاء عليه)
+    }
+  }
+  
+  .form-content {
+    padding: 1.5rem; // MODIFIED
+    flex-grow: 1;
+    // max-height: calc(90vh - 120px); // REMOVED
+    // overflow-y: auto; // REMOVED
+    background-color: #f7f9fc; // MODIFIED: لون خلفية مختلف قليلاً
+    
+    // إزالة أنماط شريط التمرير المخصص من هنا لأن التمرير سيكون على مستوى .modal-overlay
+  }
+  
+  // Quick Templates (تحسينات بناءً على الصورة)
+  .quick-templates {
+    text-align: center;
+    padding: 1.5rem 0.5rem 2rem; // MODIFIED
+    border-bottom: 1px solid #dfe3ec; // MODIFIED
+    margin-bottom: 2rem;
+    
+    h3 {
+      margin-bottom: 1.75rem; // MODIFIED
+      color: #32325d;
+      font-size: 1.2rem; // MODIFIED
+      font-weight: 600;
+    }
+    
+    .template-grid {
+      display: grid;
+      // grid-template-columns: repeat(auto-fit, minmax(120px, 1fr)); // MODIFIED: ليتناسب مع 5 عناصر كما في الصورة
+      grid-template-columns: repeat(5, 1fr); // MODIFIED: إذا كان العدد ثابتًا على 5
+      gap: 1rem; // MODIFIED
+      margin-bottom: 1.75rem;
+      max-width: 800px; // NEW: تحديد عرض أقصى للشبكة
+      margin-left: auto; // NEW: لتوسيط الشبكة
+      margin-right: auto; // NEW: لتوسيط الشبكة
+      
+      .template-btn {
+        background: #ffffff;
+        border: 1px solid #ccd3e0; // MODIFIED: لون إطار أفتح
+        border-radius: 10px;
+        padding: 1.5rem 0.5rem; // MODIFIED: زيادة الـ padding الرأسي
+        cursor: pointer;
+        transition: all 0.2s ease-out;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center; // NEW: توسيط المحتوى
+        gap: 0.75rem; // MODIFIED
+        color: #434a54; // MODIFIED: لون نص أغمق قليلاً
+        min-height: 110px; // NEW: تحديد ارتفاع أدنى للتوحيد
+        
+        &:hover {
+          border-color: #5E72E4;
+          transform: translateY(-3px) scale(1.03); // MODIFIED: تعديل تأثير الرفع والتكبير
+          box-shadow: 0 5px 15px rgba(94, 114, 228, 0.18); // MODIFIED
+          color: #5E72E4;
+        }
+        
+        &:active {
+          transform: translateY(-1px) scale(1.01); // MODIFIED
+          box-shadow: 0 2px 8px rgba(94, 114, 228, 0.15); // MODIFIED
+        }
+        
+        i {
+          font-size: 2rem; // MODIFIED: تكبير الأيقونة قليلاً (كما يبدو في الصورة)
+          color: #5E72E4; // يمكن تغيير لون الأيقونة عند الـ hover إذا أردت
+          margin-bottom: 0.25rem; // NEW: مسافة صغيرة أسفل الأيقونة
+        }
+        
+        span {
+          font-weight: 500;
+          font-size: 0.8rem; // MODIFIED: تصغير حجم الخط قليلاً ليتناسب
+          line-height: 1.3;
+          text-align: center; // NEW
+        }
+      }
+    }
+    
+    .btn-link {
+      // ... (نفس النمط السابق، يمكن الإبقاء عليه أو تحسينه ليتماشى)
+      font-size: 0.95rem; // MODIFIED: تكبير طفيف
+      font-weight: 500;
+      &:hover {
+        background: rgba(94, 114, 228, 0.08);
+      }
+    }
+  }
+  
+  // Form Sections
+  .form-section {
+    margin-bottom: 1.75rem; // MODIFIED
+    padding: 1.25rem; // MODIFIED
+    background: #ffffff;
+    border-radius: 10px; // MODIFIED
+    border: 1px solid #dfe3ec; // MODIFIED
+    border-top: 3px solid #6777E5; // MODIFIED: تعديل اللون قليلاً
+    box-shadow: 0 3px 8px rgba(0,0,0,0.03); // MODIFIED
+  
+    h3 {
+      // ... (يمكن الإبقاء على النمط السابق للعنوان داخل القسم)
+      padding: 0.9rem 1.25rem; // MODIFIED
+      font-size: 1.05rem; // MODIFIED
+    }
+  }
+  
+  // Form Layout
+  .form-row {
+    // ... (يمكن الإبقاء على النمط السابق)
+    gap: 1rem; // MODIFIED
+    margin-bottom: 1rem; // MODIFIED
+  }
+  
+  .form-group {
+    // ... (يمكن الإبقاء على النمط السابق)
+    label {
+      // ... (يمكن الإبقاء على النمط السابق)
+    }
+    .form-control {
+      // ... (يمكن الإبقاء على النمط السابق)
+      padding: 0.75rem 1rem; // MODIFIED
+      border-radius: 7px; // MODIFIED
+    }
+    .suggestions {
+      // ... (يمكن الإبقاء على النمط السابق)
+      border-radius: 7px; // MODIFIED
+      .suggestion-item {
+          padding: 0.75rem 1rem; // MODIFIED
+      }
+    }
+  }
+  
+  // Checkbox styling
+  .checkbox-group {
+    // ... (يمكن الإبقاء على النمط السابق)
+    .checkbox-label {
+      // ... (يمكن الإبقاء على النمط السابق)
+      input[type="checkbox"] {
+          // ... (يمكن الإبقاء على النمط السابق)
+      }
+    }
+  }
+  
+  // Image Upload Section
+  .image-upload-area {
+    // ... (يمكن الإبقاء على النمط السابق مع بعض التعديلات إذا لزم الأمر)
+    border-radius: 10px; // MODIFIED
+    padding: 1.25rem; // MODIFIED
+  
+    .upload-content {
+      // ... (يمكن الإبقاء على النمط السابق)
+      i { font-size: 2.2rem; } // MODIFIED
+      p { font-size: 0.9rem; } // MODIFIED
+    }
+    
+    .image-preview {
+      // ... (يمكن الإبقاء على النمط السابق)
+      .image-item {
+          border-radius: 8px; // MODIFIED
+      }
+    }
+  }
+  
+  // Form Actions
+  .form-actions {
+    gap: 0.8rem; // MODIFIED
+    padding: 1.2rem 1.5rem; // MODIFIED
+    background: #f0f3f7; // MODIFIED: لون أفتح قليلاً
+    border-top: 1px solid #dfe3ec; // MODIFIED
+  
+    .btn { // MODIFIED: تعديل الأزرار لتكون متناسقة مع أزرار الداشبورد الرئيسية
+      padding: 0.7rem 1.3rem; // MODIFIED: تعديل الـ padding
+      font-size: 0.9rem;
+      border-radius: 8px; // MODIFIED: زيادة استدارة الحواف
+      font-weight: 600; // NEW
+      // سيتم تطبيق باقي أنماط الأزرار (primary, secondary, success) من الأنماط العامة إذا كانت مشتركة
+      // إذا لم تكن مشتركة، يجب نسخها وتعديلها هنا من dashboard.component.scss
+    }
+  }
+  
+  .shortcuts-info {
+      padding: 0.8rem 1.5rem; // MODIFIED
+      background-color: #e9edf2; // MODIFIED: لون أفتح
+      // ... (باقي النمط كما هو)
+  }
+  
+  // Responsive Design
+  @media (max-width: 1200px) {
+      :host {
+          width: 70vw; // MODIFIED
+      }
+      .quick-templates .template-grid { // NEW: تعديل عدد الأعمدة للشاشات المتوسطة
+          grid-template-columns: repeat(3, 1fr);
+      }
+  }
+  
+  @media (max-width: 992px) {
+      :host {
+          width: 85vw; // MODIFIED
+      }
+       .quick-templates .template-grid {
+          grid-template-columns: repeat(2, 1fr); // MODIFIED: عمودان للقوالب
+      }
+  }
+  
+  @media (max-width: 768px) {
+    :host {
+      width: 95vw; // MODIFIED: ليكون أعرض قليلاً على الموبايل
+      border-radius: 10px; // MODIFIED: تقليل الاستدارة للموبايل
+    }
+    .modal-overlay { // NEW: تعديل padding الغلاف على الموبايل
+        padding: 0.5rem;
+    }
+    .form-header { padding: 1rem 1.25rem; h2 {font-size: 1.25rem;} } // MODIFIED
+    .form-content { padding: 1rem; } // MODIFIED
+    
+    .quick-templates .template-grid {
+      grid-template-columns: repeat(2, 1fr); // MODIFIED: تأكيد عمودين
+      gap: 0.75rem; // MODIFIED
+      .template-btn {
+          padding: 1rem 0.5rem; // MODIFIED
+          min-height: 90px; // MODIFIED
+          i { font-size: 1.6rem; }
+          span { font-size: 0.75rem; }
+      }
+    }
+    .form-actions {
+      padding: 1rem; // MODIFIED
+    }
+  }
+  
+  @media (max-width: 480px) {
+    :host {
+        border-radius: 0; // NEW: إزالة الاستدارة للشاشات الصغيرة جداً لملء الشاشة
+    }
+    .modal-overlay { // NEW: إزالة الـ padding للشاشات الصغيرة جداً
+        padding: 0;
+    }
+    .form-header { border-radius: 0; } // NEW
+  
+    .quick-templates .template-grid {
+      grid-template-columns: repeat(2, 1fr); // MODIFIED: صفان، كل صف به عنصران أو ثلاثة حسب المساحة
+      gap: 0.5rem;
+    }
+    // يمكن تعديل أنماط أخرى حسب الحاجة للشاشات الصغيرة جداً
+  }
+  
+  // ... (باقي الأنماط مثل @keyframes spin و @keyframes fadeInSuggestions)
