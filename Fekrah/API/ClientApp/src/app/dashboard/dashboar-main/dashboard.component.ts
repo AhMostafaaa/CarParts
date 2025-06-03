@@ -1,32 +1,9 @@
 // dashboard.component.ts
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { Subject, debounceTime, distinctUntilChanged, takeUntil } from 'rxjs';
+import { CarPart } from '../../Shared/Models/car-card';
 
-export interface CarPart {
-  id: string;
-  name: string;
-  subtitle: any;
-  condition: 'جديد' | 'مستعمل';
-  store: {
-    name: string;
-    phone: string;
-  };
-  car: {
-    brand: string;
-    model: string;
-    year: string;
-  };
-  price: number;
-  priceAfterDiscount: number;
-  discount: number;
-  isFavorite: boolean;
-  hasDelivery: boolean;
-  grade: 'فرز أول' | 'فرز تاني';
-  partType: 'كوري' | 'ياباني' | 'صيني';
-  origin: string;
-  image?: string;
-  thumbnails?: string[];
-}
+
 
 @Component({
   selector: 'app-dashboard',
@@ -36,40 +13,58 @@ export interface CarPart {
 export class DashboardComponent implements OnInit, OnDestroy {
   private destroy$ = new Subject<void>();
   private searchSubject = new Subject<string>();
-  
+
+  // أضف هذا المتغير للتحكم في طريقة العرض
+viewMode: 'card' | 'list' = 'card';
+
+// دالة لتغيير وضع العرض
+setViewMode(mode: 'card' | 'list') {
+  this.viewMode = mode;
+}
+
+
+getListRows(): any[][] {
+  const rows = [];
+  for (let i = 0; i < this.filteredParts.length; i += 2) {
+    rows.push(this.filteredParts.slice(i, i + 2));
+  }
+  return rows;
+}
+
+
   // Data properties
   parts: CarPart[] = [];
   filteredParts: CarPart[] = [];
   isLoading = false;
-  
+
   // Search and filter properties
   searchTerm = '';
   selectedBrand = '';
   selectedCondition = '';
   selectedGrade = '';
   availableBrands: string[] = [];
-  
+
   // Pagination properties
   currentPage = 1;
   itemsPerPage = 12;
   totalPages = 0;
-  
+
   // Modal properties
   showQuickAddModal = false;
-  
+
   // Stats properties
   get totalParts(): number {
     return this.parts.length;
   }
-  
+
   get favoritePartsCount(): number {
     return this.parts.filter(part => part.isFavorite).length;
   }
-  
+
   get totalValue(): number {
     return this.parts.reduce((sum, part) => sum + part.priceAfterDiscount, 0);
   }
-  
+
   get deliveryAvailableCount(): number {
     return this.parts.filter(part => part.hasDelivery).length;
   }
@@ -209,7 +204,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
       name: `${part.name} (نسخة)`,
       isFavorite: false
     };
-    
+
     this.parts.unshift(newPart); // Add to beginning for quick access
     this.applyFilters();
     this.showSuccessMessage('تم نسخ القطعة بنجاح');
@@ -245,14 +240,14 @@ export class DashboardComponent implements OnInit, OnDestroy {
     input.type = 'file';
     input.accept = '.csv,.xlsx,.json';
     input.multiple = false;
-    
+
     input.onchange = (event: any) => {
       const file = event.target.files[0];
       if (file) {
         this.processBulkImport(file);
       }
     };
-    
+
     input.click();
   }
 
@@ -271,7 +266,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
       // Validate and add parts
       const validParts = importedParts.filter(part => this.validatePart(part));
       this.parts = [...validParts, ...this.parts];
-      
+
       this.extractAvailableBrands();
       this.applyFilters();
       this.showSuccessMessage(`تم استيراد ${validParts.length} قطعة بنجاح`);
@@ -292,13 +287,13 @@ export class DashboardComponent implements OnInit, OnDestroy {
         const searchInput = document.querySelector('.search-input') as HTMLInputElement;
         searchInput?.focus();
       }
-      
+
       // Ctrl/Cmd + N for quick add
       if ((event.ctrlKey || event.metaKey) && event.key === 'n') {
         event.preventDefault();
         this.openQuickAddModal();
       }
-      
+
       // Escape to close modals
       if (event.key === 'Escape') {
         this.closeQuickAddModal();
@@ -385,10 +380,10 @@ export class DashboardComponent implements OnInit, OnDestroy {
   }
 
   private validatePart(part: any): part is CarPart {
-    return part && 
-           typeof part.name === 'string' && 
+    return part &&
+           typeof part.name === 'string' &&
            part.name.length > 0 &&
-           part.car && 
+           part.car &&
            part.store &&
            typeof part.price === 'number';
   }
@@ -419,7 +414,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
       const partName = partNames[Math.floor(Math.random() * partNames.length)];
       const store = stores[Math.floor(Math.random() * stores.length)];
       const origin = origins[Math.floor(Math.random() * origins.length)];
-      
+
       const price = Math.floor(Math.random() * 2000) + 100;
       const discount = Math.floor(Math.random() * 30);
       const priceAfterDiscount = price - (price * discount / 100);
