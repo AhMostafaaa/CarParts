@@ -1,4 +1,5 @@
 import { AfterViewInit, Component, OnInit } from '@angular/core';
+import { CarPart } from 'src/app/Shared/Models/car-card';
 import Swiper from 'swiper';
 
 @Component({
@@ -7,186 +8,101 @@ import Swiper from 'swiper';
   styleUrls: ['./suggested-offers.component.scss']
 })
 export class SuggestedOffersComponent implements OnInit, AfterViewInit {
-  suggestedParts = [
+
+  carPartsSample: CarPart[] = [
     {
-      id: 109,
-      name: 'حساس شكمان مستعمل',
-      price: 270,
-      oldPrice: 0,
-      discount: 0,
-      condition: 'Used',
-      sellerName: 'ورشة البيئة الذكية',
-      sellerId: '110',
-      description: 'حساس شكمان أصلي تم اختباره ويعمل بكفاءة.',
-      imageUrl: 'assets/images/image100_100.png'
-    },
-    {
-      id: 110,
-      name: 'ردياتير مستعمل نيسان',
-      price: 520,
-      oldPrice: 0,
-      discount: 0,
-      condition: 'Used',
-      sellerName: 'ورشة التبريد العالمية',
-      sellerId: '111',
-      description: 'ردياتير نيسان نظيف، بدون تسريبات، أداء ممتاز.',
-      imageUrl: 'assets/images/image100_100.png'
-    },
-    {
-      id: 111,
-      name: 'كارتة كهرباء',
-      price: 780,
-      oldPrice: 950,
-      discount: 18,
-      condition: 'New',
-      sellerName: 'محل الإلكترونيات الأصلية',
-      sellerId: '112',
-      description: 'كارتة تشغيل عالية الكفاءة لمعالجة أعطال الكهرباء.',
-      imageUrl: 'assets/images/image100_100.png'
-    },
-    {
-      id: 112,
+      id: '1000',
       name: 'فلتر مكيف داخلي',
-      price: 130,
-      oldPrice: 160,
-      discount: 19,
-      condition: 'New',
-      sellerName: 'تكييف السيارات الحديث',
-      sellerId: '113',
-      description: 'فلتر داخلي يحافظ على الهواء النقي داخل السيارة.',
-      imageUrl: 'assets/images/image100_100.png'
+      subtitle: 'فلتر مكيف داخلي أصلي وجديد',
+      condition: 'جديد',
+      store: { name: 'العفشة العالمية', phone: '01000000007' },
+      car: { brand: 'ميتسوبيشي', model: 'كورولا', year: '2016' },
+      price: 212,
+      priceAfterDiscount: 159,
+      discount: 25,
+      isFavorite: false,
+      hasDelivery: true,
+      grade: 'فرز تاني',
+      partType: 'كوري',
+      origin: 'كوريا'
     },
     {
-      id: 113,
-      name: 'زمارة هواء مستعملة',
-      price: 80,
-      oldPrice: 0,
-      discount: 0,
-      condition: 'Used',
-      sellerName: 'الصوت العالي لقطع الغيار',
-      sellerId: '114',
-      description: 'زمارة صوت عالي تعمل بكفاءة وبدون أعطال.',
-      imageUrl: 'assets/images/image100_100.png'
-    }
-    ,
-    {
-      id: 100,
-      name: 'فلتر هواء',
-      price: 350,
-      oldPrice: 0,
-      discount: 0,
-      condition: 'New',
-      sellerName: 'قطع الغيار الممتازة',
-      sellerId: '101',
-      description: 'فلتر هواء أصلي لأداء محرك مثالي.',
-      imageUrl: 'assets/images/image100_100.png'
-    },
-    {
-      id: 101,
-      name: 'ردياتير نيسان',
-      price: 680,
-      oldPrice: 0,
-      discount: 0,
-      condition: 'New',
-      sellerName: 'العفشة العالمية',
-      sellerId: '102',
-      description: 'ردياتير تبريد عالي الجودة.',
-      imageUrl: 'assets/images/image100_100.png'
-    },
-    {
-      id: 102,
+      id: '1001',
       name: 'بطارية فارتا',
-      price: 1150,
-      oldPrice: 1300,
-      discount: 12,
-      condition: 'New',
-      sellerName: 'مؤسسة البطاريات الحديثة',
-      sellerId: '103',
-      description: 'بطارية ألمانية قوية تناسب السيارات الأوروبية.',
-      imageUrl: 'assets/images/image100_100.png'
+      subtitle: 'بطارية فارتا أصلي وجديد',
+      condition: 'جديد',
+      store: { name: 'ورشة التبريد العالمية', phone: '01000000002' },
+      car: { brand: 'نيسان', model: 'إلنترا', year: '2017' },
+      price: 535,
+      priceAfterDiscount: 428,
+      discount: 20,
+      isFavorite: false,
+      hasDelivery: true,
+      grade: 'فرز أول',
+      partType: 'ياباني',
+      origin: 'اليابان'
     },
     {
-      id: 103,
-      name: 'كمبيوتر سيارة مستعمل',
-      price: 2200,
-      oldPrice: 2900,
-      discount: 24,
-      condition: 'Used',
-      sellerName: 'الإلكترونيات الحديثة',
-      sellerId: '104',
-      description: 'كمبيوتر سيارة بحالة ممتازة مع ضمان لمدة شهر.',
-      imageUrl: 'assets/images/image100_100.png'
+      id: '1002',
+      name: 'بطارية فارتا',
+      subtitle: 'بطارية فارتا أصلي وجديد',
+      condition: 'جديد',
+      store: { name: 'تكييف السيارات الحديث', phone: '01000000004' },
+      car: { brand: 'تويوتا', model: 'سيراتو', year: '2020' },
+      price: 1541,
+      priceAfterDiscount: 1232,
+      discount: 20,
+      isFavorite: false,
+      hasDelivery: true,
+      grade: 'فرز تاني',
+      partType: 'صيني',
+      origin: 'الصين'
     },
     {
-      id: 104,
-      name: 'كمبروسر تكييف مستعمل',
-      price: 850,
-      oldPrice: 1050,
-      discount: 19,
-      condition: 'Used',
-      sellerName: 'ورشة التبريد الشامل',
-      sellerId: '105',
-      description: 'كمبروسر تكييف مجدد يعمل بكفاءة.',
-      imageUrl: 'assets/images/image100_100.png'
-    },
-    {
-      id: 105,
-      name: 'مساعدين أمامي تويوتا',
-      price: 950,
-      oldPrice: 1150,
-      discount: 17,
-      condition: 'New',
-      sellerName: 'العفشة الأصلية',
-      sellerId: '106',
-      description: 'مساعدين يوفرون ثبات وراحة أثناء القيادة.',
-      imageUrl: 'assets/images/image100_100.png'
-    },
-    {
-      id: 106,
-      name: 'كشاف أمامي مستعمل',
-      price: 400,
-      oldPrice: 0,
-      discount: 0,
-      condition: 'Used',
-      sellerName: 'كهرباء نور الطريق',
-      sellerId: '107',
-      description: 'كشاف مستعمل نظيف مناسب لهونداي النترا.',
-      imageUrl: 'assets/images/image100_100.png'
-    },
-    {
-      id: 107,
+      id: '1003',
       name: 'طرمبة بنزين',
-      price: 375,
-      oldPrice: 450,
-      discount: 17,
-      condition: 'New',
-      sellerName: 'قطع الوقود الأصلية',
-      sellerId: '108',
-      description: 'طرمبة قوية تضمن ضخ وقود مستمر للمحرك.',
-      imageUrl: 'assets/images/image100_100.png'
+      subtitle: 'طرمبة بنزين أصلي وجديد',
+      condition: 'جديد',
+      store: { name: 'قطع الغيار الممتازة', phone: '01000000006' },
+      car: { brand: 'نيسان', model: 'سيراتو', year: '2012' },
+      price: 1637,
+      priceAfterDiscount: 1227,
+      discount: 25,
+      isFavorite: false,
+      hasDelivery: true,
+      grade: 'فرز تاني',
+      partType: 'صيني',
+      origin: 'الصين'
     },
     {
-      id: 108,
-      name: 'فلتر زيت مستعمل بحالة ممتازة',
-      price: 90,
-      oldPrice: 0,
-      discount: 0,
-      condition: 'Used',
-      sellerName: 'ورشة الصيانة السريعة',
-      sellerId: '109',
-      description: 'فلتر زيت مستخدم نظيف بسعر اقتصادي.',
-      imageUrl: 'assets/images/image100_100.png'
+      id: '1004',
+      name: 'فلتر هواء',
+      subtitle: 'فلتر هواء أصلي وجديد',
+      condition: 'جديد',
+      store: { name: 'الإلكترونيات الحديثة', phone: '01000000009' },
+      car: { brand: 'تويوتا', model: 'سيراتو', year: '2022' },
+      price: 407,
+      priceAfterDiscount: 386,
+      discount: 5,
+      isFavorite: false,
+      hasDelivery: true,
+      grade: 'فرز أول',
+      partType: 'صيني',
+      origin: 'الصين'
     }
   ];
+  
+  
+  
 
 
-
-  ngOnInit(): void { }
+  ngOnInit(): void {}
 
   ngAfterViewInit(): void {
     new Swiper('.suggested-offers-swiper', {
       slidesPerView: 6,
       spaceBetween: 30,
+      centeredSlides: false,
       loop: true,
       autoplay: {
         delay: 4000,
@@ -202,5 +118,19 @@ export class SuggestedOffersComponent implements OnInit, AfterViewInit {
         1024: { slidesPerView: 5, spaceBetween: 30 }
       }
     });
+  }
+
+  trackByPartId(index: number, part: CarPart): string {
+    return part?.id ?? index.toString();
+  }
+  
+  
+
+  onAddToCart(part: any): void {
+    console.log('✅ Add to cart:', part);
+  }
+
+  onFavoriteToggled(part: any): void {
+    console.log('❤️ Favorite toggled:', part);
   }
 }

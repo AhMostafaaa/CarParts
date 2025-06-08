@@ -3199,23 +3199,23 @@
     ]
   },
   "packageFolders": {
-    "C:\\Users\\TIGEER2\\.nuget\\packages\\": {},
+    "C:\\Users\\tafeel-pc4\\.nuget\\packages\\": {},
     "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages": {}
   },
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\Users\\TIGEER2\\Source\\Repos\\CarParts\\Fekrah\\Bussiness\\Bussiness.csproj",
+      "projectUniqueName": "C:\\Users\\tafeel-pc4\\source\\repos\\CarParts\\Fekrah\\Bussiness\\Bussiness.csproj",
       "projectName": "Bussiness",
-      "projectPath": "C:\\Users\\TIGEER2\\Source\\Repos\\CarParts\\Fekrah\\Bussiness\\Bussiness.csproj",
-      "packagesPath": "C:\\Users\\TIGEER2\\.nuget\\packages\\",
-      "outputPath": "C:\\Users\\TIGEER2\\Source\\Repos\\CarParts\\Fekrah\\Bussiness\\obj\\",
+      "projectPath": "C:\\Users\\tafeel-pc4\\source\\repos\\CarParts\\Fekrah\\Bussiness\\Bussiness.csproj",
+      "packagesPath": "C:\\Users\\tafeel-pc4\\.nuget\\packages\\",
+      "outputPath": "C:\\Users\\tafeel-pc4\\source\\repos\\CarParts\\Fekrah\\Bussiness\\obj\\",
       "projectStyle": "PackageReference",
       "fallbackFolders": [
         "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
       ],
       "configFilePaths": [
-        "C:\\Users\\TIGEER2\\AppData\\Roaming\\NuGet\\NuGet.Config",
+        "C:\\Users\\tafeel-pc4\\AppData\\Roaming\\NuGet\\NuGet.Config",
         "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
         "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
       ],
@@ -3231,8 +3231,8 @@
         "net8.0": {
           "targetAlias": "net8.0",
           "projectReferences": {
-            "C:\\Users\\TIGEER2\\Source\\Repos\\CarParts\\Fekrah\\Data\\Data.csproj": {
-              "projectPath": "C:\\Users\\TIGEER2\\Source\\Repos\\CarParts\\Fekrah\\Data\\Data.csproj"
+            "C:\\Users\\tafeel-pc4\\source\\repos\\CarParts\\Fekrah\\Data\\Data.csproj": {
+              "projectPath": "C:\\Users\\tafeel-pc4\\source\\repos\\CarParts\\Fekrah\\Data\\Data.csproj"
             }
           }
         }
@@ -3270,13 +3270,5 @@
         "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\8.0.400/PortableRuntimeIdentifierGraph.json"
       }
     }
-  },
-  "logs": [
-    {
-      "code": "Undefined",
-      "level": "Warning",
-      "warningLevel": 1,
-      "message": "Problem reading the cache file C:\\Users\\TIGEER2\\Source\\Repos\\CarParts\\Fekrah\\Bussiness\\obj\\project.nuget.cache : Invalid property identifier character: <. Path 'version', line 3, position 0."
-    }
-  ]
+  }
 }

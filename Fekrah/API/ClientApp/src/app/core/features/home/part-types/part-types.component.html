@@ -1,0 +1,23 @@
+<section class="part-types-section">
+  <div class="section-header">
+    <h2>تصفح حسب نوع القطعة</h2>
+    <p class="subtitle">اختر من مجموعة واسعة من قطع الغيار</p>
+  </div>
+
+  <div #swiperRef class="swiper">
+    <div class="swiper-wrapper">
+      <div class="swiper-slide" *ngFor="let part of partTypes; trackBy: trackByPartName">
+        <div class="part-card"  [routerLink]="['/parts/brand', part.id]">
+          <div class="icon-wrapper">
+            <img [src]="part.imageUrl" [alt]="part.name" class="part-icon" />
+          </div>
+          <h3>{{ part.name }}</h3>
+        </div>
+      </div>
+    </div>
+
+    <div class="swiper-pagination"></div>
+    <div class="swiper-button-prev"></div>
+    <div class="swiper-button-next"></div>
+  </div>
+</section>

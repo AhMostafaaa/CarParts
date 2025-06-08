@@ -9,37 +9,33 @@
   <!-- Search Bar -->
   <div class="search-bar">
     <select class="category-select">
-      <option value="">جميع الأقسام</option>
-      <option value="الموتور">الموتور</option>
-      <option value="الكهرباء">الكهرباء</option>
-      <option value="البودي">البودي</option>
-      <option value="الفرامل">الفرامل</option>
-      <option value="اكسسوارات">اكسسوارات</option>
+      <option value="">{{ searchCategories.default }}</option>
+      <option *ngFor="let category of searchCategories.options" [value]="category.value">
+        {{ category.label }}
+      </option>
     </select>
-    <input type="text" placeholder="ابحث عن قطعة غيار..." [(ngModel)]="searchTerm" />
+    <input type="text" [placeholder]="searchPlaceholder" [(ngModel)]="searchTerm" />
     <button class="search-button" (click)="search()">
-      <i class="fas fa-search"></i> بحث
+      <i class="fas fa-search"></i> {{ searchButtonText }}
     </button>
   </div>
 
   <!-- Right Menu -->
   <div class="right-menu">
-    <a routerLink="/AboutUs" class="nav-link">
-      <i class="fas fa-info-circle"></i> من نحن
+    <a *ngFor="let menuItem of rightMenuItems" [routerLink]="menuItem.route" class="nav-link">
+      <i [class]="menuItem.icon"></i> {{ menuItem.label }}
     </a>
-    <a routerLink="/contact-us" class="nav-link">
-      <i class="fas fa-envelope"></i> اتصل بنا
+
+
+    <!-- سلة المشتريات -->
+    <a [routerLink]="['/addCart']" class="cart-icon nav-link">
+      <i class="fas fa-shopping-cart"></i> {{ cartText }}
+      <span class="cart-count" *ngIf="cartCount > 0">{{ cartCount }}</span>
     </a>
-    <a routerLink="/seller/dashboard" class="nav-link">
-      <i class="fas fa-user-cog"></i> لوحة التحكم
-    </a>
+    <!-- تسجيل الدخول -->
     <a routerLink="/auth/login" class="nav-link">
       <i class="fas fa-sign-in-alt"></i> دخول
     </a>
-    <!-- <a routerLink="/cart" class="cart-icon nav-link">
-      <i class="fas fa-shopping-cart"></i>
-      <span class="cart-count" *ngIf="cartCount > 0">{{ cartCount }}</span>
-    </a> -->
   </div>
 </header>
 
@@ -47,12 +43,12 @@
 <nav class="main-nav">
   <div class="container">
     <ul class="nav-list">
-      <li><a routerLink="/home" routerLinkActive="active">الرئيسية</a></li>
-      <li><a routerLink="/categories" routerLinkActive="active">الأقسام</a></li>
-      <li><a routerLink="/brands" routerLinkActive="active">الماركات</a></li>
-      <li><a routerLink="/offers" routerLinkActive="active">العروض</a></li>
-      <li><a routerLink="/stores" routerLinkActive="active">المتاجر</a></li>
-      <li><a routerLink="/latest" routerLinkActive="active">أحدث القطع</a></li>
+      <li *ngFor="let item of navItems">
+        <a (click)="goToNavItem(item)">
+          {{ item.label }}
+        </a>
+      </li>
     </ul>
   </div>
 </nav>
+

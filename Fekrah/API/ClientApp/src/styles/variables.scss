@@ -1,0 +1,36 @@
+// src/styles/_variables.scss
+
+$primary-color: #2c5aa0;
+$secondary-color: #f8941e;
+$accent-color: #e74c3c;
+$success-color: #27ae60;
+$dark-color: #2c3e50;
+$light-gray: #f8f9fa;
+$border-color: #e9ecef;
+$shadow-color: rgba(0, 0, 0, 0.1);
+$gradient-primary: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+$gradient-secondary: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+
+// Variables
+$primary-color: #667eea;
+$secondary-color: #764ba2;
+$tertiary-color: #a78bfa; // لون ثالث إضافي
+$gradient-primary: linear-gradient(
+  135deg,
+  $primary-color 0%,
+  $secondary-color 100%
+);
+$white: #ffffff;
+$gray-light: #f8f9ff;
+$gray-medium: #666;
+$gray-dark: #333;
+$border-radius-small: 12px;
+$border-radius-medium: 20px;
+$border-radius-large: 25px;
+$transition-smooth: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+$transition-fast: all 0.3s ease;
+$box-shadow-light: 0 8px 25px rgba(102, 126, 234, 0.1);
+$box-shadow-medium: 0 15px 35px rgba(102, 126, 234, 0.25);
+$box-shadow-heavy: 0 20px 40px rgba(118, 75, 162, 0.3);
+$orange-light: #ffe0b2; // برتقالي فاتح
+$orange-medium: #ffb74d; // برتقالي متوسط

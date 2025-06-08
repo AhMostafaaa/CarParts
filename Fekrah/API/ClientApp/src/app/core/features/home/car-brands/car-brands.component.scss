@@ -1,0 +1,214 @@
+.brand-section {
+  text-align: center;
+  margin: 25px 0;
+  padding: 30px 70px;
+  border-radius: 20px;
+  box-shadow: inset 0 0 15px rgba(255, 255, 255, 0.5);
+  border: 1px solid rgba(255, 255, 255, 0.3);
+
+  h2 {
+    font-size: 1.8rem;
+    margin-bottom: 1.5rem;
+    background: linear-gradient(45deg, #2c3e50, #3498db);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    font-weight: 700;
+    letter-spacing: 0.5px;
+    position: relative;
+    display: inline-block;
+
+    &:after {
+      content: "";
+      position: absolute;
+      bottom: -8px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 50px;
+      height: 3px;
+      background: linear-gradient(90deg, #3498db, #2ecc71);
+      border-radius: 3px;
+    }
+  }
+}
+
+.swiper {
+  padding: 37px 41px 62px;
+  margin: 5px 10px;
+  overflow: hidden;
+
+  .swiper-wrapper {
+    align-items: center;
+  }
+
+  .swiper-slide {
+    transition: all 0.3s ease;
+    width: auto;
+
+    &-active {
+      transform: scale(1.05);
+    }
+  }
+
+  .swiper-button-next,
+  .swiper-button-prev {
+    width: 28px;
+    height: 28px;
+    background: rgba(52, 152, 219, 0.9);
+    border-radius: 50%;
+    color: white;
+    transition: all 0.3s ease;
+
+    &:after {
+      font-size: 12px;
+      font-weight: bold;
+    }
+
+    &:hover {
+      background: #2980b9;
+      transform: scale(1.1);
+    }
+  }
+
+  .swiper-pagination {
+    bottom: 0;
+    padding-bottom: 5px;
+  }
+
+  .swiper-pagination-bullet {
+    width: 8px;
+    height: 3px;
+    border-radius: 2px;
+    background: #bdc3c7;
+    transition: all 0.3s ease;
+    margin: 0 4px;
+
+    &-active {
+      width: 20px;
+      background: #3498db;
+    }
+  }
+}
+
+.brand-card {
+  cursor: pointer;
+  width: 120px;
+  background: rgba(255, 255, 255, 0.95);
+  border-radius: 16px;
+  padding: 16px 10px;
+  margin: 0 6px;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  position: relative;
+  overflow: hidden;
+  box-shadow: 0 3px 10px rgba(0, 0, 0, 0.05);
+
+  &:before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 100%;
+    background: linear-gradient(
+      45deg,
+      transparent,
+      rgba(255, 255, 255, 0.8),
+      transparent
+    );
+    transform: translateX(-100%);
+    transition: 0.5s;
+  }
+
+  &:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 15px 25px rgba(52, 152, 219, 0.3);
+    background: linear-gradient(145deg, #ffffff, #ecf0f1);
+
+    &:before {
+      transform: translateX(100%);
+    }
+
+    .brand-image {
+      transform: scale(1.2);
+      box-shadow: 0 8px 20px rgba(52, 152, 219, 0.25);
+    }
+
+    p {
+      color: #2980b9;
+      transform: scale(1.05);
+    }
+  }
+
+  .brand-image {
+    width: 60px;
+    height: 60px;
+    margin: 0 auto 12px;
+    border-radius: 12px;
+    padding: 8px;
+    background: #fff;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+
+    &:after {
+      content: "";
+      position: absolute;
+      inset: 0;
+      border-radius: 12px;
+      padding: 2px;
+      background: linear-gradient(45deg, #3498db, #2ecc71);
+      -webkit-mask: linear-gradient(#fff 0 0) content-box,
+        linear-gradient(#fff 0 0);
+      mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+      -webkit-mask-composite: xor;
+      mask-composite: exclude;
+    }
+
+    img {
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
+      filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.1));
+    }
+  }
+
+  p {
+    margin: 0;
+    font-size: 0.9rem;
+    font-weight: 600;
+    color: #34495e;
+    transition: all 0.3s ease;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    text-shadow: 0 1px 1px rgba(255, 255, 255, 0.8);
+  }
+}
+
+@media (max-width: 768px) {
+  .brand-section {
+    margin: 15px 0;
+    padding: 20px 20px;
+
+    h2 {
+      font-size: 1.4rem;
+    }
+  }
+
+  .brand-card {
+    width: 100px;
+    padding: 12px 8px;
+
+    .brand-image {
+      width: 45px;
+      height: 45px;
+      margin-bottom: 10px;
+    }
+
+    p {
+      font-size: 0.8rem;
+    }
+  }
+}

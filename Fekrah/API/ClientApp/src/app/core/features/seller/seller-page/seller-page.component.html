@@ -1,61 +1,161 @@
 <div class="seller-page">
-  <!-- بيانات البائع -->
-  <div class="seller-header">
-    <div class="seller-info">
-      <h2 class="seller-name">{{ seller.name }}</h2>
-      <div class="rating">
-        <ng-container *ngFor="let star of stars; let i = index">
-          <i class="fas" [ngClass]="i < seller.rating ? 'fa-star' : 'fa-star-half-alt'"></i>
-        </ng-container>
-        <span class="rating-text">({{ seller.rating }}/5)</span>
-      </div>
-      <p class="description">{{ seller.description }}</p>
-    </div>
-    <div class="contact-buttons">
-      <a class="whatsapp-button" [href]="'https://wa.me/' + seller.phone" target="_blank">
-        <i class="fab fa-whatsapp"></i> تواصل واتساب
-      </a>
-    </div>
+  <!-- خلفية متحركة -->
+  <div class="animated-background">
+    <div class="floating-circle circle-1"></div>
+    <div class="floating-circle circle-2"></div>
   </div>
 
-  <section class="seller-products-section">
-    <h3 class="section-heading">منتجات هذا البائع</h3>
-
-    <div class="products-grid">
-      <div class="product-card" *ngFor="let product of sellerProducts">
-        <div class="product-image">
-          <img [src]="product.imageUrl" alt="{{ product.name }}">
-        </div>
-        <div class="product-details">
-          <h4>{{ product.name }}</h4>
-          <p class="description">{{ product.description }}</p>
-          <div class="price-block">
-            <span class="price">{{ product.price }} ج.م</span>
-            <span class="old-price" *ngIf="product.oldPrice > product.price">{{ product.oldPrice }} ج.م</span>
+  <div class="container">
+    <!-- بيانات التاجر -->
+    <div class="seller-card glass-card">
+      <div class="seller-gradient">
+        <div class="seller-content">
+          <div class="seller-avatar pulse-animation">
+            <i class="fas fa-store-alt"></i>
           </div>
-          <button class="details-btn" [routerLink]="['/parts', product.id]">عرض التفاصيل</button>
+
+          <div class="seller-info">
+            <h1 class="seller-name">{{ seller.name }}</h1>
+            <div class="seller-rating">
+              <div class="stars">
+                <i class="fas fa-star"
+                   *ngFor="let star of stars; let i = index"
+                   [class.filled]="i < sellerRoundedRating"></i>
+              </div>
+              <span class="rating-text">
+                ({{ seller.rating }}/5) • {{ seller.reviews.length }} تقييم
+              </span>
+            </div>
+            <p class="seller-description">{{ seller.description }}</p>
+            <div class="seller-details">
+              <div class="detail-item">
+                <i class="fas fa-map-marker-alt"></i>
+                <span>{{ seller.location }}</span>
+              </div>
+              <div class="detail-item">
+                <i class="far fa-clock"></i>
+                <span>{{ seller.workingHours }}</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="whatsapp-section">
+            <a [href]="'https://wa.me/' + seller.phone" target="_blank" class="whatsapp-btn">
+              <i class="fab fa-whatsapp"></i> تواصل واتساب
+            </a>
+          </div>
         </div>
       </div>
     </div>
-  </section>
 
+    <!-- نظام الفلترة -->
+    <div class="filters-section glass-card">
+      <div class="filters-header">
+        <h3 class="filters-title"><i class="fas fa-filter"></i> فلترة المنتجات</h3>
+        <button class="mobile-toggle-btn" (click)="toggleFilters()" [class.active]="showFilters">
+          <i class="fas fa-filter"></i>
+          <i class="fas fa-chevron-down" [class.rotated]="showFilters"></i>
+        </button>
+      </div>
 
-  <!-- تقييمات العملاء -->
-  <div class="reviews-section">
-    <h3>تقييمات العملاء</h3>
-    <div class="reviews">
-      <div class="review-card" *ngFor="let review of seller.reviews">
-        <div class="review-header">
-          <strong>{{ review.customer }}</strong>
-          <span class="review-rating">
-            <ng-container *ngFor="let star of stars; let i = index">
-              <i class="fas" [ngClass]="i < review.rating ? 'fa-star' : 'fa-star-half-alt'"></i>
-            </ng-container>
+      <div class="filters-grid" [class.show]="showFilters">
+        <div class="filter-group">
+          <label>نوع السيارة</label>
+          <select [(ngModel)]="filters.brand" (ngModelChange)="onFilterChange('brand', $event)" class="filter-select">
+            <option value="">جميع الأنواع</option>
+            <option *ngFor="let brand of carBrands" [value]="brand">{{ brand }}</option>
+          </select>
+        </div>
+
+        <div class="filter-group">
+          <label>الموديل</label>
+          <select [(ngModel)]="filters.model" (ngModelChange)="onFilterChange('model', $event)" class="filter-select" [disabled]="!filters.brand">
+            <option value="">جميع الموديلات</option>
+            <option *ngFor="let model of getModelsForBrand(filters.brand)" [value]="model">{{ model }}</option>
+          </select>
+        </div>
+
+        <div class="filter-group">
+          <label>سنة الصنع</label>
+          <select [(ngModel)]="filters.year" (ngModelChange)="onFilterChange('year', $event)" class="filter-select">
+            <option value="">جميع السنوات</option>
+            <option *ngFor="let year of years" [value]="year.toString()">{{ year }}</option>
+          </select>
+        </div>
+
+        <div class="filter-group">
+          <label>نوع القطعة</label>
+          <select [(ngModel)]="filters.category" (ngModelChange)="onFilterChange('category', $event)" class="filter-select">
+            <option value="">جميع القطع</option>
+            <option *ngFor="let category of categories" [value]="category">{{ category }}</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="filters-footer">
+        <div class="results-count">
+          <span class="count">{{ filteredProducts.length }}</span> منتج من أصل {{ sellerProducts.length }}
+        </div>
+        <button class="clear-filters-btn" (click)="clearFilters()">
+          <i class="fas fa-times"></i> مسح الفلاتر
+        </button>
+      </div>
+    </div>
+
+    <!-- المنتجات -->
+    <div class="products-grid">
+      <div class="product-card"
+           *ngFor="let product of filteredProducts"
+           [class.has-discount]="product.oldPrice > product.price"
+           [class.free-shipping]="product.freeShipping">
+
+        <div class="product-badges">
+          <span class="badge discount-badge shine-animation"
+                *ngIf="product.oldPrice > product.price">
+            خصم {{ calculateDiscount(product) }}%
+          </span>
+          <span class="badge shipping-badge bounce-animation" *ngIf="product.freeShipping">
+            <i class="fas fa-truck"></i> شحن مجاني
           </span>
         </div>
-        <p class="comment">{{ review.comment }}</p>
+
+        <div class="product-image">
+          <img [src]="product.imageUrl" [alt]="product.name">
+          <div class="image-overlay"></div>
+        </div>
+
+        <div class="product-content">
+          <div class="product-header">
+            <div class="product-tags">
+              <span class="category-tag">{{ product.category }}</span>
+              <span class="car-info">{{ product.brand }} {{ product.model }}</span>
+            </div>
+            <h3 class="product-title">{{ product.name }}</h3>
+            <p class="product-description">{{ product.description }}</p>
+            <p class="product-year">مناسب للسنوات: {{ product.year }}</p>
+          </div>
+
+          <div class="product-price">
+            <span class="current-price">{{ product.price }} ج.م</span>
+            <span class="old-price" *ngIf="product.oldPrice > product.price">{{ product.oldPrice }} ج.م</span>
+          </div>
+
+          <!-- <a class="view-icon" [routerLink]="['/parts', part.id]">
+            <i class="fa-solid fa-eye"></i>
+          </a> -->
+
+          <a class="details-btn" [routerLink]="['/parts', product.id]">
+            <i class="fas fa-eye"></i> عرض التفاصيل
+          </a>
+        </div>
       </div>
+    </div>
+
+    <div class="no-results" *ngIf="filteredProducts.length === 0">
+      <div class="no-results-icon">🔍</div>
+      <h3>لم يتم العثور على منتجات</h3>
+      <p>جرب تغيير معايير البحث أو مسح الفلاتر</p>
+      <button class="clear-filters-btn" (click)="clearFilters()">مسح الفلاتر</button>
     </div>
   </div>
 </div>
-

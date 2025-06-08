@@ -1,16 +1,44 @@
-<div class="image-container">
-  <ng-container *ngIf="part.imageUrl; else noImage">
-    <img [src]="part.imageUrl" alt="{{ part.name }}" (load)="imageLoaded = true" [class.loaded]="imageLoaded">
-  </ng-container>
+<div class="part-card">
+  <div class="image-container">
+    <ng-container *ngIf="part.imageUrl; else noImage">
+      <img [src]="part.imageUrl" alt="{{ part.name }}" (load)="imageLoaded = true" [class.loaded]="imageLoaded">
+    </ng-container>
 
-  <ng-template #noImage>
-    <div class="no-image-frame">
-      <svg width="80" height="80" viewBox="0 0 24 24" fill="none" stroke="#555" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-        <path d="M3 13l2-2h3l3 3h5l3-3h3l2 2"></path>
-        <circle cx="7.5" cy="18.5" r="2.5"></circle>
-        <circle cx="16.5" cy="18.5" r="2.5"></circle>
-      </svg>
-      <span>لا توجد صورة</span>
+    <ng-template #noImage>
+      <div class="no-image-frame">
+        <svg width="80" height="80" viewBox="0 0 24 24" fill="none" stroke="#555" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M3 13l2-2h3l3 3h5l3-3h3l2 2"></path>
+          <circle cx="7.5" cy="18.5" r="2.5"></circle>
+          <circle cx="16.5" cy="18.5" r="2.5"></circle>
+        </svg>
+        <span>لا توجد صورة</span>
+      </div>
+    </ng-template>
+  </div>
+
+  <div class="part-info">
+    <h3>{{ part.name }}</h3>
+    <div class="price-section">
+      <div class="original-price" *ngIf="part.discount">
+        <span class="price-label">السعر الأصلي:</span>
+        <span class="price-value">{{ part.price }} ريال</span>
+      </div>
+      <div class="final-price">
+        <span class="price-label">السعر النهائي:</span>
+        <span class="price-value">{{ part.price - (part.price * part.discount / 100) }} ريال</span>
+      </div>
     </div>
-  </ng-template>
+
+    <div class="actions">
+      <button class="btn-icon" title="عرض التفاصيل">
+        <i class="fas fa-info-circle"></i>
+      </button>
+      <button class="btn-icon" title="إضافة إلى السلة">
+        <i class="fas fa-shopping-cart"></i>
+      </button>
+      <a href="https://wa.me/your-number" class="btn-icon" title="تواصل عبر الواتساب" target="_blank">
+        <i class="fab fa-whatsapp"></i>
+      </a>
+    </div>
+  </div>
 </div>

@@ -2,13 +2,12 @@
   <button class="scroll-btn prev" (click)="scrollLeft()">‹</button>
 
   <div #scrollContainer class="categories-scroll-container">
-    <a class="category-tab"
-       *ngFor="let category of categories"
-       [routerLink]="['/category', category.name]"
-       routerLinkActive="active"
-       [routerLinkActiveOptions]="{ exact: true }">
+    <a class="category-tab" *ngFor="let category of categories" [routerLink]="['/category', category.name]"
+      routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }">
       {{ category.name }}
     </a>
+
+
   </div>
 
   <button class="scroll-btn next" (click)="scrollRight()">›</button>

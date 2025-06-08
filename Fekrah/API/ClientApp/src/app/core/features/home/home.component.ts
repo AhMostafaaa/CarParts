@@ -1,4 +1,7 @@
-import { Component } from '@angular/core';
+import { Component, ViewChild } from '@angular/core';
+import { CategoriesComponent } from './categories/categories.component';
+import { ActivatedRoute, NavigationEnd, Router } from '@angular/router';
+import { filter } from 'rxjs';
 
 
 @Component({
@@ -9,6 +12,16 @@ import { Component } from '@angular/core';
 export class HomeComponent {
 
   filtersOpened = false; // ✅ الحالة الافتراضية مقفول
+
+  @ViewChild(CategoriesComponent) categoriesComponent!: CategoriesComponent;
+  constructor(private route: ActivatedRoute, private router: Router) {}
+  
+scrollToSection(section: string) {
+  if (section === 'brands') {
+    this.categoriesComponent.scrollToBrands();
+  }
+}
+
 
   latestParts = [
     {
@@ -40,6 +53,26 @@ export class HomeComponent {
 
   toggleFilters() {
     this.filtersOpened = !this.filtersOpened; // ✅ كل ضغطة تغير حالة الفلتر
+  }
+
+
+
+  ngAfterViewInit() {
+    this.router.events
+      .pipe(filter(event => event instanceof NavigationEnd))
+      .subscribe(() => {
+        const sectionId = this.route.snapshot.queryParamMap.get('scrollTo');
+        if (sectionId) {
+          setTimeout(() => {
+            const el = document.getElementById(sectionId);
+            if (el) {
+              const yOffset = window.innerHeight / 2 - el.offsetHeight / 2;
+              const y = el.getBoundingClientRect().top + window.scrollY - yOffset;
+              window.scrollTo({ top: y, behavior: 'smooth' });
+            }
+          }, 300); // تأخير لضمان أن الـ DOM جاهز
+        }
+      });
   }
 
 }

@@ -177,7 +177,6 @@ export class FeaturedSellersComponent implements OnInit, AfterViewInit {
         clickable: true,
       },
       speed: 800,
-      rtl: true,
       breakpoints: {
         640: {
           slidesPerView: 3,
