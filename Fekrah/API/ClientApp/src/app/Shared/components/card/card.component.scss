@@ -1,7 +1,7 @@
 body {
   background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
   padding: 20px;
-  font-family: 'Cairo', sans-serif;
+  font-family: "Cairo", sans-serif;
   min-height: 100vh;
   display: flex;
   align-items: center;
@@ -15,7 +15,7 @@ body {
   border-radius: 16px;
   position: relative;
   transition: transform 0.3s ease, box-shadow 0.3s ease;
-  font-family: 'Cairo', sans-serif;
+  font-family: "Cairo", sans-serif;
   display: flex;
   flex-direction: column;
   border: 1px solid rgba(0, 0, 0, 0.1);
@@ -24,7 +24,7 @@ body {
 }
 
 .modern-card:hover {
-  transform: translateY(-8px);
+  // transform: translateY(-8px);
   box-shadow: 0 15px 35px rgba(0, 0, 0, 0.2);
 }
 
@@ -188,7 +188,7 @@ body {
 }
 
 .info-card::before {
-  content: '';
+  content: "";
   position: absolute;
   top: 0;
   left: 0;
@@ -398,7 +398,7 @@ body {
 }
 
 .action-btn::before {
-  content: '';
+  content: "";
   position: absolute;
   top: 50%;
   left: 50%;

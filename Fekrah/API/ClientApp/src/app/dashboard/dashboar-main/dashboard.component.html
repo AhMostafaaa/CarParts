@@ -347,13 +347,16 @@
   </div>
 </div>
 
-<!-- Quick Add Modal (will be separate component) -->
 <div class="modal-overlay" *ngIf="showQuickAddModal" (click)="closeQuickAddModal()">
   <div class="modal-content" (click)="$event.stopPropagation()">
-    <app-quick-add-form (partAdded)="onPartAdded($event)"></app-quick-add-form>
+     <app-quick-add-form
+  (formSubmitted)="onPartAdded($event)"
+  (formCancelled)="closeQuickAddModal()">
+</app-quick-add-form>
 
   </div>
 </div>
+
 
 
 

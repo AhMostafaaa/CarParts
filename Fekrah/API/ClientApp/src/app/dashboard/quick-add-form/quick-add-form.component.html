@@ -1,171 +1,439 @@
-<form class="quick-add-form__content" [formGroup]="partForm" (ngSubmit)="submitForm()">
-  <!-- معلومات القطعة -->
-  <section class="form-section">
-    <h3><i class="fas fa-cog"></i> معلومات القطعة</h3>
-
-    <div class="form-row">
-      <div class="form-group" style="flex:1;">
-        <label for="name"><i class="fas fa-tag"></i> اسم القطعة *</label>
-        <input
-          type="text"
-          id="name"
-          list="partNamesList"
-          formControlName="name"
-          class="form-control"
-          placeholder="اختر أو اكتب اسم القطعة"
-          required>
-        <datalist id="partNamesList">
-          <option *ngFor="let n of partNames" [value]="n">{{ n }}</option>
-        </datalist>
+<div class="quick-add-container">
+  <div class="form-container">
+    <!-- Enhanced Header -->
+    <div class="form-header">
+      <div class="floating-particles">
+        <div class="particle"></div>
+        <div class="particle"></div>
+        <div class="particle"></div>
+        <div class="particle"></div>
+        <div class="particle"></div>
+        <div class="particle"></div>
       </div>
+      <h2>إضافة قطعة غيار سريعة <i class="fas fa-plus-circle"></i> </h2>
+      <p class="subtitle">نظام إدخال محسن للسرعة والكفاءة</p>
     </div>
 
-    <div class="form-row">
-      <div class="form-group" style="width: 100%;">
-        <label for="subtitle"><i class="fas fa-info-circle"></i> وصف إضافي</label>
-        <textarea id="subtitle" formControlName="subtitle" class="form-control textarea-auto" rows="2"
-          style="width:100%;" placeholder="اكتب وصفًا مختصرًا للقطعة، مثل: حالتها أو تفاصيل إضافية..."></textarea>
+    <!-- Enhanced Progress Steps -->
+    <div class="progress-steps">
+      <div class="progress-line"></div>
+      <div class="progress-line-active" [style.width.%]="progressPercent"></div>
+
+      <div class="step" [class.active]="currentStep >= 1">
+        <div class="step-circle"><i class="fas fa-cog"></i></div>
+        <div class="step-label">معلومات القطعة</div>
+      </div>
+
+      <div class="step" [class.active]="currentStep >= 2">
+        <div class="step-circle"><i class="fas fa-car"></i></div>
+        <div class="step-label">السيارة</div>
+      </div>
+
+      <div class="step" [class.active]="currentStep >= 3">
+        <div class="step-circle"><i class="fas fa-dollar-sign"></i></div>
+        <div class="step-label">السعر والمتجر</div>
+      </div>
+
+      <div class="step" [class.active]="currentStep >= 4">
+        <div class="step-circle"><i class="fas fa-check"></i></div>
+        <div class="step-label">إنهاء</div>
       </div>
     </div>
 
-    <div class="form-row">
-      <div class="form-group">
-        <label for="condition"><i class="fas fa-star"></i> الحالة *</label>
-        <select formControlName="condition" class="form-control" required>
-          <option value="">اختر الحالة</option>
-          <option *ngFor="let c of conditions" [value]="c">{{ c }}</option>
-        </select>
-      </div>
-      <div class="form-group">
-        <label for="grade"><i class="fas fa-award"></i> الجودة *</label>
-        <select formControlName="grade" class="form-control" required>
-          <option value="">اختر الجودة</option>
-          <option *ngFor="let g of grades" [value]="g">{{ g }}</option>
-        </select>
-      </div>
-      <div class="form-group">
-        <label for="partType"><i class="fas fa-globe"></i> النوع *</label>
-        <select formControlName="partType" class="form-control" required>
-          <option value="">اختر النوع</option>
-          <option *ngFor="let t of partTypes" [value]="t">{{ t }}</option>
-        </select>
-      </div>
-    </div>
-  </section>
 
+    <!-- Form Content -->
+    <div class="form-content">
+      <form [formGroup]="partForm" (ngSubmit)="submitForm()">
+        <!-- Step 1: Part Information -->
+        <div class="form-step" [class.active]="currentStep === 1">
+          <div class="row ">
+            <div class="col-lg-8">
+              <div class="floating-label-group">
+                <div class="floating-label-group">
+                  <input type="text" formControlName="partName" class="form-control form-control-lg" placeholder=" "
+                    id="partName" list="partNamesList" />
+                  <label for="partName">
+                    <i class="fas fa-tag text-primary me-2"></i> اسم القطعة *
+                  </label>
+                  <datalist id="partNamesList">
+                    <option *ngFor="let name of partNames" [value]="name"></option>
+                  </datalist>
+                  <small *ngIf="isFieldInvalid('partName')" class="text-danger">{{ getFieldError('partName') }}</small>
+                </div>
+              </div>
+            </div>
+            <div class="col-lg-4">
+              <div class="floating-label-group">
+                <input list="countries" formControlName="origin" class="form-control" placeholder=" " id="origin" />
+                <label for="origin">
+                  <i class="fas fa-globe text-info me-2"></i> بلد المنشأ *
+                </label>
+                <datalist id="countries">
+                  <option *ngFor="let country of countries" [value]="country"></option>
+                </datalist>
 
-  <!-- معلومات السيارة -->
-  <section class="form-section">
-    <h3><i class="fas fa-car"></i> معلومات السيارة</h3>
-    <div class="form-row">
-      <div class="form-group">
-        <label for="carBrand"><i class="fas fa-trademark"></i> الماركة *</label>
-        <select formControlName="carBrand" class="form-control" required>
-          <option value="">اختر أو اكتب الماركة</option>
-          <option *ngFor="let brand of carBrands" [value]="brand">{{ brand }}</option>
-        </select>
-      </div>
-      <div class="form-group">
-        <label for="carModel"><i class="fas fa-car-side"></i> الموديل *</label>
-        <select formControlName="carModel" class="form-control" required>
-          <option value="">اختر أو اكتب الموديل</option>
-          <option *ngFor="let model of carModels" [value]="model">{{ model }}</option>
-        </select>
-      </div>
-      <div class="form-group">
-        <label for="carYear"><i class="fas fa-calendar"></i> السنة *</label>
-        <select formControlName="carYear" class="form-control" required>
-          <option value="">اختر السنة</option>
-          <option *ngFor="let year of years" [value]="year">{{ year }}</option>
-        </select>
-      </div>
-    </div>
-  </section>
-  <!-- معلومات السعر -->
-  <section class="form-section">
-    <h3><i class="fas fa-dollar-sign"></i> معلومات السعر</h3>
-    <div class="form-row">
-      <div class="form-group">
-        <label for="price"><i class="fas fa-money-bill"></i> السعر الأصلي *</label>
-        <input type="number" id="price" formControlName="price" placeholder="0" class="form-control" required
-          (input)="calculateDiscountedPrice()">
-      </div>
-      <div class="form-group">
-        <label for="discount"><i class="fas fa-percentage"></i> نسبة الخصم %</label>
-        <input type="number" id="discount" formControlName="discount" placeholder="0" class="form-control" min="0"
-          max="100" (input)="calculateDiscountedPrice()">
-      </div>
-      <div class="form-group">
-        <label for="priceAfterDiscount"><i class="fas fa-tag"></i> السعر النهائي</label>
-        <input type="number" id="priceAfterDiscount" formControlName="priceAfterDiscount" placeholder="0"
-          class="form-control" readonly>
-      </div>
-    </div>
-  </section>
-  <!-- معلومات إضافية -->
-  <section class="form-section">
-    <h3><i class="fas fa-plus"></i> معلومات إضافية</h3>
-    <div class="form-row">
-      <div class="form-group">
-        <label for="origin"><i class="fas fa-flag"></i> بلد المنشأ</label>
-        <input type="text" id="origin" formControlName="origin" placeholder="مثال: اليابان" class="form-control">
-      </div>
-    </div>
-    <div class="form-row">
-      <div class="form-group checkbox-group">
-        <label class="checkbox-label">
-          <input type="checkbox" formControlName="hasDelivery">
-          <span><i class="fas fa-truck"></i> يتوفر توصيل</span>
-        </label>
-      </div>
-      <div class="form-group checkbox-group">
-        <label class="checkbox-label">
-          <input type="checkbox" formControlName="isFavorite">
-          <span><i class="fas fa-heart"></i> إضافة للمفضلة</span>
-        </label>
-      </div>
-    </div>
-  </section>
-  <!-- الصور -->
-  <section class="form-section">
-    <h3><i class="fas fa-images"></i> الصور</h3>
-    <div class="image-upload-area" (dragover)="onDragOver($event)" (dragleave)="onDragLeave($event)"
-      (drop)="onDrop($event)" (click)="fileInput.click()">
-      <div class="upload-content">
-        <i class="fas fa-cloud-upload-alt"></i>
-        <p>اسحب الصور هنا أو اضغط للاختيار</p>
-        <button type="button" class="btn btn-outline" (click)="fileInput.click(); $event.stopPropagation();">
-          <i class="fas fa-plus"></i> اختيار صور
-        </button>
-      </div>
-      <div class="image-preview" *ngIf="images.length">
-        <div class="image-item" *ngFor="let img of images; let i = index">
-          <img [src]="img.url" [alt]="'صورة ' + (i+1)">
-          <button type="button" class="btn-remove" (click)="removeImage(i)">
-            <i class="fas fa-times"></i>
-          </button>
+                <small *ngIf="isFieldInvalid('origin')" class="text-danger">{{ getFieldError('origin') }}</small>
+              </div>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label class="section-label">
+              <!-- <i class="fas fa-flag"></i> -->
+              نوع القطعة *
+            </label>
+            <div class="radio-grid">
+              <div class="radio-card " *ngFor="let pt of partTypes; let i = index">
+                <input type="radio" [id]="'partType' + i" formControlName="partType" [value]="pt.value"
+                  [checked]="partForm.get('partType')?.value === pt.value" />
+                <label [for]="'partType' + i">
+                  <span>
+                    <i [class]="pt.icon + ' me-2'"></i>{{ pt.label }}
+                  </span>
+                </label>
+              </div>
+            </div>
+            <small *ngIf="isFieldInvalid('partType')" class="text-danger">{{ getFieldError('partType') }}</small>
+          </div>
+
+          <div class="row">
+            <div class="col-md-6">
+              <div class="form-group">
+                <label class="section-label">
+                  <!-- <i class="fas fa-star"></i> -->
+                  الحالة *
+                </label>
+                <div class="radio-grid">
+                  <div class="radio-card" *ngFor="let cond of conditionOptions; let i = index">
+                    <input type="radio" [id]="'condition' + i" formControlName="condition" [value]="cond"
+                      [checked]="partForm.get('condition')?.value === cond" />
+                    <label [for]="'condition' + i">
+                      <span>
+                        <!-- <i class="fas" [ngClass]="cond === 'جديد' ? 'fa-sparkles me-1' : 'fa-recycle me-1'"></i> -->
+                        {{ cond}}
+                      </span>
+                    </label>
+                  </div>
+                </div>
+                <small *ngIf="isFieldInvalid('condition')" class="text-danger">{{ getFieldError('condition') }}</small>
+              </div>
+            </div>
+
+            <div class="col-md-6">
+              <div class="form-group">
+                <label class="section-label">
+                  <!-- <i class="fas fa-award"></i> -->
+                  الجودة *
+                </label>
+                <div class="radio-grid">
+                  <div class="radio-card" *ngFor="let grade of gradeOptions; let i = index">
+                    <input type="radio" [id]="'grade' + i" formControlName="grade" [value]="grade"
+                      [checked]="partForm.get('grade')?.value === grade" />
+                    <label [for]="'grade' + i">
+                      <span>{{ grade }}</span>
+                    </label>
+                  </div>
+                </div>
+                <small *ngIf="isFieldInvalid('grade')" class="text-danger">{{ getFieldError('grade') }}</small>
+              </div>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label class="section-label">
+              <!-- <i class="fas fa-check-circle"></i> -->
+              خيارات إضافية
+            </label>
+            <div class="checkbox-grid">
+              <div class="switch-group" (click)="toggleDelivery($event)">
+                <label class="switch-label">
+                  <i class="fas fa-truck text-info me-2"></i>
+                  توصيل
+                </label>
+                <label class="switch">
+                  <input type="checkbox" formControlName="hasDelivery" #deliveryCheckbox />
+                  <span class="slider"></span>
+                </label>
+              </div>
+
+              <div class="switch-group" (click)="toggleCheckbox($event, 'isFavorite')">
+                <label class="switch-label">
+                  <i class="fas fa-heart text-danger me-2"></i> مفضلة
+                </label>
+                <label class="switch">
+                  <input type="checkbox" formControlName="isFavorite" />
+                  <span class="slider"></span>
+                </label>
+              </div>
+
+            </div>
+          </div>
+
+          <div class="floating-label-group">
+            <textarea formControlName="subtitle" class="form-control" rows="3" placeholder=" " id="subtitle"></textarea>
+            <label for="subtitle">
+              <i class="fas fa-info-circle text-secondary me-2"></i> وصف إضافي
+            </label>
+          </div>
         </div>
-      </div>
-      <input #fileInput type="file" id="fileInput" accept="image/*" multiple style="display: none"
-        (change)="onImageSelected($event)">
+
+        <!-- Step 2: Car Information -->
+        <div class="form-step" [class.active]="currentStep === 2">
+          <div class="quick-select">
+            <h6 class="quick-select-title">
+              <i class="fas fa-lightning-bolt"></i> اختيار سريع للسيارات الشائعة
+            </h6>
+            <div class="d-flex gap-2 flex-wrap">
+              <button type="button" class="btn btn-outline-primary" *ngFor="let combo of popularCombos"
+                (click)="selectPopularCombo(combo)">
+                {{ combo.name }}
+              </button>
+            </div>
+          </div>
+
+          <div class="row mt-3">
+            <div class="col-lg-4">
+              <div class="floating-label-group">
+                <select formControlName="carBrand" class="form-select form-select-lg" id="carBrand">
+                  <option value=""> اختر الماركة</option>
+                  <option *ngFor="let brand of availableCarBrands" [value]="brand">{{ brand }}</option>
+                </select>
+                <label for="carBrand">
+                  <i class="fas fa-trademark text-primary me-2"></i> ماركة السيارة *
+                </label>
+                <small *ngIf="isFieldInvalid('carBrand')" class="text-danger">{{ getFieldError('carBrand') }}</small>
+              </div>
+            </div>
+
+            <div class="col-lg-4">
+              <div class="floating-label-group">
+                <select formControlName="carModel" class="form-select form-select-lg" id="carModel">
+                  <option value="">اختر الموديل</option>
+                  <option *ngFor="let model of filteredCarModels" [value]="model">{{ model }}</option>
+                </select>
+                <label for="carModel">
+                  <i class="fas fa-car-side text-primary me-2"></i> موديل السيارة *
+                </label>
+                <small *ngIf="isFieldInvalid('carModel')" class="text-danger">{{ getFieldError('carModel') }}</small>
+              </div>
+            </div>
+
+            <div class="col-lg-4">
+              <div class="floating-label-group">
+                <select formControlName="carYear" class="form-select form-select-lg" id="carYear">
+                  <option value="">اختر السنة</option>
+                  <option *ngFor="let year of availableYears" [value]="year">{{ year }}</option>
+                </select>
+                <label for="carYear">
+                  <i class="fas fa-calendar text-primary me-2"></i> سنة الصنع *
+                </label>
+                <small *ngIf="isFieldInvalid('carYear')" class="text-danger">{{ getFieldError('carYear') }}</small>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Step 3: Price and Store Information -->
+        <div class="form-step" [class.active]="currentStep === 3">
+          <div class="row">
+            <div class="col-md-4">
+              <div class="floating-label-group">
+                <input type="number" formControlName="price" class="form-control form-control-lg" step="0.01" min="0"
+                  placeholder=" " id="price" />
+                <label for="price">
+                  <i class="fas fa-money-bill text-success me-2"></i>السعر الأصلي (ج.م) *
+                </label>
+                <small *ngIf="isFieldInvalid('price')" class="text-danger">{{ getFieldError('price') }}</small>
+              </div>
+            </div>
+            <div class="col-md-4">
+              <div class="floating-label-group">
+                <input type="number" formControlName="discount" class="form-control" min="0" max="100" step="0.01"
+                  placeholder=" " id="discount" />
+                <label for="discount">
+                  <i class="fas fa-percentage text-warning me-2"></i>نسبة الخصم %
+                </label>
+                <small *ngIf="isFieldInvalid('discount')" class="text-danger">{{ getFieldError('discount') }}</small>
+              </div>
+            </div>
+            <div class="col-md-4">
+              <div class="floating-label-group">
+                <input type="number" formControlName="priceAfterDiscount" class="form-control" readonly placeholder=" "
+                  id="finalPrice" style="background: #edf2f7;" />
+                <label for="finalPrice">
+                  <i class="fas fa-tag text-success me-2"></i>السعر النهائي (ج.م)
+                </label>
+              </div>
+            </div>
+          </div>
+
+          <!-- Store Information -->
+          <div class="form-group mt-4">
+            <label class="section-label">
+              <i class="fas fa-store"></i>معلومات المتجر
+            </label>
+            <div class="row">
+              <div class="col-md-6">
+                <div class="floating-label-group">
+                  <select formControlName="storeName" class="form-select" id="storeName">
+                    <option value="">اختر المتجر</option>
+                    <option *ngFor="let store of stores" [value]="store.name">{{ store.name }}</option>
+                  </select>
+                  <label for="storeName">
+                    <i class="fas fa-building text-info me-2"></i>اسم المتجر *
+                  </label>
+                  <small *ngIf="isFieldInvalid('storeName')" class="text-danger">{{ getFieldError('storeName')
+                    }}</small>
+                </div>
+              </div>
+              <div class="col-md-6">
+                <div class="floating-label-group">
+                  <input type="tel" formControlName="storePhone" class="form-control" placeholder=" " maxlength="11"
+                    id="storePhone" />
+                  <label for="storePhone">
+                    <i class="fas fa-phone text-info me-2"></i>رقم التواصل *
+                  </label>
+                  <small *ngIf="isFieldInvalid('storePhone')" class="text-danger">{{ getFieldError('storePhone')
+                    }}</small>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Step 4: Final Review & Images -->
+        <div class="form-step" [class.active]="currentStep === 4">
+          <div style="text-align: center; margin-bottom: 30px;">
+            <h5 style="color: #3182ce; font-weight: 600;">
+              <i class="fas fa-check-circle me-2"></i>مراجعة البيانات والصور
+            </h5>
+            <p style="color: #718096;">تأكد من صحة البيانات قبل الحفظ</p>
+          </div>
+
+          <!-- Image Upload -->
+          <div class="form-group">
+            <label class="section-label">
+              <i class="fas fa-images"></i>الصور (اختياري)
+            </label>
+            <div class="image-upload" (click)="triggerFileInputClick()" (dragover)="onDragOver($event)"
+              (dragleave)="onDragLeave($event)" (drop)="onDrop($event)" [class.dragover]="isDragOver">
+              <i class="fas fa-cloud-upload-alt"></i>
+              <p>اضغط لإختيار الصور أو اسحبها هنا</p>
+              <small>PNG, JPG حتى 5MB</small>
+              <input type="file" id="imageInput" #imageInput accept="image/*" multiple
+                (change)="onImageSelected($event)" style="display: none" />
+            </div>
+
+            <div class="image-preview-container mt-3">
+              <div class="image-preview" *ngFor="let img of images; let i = index; trackBy: trackByImageUrl"
+                [class.main]="img.isMain">
+                <img [src]="img.url" alt="صورة القطعة" />
+                <button type="button" class="btn btn-sm btn-danger" (click)="removeImage(i)">
+                  حذف
+                </button>
+                <button type="button" class="btn btn-sm btn-outline-primary" *ngIf="!img.isMain"
+                  (click)="setMainImage(i)">
+                  تعيين رئيسية
+                </button>
+                <span *ngIf="img.isMain" class="badge bg-success">رئيسية</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Data Review Summary -->
+          <div class="review-summary mt-4">
+            <div class="card">
+              <div class="card-header">
+                <h6><i class="fas fa-eye me-2"></i>ملخص البيانات</h6>
+              </div>
+              <div class="card-body">
+                <div class="row">
+                  <div class="col-md-6">
+                    <strong>اسم القطعة:</strong> {{ partForm.get('partName')?.value || 'غير محدد' }}
+                  </div>
+                  <div class="col-md-6">
+                    <strong>نوع القطعة:</strong>
+                    {{ selectedPartTypeLabel }}
+
+                  </div>
+                  <div class="col-md-6">
+                    <strong>بلد المنشأ:</strong> {{ partForm.get('origin')?.value || 'غير محدد' }}
+                  </div>
+                  <div class="col-md-6">
+                    <strong>الحالة:</strong> {{ partForm.get('condition')?.value || 'جديد' }}
+                  </div>
+                  <div class="col-md-6">
+                    <strong>الجودة:</strong> {{ partForm.get('grade')?.value || 'فرز أول' }}
+                  </div>
+                  <div class="col-md-6">
+                    <strong>السيارة:</strong>
+                    {{
+                    partForm.get('carBrand')?.value && partForm.get('carModel')?.value && partForm.get('carYear')?.value
+                    ? partForm.get('carBrand')?.value + ' ' + partForm.get('carModel')?.value + ' ' +
+                    partForm.get('carYear')?.value
+                    : 'غير محدد'
+                    }}
+                  </div>
+                  <div class="col-md-6">
+                    <strong>المتجر:</strong> {{ partForm.get('storeName')?.value || 'غير محدد' }}
+                  </div>
+                  <div class="col-md-6">
+                    <strong>السعر الأصلي:</strong> {{ partForm.get('price')?.value || 0 }} ج.م
+                  </div>
+                  <div class="col-md-6">
+                    <strong>السعر النهائي:</strong> {{ partForm.get('priceAfterDiscount')?.value || 0 }} ج.م
+                  </div>
+                  <div class="col-md-6">
+                    <strong>عدد الصور:</strong> {{ images.length }} صورة
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Navigation Buttons -->
+        <div class="form-navigation mt-4 d-flex align-items-center">
+          <button type="button" class="nav-btn btn-outline-secondary" *ngIf="currentStep > 1" (click)="previousStep()">
+            <i class="fas fa-arrow-right me-2"></i>السابق
+          </button>
+
+          <div class="ms-auto d-flex gap-2">
+            <button type="button" class="nav-btn btn-outline-info" (click)="saveAsDraft()">
+              <i class="fas fa-save me-2"></i>حفظ مسودة
+            </button>
+
+            <button type="button" class="nav-btn btn-outline-warning" *ngIf="lastSubmittedPart"
+              (click)="duplicateLastEntry()">
+              <i class="fas fa-copy me-2"></i>تكرار آخر إدخال
+            </button>
+
+            <button type="button" class="nav-btn btn-primary" *ngIf="currentStep < totalSteps" (click)="nextStep()">
+              التالي<i class="fas fa-arrow-left ms-2"></i>
+            </button>
+
+            <button type="submit" class="nav-btn btn-success" *ngIf="currentStep === totalSteps"
+              [disabled]="!partForm.valid || isLoading">
+              <i class="fas fa-check me-2"></i>حفظ القطعة
+            </button>
+
+            <button type="button" class="nav-btn btn-info" *ngIf="currentStep === totalSteps"
+              (click)="submitAndAddAnother()" [disabled]="!partForm.valid || isLoading">
+              <i class="fas fa-plus me-2"></i>حفظ وإضافة أخرى
+            </button>
+          </div>
+        </div>
+      </form>
+
     </div>
-  </section>
-  <!-- الأزرار -->
-  <div class="form-actions">
-    <button type="button" class="btn btn-secondary" (click)="closeForm()">
-      <i class="fas fa-times"></i> إلغاء
-    </button>
-    <button type="submit" class="btn btn-primary" [disabled]="!partForm.valid">
-      <i class="fas fa-plus"></i> إضافة القطعة
-    </button>
-    <button type="button" class="btn btn-success" (click)="submitAndAddAnother()">
-      <i class="fas fa-plus"></i> حفظ وإضافة أخرى
-    </button>
+
+    <!-- Keyboard Shortcuts Info -->
+    <div class="keyboard-shortcuts">
+      <small>
+        <i class="fas fa-keyboard me-2"></i>
+        <strong>اختصارات:</strong>
+        Tab للتنقل | Enter للمتابعة | Ctrl+Enter للحفظ | Ctrl+S للمسودة
+      </small>
+    </div>
   </div>
-</form>
-<div class="shortcuts-info">
-  <small>
-    <strong>اختصارات لوحة المفاتيح:</strong>
-    Ctrl+Enter للحفظ | Ctrl+Shift+Enter للحفظ وإضافة أخرى | Esc للإلغاء
-  </small>
 </div>
