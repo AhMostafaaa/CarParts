@@ -1,15 +1,15 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\tafeel-pc4\\Source\\Repos\\CarParts\\Fekrah\\Data\\Data.csproj": {}
+    "C:\\Users\\tafeel-pc4\\source\\repos\\CarParts\\Fekrah\\Data\\Data.csproj": {}
   },
   "projects": {
-    "C:\\Users\\tafeel-pc4\\Source\\Repos\\CarParts\\Fekrah\\Data\\Data.csproj": {
+    "C:\\Users\\tafeel-pc4\\source\\repos\\CarParts\\Fekrah\\Data\\Data.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\tafeel-pc4\\Source\\Repos\\CarParts\\Fekrah\\Data\\Data.csproj",
+        "projectUniqueName": "C:\\Users\\tafeel-pc4\\source\\repos\\CarParts\\Fekrah\\Data\\Data.csproj",
         "projectName": "Data",
-        "projectPath": "C:\\Users\\tafeel-pc4\\Source\\Repos\\CarParts\\Fekrah\\Data\\Data.csproj",
+        "projectPath": "C:\\Users\\tafeel-pc4\\source\\repos\\CarParts\\Fekrah\\Data\\Data.csproj",
         "packagesPath": "C:\\Users\\tafeel-pc4\\.nuget\\packages\\",
         "outputPath": "C:\\Users\\tafeel-pc4\\source\\repos\\CarParts\\Fekrah\\Data\\obj\\",
         "projectStyle": "PackageReference",
@@ -79,7 +79,7 @@
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\8.0.404/PortableRuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\8.0.400/PortableRuntimeIdentifierGraph.json"
         }
       }
     }
