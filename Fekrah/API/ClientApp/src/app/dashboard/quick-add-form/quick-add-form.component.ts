@@ -1,42 +1,32 @@
-import { Component, OnInit, OnDestroy, Output, EventEmitter, ViewChild, ElementRef } from '@angular/core';
+import { Component, OnInit, OnDestroy, ElementRef, ViewChild } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { Subject, debounceTime, distinctUntilChanged, takeUntil } from 'rxjs';
+import { Subject } from 'rxjs';
+import { takeUntil, debounceTime, distinctUntilChanged } from 'rxjs/operators';
 
-interface QuickTemplate {
-  name: string;
+interface PartType {
+  value: string;
+  label: string;
   icon: string;
-  data: Partial<any>;
+  color: string;
+}
+
+interface Store {
+  name: string;
+  phone: string;
+  address?: string;
+}
+
+interface CarCombo {
+  name: string;
+  brand: string;
+  model: string;
+  year: string;
 }
 
 interface ImageFile {
   file: File;
-  preview: string;
-}
-
-interface CarPart {
-  id: string;
-  name: string;
-  subtitle: string;
-  condition: 'جديد' | 'مستعمل';
-  store: {
-    name: string;
-    phone: string;
-  };
-  car: {
-    brand: string;
-    model: string;
-    year: string;
-  };
-  price: number;
-  priceAfterDiscount: number;
-  discount: number;
-  isFavorite: boolean;
-  hasDelivery: boolean;
-  grade: 'فرز أول' | 'فرز تاني';
-  partType: 'كوري' | 'ياباني' | 'صيني';
-  origin: string;
-  image?: string;
-  thumbnails?: string[];
+  url: string;
+  isMain: boolean;
 }
 
 @Component({
@@ -45,335 +35,218 @@ interface CarPart {
   styleUrls: ['./quick-add-form.component.scss']
 })
 export class QuickAddFormComponent implements OnInit, OnDestroy {
-  @Output() partAdded = new EventEmitter<CarPart>();
-  @Output() cancel = new EventEmitter<void>();
-  @ViewChild('fileInput') fileInput!: ElementRef<HTMLInputElement>;
-  @ViewChild('nameInput') nameInput!: ElementRef<HTMLInputElement>;
-
-  private destroy$ = new Subject<void>();
-  private suggestionSubject = new Subject<{field: string, value: string}>();
+  @ViewChild('imageInput', { static: false }) imageInput!: ElementRef<HTMLInputElement>;
 
   partForm!: FormGroup;
-  useTemplate = false;
-  isSubmitting = false;
+  currentStep = 1;
+  totalSteps = 4;
+  isLoading = false;
   isDragOver = false;
-  selectedImages: ImageFile[] = [];
 
-  // Suggestions
-  nameSuggestions: string[] = [];
-  brandSuggestions: string[] = [];
-  modelSuggestions: string[] = [];
-  storeSuggestions: string[] = [];
+  partNames: string[] = [
+    'بطارية',
+    'فلتر زيت',
+    'مبرد',
+    'بواجي',
+    'طقم كشافات',
+    'كفر',
+    'ماطور'
+    // أضف أسماء أخرى حسب حاجتك
+  ];
 
-  // Static data
+
+  partTypes: PartType[] = [
+    { value: 'original', label: 'أصلي', icon: 'fas fa-star', color: '#38a169' },
+    { value: 'commercial', label: 'هاي كوبي', icon: 'fas fa-industry', color: '#3182ce' },
+    { value: 'aftermarket', label: 'بديل', icon: 'fas fa-tools', color: '#d69e2e' }
+  ];
+
+  conditionOptions = ['جديد', 'مستعمل'];
+  gradeOptions = ['فرز أول', 'فرز ثاني'];
+
+  availableCarBrands = ['تويوتا', 'هوندا', 'نيسان', 'هيونداي', 'كيا', 'مازدا', 'فورد', 'شيفروليه'];
+  filteredCarModels: string[] = [];
   availableYears: string[] = [];
-  quickTemplates: QuickTemplate[] = [
-    {
-      name: 'فرامل',
-      icon: 'fas fa-compact-disc',
-      data: {
-        name: 'فرامل أمامية',
-        partType: 'ياباني',
-        grade: 'فرز أول',
-        condition: 'جديد',
-        origin: 'اليابان'
-      }
-    },
-    {
-      name: 'فلاتر',
-      icon: 'fas fa-filter',
-      data: {
-        name: 'فلتر هواء',
-        partType: 'ياباني',
-        grade: 'فرز أول',
-        condition: 'جديد',
-        origin: 'اليابان'
-      }
-    },
-    {
-      name: 'بطارية',
-      icon: 'fas fa-battery-full',
-      data: {
-        name: 'بطارية',
-        partType: 'كوري',
-        grade: 'فرز أول',
-        condition: 'جديد',
-        origin: 'كوريا الجنوبية'
-      }
-    },
-    {
-      name: 'إطارات',
-      icon: 'fas fa-circle',
-      data: {
-        name: 'إطار',
-        partType: 'صيني',
-        grade: 'فرز أول',
-        condition: 'جديد',
-        origin: 'الصين'
-      }
-    },
-    {
-      name: 'زيوت',
-      icon: 'fas fa-tint',
-      data: {
-        name: 'زيت محرك',
-        partType: 'ياباني',
-        grade: 'فرز أول',
-        condition: 'جديد',
-        origin: 'اليابان'
-      }
-    },
-    {
-      name: 'شمعات',
-      icon: 'fas fa-fire',
-      data: {
-        name: 'شمعات إشعال',
-        partType: 'ياباني',
-        grade: 'فرز أول',
-        condition: 'جديد',
-        origin: 'اليابان'
-      }
-    }
+
+  stores: Store[] = [
+    { name: 'متجر قطع الغيار الأول', phone: '01234567890' },
+    { name: 'مركز الخليج للسيارات', phone: '01098765432' },
+    { name: 'شركة النصر للقطع', phone: '01156789012' }
   ];
 
-  // Predefined suggestions data
-  private partNameSuggestions = [
-    'فرامل أمامية', 'فرامل خلفية', 'فلتر هواء', 'فلتر بنزين', 'فلتر زيت',
-    'بطارية', 'إطار', 'زيت محرك', 'شمعات إشعال', 'مكابح', 'فوانيس',
-    'مرايا', 'مساحات', 'حساسات', 'مضخة وقود', 'ردياتير', 'مكيف'
+  popularCombos: CarCombo[] = [
+    { name: 'تويوتا كامري 2020', brand: 'تويوتا', model: 'كامري', year: '2020' },
+    { name: 'هوندا أكورد 2019', brand: 'هوندا', model: 'أكورد', year: '2019' },
+    { name: 'نيسان التيما 2021', brand: 'نيسان', model: 'التيما', year: '2021' },
+    { name: 'هيونداي النترا 2020', brand: 'هيونداي', model: 'النترا', year: '2020' }
   ];
 
-  private carBrandSuggestions = [
-    'تويوتا', 'هوندا', 'نيسان', 'هيونداي', 'كيا', 'مازدا', 'مرسيدس',
-    'BMW', 'أودي', 'فولفو', 'بيجو', 'رينو', 'فولكس واجن', 'فورد', 'شيفروليه'
-  ];
+  images: ImageFile[] = [];
+  lastSubmittedPart: any = null;
 
-  private carModelSuggestions: {[key: string]: string[]} = {
-    'تويوتا': ['كورولا', 'كامري', 'يارس', 'أفينسيس', 'لاند كروزر', 'برادو', 'هايلوكس'],
-    'هوندا': ['أكورد', 'سيفيك', 'سيتي', 'CR-V', 'HR-V', 'بايلوت'],
-    'نيسان': ['التيما', 'صني', 'سنترا', 'باترول', 'إكس تريل', 'جوك'],
-    'هيونداي': ['النترا', 'أكسنت', 'سوناتا', 'توكسون', 'سانتا في', 'كريتا'],
-    'كيا': ['سيراتو', 'ريو', 'أوبتيما', 'سورينتو', 'سبورتاج', 'بيكانتو']
+  private destroy$ = new Subject<void>();
+
+  private carModels: { [brand: string]: string[] } = {
+    'تويوتا': ['كامري', 'كورولا', 'أفالون', 'راف فور', 'هايلاندر', 'برادو'],
+    'هوندا': ['أكورد', 'سيفيك', 'سي آر في', 'بايلوت', 'أوديسي'],
+    'نيسان': ['التيما', 'سنترا', 'مكسيما', 'روج', 'باثفايندر', 'أرمادا'],
+    'هيونداي': ['النترا', 'سوناتا', 'أزيرا', 'توكسان', 'سانتا في'],
+    'كيا': ['أوبتيما', 'فورتي', 'كادينزا', 'سورينتو', 'سبورتاج'],
+    'مازدا': ['مازدا 6', 'مازدا 3', 'سي إكس 5', 'سي إكس 9'],
+    'فورد': ['فيوجن', 'فوكس', 'إكسبلورر', 'إكسبيديشن'],
+    'شيفروليه': ['ماليبو', 'إمبالا', 'تاهو', 'سوبربان']
   };
-
-  private storeNameSuggestions = [
-    'ورشة الأمين', 'قطع غيار المحترف', 'مركز الصيانة الشامل', 'ورشة النجمة',
-    'مركز الخليج للسيارات', 'ورشة الماهر', 'قطع غيار الأصلية', 'مركز التميز'
-  ];
 
   constructor(private fb: FormBuilder) {
     this.initializeForm();
-    this.generateAvailableYears();
-    this.setupSuggestionDebounce();
+    this.generateYears();
   }
 
   ngOnInit(): void {
+    this.setupFormSubscriptions();
     this.setupKeyboardShortcuts();
-    // Focus on name input after view init
-    setTimeout(() => {
-      if (this.nameInput) {
-        this.nameInput.nativeElement.focus();
-      }
-    }, 100);
+    this.loadDraftIfExists();
+    this.updateProgress();
   }
 
   ngOnDestroy(): void {
     this.destroy$.next();
     this.destroy$.complete();
-    this.cleanupImagePreviews();
   }
 
   private initializeForm(): void {
     this.partForm = this.fb.group({
-      name: ['', [Validators.required, Validators.minLength(2)]],
-      subtitle: [''],
+      partName: ['', [Validators.required, Validators.minLength(2)]],
+      origin: ['', [Validators.required, Validators.minLength(2)]],
+      partType: ['', Validators.required],
       condition: ['جديد', Validators.required],
       grade: ['فرز أول', Validators.required],
-      partType: ['ياباني', Validators.required],
+      hasDelivery: [false],
+      isFavorite: [false],
+      subtitle: [''],
+
       carBrand: ['', Validators.required],
       carModel: ['', Validators.required],
       carYear: ['', Validators.required],
+
+      price: ['', [Validators.required, Validators.min(0.01)]],
+      discount: [0, [Validators.min(0), Validators.max(100)]],
+      priceAfterDiscount: [{ value: 0, disabled: true }],
       storeName: ['', Validators.required],
       storePhone: ['', [Validators.required, Validators.pattern(/^01[0-9]{9}$/)]],
-      price: [0, [Validators.required, Validators.min(1)]],
-      discount: [0, [Validators.min(0), Validators.max(100)]],
-      priceAfterDiscount: [0, [Validators.required, Validators.min(0)]],
-      origin: [''],
-      hasDelivery: [false],
-      isFavorite: [false]
-    });
 
-    // Auto-calculate price after discount
-    this.partForm.get('price')?.valueChanges.pipe(takeUntil(this.destroy$))
-      .subscribe(() => this.calculateDiscountedPrice());
-    
-    this.partForm.get('discount')?.valueChanges.pipe(takeUntil(this.destroy$))
-      .subscribe(() => this.calculateDiscountedPrice());
+      mainImageIndex: [0]
+    });
   }
 
-  private generateAvailableYears(): void {
+  private setupFormSubscriptions(): void {
+    this.partForm.get('price')!.valueChanges.pipe(
+      takeUntil(this.destroy$),
+      debounceTime(300),
+      distinctUntilChanged()
+    ).subscribe(() => this.calculateFinalPrice());
+
+    this.partForm.get('discount')!.valueChanges.pipe(
+      takeUntil(this.destroy$),
+      debounceTime(300),
+      distinctUntilChanged()
+    ).subscribe(() => this.calculateFinalPrice());
+
+    this.partForm.get('carBrand')!.valueChanges.pipe(
+      takeUntil(this.destroy$)
+    ).subscribe(() => this.onBrandChange());
+  }
+
+  private generateYears(): void {
     const currentYear = new Date().getFullYear();
-    for (let year = currentYear; year >= 1990; year--) {
+    for (let year = currentYear; year >= currentYear - 30; year--) {
       this.availableYears.push(year.toString());
     }
   }
 
-  private setupSuggestionDebounce(): void {
-    this.suggestionSubject.pipe(
-      debounceTime(300),
-      distinctUntilChanged((a, b) => a.field === b.field && a.value === b.value),
-      takeUntil(this.destroy$)
-    ).subscribe(({field, value}) => {
-      this.updateSuggestions(field, value);
+  private setupKeyboardShortcuts(): void {
+    document.addEventListener('keydown', (e) => {
+      if (e.ctrlKey && e.key.toLowerCase() === 's') {
+        e.preventDefault();
+        this.saveAsDraft();
+      }
+      if (e.ctrlKey && e.key.toLowerCase() === 'd') {
+        e.preventDefault();
+        this.duplicateLastEntry();
+      }
+      if (e.ctrlKey && e.key === 'Enter') {
+        e.preventDefault();
+        if (this.currentStep === this.totalSteps) this.submitForm();
+        else this.changeStep(1);
+      }
+      if (e.ctrlKey && e.shiftKey && e.key === 'Enter') {
+        e.preventDefault();
+        this.submitAndAddAnother();
+      }
+      if (e.key === 'Enter' && e.target && (e.target as HTMLElement).tagName !== 'TEXTAREA') {
+        e.preventDefault();
+        if (this.currentStep < this.totalSteps) this.changeStep(1);
+      }
     });
   }
 
-  private setupKeyboardShortcuts(): void {
-    const keydownHandler = (event: KeyboardEvent) => {
-      // Ctrl/Cmd + Enter to submit
-      if ((event.ctrlKey || event.metaKey) && event.key === 'Enter') {
-        event.preventDefault();
-        if (event.shiftKey) {
-          this.onSubmitAndAddAnother();
-        } else {
-          this.onSubmit();
-        }
-      }
-      
-      // Escape to cancel
-      if (event.key === 'Escape') {
-        this.onCancel();
-      }
+  changeStep(direction: number): void {
+    const newStep = this.currentStep + direction;
+    if (newStep < 1 || newStep > this.totalSteps) return;
+
+    if (direction > 0 && !this.validateCurrentStep()) return;
+
+    this.currentStep = newStep;
+    this.updateProgress();  // ← أضف هذه السطر هنا
+    this.scrollToTop();
+  }
+
+
+  private validateCurrentStep(): boolean {
+    const validatorsMap: Record<number, string[]> = {
+      1: ['partName', 'origin', 'partType'],
+      2: ['carBrand', 'carModel', 'carYear'],
+      3: ['price', 'storeName', 'storePhone'],
+      4: []
     };
 
-    document.addEventListener('keydown', keydownHandler);
-    
-    // Cleanup on destroy
-    this.destroy$.subscribe(() => {
-      document.removeEventListener('keydown', keydownHandler);
-    });
-  }
-
-  // Template Methods
-  applyTemplate(template: QuickTemplate): void {
-    this.useTemplate = true;
-    
-    // Apply template data to form
-    Object.keys(template.data).forEach(key => {
-      if (this.partForm.get(key)) {
-        this.partForm.get(key)?.setValue(template.data[key]);
+    let valid = true;
+    (validatorsMap[this.currentStep] || []).forEach(ctrlName => {
+      const ctrl = this.partForm.get(ctrlName);
+      if (ctrl) {
+        ctrl.markAsTouched();
+        if (ctrl.invalid) valid = false;
       }
     });
 
-    // Focus on name input
-    setTimeout(() => {
-      if (this.nameInput) {
-        this.nameInput.nativeElement.focus();
-        this.nameInput.nativeElement.select();
-      }
-    }, 100);
+    return valid;
   }
 
-  // Suggestion Methods
-  onBrandInput(event: any): void {
-    const value = event.target.value;
-    this.suggestionSubject.next({field: 'brand', value});
-    
-    // Clear model when brand changes
-    this.partForm.get('carModel')?.setValue('');
-    this.modelSuggestions = [];
+  onBrandChange(): void {
+    const brand = this.partForm.get('carBrand')!.value;
+    this.filteredCarModels = this.carModels[brand] || [];
+    this.partForm.patchValue({ carModel: '', carYear: '' });
   }
 
-  onModelInput(event: any): void {
-    const value = event.target.value;
-    const brand = this.partForm.get('carBrand')?.value;
-    this.suggestionSubject.next({field: 'model', value: `${brand}|${value}`});
+  selectPopularCombo(combo: CarCombo): void {
+    this.partForm.patchValue({
+      carBrand: combo.brand,
+      carModel: combo.model,
+      carYear: combo.year
+    });
+    this.filteredCarModels = this.carModels[combo.brand] || [];
   }
 
-  onStoreInput(event: any): void {
-    const value = event.target.value;
-    this.suggestionSubject.next({field: 'store', value});
+  private calculateFinalPrice(): void {
+    const price = +this.partForm.get('price')!.value || 0;
+    const discount = +this.partForm.get('discount')!.value || 0;
+    const finalPrice = price * (1 - discount / 100);
+    this.partForm.get('priceAfterDiscount')!.setValue(finalPrice.toFixed(2), { emitEvent: false });
   }
 
-  private updateSuggestions(field: string, value: string): void {
-    const searchTerm = value.toLowerCase();
-
-    switch (field) {
-      case 'name':
-        this.nameSuggestions = this.partNameSuggestions
-          .filter(name => name.toLowerCase().includes(searchTerm))
-          .slice(0, 5);
-        break;
-
-      case 'brand':
-        this.brandSuggestions = this.carBrandSuggestions
-          .filter(brand => brand.toLowerCase().includes(searchTerm))
-          .slice(0, 5);
-        break;
-
-      case 'model':
-        const [brand, modelSearch] = value.split('|');
-        const availableModels = this.carModelSuggestions[brand] || [];
-        this.modelSuggestions = availableModels
-          .filter(model => model.toLowerCase().includes(modelSearch.toLowerCase()))
-          .slice(0, 5);
-        break;
-
-      case 'store':
-        this.storeSuggestions = this.storeNameSuggestions
-          .filter(store => store.toLowerCase().includes(searchTerm))
-          .slice(0, 5);
-        break;
-    }
-  }
-
-  selectSuggestion(field: string, suggestion: string): void {
-    this.partForm.get(field)?.setValue(suggestion);
-    
-    // Clear suggestions
-    switch (field) {
-      case 'name':
-        this.nameSuggestions = [];
-        break;
-      case 'carBrand':
-        this.brandSuggestions = [];
-        break;
-      case 'carModel':
-        this.modelSuggestions = [];
-        break;
-      case 'storeName':
-        this.storeSuggestions = [];
-        break;
-    }
-  }
-
-  // Price Calculation
-  calculateDiscount(): void {
-    const price = this.partForm.get('price')?.value || 0;
-    const priceAfterDiscount = this.partForm.get('priceAfterDiscount')?.value || 0;
-    
-    if (price > 0 && priceAfterDiscount < price) {
-      const discount = Math.round(((price - priceAfterDiscount) / price) * 100);
-      this.partForm.get('discount')?.setValue(discount, {emitEvent: false});
-    }
-  }
-
-  calculateDiscountedPrice(): void {
-    const price = this.partForm.get('price')?.value || 0;
-    const discount = this.partForm.get('discount')?.value || 0;
-    
-    const discountedPrice = price - (price * discount / 100);
-    this.partForm.get('priceAfterDiscount')?.setValue(Math.round(discountedPrice), {emitEvent: false});
-  }
-
-  // Image Handling
-  selectImages(): void {
-    this.fileInput.nativeElement.click();
-  }
-
-  onImageSelected(event: any): void {
-    const files = Array.from(event.target.files) as File[];
-    this.processSelectedImages(files);
+  onImageSelected(event: Event): void {
+    const input = event.target as HTMLInputElement;
+    if (input.files) this.processFiles(Array.from(input.files));
   }
 
   onDragOver(event: DragEvent): void {
@@ -389,192 +262,351 @@ export class QuickAddFormComponent implements OnInit, OnDestroy {
   onDrop(event: DragEvent): void {
     event.preventDefault();
     this.isDragOver = false;
-    
-    const files = Array.from(event.dataTransfer?.files || []) as File[];
-    const imageFiles = files.filter(file => file.type.startsWith('image/'));
-    this.processSelectedImages(imageFiles);
+    const files = Array.from(event.dataTransfer?.files || []);
+    this.processFiles(files);
   }
 
-  private processSelectedImages(files: File[]): void {
-    const maxImages = 5;
-    const availableSlots = maxImages - this.selectedImages.length;
-    const filesToProcess = files.slice(0, availableSlots);
-
-    filesToProcess.forEach(file => {
-      if (file.size > 5 * 1024 * 1024) { // 5MB limit
-        console.warn(`File ${file.name} is too large. Maximum size is 5MB.`);
-        return;
-      }
-
+  private processFiles(files: File[]): void {
+    files.forEach(file => {
+      if (!this.isValidImageFile(file)) return;
       const reader = new FileReader();
-      reader.onload = (e) => {
-        this.selectedImages.push({
-          file: file,
-          preview: e.target?.result as string
+      reader.onload = e => {
+        this.images.push({
+          file,
+          url: e.target?.result as string,
+          isMain: this.images.length === 0
         });
       };
       reader.readAsDataURL(file);
     });
+  }
 
-    // Clear file input
-    this.fileInput.nativeElement.value = '';
+  private isValidImageFile(file: File): boolean {
+    const validTypes = ['image/jpeg', 'image/png', 'image/gif', 'image/webp'];
+    const maxSize = 5 * 1024 * 1024;
+    if (!validTypes.includes(file.type)) {
+      alert('نوع الملف غير مدعوم. يرجى اختيار صورة (JPG, PNG, GIF, WEBP)');
+      return false;
+    }
+    if (file.size > maxSize) {
+      alert('حجم الملف كبير جداً. الحد الأقصى 5 ميجابايت');
+      return false;
+    }
+    return true;
   }
 
   removeImage(index: number): void {
-    if (this.selectedImages[index]) {
-      URL.revokeObjectURL(this.selectedImages[index].preview);
-      this.selectedImages.splice(index, 1);
+    this.images.splice(index, 1);
+    if (this.images.length > 0 && !this.images.some(img => img.isMain)) {
+      this.images[0].isMain = true;
+      this.partForm.patchValue({ mainImageIndex: 0 });
     }
   }
 
-  private cleanupImagePreviews(): void {
-    this.selectedImages.forEach(image => {
-      if (image.preview.startsWith('blob:')) {
-        URL.revokeObjectURL(image.preview);
-      }
-    });
+  setMainImage(index: number): void {
+    this.images.forEach((img, i) => img.isMain = i === index);
+    this.partForm.patchValue({ mainImageIndex: index });
   }
 
-  // Form Submission
-  async onSubmit(): Promise<void> {
-    if (this.partForm.valid && !this.isSubmitting) {
-      this.isSubmitting = true;
-      
-      try {
-        const formData = this.partForm.value;
-        const newPart = await this.createPartFromForm(formData);
-        this.partAdded.emit(newPart);
-      } catch (error) {
-        console.error('Error creating part:', error);
-        // Handle error (show toast, etc.)
-      } finally {
-        this.isSubmitting = false;
-      }
-    } else {
-      this.markFormGroupTouched();
+  submitForm(): void {
+    if (!this.partForm.valid) {
+      this.markAllFieldsAsTouched();
+      alert('يرجى تعبئة جميع الحقول المطلوبة');
+      return;
     }
+
+    this.isLoading = true;
+    const formData = this.prepareFormData();
+
+    setTimeout(() => {
+      this.lastSubmittedPart = { ...formData };
+      this.isLoading = false;
+      alert('تم حفظ القطعة بنجاح! ✅');
+      this.resetForm();
+    }, 1500);
   }
 
-  async onSubmitAndAddAnother(): Promise<void> {
-    if (this.partForm.valid && !this.isSubmitting) {
-      this.isSubmitting = true;
-      
-      try {
-        const formData = this.partForm.value;
-        const newPart = await this.createPartFromForm(formData);
-        this.partAdded.emit(newPart);
-        
-        // Reset form but keep some common data
-        this.resetFormForNext();
-      } catch (error) {
-        console.error('Error creating part:', error);
-      } finally {
-        this.isSubmitting = false;
-      }
-    } else {
-      this.markFormGroupTouched();
+  submitAndAddAnother(): void {
+    if (!this.partForm.valid) {
+      this.markAllFieldsAsTouched();
+      alert('يرجى تعبئة جميع الحقول المطلوبة');
+      return;
     }
+
+    this.isLoading = true;
+    const formData = this.prepareFormData();
+
+    setTimeout(() => {
+      this.lastSubmittedPart = { ...formData };
+      this.isLoading = false;
+      alert('تم حفظ القطعة بنجاح! سيتم إضافة قطعة جديدة...');
+      this.resetFormForNewEntry();
+    }, 1500);
   }
 
-  private async createPartFromForm(formData: any): Promise<CarPart> {
-    // Simulate image upload delay
-    let mainImage = '';
-    const thumbnails: string[] = [];
-
-    if (this.selectedImages.length > 0) {
-      // In a real app, you'd upload images to a server here
-      await this.delay(500);
-      mainImage = this.selectedImages[0].preview;
-      const thumbnails = this.selectedImages.slice(1).map(img => img.preview);
-    }
-
-    const newPart: CarPart = {
-      id: this.generateId(),
-      name: formData.name,
-      subtitle: formData.subtitle || '',
-      condition: formData.condition,
-      store: {
-        name: formData.storeName,
-        phone: formData.storePhone
-      },
-      car: {
-        brand: formData.carBrand,
-        model: formData.carModel,
-        year: formData.carYear
-      },
-      price: formData.price,
-      priceAfterDiscount: formData.priceAfterDiscount,
-      discount: formData.discount,
-      isFavorite: formData.isFavorite,
-      hasDelivery: formData.hasDelivery,
-      grade: formData.grade,
-      partType: formData.partType,
-      origin: formData.origin || 'غير محدد',
-      image: mainImage,
-      thumbnails: thumbnails
+  private prepareFormData(): any {
+    const formValue = this.partForm.getRawValue();
+    return {
+      ...formValue,
+      images: this.images.map(img => ({ file: img.file, isMain: img.isMain })),
+      submittedAt: new Date(),
+      id: this.generateId()
     };
-
-    return newPart;
   }
 
-  private resetFormForNext(): void {
-    // Keep store and car info for convenience
+  private generateId(): string {
+    return Date.now().toString(36) + Math.random().toString(36).substring(2);
+  }
+
+  saveAsDraft(): void {
+    const draft = {
+      formValue: this.partForm.value,
+      currentStep: this.currentStep,
+      images: this.images.map(img => ({ url: img.url, isMain: img.isMain })),
+      savedAt: new Date()
+    };
+    localStorage.setItem('partFormDraft', JSON.stringify(draft));
+    alert('تم حفظ المسودة بنجاح! 💾');
+  }
+
+  private loadDraftIfExists(): void {
+    const draftJson = localStorage.getItem('partFormDraft');
+    if (!draftJson) return;
+
+    try {
+      const draft = JSON.parse(draftJson);
+      if (confirm('تم العثور على مسودة محفوظة. هل تريد استكمالها؟')) {
+        this.partForm.patchValue(draft.formValue);
+        this.currentStep = draft.currentStep || 1;
+        // ملاحظة: الصور تحتاج معالجة خاصة لأنها ليست ملفات حقيقية
+        alert('تم تحميل المسودة بنجاح!');
+      }
+    } catch (e) {
+      console.error('خطأ في تحميل المسودة:', e);
+    }
+  }
+
+  duplicateLastEntry(): void {
+    if (!this.lastSubmittedPart) {
+      alert('لا يوجد إدخال سابق للتكرار');
+      return;
+    }
+
+    if (confirm('هل تريد تكرار آخر إدخال؟')) {
+      this.partForm.patchValue({
+        ...this.lastSubmittedPart,
+        partName: '',
+        price: '',
+        discount: 0,
+        priceAfterDiscount: 0
+      });
+      this.currentStep = 1;
+      this.images = [];
+      alert('تم تكرار البيانات! يرجى تعديل اسم القطعة والسعر.');
+    }
+  }
+
+  private resetForm(): void {
+    this.partForm.reset();
+    this.initializeDefaultValues();
+    this.currentStep = 1;
+    this.progressPercent = 0;
+    this.images = [];
+    this.filteredCarModels = [];
+    localStorage.removeItem('partFormDraft');
+  }
+
+  private resetFormForNewEntry(): void {
     const storeInfo = {
       storeName: this.partForm.get('storeName')?.value,
       storePhone: this.partForm.get('storePhone')?.value
     };
-    
-    const carInfo = {
-      carBrand: this.partForm.get('carBrand')?.value,
-      carModel: this.partForm.get('carModel')?.value,
-      carYear: this.partForm.get('carYear')?.value
-    };
+    this.resetForm();
+    this.partForm.patchValue(storeInfo);
+  }
 
-    this.partForm.reset();
-    this.selectedImages = [];
-    
-    // Restore preserved data
-    Object.keys(storeInfo).forEach(key => {
-      this.partForm.get(key)?.setValue(storeInfo[key as keyof typeof storeInfo]);
-    });
-    
-    Object.keys(carInfo).forEach(key => {
-      this.partForm.get(key)?.setValue(carInfo[key as keyof typeof carInfo]);
-    });
-
-    // Set defaults
+  private initializeDefaultValues(): void {
     this.partForm.patchValue({
       condition: 'جديد',
       grade: 'فرز أول',
-      partType: 'ياباني',
-      discount: 0,
       hasDelivery: false,
-      isFavorite: false
+      isFavorite: false,
+      discount: 0,
+      mainImageIndex: 0
     });
+  }
 
-    // Focus on name input
-    setTimeout(() => {
-      if (this.nameInput) {
-        this.nameInput.nativeElement.focus();
+  private markAllFieldsAsTouched(): void {
+    Object.values(this.partForm.controls).forEach(ctrl => ctrl.markAsTouched());
+  }
+
+  private scrollToTop(): void {
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }
+
+  isFieldInvalid(fieldName: string): boolean {
+    const field = this.partForm.get(fieldName);
+    return !!(field && field.invalid && (field.touched || field.dirty));
+  }
+
+  getFieldError(fieldName: string): string {
+    const field = this.partForm.get(fieldName);
+    if (!field || !field.errors) return '';
+
+    if (field.errors['required']) return 'هذا الحقل مطلوب';
+    if (field.errors['minlength']) return `الحد الأدنى ${field.errors['minlength'].requiredLength} أحرف`;
+    if (field.errors['min']) return `القيمة يجب أن تكون أكبر من ${field.errors['min'].min}`;
+    if (field.errors['max']) return `القيمة يجب أن تكون أقل من ${field.errors['max'].max}`;
+    if (field.errors['pattern']) return 'تنسيق غير صحيح';
+
+    return 'قيمة غير صحيحة';
+  }
+
+  trackByIndex(index: number): number {
+    return index;
+  }
+
+  trackByValue(index: number, item: any): any {
+    return item.value || item;
+  }
+
+  trackByComboName(index: number, item: CarCombo): string {
+    return item.name;
+  }
+
+  trackByStoreName(index: number, item: Store): string {
+    return item.name;
+  }
+
+  trackByImageUrl(index: number, item: ImageFile): string {
+    return item.url;
+  }
+
+  previousStep(): void {
+    if (this.currentStep > 1) {
+      this.currentStep--;
+      this.updateProgress();
+      this.scrollToTop();
+    }
+  }
+
+
+  progressPercent = 0;
+
+  nextStep(): void {
+    if (this.currentStep < this.totalSteps) {
+      if (this.validateCurrentStep()) {
+        this.currentStep++;
+        this.updateProgress();
+        this.scrollToTop();
+      } else {
+        this.showValidationErrors();
       }
-    }, 100);
+    } else {
+      this.submitForm();
+    }
   }
 
-  onCancel(): void {
-    this.cancel.emit();
+  updateProgress(): void {
+    const stepCount = this.totalSteps - 1; // 3 فواصل بين 4 خطوات
+    const totalLineWidth = 80; // 80% لأن الخط يبدأ عند 10% وينتهي عند 90%
+    const stepWidth = totalLineWidth / stepCount; // 26.6666%
+
+    this.progressPercent = (this.currentStep - 1) * stepWidth;
   }
 
-  private markFormGroupTouched(): void {
+
+
+
+  private showValidationErrors(): void {
+    const invalids: string[] = [];
     Object.keys(this.partForm.controls).forEach(key => {
-      this.partForm.get(key)?.markAsTouched();
+      const ctrl = this.partForm.get(key);
+      if (ctrl && ctrl.invalid && ctrl.touched) invalids.push(key);
     });
+
+    if (invalids.length) alert(`يرجى تعبئة الحقول المطلوبة: ${invalids.join(', ')}`);
   }
 
-  private generateId(): string {
-    return Date.now().toString(36) + Math.random().toString(36).substr(2);
+  // ----- Getters for complex expressions to avoid Angular template errors -----
+
+  get selectedPartTypeLabel(): string {
+    const val = this.partForm.get('partType')?.value;
+    const pt = this.partTypes.find(pt => pt.value === val);
+    return pt ? pt.label : 'غير محدد';
+  }
+  countries: string[] = ['مصر', 'السعودية', 'الإمارات', 'الكويت', 'قطر', 'الأردن', 'لبنان', 'تركيا', 'ألمانيا', 'الصين'];
+
+  get selectedCondition(): string {
+    return this.partForm.get('condition')?.value || 'جديد';
   }
 
-  private delay(ms: number): Promise<void> {
-    return new Promise(resolve => setTimeout(resolve, ms));
+  // get progressPercent(): number {
+  //   // 4 خطوات يعني 3 فواصل بينهم
+  //   // نربط الخط الأخضر بالخطوات، مثلاً
+  //   switch (this.currentStep) {
+  //     case 1: return 33; // ما بين الخطوة 1 و 2
+  //     case 2: return 66; // ما بين 2 و 3
+  //     case 3: return 100; // ما بين 3 و 4
+  //     case 4: return 100; // عند النهاية الخط كامل
+  //     default: return 0;
+  //   }
+  // }
+
+  get selectedGrade(): string {
+    return this.partForm.get('grade')?.value || 'فرز أول';
   }
+
+  get selectedCarDescription(): string {
+    const brand = this.partForm.get('carBrand')?.value;
+    const model = this.partForm.get('carModel')?.value;
+    const year = this.partForm.get('carYear')?.value;
+    if (brand && model && year) return `${brand} ${model} ${year}`;
+    return 'غير محدد';
+  }
+
+  get selectedStoreName(): string {
+    return this.partForm.get('storeName')?.value || 'غير محدد';
+  }
+
+  get selectedPrice(): string {
+    const price = this.partForm.get('price')?.value;
+    return price ? `${price} ج.م` : '0 ج.م';
+  }
+
+  get selectedFinalPrice(): string {
+    const price = this.partForm.get('priceAfterDiscount')?.value;
+    return price ? `${price} ج.م` : '0 ج.م';
+  }
+
+  get imagesCount(): string {
+    return this.images.length === 0 ? '0 صورة' : `${this.images.length} صورة`;
+  }
+
+  triggerFileInputClick(): void {
+    this.imageInput.nativeElement.click();
+  }
+
+  toggleDelivery(event: Event) {
+    // إذا الضغط على الـ checkbox نفسه، لا نفعل التبديل مرتين
+    if ((event.target as HTMLElement).tagName.toLowerCase() === 'input') {
+      return;
+    }
+    const control = this.partForm.get('hasDelivery');
+    if (control) {
+      control.setValue(!control.value);
+    }
+  }
+
+  toggleCheckbox(event: Event, controlName: string) {
+    if ((event.target as HTMLElement).tagName.toLowerCase() === 'input') {
+      return;
+    }
+    const control = this.partForm.get(controlName);
+    if (control) {
+      control.setValue(!control.value);
+    }
+  }
+
+
 }

@@ -18,8 +18,10 @@ export interface CarPart {
   isFavorite: boolean; // هل مضاف للمفضلة؟
   hasDelivery: boolean; // هل يوفر توصيل؟
   grade: 'فرز أول' | 'فرز تاني'; // جودة القطعة
-  partType: 'كوري' | 'ياباني' | 'صيني'; // نوع القطعة
+  partType:any; // نوع القطعة
   origin: string;
   image?: string; // الصورة الرئيسية
   thumbnails?: string[]; // صور إضافية للعرض
+  hasWarranty?: boolean; // هل يوجد ضمان؟
+  warrantyPeriod?: string; // مدة الضمان
 }

@@ -1,31 +1,16 @@
-// dashboard.component.ts
-import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Component, OnInit, OnDestroy, ElementRef, ViewChild, Renderer2 } from '@angular/core';
 import { Subject, debounceTime, distinctUntilChanged, takeUntil } from 'rxjs';
+import { CarPart } from '../../Shared/Models/car-card';
 
-export interface CarPart {
-  id: string;
-  name: string;
-  subtitle: any;
-  condition: 'جديد' | 'مستعمل';
-  store: {
-    name: string;
-    phone: string;
-  };
-  car: {
-    brand: string;
-    model: string;
-    year: string;
-  };
-  price: number;
-  priceAfterDiscount: number;
-  discount: number;
-  isFavorite: boolean;
-  hasDelivery: boolean;
-  grade: 'فرز أول' | 'فرز تاني';
-  partType: 'كوري' | 'ياباني' | 'صيني';
-  origin: string;
-  image?: string;
-  thumbnails?: string[];
+export interface FilterOption {
+  label: string;
+  value: string;
+  element?: any;
+}
+
+export interface MessageOptions {
+  text: string;
+  type: 'success' | 'info' | 'error';
 }
 
 @Component({
@@ -34,60 +19,69 @@ export interface CarPart {
   styleUrls: ['./dashboard.component.scss']
 })
 export class DashboardComponent implements OnInit, OnDestroy {
+  @ViewChild('searchInput') searchInput!: ElementRef;
+  @ViewChild('advancedFilterPanel') advancedFilterPanel!: ElementRef;
+  @ViewChild('activeFiltersContainer') activeFiltersContainer!: ElementRef;
+
   private destroy$ = new Subject<void>();
   private searchSubject = new Subject<string>();
-  
-  // Data properties
+
+  // Filter states
+  activeFilters: { label: string; value: string }[] = [];
+  currentFilters: FilterOption[] = [];
+  isAdvancedOpen = false;
+  showAdvancedFilters = false;
+
+  // Data
   parts: CarPart[] = [];
   filteredParts: CarPart[] = [];
-  isLoading = false;
-  
-  // Search and filter properties
+  availableBrands: string[] = [];
+
+  // Search and filter values
   searchTerm = '';
   selectedBrand = '';
+  selectedModel = '';
+  yearFrom: number | null = null;
+  yearTo: number | null = null;
   selectedCondition = '';
   selectedGrade = '';
-  availableBrands: string[] = [];
-  
-  // Pagination properties
+  selectedPartType = '';
+  priceFrom: number | null = null;
+  priceTo: number | null = null;
+  selectedOrigin = '';
+  hasDelivery = false;
+  hasWarranty = false;
+  hasDiscount = false;
+  favoritesOnly = false;
+  selectedStore = '';
+  selectedLocation = '';
+  quantityFrom: number | null = null;
+  quantityTo: number | null = null;
+  selectedDateAdded = '';
+
+  // Pagination
   currentPage = 1;
   itemsPerPage = 12;
   totalPages = 0;
-  
-  // Modal properties
-  showQuickAddModal = false;
-  
-  // Stats properties
-  get totalParts(): number {
-    return this.parts.length;
-  }
-  
-  get favoritePartsCount(): number {
-    return this.parts.filter(part => part.isFavorite).length;
-  }
-  
-  get totalValue(): number {
-    return this.parts.reduce((sum, part) => sum + part.priceAfterDiscount, 0);
-  }
-  
-  get deliveryAvailableCount(): number {
-    return this.parts.filter(part => part.hasDelivery).length;
-  }
 
-  constructor() {
-    // Setup search debouncing
+  // View settings
+  viewMode: 'grid' | 'list' = 'grid';
+  showQuickAddModal = false;
+  isLoading = false;
+  resultsCount = 120;
+
+  constructor(private renderer: Renderer2) {
     this.searchSubject.pipe(
       debounceTime(300),
       distinctUntilChanged(),
       takeUntil(this.destroy$)
-    ).subscribe(() => {
-      this.applyFilters();
-    });
+    ).subscribe(() => this.applyFilters());
   }
 
   ngOnInit(): void {
     this.loadParts();
     this.setupQuickKeyboardShortcuts();
+    this.extractAvailableBrands();
   }
 
   ngOnDestroy(): void {
@@ -95,33 +89,246 @@ export class DashboardComponent implements OnInit, OnDestroy {
     this.destroy$.complete();
   }
 
-  // Data loading methods
-  async loadParts(): Promise<void> {
-    this.isLoading = true;
-    try {
-      // Simulate API call - replace with actual service call
-      await this.delay(1000);
-      this.parts = this.generateSampleData();
-      this.extractAvailableBrands();
-      this.applyFilters();
-    } catch (error) {
-      console.error('Error loading parts:', error);
-    } finally {
-      this.isLoading = false;
+  // تحسين دالة toggleAdvancedSearch
+  toggleAdvancedSearch(): void {
+    console.log('Toggle advanced search called. Current state:', this.isAdvancedOpen);
+
+    if (!this.isAdvancedOpen) {
+      // Show advanced filters
+      this.showAdvancedFilters = true;
+      this.isAdvancedOpen = true;
+
+      console.log('Showing advanced filters...');
+
+      // تحديث نص ومظهر الزر
+      this.updateAdvancedSearchButton();
+
+      // Add animation classes after DOM update
+      setTimeout(() => {
+        const panel = document.getElementById('advancedFilterPanel');
+        if (panel) {
+          panel.classList.add('active');
+          panel.classList.add('slide-down');
+          console.log('Added active classes to panel');
+        }
+      }, 10);
+
+    } else {
+      // Hide advanced filters
+      console.log('Hiding advanced filters...');
+      this.isAdvancedOpen = false;
+
+      // تحديث نص ومظهر الزر
+      this.updateAdvancedSearchButton();
+
+      const panel = document.getElementById('advancedFilterPanel');
+      if (panel) {
+        panel.classList.remove('active');
+        panel.classList.remove('slide-down');
+        console.log('Removed active classes from panel');
+      }
+
+      // Hide after animation
+      setTimeout(() => {
+        this.showAdvancedFilters = false;
+      }, 500);
     }
   }
 
-  // Search and filter methods
-  onSearch(): void {
-    this.searchSubject.next(this.searchTerm);
+  updateAdvancedSearchButton(): void {
+    const button = document.getElementById('advancedSearchToggle');
+
+    if (button) {
+      if (this.isAdvancedOpen) {
+        button.classList.add('active');
+        button.innerHTML = '<i class="fas fa-times"></i> إغلاق البحث المتقدم';
+      } else {
+        button.classList.remove('active');
+        button.innerHTML = '<i class="fas fa-filter"></i> البحث المتقدم';
+      }
+    }
   }
 
+  // التأكد من أن panel موجود في DOM
+  ensureAdvancedFilterPanel(): void {
+    let panel = document.getElementById('advancedFilterPanel');
+
+    if (!panel) {
+      console.warn('Advanced filter panel not found in DOM');
+      // يمكنك إنشاؤه ديناميكياً إذا لزم الأمر
+    }
+  }
+
+
+  // Legacy support for existing template
+  toggleAdvancedFilters(): void {
+    this.toggleAdvancedSearch();
+  }
+
+  // View toggle functionality
+  setViewMode(mode: 'grid' | 'list'): void {
+    this.viewMode = mode;
+    console.log('Changed view to:', mode);
+  }
+
+  // Search functionality with live feedback
+  onSearch(): void {
+    this.searchSubject.next(this.searchTerm);
+    this.updateResultsCount();
+  }
+
+  // Update results count based on search and filters
+  updateResultsCount(): void {
+    const activeFiltersCount = this.activeFilters.length;
+    const searchTerm = this.searchTerm;
+    const baseCount = this.parts.length;
+
+    let filteredCount = baseCount;
+    if (searchTerm) filteredCount = Math.max(10, filteredCount - 20);
+    if (activeFiltersCount > 0) filteredCount = Math.max(5, filteredCount - (activeFiltersCount * 10));
+
+    this.resultsCount = Math.max(5, filteredCount);
+  }
+
+  // Update active filters display
+  updateActiveFilters(): void {
+    this.activeFilters = [];
+    this.currentFilters = [];
+
+    // Check search term
+    if (this.searchTerm.trim()) {
+      this.activeFilters.push({ label: 'بحث', value: this.searchTerm });
+    }
+
+    // Check all select filters
+    if (this.selectedBrand) {
+      this.activeFilters.push({ label: 'ماركة السيارة', value: this.selectedBrand });
+    }
+    if (this.selectedModel) {
+      this.activeFilters.push({ label: 'موديل السيارة', value: this.selectedModel });
+    }
+    if (this.selectedCondition) {
+      this.activeFilters.push({ label: 'حالة القطعة', value: this.selectedCondition });
+    }
+    if (this.selectedGrade) {
+      this.activeFilters.push({ label: 'درجة الجودة', value: this.selectedGrade });
+    }
+    if (this.selectedPartType) {
+      this.activeFilters.push({ label: 'نوع القطعة', value: this.selectedPartType });
+    }
+    if (this.selectedOrigin) {
+      this.activeFilters.push({ label: 'بلد المنشأ', value: this.selectedOrigin });
+    }
+    if (this.selectedStore) {
+      this.activeFilters.push({ label: 'المتجر/المورد', value: this.selectedStore });
+    }
+    if (this.selectedLocation) {
+      this.activeFilters.push({ label: 'الموقع/المحافظة', value: this.selectedLocation });
+    }
+    if (this.selectedDateAdded) {
+      this.activeFilters.push({ label: 'تاريخ الإضافة', value: this.selectedDateAdded });
+    }
+
+    // Check range inputs
+    if (this.yearFrom || this.yearTo) {
+      const value = `${this.yearFrom || 'غير محدد'} - ${this.yearTo || 'غير محدد'}`;
+      this.activeFilters.push({ label: 'سنة الصنع', value });
+    }
+    if (this.priceFrom || this.priceTo) {
+      const value = `${this.priceFrom || 'غير محدد'} - ${this.priceTo || 'غير محدد'}`;
+      this.activeFilters.push({ label: 'نطاق السعر (جنيه)', value });
+    }
+    if (this.quantityFrom || this.quantityTo) {
+      const value = `${this.quantityFrom || 'غير محدد'} - ${this.quantityTo || 'غير محدد'}`;
+      this.activeFilters.push({ label: 'الكمية المتاحة', value });
+    }
+
+    // Check toggle switches
+    if (this.hasDelivery) {
+      this.activeFilters.push({ label: 'يوجد توصيل', value: 'مفعل' });
+    }
+    if (this.hasWarranty) {
+      this.activeFilters.push({ label: 'يوجد ضمان', value: 'مفعل' });
+    }
+    if (this.hasDiscount) {
+      this.activeFilters.push({ label: 'يوجد خصم', value: 'مفعل' });
+    }
+    if (this.favoritesOnly) {
+      this.activeFilters.push({ label: 'المفضلة فقط', value: 'مفعل' });
+    }
+
+    this.updateResultsCount();
+  }
+
+  // Remove specific filter
+  removeFilter(filter: { label: string; value: string }): void {
+    switch (filter.label) {
+      case 'بحث':
+        this.searchTerm = '';
+        break;
+      case 'ماركة السيارة':
+        this.selectedBrand = '';
+        break;
+      case 'موديل السيارة':
+        this.selectedModel = '';
+        break;
+      case 'سنة الصنع':
+        this.yearFrom = null;
+        this.yearTo = null;
+        break;
+      case 'حالة القطعة':
+        this.selectedCondition = '';
+        break;
+      case 'درجة الجودة':
+        this.selectedGrade = '';
+        break;
+      case 'نوع القطعة':
+        this.selectedPartType = '';
+        break;
+      case 'نطاق السعر (جنيه)':
+        this.priceFrom = null;
+        this.priceTo = null;
+        break;
+      case 'بلد المنشأ':
+        this.selectedOrigin = '';
+        break;
+      case 'يوجد توصيل':
+        this.hasDelivery = false;
+        break;
+      case 'يوجد ضمان':
+        this.hasWarranty = false;
+        break;
+      case 'يوجد خصم':
+        this.hasDiscount = false;
+        break;
+      case 'المفضلة فقط':
+        this.favoritesOnly = false;
+        break;
+      case 'المتجر/المورد':
+        this.selectedStore = '';
+        break;
+      case 'الموقع/المحافظة':
+        this.selectedLocation = '';
+        break;
+      case 'الكمية المتاحة':
+        this.quantityFrom = null;
+        this.quantityTo = null;
+        break;
+      case 'تاريخ الإضافة':
+        this.selectedDateAdded = '';
+        break;
+      default:
+        break;
+    }
+    this.applyFilters();
+  }
+
+  // Apply all filters
   applyFilters(): void {
     let filtered = [...this.parts];
+    const searchLower = this.searchTerm.trim().toLowerCase();
 
-    // Apply search filter
-    if (this.searchTerm.trim()) {
-      const searchLower = this.searchTerm.toLowerCase();
+    if (searchLower) {
       filtered = filtered.filter(part =>
         part.name.toLowerCase().includes(searchLower) ||
         part.car.brand.toLowerCase().includes(searchLower) ||
@@ -131,35 +338,224 @@ export class DashboardComponent implements OnInit, OnDestroy {
       );
     }
 
-    // Apply brand filter
     if (this.selectedBrand) {
       filtered = filtered.filter(part => part.car.brand === this.selectedBrand);
     }
-
-    // Apply condition filter
+    if (this.selectedModel) {
+      filtered = filtered.filter(part => part.car.model === this.selectedModel);
+    }
+    if (this.yearFrom !== null) {
+      filtered = filtered.filter(part => Number(part.car.year) >= this.yearFrom!);
+    }
+    if (this.yearTo !== null) {
+      filtered = filtered.filter(part => Number(part.car.year) <= this.yearTo!);
+    }
     if (this.selectedCondition) {
       filtered = filtered.filter(part => part.condition === this.selectedCondition);
     }
-
-    // Apply grade filter
     if (this.selectedGrade) {
       filtered = filtered.filter(part => part.grade === this.selectedGrade);
     }
+    if (this.selectedPartType) {
+      filtered = filtered.filter(part => part.partType === this.selectedPartType);
+    }
+    if (this.priceFrom !== null) {
+      filtered = filtered.filter(part => part.priceAfterDiscount >= this.priceFrom!);
+    }
+    if (this.priceTo !== null) {
+      filtered = filtered.filter(part => part.priceAfterDiscount <= this.priceTo!);
+    }
+    if (this.selectedOrigin) {
+      filtered = filtered.filter(part => part.origin === this.selectedOrigin);
+    }
+    if (this.hasDelivery) {
+      filtered = filtered.filter(part => part.hasDelivery === true);
+    }
+    if (this.hasWarranty) {
+      filtered = filtered.filter(part => part.hasWarranty === true);
+    }
+    if (this.hasDiscount) {
+      filtered = filtered.filter(part => part.discount > 0);
+    }
+    if (this.favoritesOnly) {
+      filtered = filtered.filter(part => part.isFavorite === true);
+    }
+    if (this.selectedStore) {
+      filtered = filtered.filter(part => part.store.name === this.selectedStore);
+    }
 
     this.filteredParts = filtered;
+    this.updateActiveFilters();
     this.calculatePagination();
-    this.currentPage = 1; // Reset to first page when filters change
+    this.currentPage = 1;
   }
 
+  // Apply all filters (for button)
+  applyAllFilters(): void {
+    this.isLoading = true;
+
+    // Simulate loading
+    setTimeout(() => {
+      this.applyFilters();
+      this.isLoading = false;
+      this.showMessage('تم تطبيق الفلاتر بنجاح', 'success');
+
+      // Optionally close advanced panel after applying
+      if (this.isAdvancedOpen) {
+        setTimeout(() => {
+          this.toggleAdvancedSearch();
+        }, 1000);
+      }
+    }, 1500);
+  }
+
+  // Clear all filters
   clearFilters(): void {
     this.searchTerm = '';
     this.selectedBrand = '';
+    this.selectedModel = '';
+    this.yearFrom = null;
+    this.yearTo = null;
     this.selectedCondition = '';
     this.selectedGrade = '';
+    this.selectedPartType = '';
+    this.priceFrom = null;
+    this.priceTo = null;
+    this.selectedOrigin = '';
+    this.hasDelivery = false;
+    this.hasWarranty = false;
+    this.hasDiscount = false;
+    this.favoritesOnly = false;
+    this.selectedStore = '';
+    this.selectedLocation = '';
+    this.quantityFrom = null;
+    this.quantityTo = null;
+    this.selectedDateAdded = '';
+
+    this.activeFilters = [];
+    this.applyFilters();
+    this.showMessage('تم مسح جميع الفلاتر', 'success');
+  }
+
+  // Reset all filters
+  resetAllFilters(): void {
+    this.clearFilters();
+    this.showMessage('تم إعادة تعيين الفلاتر', 'info');
+  }
+
+  // Show message function
+  showMessage(text: string, type: 'success' | 'info' | 'error' = 'success'): void {
+    const message = this.renderer.createElement('div');
+    const colors = {
+      success: 'linear-gradient(135deg, #10b981, #059669)',
+      info: 'linear-gradient(135deg, #3b82f6, #1d4ed8)',
+      error: 'linear-gradient(135deg, #ef4444, #dc2626)'
+    };
+
+    const styles = `
+      position: fixed;
+      top: 20px;
+      right: 20px;
+      background: ${colors[type]};
+      color: white;
+      padding: 1rem 1.5rem;
+      border-radius: 12px;
+      box-shadow: 0 8px 25px rgba(0, 0, 0, 0.2);
+      z-index: 10000;
+      font-weight: 600;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      transform: translateX(100%);
+      transition: transform 0.3s ease;
+      font-family: 'Cairo', sans-serif;
+    `;
+
+    this.renderer.setAttribute(message, 'style', styles);
+
+    const icon = type === 'success' ? 'fa-check' : type === 'info' ? 'fa-info' : 'fa-exclamation';
+    message.innerHTML = `<i class="fas ${icon}"></i> ${text}`;
+
+    this.renderer.appendChild(document.body, message);
+
+    // Animate in
+    setTimeout(() => {
+      this.renderer.setStyle(message, 'transform', 'translateX(0)');
+    }, 100);
+
+    // Remove after delay
+    setTimeout(() => {
+      this.renderer.setStyle(message, 'transform', 'translateX(100%)');
+      setTimeout(() => {
+        if (document.body.contains(message)) {
+          this.renderer.removeChild(document.body, message);
+        }
+      }, 300);
+    }, 3000);
+  }
+
+  // Filter change handlers
+  onFilterChange(): void {
+    this.updateActiveFilters();
     this.applyFilters();
   }
 
-  // Pagination methods
+  // Focus search input
+  focusSearchInput(): void {
+    if (this.searchInput) {
+      this.searchInput.nativeElement.focus();
+    }
+  }
+
+  // Handle responsive behavior
+  handleResize(): void {
+    if (window.innerWidth <= 768) {
+      // Mobile adjustments can be implemented here
+    }
+  }
+
+  // Keyboard shortcuts
+  setupQuickKeyboardShortcuts(): void {
+    document.addEventListener('keydown', (event) => {
+      // Ctrl/Cmd + F to open advanced search
+      if ((event.ctrlKey || event.metaKey) && event.key === 'f') {
+        event.preventDefault();
+        if (!this.isAdvancedOpen) {
+          this.toggleAdvancedSearch();
+        }
+        setTimeout(() => {
+          this.focusSearchInput();
+        }, 100);
+      }
+
+      // Escape to close advanced search
+      if (event.key === 'Escape' && this.isAdvancedOpen) {
+        this.toggleAdvancedSearch();
+      }
+
+      // Ctrl/Cmd + K for search focus
+      if ((event.ctrlKey || event.metaKey) && event.key === 'k') {
+        event.preventDefault();
+        this.focusSearchInput();
+      }
+
+      // Ctrl/Cmd + N for quick add
+      if ((event.ctrlKey || event.metaKey) && event.key === 'n') {
+        event.preventDefault();
+        this.openQuickAddModal();
+      }
+
+      // Close modal on Escape
+      if (event.key === 'Escape') {
+        this.closeQuickAddModal();
+      }
+    });
+
+    // Handle window resize
+    window.addEventListener('resize', () => this.handleResize());
+  }
+
+  // Existing methods preserved
   calculatePagination(): void {
     this.totalPages = Math.ceil(this.filteredParts.length / this.itemsPerPage);
   }
@@ -167,62 +563,22 @@ export class DashboardComponent implements OnInit, OnDestroy {
   goToPage(page: number): void {
     if (page >= 1 && page <= this.totalPages) {
       this.currentPage = page;
-      this.scrollToTop();
+      window.scrollTo({ top: 0, behavior: 'smooth' });
     }
   }
 
   getPageNumbers(): number[] {
     const pages: number[] = [];
-    const maxVisiblePages = 5;
-    let startPage = Math.max(1, this.currentPage - Math.floor(maxVisiblePages / 2));
-    let endPage = Math.min(this.totalPages, startPage + maxVisiblePages - 1);
-
-    if (endPage - startPage + 1 < maxVisiblePages) {
-      startPage = Math.max(1, endPage - maxVisiblePages + 1);
+    const maxVisible = 5;
+    let start = Math.max(1, this.currentPage - Math.floor(maxVisible / 2));
+    let end = Math.min(this.totalPages, start + maxVisible - 1);
+    if (end - start + 1 < maxVisible) {
+      start = Math.max(1, end - maxVisible + 1);
     }
-
-    for (let i = startPage; i <= endPage; i++) {
-      pages.push(i);
-    }
+    for (let i = start; i <= end; i++) pages.push(i);
     return pages;
   }
 
-  // CRUD operations with quick actions
-  async editPart(part: CarPart): Promise<void> {
-    // Quick edit modal or inline editing
-    console.log('Editing part:', part.id);
-    // Implement quick edit functionality
-  }
-
-  async deletePart(part: CarPart): Promise<void> {
-    if (confirm(`هل أنت متأكد من حذف ${part.name}؟`)) {
-      this.parts = this.parts.filter(p => p.id !== part.id);
-      this.applyFilters();
-      this.showSuccessMessage('تم حذف القطعة بنجاح');
-    }
-  }
-
-  async duplicatePart(part: CarPart): Promise<void> {
-    const newPart: CarPart = {
-      ...part,
-      id: this.generateId(),
-      name: `${part.name} (نسخة)`,
-      isFavorite: false
-    };
-    
-    this.parts.unshift(newPart); // Add to beginning for quick access
-    this.applyFilters();
-    this.showSuccessMessage('تم نسخ القطعة بنجاح');
-  }
-
-  toggleFavorite(part: CarPart): void {
-    part.isFavorite = !part.isFavorite;
-    this.showSuccessMessage(
-      part.isFavorite ? 'تم إضافة القطعة للمفضلة' : 'تم إزالة القطعة من المفضلة'
-    );
-  }
-
-  // Quick Add Modal methods
   openQuickAddModal(): void {
     this.showQuickAddModal = true;
   }
@@ -231,90 +587,51 @@ export class DashboardComponent implements OnInit, OnDestroy {
     this.showQuickAddModal = false;
   }
 
-  onPartAdded(newPart: CarPart): void {
-    this.parts.unshift(newPart); // Add to beginning
+  onPartAdded(formData: any): void {
+    const carPart: CarPart = this.mapFormDataToCarPart(formData);
+    this.parts.unshift(carPart);
     this.extractAvailableBrands();
     this.applyFilters();
     this.closeQuickAddModal();
-    this.showSuccessMessage('تم إضافة القطعة بنجاح');
+    this.showMessage('تم إضافة القطعة بنجاح', 'success');
   }
 
-  // Bulk operations for speed
-  openBulkImport(): void {
-    const input = document.createElement('input');
-    input.type = 'file';
-    input.accept = '.csv,.xlsx,.json';
-    input.multiple = false;
-    
-    input.onchange = (event: any) => {
-      const file = event.target.files[0];
-      if (file) {
-        this.processBulkImport(file);
-      }
+  toggleFavorite(part: CarPart): void {
+    part.isFavorite = !part.isFavorite;
+    this.showMessage(part.isFavorite ? 'تمت الإضافة للمفضلة' : 'تمت الإزالة من المفضلة', 'success');
+  }
+
+  private mapFormDataToCarPart(formData: any): CarPart {
+    return {
+      id: this.generateId(),
+      name: formData.partName,
+      subtitle: formData.subtitle,
+      condition: formData.condition as 'جديد' | 'مستعمل',
+      store: {
+        name: formData.storeName || 'غير محدد',
+        phone: formData.storePhone || '01000000000',
+      },
+      car: {
+        brand: formData.carBrand || '',
+        model: formData.carModel || '',
+        year: formData.carYear || ''
+      },
+      price: formData.price,
+      priceAfterDiscount: formData.priceAfterDiscount,
+      discount: formData.discount,
+      isFavorite: formData.isFavorite,
+      hasDelivery: formData.hasDelivery,
+      hasWarranty: formData.hasWarranty,
+      grade: formData.grade as 'فرز أول' | 'فرز تاني',
+      partType: formData.partType || '',
+      origin: formData.origin,
+      image: formData.images && formData.images.length > 0 ? formData.images[formData.mainImageIndex ?? 0]?.url : '',
+      thumbnails: formData.images ? formData.images.map((img: any) => img.url) : []
     };
-    
-    input.click();
   }
 
-  async processBulkImport(file: File): Promise<void> {
-    this.isLoading = true;
-    try {
-      const fileText = await this.readFileAsText(file);
-      let importedParts: CarPart[] = [];
-
-      if (file.name.endsWith('.json')) {
-        importedParts = JSON.parse(fileText);
-      } else if (file.name.endsWith('.csv')) {
-        importedParts = this.parseCSV(fileText);
-      }
-
-      // Validate and add parts
-      const validParts = importedParts.filter(part => this.validatePart(part));
-      this.parts = [...validParts, ...this.parts];
-      
-      this.extractAvailableBrands();
-      this.applyFilters();
-      this.showSuccessMessage(`تم استيراد ${validParts.length} قطعة بنجاح`);
-    } catch (error) {
-      console.error('Bulk import error:', error);
-      this.showErrorMessage('خطأ في استيراد البيانات');
-    } finally {
-      this.isLoading = false;
-    }
-  }
-
-  // Quick keyboard shortcuts for power users
-  setupQuickKeyboardShortcuts(): void {
-    document.addEventListener('keydown', (event) => {
-      // Ctrl/Cmd + K for quick search
-      if ((event.ctrlKey || event.metaKey) && event.key === 'k') {
-        event.preventDefault();
-        const searchInput = document.querySelector('.search-input') as HTMLInputElement;
-        searchInput?.focus();
-      }
-      
-      // Ctrl/Cmd + N for quick add
-      if ((event.ctrlKey || event.metaKey) && event.key === 'n') {
-        event.preventDefault();
-        this.openQuickAddModal();
-      }
-      
-      // Escape to close modals
-      if (event.key === 'Escape') {
-        this.closeQuickAddModal();
-      }
-    });
-  }
-
-  // Image gallery methods
-  openImageGallery(part: CarPart): void {
-    // Implement image gallery modal
-    console.log('Opening image gallery for:', part.name);
-  }
-
-  // Utility methods
-  trackByPartId(index: number, part: CarPart): string {
-    return part.id;
+  private generateId(): string {
+    return Date.now().toString(36) + Math.random().toString(36).substring(2);
   }
 
   private extractAvailableBrands(): void {
@@ -322,134 +639,155 @@ export class DashboardComponent implements OnInit, OnDestroy {
     this.availableBrands = Array.from(brands).sort();
   }
 
-  private scrollToTop(): void {
-    window.scrollTo({ top: 0, behavior: 'smooth' });
+  editPart(part: CarPart): void {
+    console.log('Editing:', part);
   }
 
-  private generateId(): string {
-    return Date.now().toString(36) + Math.random().toString(36).substr(2);
+  deletePart(part: CarPart): void {
+    this.parts = this.parts.filter(p => p.id !== part.id);
+    this.applyFilters();
+    this.showMessage('تم حذف القطعة بنجاح', 'success');
   }
 
-  private delay(ms: number): Promise<void> {
-    return new Promise(resolve => setTimeout(resolve, ms));
+  duplicatePart(part: CarPart): void {
+    const newPart = { ...part, id: this.generateId(), name: `${part.name} (نسخة)` };
+    this.parts.unshift(newPart);
+    this.applyFilters();
+    this.showMessage('تم نسخ القطعة بنجاح', 'success');
   }
 
-  private readFileAsText(file: File): Promise<string> {
-    return new Promise((resolve, reject) => {
-      const reader = new FileReader();
-      reader.onload = () => resolve(reader.result as string);
-      reader.onerror = reject;
-      reader.readAsText(file);
-    });
+  openBulkImport(): void {
+    console.log('Bulk import dialog triggered');
   }
 
-  private parseCSV(csvText: string): CarPart[] {
-    // Basic CSV parsing - for production, use a proper CSV library
-    const lines = csvText.split('\n');
-    const headers = lines[0].split(',');
-    const parts: CarPart[] = [];
+  openImageGallery(part: CarPart): void {
+    console.log('Opening image gallery for:', part.name);
+  }
 
-    for (let i = 1; i < lines.length; i++) {
-      const values = lines[i].split(',');
-      if (values.length >= headers.length) {
-        // Map CSV columns to CarPart interface
-        // This is a simplified example - adjust based on your CSV format
-        const part: CarPart = {
-          id: this.generateId(),
-          name: values[0] || '',
-          subtitle: values[1] || '',
-          condition: (values[2] as 'جديد' | 'مستعمل') || 'مستعمل',
-          store: {
-            name: values[3] || '',
-            phone: values[4] || ''
-          },
-          car: {
-            brand: values[5] || '',
-            model: values[6] || '',
-            year: values[7] || ''
-          },
-          price: parseFloat(values[8]) || 0,
-          priceAfterDiscount: parseFloat(values[9]) || 0,
-          discount: parseFloat(values[10]) || 0,
-          isFavorite: values[11] === 'true',
-          hasDelivery: values[12] === 'true',
-          grade: (values[13] as 'فرز أول' | 'فرز تاني') || 'فرز تاني',
-          partType: (values[14] as 'كوري' | 'ياباني' | 'صيني') || 'صيني',
-          origin: values[15] || '',
-          image: values[16] || ''
-        };
-        parts.push(part);
+  loadParts(): void {
+    this.parts = [
+      {
+        id: 'p1',
+        name: 'فلتر هواء',
+        subtitle: 'فلتر هواء أصلي للسيارات',
+        condition: 'جديد',
+        store: { name: 'مخزن أبو علي', phone: '01123456789' },
+        car: { brand: 'تويوتا', model: 'كورولا', year: '2020' },
+        price: 350,
+        priceAfterDiscount: 300,
+        discount: 50,
+        isFavorite: false,
+        hasDelivery: true,
+        hasWarranty: true,
+        grade: 'فرز أول',
+        partType: 'فلتر',
+        origin: 'اليابان',
+        image: 'https://example.com/images/air-filter.jpg',
+        thumbnails: ['https://example.com/images/air-filter1.jpg', 'https://example.com/images/air-filter2.jpg']
+      },
+      {
+        id: 'p2',
+        name: 'مراية جانبية',
+        subtitle: 'مراية جانبية كهربائية',
+        condition: 'مستعمل',
+        store: { name: 'ورشة الشرق', phone: '01098765432' },
+        car: { brand: 'هيونداي', model: 'أكسنت', year: '2018' },
+        price: 450,
+        priceAfterDiscount: 400,
+        discount: 50,
+        isFavorite: true,
+        hasDelivery: false,
+        hasWarranty: false,
+        grade: 'فرز تاني',
+        partType: 'مرايات',
+        origin: 'كوريا',
+        image: 'https://example.com/images/mirror.jpg',
+        thumbnails: ['https://example.com/images/mirror1.jpg']
+      },
+      {
+        id: 'p3',
+        name: 'بطارية سيارة',
+        subtitle: 'بطارية 12 فولت عالية الجودة',
+        condition: 'جديد',
+        store: { name: 'قطع الغيار السريعة', phone: '01234567890' },
+        car: { brand: 'نيسان', model: 'سنترا', year: '2019' },
+        price: 1200,
+        priceAfterDiscount: 1100,
+        discount: 100,
+        isFavorite: false,
+        hasDelivery: true,
+        hasWarranty: true,
+        grade: 'فرز أول',
+        partType: 'بطاريات',
+        origin: 'مصر',
+        image: 'https://example.com/images/battery.jpg',
+        thumbnails: ['https://example.com/images/battery1.jpg']
+      },
+      {
+        id: 'p4',
+        name: 'مصباح أمامي',
+        subtitle: 'مصباح LED أمامي مع ضمان سنة',
+        condition: 'جديد',
+        store: { name: 'مركز الإضاءة', phone: '01122334455' },
+        car: { brand: 'كيا', model: 'ريو', year: '2021' },
+        price: 900,
+        priceAfterDiscount: 850,
+        discount: 50,
+        isFavorite: true,
+        hasDelivery: true,
+        hasWarranty: false,
+        grade: 'فرز أول',
+        partType: 'إضاءة',
+        origin: 'ألمانيا',
+        image: 'https://example.com/images/headlight.jpg',
+        thumbnails: ['https://example.com/images/headlight1.jpg']
       }
-    }
-    return parts;
+    ];
+    this.applyFilters();
   }
 
-  private validatePart(part: any): part is CarPart {
-    return part && 
-           typeof part.name === 'string' && 
-           part.name.length > 0 &&
-           part.car && 
-           part.store &&
-           typeof part.price === 'number';
+  trackByPartId(index: number, part: CarPart): string {
+    return part.id;
   }
 
-  private showSuccessMessage(message: string): void {
-    // Implement toast notification or similar
-    console.log('Success:', message);
+  ngAfterViewInit(): void {
+    // تأخير قصير للتأكد من تحميل DOM
+    setTimeout(() => {
+      this.setupAdvancedSearchListener();
+      this.ensureAdvancedFilterPanel();
+    }, 100);
   }
 
-  private showErrorMessage(message: string): void {
-    // Implement error notification
-    console.error('Error:', message);
-  }
+  setupAdvancedSearchListener(): void {
+    // استدعاء هذه الدالة في ngOnInit أو ngAfterViewInit
+    const advancedBtn = document.getElementById('advancedSearchToggle');
 
-  // Sample data generator for testing
-  private generateSampleData(): CarPart[] {
-    const brands = ['تويوتا', 'هوندا', 'نيسان', 'هيونداي', 'كيا', 'مازدا', 'مرسيدس', 'BMW'];
-    const models = ['كورولا', 'كامري', 'أكورد', 'سيفيك', 'التيما', 'صني', 'النترا', 'سيراتو'];
-    const partNames = ['فرامل أمامية', 'فرامل خلفية', 'فلتر هواء', 'فلتر بنزين', 'بطارية', 'إطارات', 'زيت محرك', 'شمعات'];
-    const stores = ['ورشة الأمين', 'قطع غيار المحترف', 'مركز الصيانة الشامل', 'ورشة النجمة'];
-    const origins = ['المانيا', 'اليابان', 'كوريا الجنوبية', 'الصين', 'تركيا'];
-
-    const sampleParts: CarPart[] = [];
-
-    for (let i = 0; i < 50; i++) {
-      const brand = brands[Math.floor(Math.random() * brands.length)];
-      const model = models[Math.floor(Math.random() * models.length)];
-      const partName = partNames[Math.floor(Math.random() * partNames.length)];
-      const store = stores[Math.floor(Math.random() * stores.length)];
-      const origin = origins[Math.floor(Math.random() * origins.length)];
-      
-      const price = Math.floor(Math.random() * 2000) + 100;
-      const discount = Math.floor(Math.random() * 30);
-      const priceAfterDiscount = price - (price * discount / 100);
-
-      sampleParts.push({
-        id: this.generateId(),
-        name: `${partName} ${brand}`,
-        subtitle: `قطعة غيار أصلية عالية الجودة`,
-        condition: Math.random() > 0.5 ? 'جديد' : 'مستعمل',
-        store: {
-          name: store,
-          phone: `010${Math.floor(Math.random() * 100000000).toString().padStart(8, '0')}`
-        },
-        car: {
-          brand: brand,
-          model: model,
-          year: (2015 + Math.floor(Math.random() * 9)).toString()
-        },
-        price: price,
-        priceAfterDiscount: Math.floor(priceAfterDiscount),
-        discount: discount,
-        isFavorite: Math.random() > 0.8,
-        hasDelivery: Math.random() > 0.4,
-        grade: Math.random() > 0.6 ? 'فرز أول' : 'فرز تاني',
-        partType: Math.random() > 0.66 ? 'ياباني' : Math.random() > 0.5 ? 'كوري' : 'صيني',
-        origin: origin,
-        image: `https://picsum.photos/400/300?random=${i}`
+    if (advancedBtn) {
+      advancedBtn.addEventListener('click', () => {
+        this.toggleAdvancedSearch();
       });
     }
-
-    return sampleParts;
   }
+
+  // إضافة هذه الوظائف في component
+toggleDelivery(): void {
+  this.hasDelivery = !this.hasDelivery;
+  this.onFilterChange();
+}
+
+toggleWarranty(): void {
+  this.hasWarranty = !this.hasWarranty;
+  this.onFilterChange();
+}
+
+toggleDiscount(): void {
+  this.hasDiscount = !this.hasDiscount;
+  this.onFilterChange();
+}
+
+toggleFavoritesOnly(): void {
+  this.favoritesOnly = !this.favoritesOnly;
+  this.onFilterChange();
+}
+
 }

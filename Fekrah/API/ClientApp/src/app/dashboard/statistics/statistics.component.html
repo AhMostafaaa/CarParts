@@ -1,0 +1,285 @@
+<div class="statistics-container" tabindex="0">
+
+  <!-- إشعار تحديث البيانات -->
+  <div class="update-notice">
+    تم تحديث الإحصائيات اليوم 8 يونيو 2025 الساعة 12:00 ظهرًا
+  </div>
+
+  <!-- رأس الصفحة -->
+  <div class="statistics-header">
+    <h2 class="statistics-title">
+      <i class="fas fa-chart-bar"></i>
+      إحصائيات المتجر
+    </h2>
+    <div class="header-actions">
+      <button class="btn btn-export" (click)="exportStatistics()" title="تصدير الإحصائيات">
+        <i class="fas fa-download"></i>
+        تصدير
+      </button>
+      <button class="btn btn-refresh" (click)="refreshStatistics()" title="تحديث الإحصائيات">
+        <i class="fas fa-sync-alt"></i>
+        تحديث
+      </button>
+      <button class="btn btn-close" (click)="onClose()" title="إغلاق">
+        <i class="fas fa-times"></i>
+      </button>
+    </div>
+  </div>
+
+  <!-- شبكة الإحصائيات السريعة -->
+  <div class="stats-grid">
+
+    <!-- بطاقة قطع الغيار -->
+    <div class="stat-card total-parts-card" data-desc="عدد قطع الغيار المتاحة في المتجر">
+      <div class="stat-icon total-parts">
+        <i class="fas fa-cogs"></i>
+      </div>
+      <div class="stat-info">
+        <h3 class="stat-value">{{ statistics.totalParts }}</h3>
+        <p class="stat-label">إجمالي قطع الغيار</p>
+        <div class="stat-percentage">
+          <span class="percentage-value positive" [class.negative]="statistics.partsGrowth < 0">
+            {{ statistics.partsGrowth > 0 ? '+' : '' }}{{ statistics.partsGrowth }}%
+          </span>
+          <div class="progress-container" aria-label="نسبة نمو قطع الغيار">
+            <div class="progress-bar" [style.width.%]="statistics.partsGrowth"></div>
+            <div class="progress-label">{{ statistics.partsGrowth }}%</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- بطاقة إجمالي المبيعات -->
+    <div class="stat-card total-sales-card" data-desc="قيمة إجمالي المبيعات الحالية">
+      <div class="stat-icon total-sales">
+        <i class="fas fa-chart-line"></i>
+      </div>
+      <div class="stat-info">
+        <h3 class="stat-value">{{ statistics.totalSales | currency:'EGP':'symbol':'1.0-0' }}</h3>
+        <p class="stat-label">إجمالي المبيعات</p>
+        <div class="stat-percentage">
+          <span class="percentage-value"
+                [class.positive]="statistics.salesGrowth > 0"
+                [class.negative]="statistics.salesGrowth < 0"
+                [class.neutral]="statistics.salesGrowth === 0">
+            <i *ngIf="statistics.salesGrowth > 0" class="fas fa-arrow-up"></i>
+            <i *ngIf="statistics.salesGrowth < 0" class="fas fa-arrow-down"></i>
+            {{ statistics.salesGrowth > 0 ? '+' : '' }}{{ statistics.salesGrowth }}%
+          </span>
+          <div class="progress-container" aria-label="نسبة نمو المبيعات">
+            <div class="progress-bar"
+                 [style.width.%]="statistics.salesGrowth > 0 ? statistics.salesGrowth : 0"
+                 [style.background-color]="statistics.salesGrowth > 0 ? '#27ae60' : '#e74c3c'"></div>
+            <div class="progress-label">{{ statistics.salesGrowth }}%</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- بطاقة عدد الطلبات -->
+    <div class="stat-card total-orders-card" data-desc="عدد الطلبات المكتملة">
+      <div class="stat-icon total-orders">
+        <i class="fas fa-shopping-cart"></i>
+      </div>
+      <div class="stat-info">
+        <h3 class="stat-value">{{ statistics.totalOrders }}</h3>
+        <p class="stat-label">عدد الطلبات</p>
+        <div class="stat-percentage">
+          <span class="percentage-value positive" [class.negative]="statistics.ordersGrowth < 0">
+            {{ statistics.ordersGrowth > 0 ? '+' : '' }}{{ statistics.ordersGrowth }}%
+          </span>
+          <div class="progress-container" aria-label="نسبة نمو الطلبات">
+            <div class="progress-bar" [style.width.%]="statistics.ordersGrowth"></div>
+            <div class="progress-label">{{ statistics.ordersGrowth }}%</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- بطاقة متوسط قيمة الطلب -->
+    <div class="stat-card avg-order-card" data-desc="متوسط قيمة الطلب الواحد">
+      <div class="stat-icon avg-order">
+        <i class="fas fa-money-bill-wave"></i>
+      </div>
+      <div class="stat-info">
+        <h3 class="stat-value">{{ statistics.averageOrderValue | currency:'EGP':'symbol':'1.0-0' }}</h3>
+        <p class="stat-label">متوسط قيمة الطلب</p>
+        <div class="stat-percentage">
+          <span class="percentage-value positive" [class.negative]="statistics.avgOrderGrowth < 0">
+            {{ statistics.avgOrderGrowth > 0 ? '+' : '' }}{{ statistics.avgOrderGrowth }}%
+          </span>
+          <div class="progress-container" aria-label="نسبة نمو متوسط الطلب">
+            <div class="progress-bar" [style.width.%]="statistics.avgOrderGrowth"></div>
+            <div class="progress-label">{{ statistics.avgOrderGrowth }}%</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- بطاقة قطع الغيار المفضلة -->
+    <div class="stat-card favorite-parts-card" data-desc="عدد قطع الغيار المفضلة">
+      <div class="stat-icon favorite-parts">
+        <i class="fas fa-heart"></i>
+      </div>
+      <div class="stat-info">
+        <h3 class="stat-value">{{ statistics.favoriteParts }}</h3>
+        <p class="stat-label">قطع الغيار المفضلة</p>
+        <div class="stat-percentage">
+          <span class="percentage-value neutral">
+            {{ statistics.favoritePercentage }}% من المجموع
+          </span>
+          <div class="progress-container" aria-label="نسبة قطع الغيار المفضلة">
+            <div class="progress-bar" [style.width.%]="statistics.favoritePercentage" style="background-color: #f39c12;"></div>
+            <div class="progress-label">{{ statistics.favoritePercentage }}%</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- بطاقة قطع الغيار الجديدة -->
+    <div class="stat-card new-parts-card" data-desc="عدد قطع الغيار الجديدة">
+      <div class="stat-icon new-parts">
+        <i class="fas fa-star"></i>
+      </div>
+      <div class="stat-info">
+        <h3 class="stat-value">{{ statistics.newParts }}</h3>
+        <p class="stat-label">قطع غيار جديدة</p>
+        <div class="stat-percentage">
+          <span class="percentage-value neutral">
+            {{ statistics.newPartsPercentage }}% من المجموع
+          </span>
+          <div class="progress-container" aria-label="نسبة قطع الغيار الجديدة">
+            <div class="progress-bar" [style.width.%]="statistics.newPartsPercentage" style="background-color: #3498db;"></div>
+            <div class="progress-label">{{ statistics.newPartsPercentage }}%</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- توزيع الحالة -->
+  <div class="chart-card condition-chart-card">
+    <div class="chart-header">
+      <h3>
+        <i class="fas fa-chart-bar"></i>
+        توزيع قطع الغيار حسب الحالة
+      </h3>
+    </div>
+    <div class="chart-content">
+
+      <div class="condition-stats">
+
+        <div class="condition-item new-condition">
+          <div class="condition-indicator new"></div>
+          <div class="condition-details">
+            <span class="condition-label">قطع غيار جديدة</span>
+            <div class="condition-metrics">
+              <span class="condition-value">{{ statistics.newConditionCount }}</span>
+              <span class="condition-percentage">({{ statistics.newConditionPercentage }}%)</span>
+            </div>
+          </div>
+          <div class="condition-progress">
+            <div class="progress-bar new" [style.width.%]="statistics.newConditionPercentage"></div>
+          </div>
+        </div>
+
+        <div class="condition-item used-condition">
+          <div class="condition-indicator used"></div>
+          <div class="condition-details">
+            <span class="condition-label">قطع غيار مستعملة</span>
+            <div class="condition-metrics">
+              <span class="condition-value">{{ statistics.usedConditionCount }}</span>
+              <span class="condition-percentage">({{ statistics.usedConditionPercentage }}%)</span>
+            </div>
+          </div>
+          <div class="condition-progress">
+            <div class="progress-bar used" [style.width.%]="statistics.usedConditionPercentage"></div>
+          </div>
+        </div>
+
+      </div>
+
+    </div>
+  </div>
+
+  <!-- مقاييس إضافية -->
+  <div class="chart-card metrics-card">
+    <div class="chart-header">
+      <h3>
+        <i class="fas fa-analytics"></i>
+        مقاييس إضافية
+      </h3>
+    </div>
+    <div class="chart-content">
+      <div class="metrics-grid">
+
+        <div class="metric-item">
+          <div class="metric-icon delivery">
+            <i class="fas fa-truck"></i>
+          </div>
+          <div class="metric-info">
+            <span class="metric-value">{{ getDeliveryPercentage() }}%</span>
+            <span class="metric-label">قطع متاحة للتوصيل</span>
+          </div>
+        </div>
+
+        <div class="metric-item">
+          <div class="metric-icon price">
+            <i class="fas fa-tag"></i>
+          </div>
+          <div class="metric-info">
+            <span class="metric-value">{{ getAveragePartPrice() | currency:'EGP':'symbol':'1.0-0' }}</span>
+            <span class="metric-label">متوسط سعر القطعة</span>
+          </div>
+        </div>
+
+        <div class="metric-item">
+          <div class="metric-icon brand">
+            <i class="fas fa-award"></i>
+          </div>
+          <div class="metric-info">
+            <span class="metric-value">{{ getMostPopularBrand() }}</span>
+            <span class="metric-label">أكثر الماركات شعبية</span>
+          </div>
+        </div>
+
+        <div class="metric-item">
+          <div class="metric-icon total-revenue">
+            <i class="fas fa-coins"></i>
+          </div>
+          <div class="metric-info">
+            <span class="metric-value">{{ getTotalRevenue() | currency:'EGP':'symbol':'1.0-0' }}</span>
+            <span class="metric-label">إجمالي الإيرادات المقدرة</span>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+  <!-- خيارات التصدير -->
+  <div class="export-section" *ngIf="showExportOptions">
+    <div class="export-header">
+      <h4>خيارات التصدير</h4>
+      <button class="btn btn-close-export" (click)="showExportOptions = false">
+        <i class="fas fa-times"></i>
+      </button>
+    </div>
+    <div class="export-options">
+      <button class="btn btn-export-option" (click)="exportAs('pdf')">
+        <i class="fas fa-file-pdf"></i>
+        تصدير PDF
+      </button>
+      <button class="btn btn-export-option" (click)="exportAs('excel')">
+        <i class="fas fa-file-excel"></i>
+        تصدير Excel
+      </button>
+      <button class="btn btn-export-option" (click)="exportAs('json')">
+        <i class="fas fa-file-code"></i>
+        تصدير JSON
+      </button>
+    </div>
+  </div>
+
+</div>

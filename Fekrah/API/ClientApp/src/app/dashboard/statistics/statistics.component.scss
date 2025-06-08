@@ -1,0 +1,443 @@
+/* statistics.component.scss */
+
+.statistics-container {
+  max-width: 1200px;
+  margin: 30px auto;
+  padding: 30px 35px;
+  background-color: #fff;
+  border-radius: 20px;
+  box-shadow: 0 12px 32px rgba(0, 0, 0, 0.07);
+  font-family: 'Cairo', sans-serif;
+  direction: rtl;
+  color: #1b2733;
+  user-select: none;
+
+  &:focus {
+    outline: none;
+  }
+}
+
+/* إشعار تحديث البيانات */
+.update-notice {
+  background-color: #e3f2fd;
+  border-radius: 12px;
+  padding: 15px 22px;
+  margin-bottom: 28px;
+  font-weight: 600;
+  color: #1565c0;
+  text-align: center;
+  font-size: 1.1rem;
+  box-shadow: inset 0 0 8px rgba(21, 101, 192, 0.25);
+}
+
+/* رأس الصفحة */
+.statistics-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 16px;
+  margin-bottom: 35px;
+
+  .statistics-title {
+    font-size: 2.3rem;
+    font-weight: 800;
+    color: #0d47a1;
+    display: flex;
+    align-items: center;
+    gap: 16px;
+
+    i {
+      font-size: 2.9rem;
+      color: #1565c0;
+    }
+  }
+
+  .header-actions {
+    display: flex;
+    gap: 16px;
+
+    button.btn {
+      font-weight: 700;
+      font-size: 1.15rem;
+      padding: 10px 26px;
+      border-radius: 14px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      color: white;
+      border: none;
+      transition: background-color 0.3s ease;
+
+      i {
+        font-size: 1.4rem;
+      }
+
+      &.btn-export { background-color: #2e7d32; }
+      &.btn-refresh { background-color: #1565c0; }
+      &.btn-close { background-color: #c62828; }
+
+      &:hover, &:focus {
+        outline: none;
+        filter: brightness(85%);
+      }
+    }
+  }
+}
+
+/* شبكة الإحصائيات السريعة */
+.stats-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 24px;
+  margin-bottom: 40px;
+
+  .stat-card {
+    background: linear-gradient(145deg, #f3f9ff, #dceeff);
+    border-radius: 22px;
+    padding: 30px 28px;
+    box-shadow: 7px 7px 15px #c0d8f9, -7px -7px 15px #ffffff;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    gap: 18px;
+    position: relative;
+    transition: box-shadow 0.3s ease, transform 0.3s ease;
+
+    &:hover {
+      box-shadow: 11px 11px 22px #a6c0f9, -11px -11px 22px #ffffff;
+      transform: translateY(-5px);
+    }
+
+    .stat-icon {
+      width: 80px;
+      height: 80px;
+      border-radius: 50%;
+      background-color: #1565c0;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      color: white;
+      font-size: 2.5rem;
+      box-shadow: 0 5px 10px rgba(21, 101, 192, 0.65);
+      user-select: none;
+
+      &.total-parts { background: #1e88e5; }
+      &.total-sales { background: #43a047; }
+      &.total-orders { background: #fbc02d; color: #222; }
+      &.avg-order { background: #fb8c00; }
+      &.favorite-parts { background: #e53935; }
+      &.new-parts { background: #3949ab; }
+    }
+
+    .stat-info {
+      text-align: center;
+      user-select: none;
+
+      .stat-value {
+        font-size: 2.5rem;
+        font-weight: 900;
+        color: #0d47a1;
+        letter-spacing: 0.02em;
+      }
+
+      .stat-label {
+        font-size: 1.2rem;
+        font-weight: 600;
+        color: #333;
+        margin-bottom: 10px;
+      }
+
+      /* النسبة المئوية مع شريط التقدم */
+      .stat-percentage {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 8px;
+
+        .percentage-value {
+          font-weight: 800;
+          font-size: 1.9rem;
+          padding: 6px 18px;
+          border-radius: 14px;
+          color: white;
+          user-select: none;
+          min-width: 72px;
+          text-align: center;
+          background-color: #2980b9;
+          transition: background-color 0.3s ease;
+
+          &.positive {
+            background-color: #27ae60;
+          }
+          &.negative {
+            background-color: #e74c3c;
+          }
+          &.neutral {
+            background-color: #777;
+          }
+        }
+
+        .progress-container {
+          position: relative;
+          background: #d0e1fd;
+          border-radius: 18px;
+          width: 150px;
+          height: 26px;
+          overflow: hidden;
+
+          .progress-bar {
+            height: 100%;
+            background-color: #2980b9;
+            border-radius: 18px;
+            transition: width 0.4s ease;
+          }
+
+          .progress-label {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            color: white;
+            font-weight: 800;
+            text-shadow: 0 0 5px rgba(0,0,0,0.65);
+            font-size: 1.1rem;
+            user-select: none;
+          }
+        }
+      }
+    }
+
+    /* وصف مختصر تحت البطاقة */
+    &::after {
+      content: attr(data-desc);
+      font-size: 0.9rem;
+      color: #555;
+      text-align: center;
+      margin-top: 8px;
+      display: block;
+      user-select: none;
+    }
+  }
+}
+
+/* القسم الخاص بتوزيع الحالة فقط */
+.chart-card.condition-chart-card {
+  background-color: #f7faff;
+  border-radius: 22px;
+  box-shadow: 0 8px 22px rgba(0, 0, 0, 0.06);
+  padding: 24px 28px;
+  margin-bottom: 40px;
+
+  .chart-header {
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    margin-bottom: 24px;
+
+    h3 {
+      font-weight: 800;
+      font-size: 1.6rem;
+      color: #0d47a1;
+      display: flex;
+      align-items: center;
+      gap: 16px;
+
+      i {
+        font-size: 1.9rem;
+        color: #1976d2;
+      }
+    }
+  }
+
+  .chart-content {
+    min-height: 220px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: relative;
+
+    .condition-stats {
+      margin-top: 8px;
+      padding: 0 14px;
+      width: 100%;
+
+      .condition-item {
+        display: flex;
+        align-items: center;
+        gap: 16px;
+        margin-bottom: 18px;
+
+        .condition-indicator {
+          width: 28px;
+          height: 28px;
+          border-radius: 50%;
+
+          &.new { background-color: #43a047; }
+          &.used { background-color: #fbc02d; }
+        }
+
+        .condition-details {
+          flex-grow: 1;
+
+          .condition-label {
+            font-weight: 700;
+            font-size: 1.15rem;
+            color: #0d47a1;
+          }
+
+          .condition-metrics {
+            color: #444;
+            font-size: 1.05rem;
+            display: flex;
+            gap: 12px;
+            user-select: none;
+          }
+        }
+
+        .condition-progress {
+          width: 140px;
+          height: 18px;
+          background-color: #ddd;
+          border-radius: 16px;
+          overflow: hidden;
+
+          .progress-bar {
+            height: 100%;
+            border-radius: 16px;
+
+            &.new { background-color: #43a047; }
+            &.used { background-color: #fbc02d; }
+          }
+        }
+      }
+    }
+  }
+}
+
+/* شبكة المقاييس الإضافية */
+.metrics-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  gap: 24px;
+  padding: 0 14px 28px;
+
+  .metric-item {
+    background-color: #f5faff;
+    border-radius: 22px;
+    padding: 26px 28px;
+    box-shadow: 0 7px 22px rgba(0, 0, 0, 0.04);
+    display: flex;
+    align-items: center;
+    gap: 24px;
+
+    .metric-icon {
+      width: 60px;
+      height: 60px;
+      border-radius: 50%;
+      font-size: 1.75rem;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      color: white;
+      flex-shrink: 0;
+
+      &.delivery { background-color: #43a047; }
+      &.price { background-color: #1565c0; }
+      &.brand { background-color: #8e24aa; }
+      &.total-revenue { background-color: #fb8c00; }
+    }
+
+    .metric-info {
+      display: flex;
+      flex-direction: column;
+
+      .metric-value {
+        font-weight: 900;
+        font-size: 1.5rem;
+        color: #0d47a1;
+        letter-spacing: 0.01em;
+      }
+
+      .metric-label {
+        font-size: 1.1rem;
+        color: #555;
+        margin-top: 6px;
+      }
+    }
+  }
+}
+
+/* قسم التصدير */
+.export-section {
+  background-color: #dceeff;
+  border-radius: 22px;
+  box-shadow: 0 5px 20px rgba(21, 101, 192, 0.22);
+  padding: 26px 32px;
+  margin-top: 38px;
+
+  .export-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+
+    h4 {
+      font-size: 1.5rem;
+      font-weight: 800;
+      color: #0d47a1;
+    }
+
+    button.btn-close-export {
+      font-size: 1.9rem;
+      background: transparent;
+      border: none;
+      color: #c62828;
+      cursor: pointer;
+      transition: color 0.3s ease;
+
+      &:hover, &:focus {
+        color: #8e1e1e;
+        outline: none;
+      }
+    }
+  }
+
+  .export-options {
+    margin-top: 22px;
+    display: flex;
+    gap: 22px;
+
+    button.btn-export-option {
+      flex: 1;
+      background-color: #1565c0;
+      color: white;
+      font-weight: 800;
+      border: none;
+      border-radius: 16px;
+      padding: 18px 28px;
+      cursor: pointer;
+      font-size: 1.2rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 16px;
+      transition: background-color 0.3s ease;
+
+      i {
+        font-size: 1.6rem;
+      }
+
+      &:hover, &:focus {
+        background-color: #0d3c82;
+        outline: none;
+      }
+    }
+  }
+}
+
+/* دوران أيقونة التحميل */
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
