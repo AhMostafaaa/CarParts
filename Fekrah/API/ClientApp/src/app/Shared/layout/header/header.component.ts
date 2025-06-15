@@ -1,5 +1,5 @@
 import { Component, HostListener, OnInit } from '@angular/core';
-import { Router } from '@angular/router';
+import { NavigationEnd, Router } from '@angular/router';
 
 @Component({
   selector: 'app-header',
@@ -8,9 +8,31 @@ import { Router } from '@angular/router';
 })
 export class HeaderComponent implements OnInit {
 
+    constructor(private router: Router) { }
+
+  ngOnInit(): void {
+    this.updateCartCount();
+    // تحديث عدد العناصر في السلة كل ثانية (اختياري)
+    setInterval(() => {
+      this.updateCartCount();
+    }, 1000);
+
+      this.router.events.subscribe(event => {
+      if (event instanceof NavigationEnd) {
+        this.closeMobileMenus();
+      }
+    });
+  }
+  
   isSticky = false;
   searchTerm = '';
   cartCount = 0;
+  /*---------------------------------*/
+    // Mobile responsive properties
+ showMobileMenu = false;
+  showMobileNav = false;
+  showSearch = false;
+
 
   // نصوص الواجهة
   searchPlaceholder = 'ابحث عن قطعة غيار...';
@@ -55,15 +77,7 @@ export class HeaderComponent implements OnInit {
     this.isSticky = window.pageYOffset > 20;
   }
 
-  constructor(private router: Router) { }
 
-  ngOnInit(): void {
-    this.updateCartCount();
-    // تحديث عدد العناصر في السلة كل ثانية (اختياري)
-    setInterval(() => {
-      this.updateCartCount();
-    }, 1000);
-  }
 
   search(): void {
     if (this.searchTerm.trim()) {
@@ -88,6 +102,7 @@ export class HeaderComponent implements OnInit {
         this.router.navigate([item.page], { queryParams: { scrollTo: item.target } });
       }
     }
+     this.closeMobileMenus();
   }
 
 
@@ -156,4 +171,78 @@ export class HeaderComponent implements OnInit {
     localStorage.setItem('cart', JSON.stringify(cart));
     this.updateCartCount();
   }
+
+
+
+  // ... your existing methods
+
+  // Mobile menu methods
+  toggleMobileMenu(): void {
+    this.showMobileMenu = !this.showMobileMenu;
+    // Close other menus when opening mobile menu
+    if (this.showMobileMenu) {
+      this.showMobileNav = false;
+      this.showSearch = false;
+    }
+  }
+
+  toggleMobileNav(): void {
+    this.showMobileNav = !this.showMobileNav;
+    // Close other menus when opening mobile nav
+    if (this.showMobileNav) {
+      this.showMobileMenu = false;
+      this.showSearch = false;
+    }
+  }
+
+  toggleSearch(): void {
+    this.showSearch = !this.showSearch;
+    // Close other menus when opening search
+    if (this.showSearch) {
+      this.showMobileMenu = false;
+      this.showMobileNav = false;
+    }
+  }
+
+  // Close all mobile menus
+  closeMobileMenus(): void {
+    this.showMobileMenu = false;
+    this.showMobileNav = false;
+    this.showSearch = false;
+  }
+
+
+  // Listen for window resize to close mobile menus on desktop
+  @HostListener('window:resize', ['$event'])
+  onResize(event: any): void {
+    if (event.target.innerWidth > 768) {
+      this.closeMobileMenus();
+    }
+  }
+
+  // Close mobile menus when clicking outside
+  @HostListener('document:click', ['$event'])
+  onDocumentClick(event: any): void {
+    const target = event.target;
+    const mobileMenuToggle = document.querySelector('.mobile-menu-toggle');
+    const navToggle = document.querySelector('.nav-toggle');
+    const searchToggle = document.querySelector('.search-toggle');
+
+    // Close mobile menu if clicked outside
+    if (this.showMobileMenu && !target.closest('.right-menu') && target !== mobileMenuToggle) {
+      this.showMobileMenu = false;
+    }
+
+    // Close mobile nav if clicked outside
+    if (this.showMobileNav && !target.closest('.main-nav') && target !== navToggle) {
+      this.showMobileNav = false;
+    }
+
+    // Close search if clicked outside
+    if (this.showSearch && !target.closest('.search-bar') && target !== searchToggle) {
+      this.showSearch = false;
+    }
+  }
 }
+
+

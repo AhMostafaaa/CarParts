@@ -2,6 +2,8 @@
   background: linear-gradient(135deg, #e65100 0%, #ff6b00 50%, #ff9248 100%);
   min-height: 500px;
   position: relative;
+  margin-left: 20px;
+  margin-right: 20px;
 
   &::before {
     content: "";
@@ -357,4 +359,37 @@
 
 .seller-name {
   cursor: pointer;
+}
+@keyframes float {
+  0%,
+  100% {
+    transform: translateY(0px) rotate(0deg);
+    opacity: 0.2;
+  }
+
+  50% {
+    transform: translateY(-15px) rotate(180deg);
+    opacity: 0.4;
+  }
+}
+
+.blur-sm {
+  filter: blur(30px);
+}
+
+.section-title {
+  font-size: 50px; /* الحجم الافتراضي للكبير */
+
+  @media (max-width: 768px) {
+    font-size: 35px !important; /* حجم أصغر للشاشات المتوسطة */
+  }
+
+  @media (max-width: 480px) {
+    font-size: 22px !important; /* حجم أصغر جداً للشاشات الصغيرة */
+    &::before {
+      content: "🔥";
+      position: absolute;
+      left: 0px;
+    }
+  }
 }

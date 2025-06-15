@@ -2,12 +2,15 @@
   <!-- Logo -->
   <div class="logo">
     <a routerLink="/">
-      <i class="fas fa-tools"></i> قطع غيار
+      <i class="fas fa-tools"></i>
+      <span class="logo-text">قطع غيار</span>
     </a>
+    <!-- اسم الموقع يظهر في الشاشات الصغيرة -->
+    <span class="mobile-logo-text">قطع غيار</span>
   </div>
 
   <!-- Search Bar -->
-  <div class="search-bar">
+  <div class="search-bar" [class.hidden]="!showSearch">
     <select class="category-select">
       <option value="">{{ searchCategories.default }}</option>
       <option *ngFor="let category of searchCategories.options" [value]="category.value">
@@ -16,33 +19,60 @@
     </select>
     <input type="text" [placeholder]="searchPlaceholder" [(ngModel)]="searchTerm" />
     <button class="search-button" (click)="search()">
-      <i class="fas fa-search"></i> {{ searchButtonText }}
+      <i class="fas fa-search"></i>
+      <span class="search-text">{{ searchButtonText }}</span>
     </button>
   </div>
 
   <!-- Right Menu -->
-  <div class="right-menu">
-    <a *ngFor="let menuItem of rightMenuItems" [routerLink]="menuItem.route" class="nav-link">
-      <i [class]="menuItem.icon"></i> {{ menuItem.label }}
-    </a>
+  <div class="right-menu" [class.show]="showMobileMenu">
+    <!-- اسم الموقع في قائمة الموبايل -->
+    <div class="mobile-menu-header">
+      قطع غيار
+    </div>
 
+    <!-- Mobile Search Toggle -->
+    <button class="search-toggle mobile-only" (click)="toggleSearch()">
+      <i class="fas fa-search"></i>
+    </button>
+
+    <a *ngFor="let menuItem of rightMenuItems" [routerLink]="menuItem.route" class="nav-link" (click)="closeMobileMenus()">
+      <i [class]="menuItem.icon"></i>
+      <span class="menu-text">{{ menuItem.label }}</span>
+    </a>
 
     <!-- سلة المشتريات -->
-    <a [routerLink]="['/addCart']" class="cart-icon nav-link">
-      <i class="fas fa-shopping-cart"></i> {{ cartText }}
+    <a [routerLink]="['/addCart']" class="cart-icon nav-link" (click)="closeMobileMenus()">
+      <i class="fas fa-shopping-cart"></i>
+      <span class="menu-text">{{ cartText }}</span>
       <span class="cart-count" *ngIf="cartCount > 0">{{ cartCount }}</span>
     </a>
+
     <!-- تسجيل الدخول -->
-    <a routerLink="/auth/login" class="nav-link">
-      <i class="fas fa-sign-in-alt"></i> دخول
+    <a routerLink="/auth/login" class="nav-link" (click)="closeMobileMenus()">
+      <i class="fas fa-sign-in-alt"></i>
+      <span class="menu-text">دخول</span>
     </a>
   </div>
+
+  <!-- Mobile Menu Toggle -->
+  <button class="mobile-menu-toggle mobile-only" (click)="toggleMobileMenu()">
+    <span class="hamburger-line" [class.active]="showMobileMenu"></span>
+    <span class="hamburger-line" [class.active]="showMobileMenu"></span>
+    <span class="hamburger-line" [class.active]="showMobileMenu"></span>
+  </button>
 </header>
 
 <!-- Navigation Menu -->
-<nav class="main-nav">
+<nav class="main-nav" [class.show]="showMobileNav">
   <div class="container">
-    <ul class="nav-list">
+    <!-- Mobile Nav Toggle -->
+    <button class="nav-toggle mobile-only" (click)="toggleMobileNav()">
+      <i class="fas fa-bars"></i>
+      <span>القائمة</span>
+    </button>
+
+    <ul class="nav-list" [class.show]="showMobileNav">
       <li *ngFor="let item of navItems">
         <a (click)="goToNavItem(item)">
           {{ item.label }}
@@ -51,4 +81,3 @@
     </ul>
   </div>
 </nav>
-
