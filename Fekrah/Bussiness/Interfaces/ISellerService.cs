@@ -1,9 +1,7 @@
-﻿public interface ISellerService
+﻿using Bussiness.Interfaces;
+
+public interface ISellerService : _IBusinessService<Seller, SellerDto>
 {
-    Task<IEnumerable<SellerViewModel>> GetAllAsync();
-    Task<SellerViewModel> GetByIdAsync(int id);
-    Task AddAsync(SellerDto dto);
-    Task UpdateAsync(int id, SellerDto dto);
-    Task DeleteAsync(int id);
+   
 }
 

@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations.Schema;
+﻿using Data.Models;
+using System.ComponentModel.DataAnnotations.Schema;
 
 public class Seller
 {
@@ -11,5 +12,6 @@ public class Seller
 
 
     public ICollection<Part> Parts { get; set; }
+    public ICollection<SellerCategory> SellerCategories { get; set; }
 }
 

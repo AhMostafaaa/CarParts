@@ -26,8 +26,18 @@ export class SwaggerClient {
         this.baseUrl = baseUrl ?? "https://localhost:5200";
     }
 
-    apiCategoriesGetAllGet(): Observable<CategoryViewModel[]> {
-        let url_ = this.baseUrl + "/api/Categories/GetAll";
+    apiCategoriesGetAllGet(pageSize: number | undefined, page: number | undefined, searchTerm: string | null | undefined): Observable<DataSourceResultOfCategoryDto> {
+        let url_ = this.baseUrl + "/api/Categories/GetAll?";
+        if (pageSize === null)
+            throw new Error("The parameter 'pageSize' cannot be null.");
+        else if (pageSize !== undefined)
+            url_ += "pageSize=" + encodeURIComponent("" + pageSize) + "&";
+        if (page === null)
+            throw new Error("The parameter 'page' cannot be null.");
+        else if (page !== undefined)
+            url_ += "page=" + encodeURIComponent("" + page) + "&";
+        if (searchTerm !== undefined && searchTerm !== null)
+            url_ += "searchTerm=" + encodeURIComponent("" + searchTerm) + "&";
         url_ = url_.replace(/[?&]$/, "");
 
         let options_ : any = {
@@ -45,14 +55,14 @@ export class SwaggerClient {
                 try {
                     return this.processApiCategoriesGetAllGet(response_ as any);
                 } catch (e) {
-                    return _observableThrow(e) as any as Observable<CategoryViewModel[]>;
+                    return _observableThrow(e) as any as Observable<DataSourceResultOfCategoryDto>;
                 }
             } else
-                return _observableThrow(response_) as any as Observable<CategoryViewModel[]>;
+                return _observableThrow(response_) as any as Observable<DataSourceResultOfCategoryDto>;
         }));
     }
 
-    protected processApiCategoriesGetAllGet(response: HttpResponseBase): Observable<CategoryViewModel[]> {
+    protected processApiCategoriesGetAllGet(response: HttpResponseBase): Observable<DataSourceResultOfCategoryDto> {
         const status = response.status;
         const responseBlob =
             response instanceof HttpResponse ? response.body :
@@ -63,22 +73,8 @@ export class SwaggerClient {
             return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
             let result200: any = null;
             let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
-            if (Array.isArray(resultData200)) {
-                result200 = [] as any;
-                for (let item of resultData200)
-                    result200!.push(CategoryViewModel.fromJS(item));
-            }
-            else {
-                result200 = <any>null;
-            }
+            result200 = DataSourceResultOfCategoryDto.fromJS(resultData200);
             return _observableOf(result200);
-            }));
-        } else if (status === 404) {
-            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
-            let result404: any = null;
-            let resultData404 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
-            result404 = ProblemDetails.fromJS(resultData404);
-            return throwException("A server side error occurred.", status, _responseText, _headers, result404);
             }));
         } else if (status !== 200 && status !== 204) {
             return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
@@ -88,8 +84,8 @@ export class SwaggerClient {
         return _observableOf(null as any);
     }
 
-    apiCategoriesGetByIdGet(id: number | undefined): Observable<CategoryViewModel> {
-        let url_ = this.baseUrl + "/api/Categories/GetById?";
+    apiCategoriesGetDetailsGet(id: number | undefined): Observable<CategoryDto> {
+        let url_ = this.baseUrl + "/api/Categories/GetDetails?";
         if (id === null)
             throw new Error("The parameter 'id' cannot be null.");
         else if (id !== undefined)
@@ -105,20 +101,20 @@ export class SwaggerClient {
         };
 
         return this.http.request("get", url_, options_).pipe(_observableMergeMap((response_ : any) => {
-            return this.processApiCategoriesGetByIdGet(response_);
+            return this.processApiCategoriesGetDetailsGet(response_);
         })).pipe(_observableCatch((response_: any) => {
             if (response_ instanceof HttpResponseBase) {
                 try {
-                    return this.processApiCategoriesGetByIdGet(response_ as any);
+                    return this.processApiCategoriesGetDetailsGet(response_ as any);
                 } catch (e) {
-                    return _observableThrow(e) as any as Observable<CategoryViewModel>;
+                    return _observableThrow(e) as any as Observable<CategoryDto>;
                 }
             } else
-                return _observableThrow(response_) as any as Observable<CategoryViewModel>;
+                return _observableThrow(response_) as any as Observable<CategoryDto>;
         }));
     }
 
-    protected processApiCategoriesGetByIdGet(response: HttpResponseBase): Observable<CategoryViewModel> {
+    protected processApiCategoriesGetDetailsGet(response: HttpResponseBase): Observable<CategoryDto> {
         const status = response.status;
         const responseBlob =
             response instanceof HttpResponse ? response.body :
@@ -129,15 +125,8 @@ export class SwaggerClient {
             return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
             let result200: any = null;
             let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
-            result200 = CategoryViewModel.fromJS(resultData200);
+            result200 = CategoryDto.fromJS(resultData200);
             return _observableOf(result200);
-            }));
-        } else if (status === 404) {
-            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
-            let result404: any = null;
-            let resultData404 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
-            result404 = ProblemDetails.fromJS(resultData404);
-            return throwException("A server side error occurred.", status, _responseText, _headers, result404);
             }));
         } else if (status !== 200 && status !== 204) {
             return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
@@ -147,11 +136,11 @@ export class SwaggerClient {
         return _observableOf(null as any);
     }
 
-    apiCategoriesPost(dto: CategoryDto): Observable<CategoryViewModel> {
-        let url_ = this.baseUrl + "/api/Categories";
+    apiCategoriesInsertPost(entity: CategoryDto): Observable<CategoryDto> {
+        let url_ = this.baseUrl + "/api/Categories/Insert";
         url_ = url_.replace(/[?&]$/, "");
 
-        const content_ = JSON.stringify(dto);
+        const content_ = JSON.stringify(entity);
 
         let options_ : any = {
             body: content_,
@@ -164,39 +153,32 @@ export class SwaggerClient {
         };
 
         return this.http.request("post", url_, options_).pipe(_observableMergeMap((response_ : any) => {
-            return this.processApiCategoriesPost(response_);
+            return this.processApiCategoriesInsertPost(response_);
         })).pipe(_observableCatch((response_: any) => {
             if (response_ instanceof HttpResponseBase) {
                 try {
-                    return this.processApiCategoriesPost(response_ as any);
+                    return this.processApiCategoriesInsertPost(response_ as any);
                 } catch (e) {
-                    return _observableThrow(e) as any as Observable<CategoryViewModel>;
+                    return _observableThrow(e) as any as Observable<CategoryDto>;
                 }
             } else
-                return _observableThrow(response_) as any as Observable<CategoryViewModel>;
+                return _observableThrow(response_) as any as Observable<CategoryDto>;
         }));
     }
 
-    protected processApiCategoriesPost(response: HttpResponseBase): Observable<CategoryViewModel> {
+    protected processApiCategoriesInsertPost(response: HttpResponseBase): Observable<CategoryDto> {
         const status = response.status;
         const responseBlob =
             response instanceof HttpResponse ? response.body :
             (response as any).error instanceof Blob ? (response as any).error : undefined;
 
         let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); }}
-        if (status === 201) {
+        if (status === 200) {
             return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
-            let result201: any = null;
-            let resultData201 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
-            result201 = CategoryViewModel.fromJS(resultData201);
-            return _observableOf(result201);
-            }));
-        } else if (status === 400) {
-            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
-            let result400: any = null;
-            let resultData400 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
-            result400 = ProblemDetails.fromJS(resultData400);
-            return throwException("A server side error occurred.", status, _responseText, _headers, result400);
+            let result200: any = null;
+            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result200 = CategoryDto.fromJS(resultData200);
+            return _observableOf(result200);
             }));
         } else if (status !== 200 && status !== 204) {
             return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
@@ -206,15 +188,11 @@ export class SwaggerClient {
         return _observableOf(null as any);
     }
 
-    apiCategoriesUpdatePut(id: number | undefined, dto: CategoryDto): Observable<void> {
-        let url_ = this.baseUrl + "/api/Categories/Update?";
-        if (id === null)
-            throw new Error("The parameter 'id' cannot be null.");
-        else if (id !== undefined)
-            url_ += "id=" + encodeURIComponent("" + id) + "&";
+    apiCategoriesUpdatePost(entity: CategoryDto): Observable<CategoryDto> {
+        let url_ = this.baseUrl + "/api/Categories/Update";
         url_ = url_.replace(/[?&]$/, "");
 
-        const content_ = JSON.stringify(dto);
+        const content_ = JSON.stringify(entity);
 
         let options_ : any = {
             body: content_,
@@ -222,47 +200,37 @@ export class SwaggerClient {
             responseType: "blob",
             headers: new HttpHeaders({
                 "Content-Type": "application/json",
+                "Accept": "application/json"
             })
         };
 
-        return this.http.request("put", url_, options_).pipe(_observableMergeMap((response_ : any) => {
-            return this.processApiCategoriesUpdatePut(response_);
+        return this.http.request("post", url_, options_).pipe(_observableMergeMap((response_ : any) => {
+            return this.processApiCategoriesUpdatePost(response_);
         })).pipe(_observableCatch((response_: any) => {
             if (response_ instanceof HttpResponseBase) {
                 try {
-                    return this.processApiCategoriesUpdatePut(response_ as any);
+                    return this.processApiCategoriesUpdatePost(response_ as any);
                 } catch (e) {
-                    return _observableThrow(e) as any as Observable<void>;
+                    return _observableThrow(e) as any as Observable<CategoryDto>;
                 }
             } else
-                return _observableThrow(response_) as any as Observable<void>;
+                return _observableThrow(response_) as any as Observable<CategoryDto>;
         }));
     }
 
-    protected processApiCategoriesUpdatePut(response: HttpResponseBase): Observable<void> {
+    protected processApiCategoriesUpdatePost(response: HttpResponseBase): Observable<CategoryDto> {
         const status = response.status;
         const responseBlob =
             response instanceof HttpResponse ? response.body :
             (response as any).error instanceof Blob ? (response as any).error : undefined;
 
         let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); }}
-        if (status === 204) {
+        if (status === 200) {
             return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
-            return _observableOf(null as any);
-            }));
-        } else if (status === 400) {
-            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
-            let result400: any = null;
-            let resultData400 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
-            result400 = ProblemDetails.fromJS(resultData400);
-            return throwException("A server side error occurred.", status, _responseText, _headers, result400);
-            }));
-        } else if (status === 404) {
-            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
-            let result404: any = null;
-            let resultData404 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
-            result404 = ProblemDetails.fromJS(resultData404);
-            return throwException("A server side error occurred.", status, _responseText, _headers, result404);
+            let result200: any = null;
+            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result200 = CategoryDto.fromJS(resultData200);
+            return _observableOf(result200);
             }));
         } else if (status !== 200 && status !== 204) {
             return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
@@ -272,52 +240,49 @@ export class SwaggerClient {
         return _observableOf(null as any);
     }
 
-    apiCategoriesDeleteDelete(id: number | undefined): Observable<void> {
+    apiCategoriesDeletePost(id: number | undefined): Observable<CategoryDto> {
         let url_ = this.baseUrl + "/api/Categories/Delete?";
         if (id === null)
             throw new Error("The parameter 'id' cannot be null.");
         else if (id !== undefined)
-            url_ += "id=" + encodeURIComponent("" + id) + "&";
+            url_ += "Id=" + encodeURIComponent("" + id) + "&";
         url_ = url_.replace(/[?&]$/, "");
 
         let options_ : any = {
             observe: "response",
             responseType: "blob",
             headers: new HttpHeaders({
+                "Accept": "application/json"
             })
         };
 
-        return this.http.request("delete", url_, options_).pipe(_observableMergeMap((response_ : any) => {
-            return this.processApiCategoriesDeleteDelete(response_);
+        return this.http.request("post", url_, options_).pipe(_observableMergeMap((response_ : any) => {
+            return this.processApiCategoriesDeletePost(response_);
         })).pipe(_observableCatch((response_: any) => {
             if (response_ instanceof HttpResponseBase) {
                 try {
-                    return this.processApiCategoriesDeleteDelete(response_ as any);
+                    return this.processApiCategoriesDeletePost(response_ as any);
                 } catch (e) {
-                    return _observableThrow(e) as any as Observable<void>;
+                    return _observableThrow(e) as any as Observable<CategoryDto>;
                 }
             } else
-                return _observableThrow(response_) as any as Observable<void>;
+                return _observableThrow(response_) as any as Observable<CategoryDto>;
         }));
     }
 
-    protected processApiCategoriesDeleteDelete(response: HttpResponseBase): Observable<void> {
+    protected processApiCategoriesDeletePost(response: HttpResponseBase): Observable<CategoryDto> {
         const status = response.status;
         const responseBlob =
             response instanceof HttpResponse ? response.body :
             (response as any).error instanceof Blob ? (response as any).error : undefined;
 
         let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); }}
-        if (status === 204) {
+        if (status === 200) {
             return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
-            return _observableOf(null as any);
-            }));
-        } else if (status === 404) {
-            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
-            let result404: any = null;
-            let resultData404 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
-            result404 = ProblemDetails.fromJS(resultData404);
-            return throwException("A server side error occurred.", status, _responseText, _headers, result404);
+            let result200: any = null;
+            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result200 = CategoryDto.fromJS(resultData200);
+            return _observableOf(result200);
             }));
         } else if (status !== 200 && status !== 204) {
             return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
@@ -327,8 +292,18 @@ export class SwaggerClient {
         return _observableOf(null as any);
     }
 
-    apiPartsGet(): Observable<PartViewModel[]> {
-        let url_ = this.baseUrl + "/api/Parts";
+    apiPartsGetAllGet(pageSize: number | undefined, page: number | undefined, searchTerm: string | null | undefined): Observable<DataSourceResultOfPartDto> {
+        let url_ = this.baseUrl + "/api/Parts/GetAll?";
+        if (pageSize === null)
+            throw new Error("The parameter 'pageSize' cannot be null.");
+        else if (pageSize !== undefined)
+            url_ += "pageSize=" + encodeURIComponent("" + pageSize) + "&";
+        if (page === null)
+            throw new Error("The parameter 'page' cannot be null.");
+        else if (page !== undefined)
+            url_ += "page=" + encodeURIComponent("" + page) + "&";
+        if (searchTerm !== undefined && searchTerm !== null)
+            url_ += "searchTerm=" + encodeURIComponent("" + searchTerm) + "&";
         url_ = url_.replace(/[?&]$/, "");
 
         let options_ : any = {
@@ -340,20 +315,20 @@ export class SwaggerClient {
         };
 
         return this.http.request("get", url_, options_).pipe(_observableMergeMap((response_ : any) => {
-            return this.processApiPartsGet(response_);
+            return this.processApiPartsGetAllGet(response_);
         })).pipe(_observableCatch((response_: any) => {
             if (response_ instanceof HttpResponseBase) {
                 try {
-                    return this.processApiPartsGet(response_ as any);
+                    return this.processApiPartsGetAllGet(response_ as any);
                 } catch (e) {
-                    return _observableThrow(e) as any as Observable<PartViewModel[]>;
+                    return _observableThrow(e) as any as Observable<DataSourceResultOfPartDto>;
                 }
             } else
-                return _observableThrow(response_) as any as Observable<PartViewModel[]>;
+                return _observableThrow(response_) as any as Observable<DataSourceResultOfPartDto>;
         }));
     }
 
-    protected processApiPartsGet(response: HttpResponseBase): Observable<PartViewModel[]> {
+    protected processApiPartsGetAllGet(response: HttpResponseBase): Observable<DataSourceResultOfPartDto> {
         const status = response.status;
         const responseBlob =
             response instanceof HttpResponse ? response.body :
@@ -364,22 +339,8 @@ export class SwaggerClient {
             return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
             let result200: any = null;
             let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
-            if (Array.isArray(resultData200)) {
-                result200 = [] as any;
-                for (let item of resultData200)
-                    result200!.push(PartViewModel.fromJS(item));
-            }
-            else {
-                result200 = <any>null;
-            }
+            result200 = DataSourceResultOfPartDto.fromJS(resultData200);
             return _observableOf(result200);
-            }));
-        } else if (status === 404) {
-            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
-            let result404: any = null;
-            let resultData404 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
-            result404 = ProblemDetails.fromJS(resultData404);
-            return throwException("A server side error occurred.", status, _responseText, _headers, result404);
             }));
         } else if (status !== 200 && status !== 204) {
             return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
@@ -389,8 +350,8 @@ export class SwaggerClient {
         return _observableOf(null as any);
     }
 
-    apiPartsGetByIdGet(id: number | undefined): Observable<PartViewModel> {
-        let url_ = this.baseUrl + "/api/Parts/GetById?";
+    apiPartsGetDetailsGet(id: number | undefined): Observable<PartDto> {
+        let url_ = this.baseUrl + "/api/Parts/GetDetails?";
         if (id === null)
             throw new Error("The parameter 'id' cannot be null.");
         else if (id !== undefined)
@@ -406,20 +367,20 @@ export class SwaggerClient {
         };
 
         return this.http.request("get", url_, options_).pipe(_observableMergeMap((response_ : any) => {
-            return this.processApiPartsGetByIdGet(response_);
+            return this.processApiPartsGetDetailsGet(response_);
         })).pipe(_observableCatch((response_: any) => {
             if (response_ instanceof HttpResponseBase) {
                 try {
-                    return this.processApiPartsGetByIdGet(response_ as any);
+                    return this.processApiPartsGetDetailsGet(response_ as any);
                 } catch (e) {
-                    return _observableThrow(e) as any as Observable<PartViewModel>;
+                    return _observableThrow(e) as any as Observable<PartDto>;
                 }
             } else
-                return _observableThrow(response_) as any as Observable<PartViewModel>;
+                return _observableThrow(response_) as any as Observable<PartDto>;
         }));
     }
 
-    protected processApiPartsGetByIdGet(response: HttpResponseBase): Observable<PartViewModel> {
+    protected processApiPartsGetDetailsGet(response: HttpResponseBase): Observable<PartDto> {
         const status = response.status;
         const responseBlob =
             response instanceof HttpResponse ? response.body :
@@ -430,15 +391,8 @@ export class SwaggerClient {
             return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
             let result200: any = null;
             let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
-            result200 = PartViewModel.fromJS(resultData200);
+            result200 = PartDto.fromJS(resultData200);
             return _observableOf(result200);
-            }));
-        } else if (status === 404) {
-            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
-            let result404: any = null;
-            let resultData404 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
-            result404 = ProblemDetails.fromJS(resultData404);
-            return throwException("A server side error occurred.", status, _responseText, _headers, result404);
             }));
         } else if (status !== 200 && status !== 204) {
             return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
@@ -448,11 +402,11 @@ export class SwaggerClient {
         return _observableOf(null as any);
     }
 
-    apiPartsCreatePost(dto: PartDto): Observable<PartViewModel> {
-        let url_ = this.baseUrl + "/api/Parts/Create";
+    apiPartsInsertPost(entity: PartDto): Observable<PartDto> {
+        let url_ = this.baseUrl + "/api/Parts/Insert";
         url_ = url_.replace(/[?&]$/, "");
 
-        const content_ = JSON.stringify(dto);
+        const content_ = JSON.stringify(entity);
 
         let options_ : any = {
             body: content_,
@@ -465,39 +419,32 @@ export class SwaggerClient {
         };
 
         return this.http.request("post", url_, options_).pipe(_observableMergeMap((response_ : any) => {
-            return this.processApiPartsCreatePost(response_);
+            return this.processApiPartsInsertPost(response_);
         })).pipe(_observableCatch((response_: any) => {
             if (response_ instanceof HttpResponseBase) {
                 try {
-                    return this.processApiPartsCreatePost(response_ as any);
+                    return this.processApiPartsInsertPost(response_ as any);
                 } catch (e) {
-                    return _observableThrow(e) as any as Observable<PartViewModel>;
+                    return _observableThrow(e) as any as Observable<PartDto>;
                 }
             } else
-                return _observableThrow(response_) as any as Observable<PartViewModel>;
+                return _observableThrow(response_) as any as Observable<PartDto>;
         }));
     }
 
-    protected processApiPartsCreatePost(response: HttpResponseBase): Observable<PartViewModel> {
+    protected processApiPartsInsertPost(response: HttpResponseBase): Observable<PartDto> {
         const status = response.status;
         const responseBlob =
             response instanceof HttpResponse ? response.body :
             (response as any).error instanceof Blob ? (response as any).error : undefined;
 
         let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); }}
-        if (status === 201) {
+        if (status === 200) {
             return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
-            let result201: any = null;
-            let resultData201 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
-            result201 = PartViewModel.fromJS(resultData201);
-            return _observableOf(result201);
-            }));
-        } else if (status === 400) {
-            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
-            let result400: any = null;
-            let resultData400 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
-            result400 = ProblemDetails.fromJS(resultData400);
-            return throwException("A server side error occurred.", status, _responseText, _headers, result400);
+            let result200: any = null;
+            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result200 = PartDto.fromJS(resultData200);
+            return _observableOf(result200);
             }));
         } else if (status !== 200 && status !== 204) {
             return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
@@ -507,15 +454,11 @@ export class SwaggerClient {
         return _observableOf(null as any);
     }
 
-    apiPartsUpdatePut(id: number | undefined, dto: PartDto): Observable<void> {
-        let url_ = this.baseUrl + "/api/Parts/Update?";
-        if (id === null)
-            throw new Error("The parameter 'id' cannot be null.");
-        else if (id !== undefined)
-            url_ += "id=" + encodeURIComponent("" + id) + "&";
+    apiPartsUpdatePost(entity: PartDto): Observable<PartDto> {
+        let url_ = this.baseUrl + "/api/Parts/Update";
         url_ = url_.replace(/[?&]$/, "");
 
-        const content_ = JSON.stringify(dto);
+        const content_ = JSON.stringify(entity);
 
         let options_ : any = {
             body: content_,
@@ -523,47 +466,37 @@ export class SwaggerClient {
             responseType: "blob",
             headers: new HttpHeaders({
                 "Content-Type": "application/json",
+                "Accept": "application/json"
             })
         };
 
-        return this.http.request("put", url_, options_).pipe(_observableMergeMap((response_ : any) => {
-            return this.processApiPartsUpdatePut(response_);
+        return this.http.request("post", url_, options_).pipe(_observableMergeMap((response_ : any) => {
+            return this.processApiPartsUpdatePost(response_);
         })).pipe(_observableCatch((response_: any) => {
             if (response_ instanceof HttpResponseBase) {
                 try {
-                    return this.processApiPartsUpdatePut(response_ as any);
+                    return this.processApiPartsUpdatePost(response_ as any);
                 } catch (e) {
-                    return _observableThrow(e) as any as Observable<void>;
+                    return _observableThrow(e) as any as Observable<PartDto>;
                 }
             } else
-                return _observableThrow(response_) as any as Observable<void>;
+                return _observableThrow(response_) as any as Observable<PartDto>;
         }));
     }
 
-    protected processApiPartsUpdatePut(response: HttpResponseBase): Observable<void> {
+    protected processApiPartsUpdatePost(response: HttpResponseBase): Observable<PartDto> {
         const status = response.status;
         const responseBlob =
             response instanceof HttpResponse ? response.body :
             (response as any).error instanceof Blob ? (response as any).error : undefined;
 
         let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); }}
-        if (status === 204) {
+        if (status === 200) {
             return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
-            return _observableOf(null as any);
-            }));
-        } else if (status === 400) {
-            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
-            let result400: any = null;
-            let resultData400 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
-            result400 = ProblemDetails.fromJS(resultData400);
-            return throwException("A server side error occurred.", status, _responseText, _headers, result400);
-            }));
-        } else if (status === 404) {
-            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
-            let result404: any = null;
-            let resultData404 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
-            result404 = ProblemDetails.fromJS(resultData404);
-            return throwException("A server side error occurred.", status, _responseText, _headers, result404);
+            let result200: any = null;
+            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result200 = PartDto.fromJS(resultData200);
+            return _observableOf(result200);
             }));
         } else if (status !== 200 && status !== 204) {
             return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
@@ -573,52 +506,49 @@ export class SwaggerClient {
         return _observableOf(null as any);
     }
 
-    apiPartsDeleteDelete(id: number | undefined): Observable<void> {
+    apiPartsDeletePost(id: number | undefined): Observable<PartDto> {
         let url_ = this.baseUrl + "/api/Parts/Delete?";
         if (id === null)
             throw new Error("The parameter 'id' cannot be null.");
         else if (id !== undefined)
-            url_ += "id=" + encodeURIComponent("" + id) + "&";
+            url_ += "Id=" + encodeURIComponent("" + id) + "&";
         url_ = url_.replace(/[?&]$/, "");
 
         let options_ : any = {
             observe: "response",
             responseType: "blob",
             headers: new HttpHeaders({
+                "Accept": "application/json"
             })
         };
 
-        return this.http.request("delete", url_, options_).pipe(_observableMergeMap((response_ : any) => {
-            return this.processApiPartsDeleteDelete(response_);
+        return this.http.request("post", url_, options_).pipe(_observableMergeMap((response_ : any) => {
+            return this.processApiPartsDeletePost(response_);
         })).pipe(_observableCatch((response_: any) => {
             if (response_ instanceof HttpResponseBase) {
                 try {
-                    return this.processApiPartsDeleteDelete(response_ as any);
+                    return this.processApiPartsDeletePost(response_ as any);
                 } catch (e) {
-                    return _observableThrow(e) as any as Observable<void>;
+                    return _observableThrow(e) as any as Observable<PartDto>;
                 }
             } else
-                return _observableThrow(response_) as any as Observable<void>;
+                return _observableThrow(response_) as any as Observable<PartDto>;
         }));
     }
 
-    protected processApiPartsDeleteDelete(response: HttpResponseBase): Observable<void> {
+    protected processApiPartsDeletePost(response: HttpResponseBase): Observable<PartDto> {
         const status = response.status;
         const responseBlob =
             response instanceof HttpResponse ? response.body :
             (response as any).error instanceof Blob ? (response as any).error : undefined;
 
         let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); }}
-        if (status === 204) {
+        if (status === 200) {
             return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
-            return _observableOf(null as any);
-            }));
-        } else if (status === 404) {
-            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
-            let result404: any = null;
-            let resultData404 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
-            result404 = ProblemDetails.fromJS(resultData404);
-            return throwException("A server side error occurred.", status, _responseText, _headers, result404);
+            let result200: any = null;
+            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result200 = PartDto.fromJS(resultData200);
+            return _observableOf(result200);
             }));
         } else if (status !== 200 && status !== 204) {
             return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
@@ -628,8 +558,18 @@ export class SwaggerClient {
         return _observableOf(null as any);
     }
 
-    apiSellersGetAllGet(): Observable<SellerViewModel[]> {
-        let url_ = this.baseUrl + "/api/Sellers/GetAll";
+    apiSellersGetAllGet(pageSize: number | undefined, page: number | undefined, searchTerm: string | null | undefined): Observable<DataSourceResultOfSellerDto> {
+        let url_ = this.baseUrl + "/api/Sellers/GetAll?";
+        if (pageSize === null)
+            throw new Error("The parameter 'pageSize' cannot be null.");
+        else if (pageSize !== undefined)
+            url_ += "pageSize=" + encodeURIComponent("" + pageSize) + "&";
+        if (page === null)
+            throw new Error("The parameter 'page' cannot be null.");
+        else if (page !== undefined)
+            url_ += "page=" + encodeURIComponent("" + page) + "&";
+        if (searchTerm !== undefined && searchTerm !== null)
+            url_ += "searchTerm=" + encodeURIComponent("" + searchTerm) + "&";
         url_ = url_.replace(/[?&]$/, "");
 
         let options_ : any = {
@@ -647,14 +587,14 @@ export class SwaggerClient {
                 try {
                     return this.processApiSellersGetAllGet(response_ as any);
                 } catch (e) {
-                    return _observableThrow(e) as any as Observable<SellerViewModel[]>;
+                    return _observableThrow(e) as any as Observable<DataSourceResultOfSellerDto>;
                 }
             } else
-                return _observableThrow(response_) as any as Observable<SellerViewModel[]>;
+                return _observableThrow(response_) as any as Observable<DataSourceResultOfSellerDto>;
         }));
     }
 
-    protected processApiSellersGetAllGet(response: HttpResponseBase): Observable<SellerViewModel[]> {
+    protected processApiSellersGetAllGet(response: HttpResponseBase): Observable<DataSourceResultOfSellerDto> {
         const status = response.status;
         const responseBlob =
             response instanceof HttpResponse ? response.body :
@@ -665,22 +605,8 @@ export class SwaggerClient {
             return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
             let result200: any = null;
             let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
-            if (Array.isArray(resultData200)) {
-                result200 = [] as any;
-                for (let item of resultData200)
-                    result200!.push(SellerViewModel.fromJS(item));
-            }
-            else {
-                result200 = <any>null;
-            }
+            result200 = DataSourceResultOfSellerDto.fromJS(resultData200);
             return _observableOf(result200);
-            }));
-        } else if (status === 404) {
-            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
-            let result404: any = null;
-            let resultData404 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
-            result404 = ProblemDetails.fromJS(resultData404);
-            return throwException("A server side error occurred.", status, _responseText, _headers, result404);
             }));
         } else if (status !== 200 && status !== 204) {
             return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
@@ -690,8 +616,8 @@ export class SwaggerClient {
         return _observableOf(null as any);
     }
 
-    apiSellersGetByIdGet(id: number | undefined): Observable<SellerViewModel> {
-        let url_ = this.baseUrl + "/api/Sellers/GetById?";
+    apiSellersGetDetailsGet(id: number | undefined): Observable<SellerDto> {
+        let url_ = this.baseUrl + "/api/Sellers/GetDetails?";
         if (id === null)
             throw new Error("The parameter 'id' cannot be null.");
         else if (id !== undefined)
@@ -707,20 +633,20 @@ export class SwaggerClient {
         };
 
         return this.http.request("get", url_, options_).pipe(_observableMergeMap((response_ : any) => {
-            return this.processApiSellersGetByIdGet(response_);
+            return this.processApiSellersGetDetailsGet(response_);
         })).pipe(_observableCatch((response_: any) => {
             if (response_ instanceof HttpResponseBase) {
                 try {
-                    return this.processApiSellersGetByIdGet(response_ as any);
+                    return this.processApiSellersGetDetailsGet(response_ as any);
                 } catch (e) {
-                    return _observableThrow(e) as any as Observable<SellerViewModel>;
+                    return _observableThrow(e) as any as Observable<SellerDto>;
                 }
             } else
-                return _observableThrow(response_) as any as Observable<SellerViewModel>;
+                return _observableThrow(response_) as any as Observable<SellerDto>;
         }));
     }
 
-    protected processApiSellersGetByIdGet(response: HttpResponseBase): Observable<SellerViewModel> {
+    protected processApiSellersGetDetailsGet(response: HttpResponseBase): Observable<SellerDto> {
         const status = response.status;
         const responseBlob =
             response instanceof HttpResponse ? response.body :
@@ -731,15 +657,8 @@ export class SwaggerClient {
             return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
             let result200: any = null;
             let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
-            result200 = SellerViewModel.fromJS(resultData200);
+            result200 = SellerDto.fromJS(resultData200);
             return _observableOf(result200);
-            }));
-        } else if (status === 404) {
-            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
-            let result404: any = null;
-            let resultData404 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
-            result404 = ProblemDetails.fromJS(resultData404);
-            return throwException("A server side error occurred.", status, _responseText, _headers, result404);
             }));
         } else if (status !== 200 && status !== 204) {
             return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
@@ -749,11 +668,11 @@ export class SwaggerClient {
         return _observableOf(null as any);
     }
 
-    apiSellersPost(dto: SellerDto): Observable<SellerViewModel> {
-        let url_ = this.baseUrl + "/api/Sellers";
+    apiSellersInsertPost(entity: SellerDto): Observable<SellerDto> {
+        let url_ = this.baseUrl + "/api/Sellers/Insert";
         url_ = url_.replace(/[?&]$/, "");
 
-        const content_ = JSON.stringify(dto);
+        const content_ = JSON.stringify(entity);
 
         let options_ : any = {
             body: content_,
@@ -766,39 +685,32 @@ export class SwaggerClient {
         };
 
         return this.http.request("post", url_, options_).pipe(_observableMergeMap((response_ : any) => {
-            return this.processApiSellersPost(response_);
+            return this.processApiSellersInsertPost(response_);
         })).pipe(_observableCatch((response_: any) => {
             if (response_ instanceof HttpResponseBase) {
                 try {
-                    return this.processApiSellersPost(response_ as any);
+                    return this.processApiSellersInsertPost(response_ as any);
                 } catch (e) {
-                    return _observableThrow(e) as any as Observable<SellerViewModel>;
+                    return _observableThrow(e) as any as Observable<SellerDto>;
                 }
             } else
-                return _observableThrow(response_) as any as Observable<SellerViewModel>;
+                return _observableThrow(response_) as any as Observable<SellerDto>;
         }));
     }
 
-    protected processApiSellersPost(response: HttpResponseBase): Observable<SellerViewModel> {
+    protected processApiSellersInsertPost(response: HttpResponseBase): Observable<SellerDto> {
         const status = response.status;
         const responseBlob =
             response instanceof HttpResponse ? response.body :
             (response as any).error instanceof Blob ? (response as any).error : undefined;
 
         let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); }}
-        if (status === 201) {
+        if (status === 200) {
             return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
-            let result201: any = null;
-            let resultData201 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
-            result201 = SellerViewModel.fromJS(resultData201);
-            return _observableOf(result201);
-            }));
-        } else if (status === 400) {
-            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
-            let result400: any = null;
-            let resultData400 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
-            result400 = ProblemDetails.fromJS(resultData400);
-            return throwException("A server side error occurred.", status, _responseText, _headers, result400);
+            let result200: any = null;
+            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result200 = SellerDto.fromJS(resultData200);
+            return _observableOf(result200);
             }));
         } else if (status !== 200 && status !== 204) {
             return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
@@ -808,14 +720,11 @@ export class SwaggerClient {
         return _observableOf(null as any);
     }
 
-    apiSellersPut(id: number, dto: SellerDto): Observable<void> {
-        let url_ = this.baseUrl + "/api/Sellers/{id}";
-        if (id === undefined || id === null)
-            throw new Error("The parameter 'id' must be defined.");
-        url_ = url_.replace("{id}", encodeURIComponent("" + id));
+    apiSellersUpdatePost(entity: SellerDto): Observable<SellerDto> {
+        let url_ = this.baseUrl + "/api/Sellers/Update";
         url_ = url_.replace(/[?&]$/, "");
 
-        const content_ = JSON.stringify(dto);
+        const content_ = JSON.stringify(entity);
 
         let options_ : any = {
             body: content_,
@@ -823,47 +732,37 @@ export class SwaggerClient {
             responseType: "blob",
             headers: new HttpHeaders({
                 "Content-Type": "application/json",
+                "Accept": "application/json"
             })
         };
 
-        return this.http.request("put", url_, options_).pipe(_observableMergeMap((response_ : any) => {
-            return this.processApiSellersPut(response_);
+        return this.http.request("post", url_, options_).pipe(_observableMergeMap((response_ : any) => {
+            return this.processApiSellersUpdatePost(response_);
         })).pipe(_observableCatch((response_: any) => {
             if (response_ instanceof HttpResponseBase) {
                 try {
-                    return this.processApiSellersPut(response_ as any);
+                    return this.processApiSellersUpdatePost(response_ as any);
                 } catch (e) {
-                    return _observableThrow(e) as any as Observable<void>;
+                    return _observableThrow(e) as any as Observable<SellerDto>;
                 }
             } else
-                return _observableThrow(response_) as any as Observable<void>;
+                return _observableThrow(response_) as any as Observable<SellerDto>;
         }));
     }
 
-    protected processApiSellersPut(response: HttpResponseBase): Observable<void> {
+    protected processApiSellersUpdatePost(response: HttpResponseBase): Observable<SellerDto> {
         const status = response.status;
         const responseBlob =
             response instanceof HttpResponse ? response.body :
             (response as any).error instanceof Blob ? (response as any).error : undefined;
 
         let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); }}
-        if (status === 204) {
+        if (status === 200) {
             return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
-            return _observableOf(null as any);
-            }));
-        } else if (status === 400) {
-            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
-            let result400: any = null;
-            let resultData400 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
-            result400 = ProblemDetails.fromJS(resultData400);
-            return throwException("A server side error occurred.", status, _responseText, _headers, result400);
-            }));
-        } else if (status === 404) {
-            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
-            let result404: any = null;
-            let resultData404 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
-            result404 = ProblemDetails.fromJS(resultData404);
-            return throwException("A server side error occurred.", status, _responseText, _headers, result404);
+            let result200: any = null;
+            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result200 = SellerDto.fromJS(resultData200);
+            return _observableOf(result200);
             }));
         } else if (status !== 200 && status !== 204) {
             return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
@@ -873,51 +772,49 @@ export class SwaggerClient {
         return _observableOf(null as any);
     }
 
-    apiSellersDelete(id: number): Observable<void> {
-        let url_ = this.baseUrl + "/api/Sellers/{id}";
-        if (id === undefined || id === null)
-            throw new Error("The parameter 'id' must be defined.");
-        url_ = url_.replace("{id}", encodeURIComponent("" + id));
+    apiSellersDeletePost(id: number | undefined): Observable<SellerDto> {
+        let url_ = this.baseUrl + "/api/Sellers/Delete?";
+        if (id === null)
+            throw new Error("The parameter 'id' cannot be null.");
+        else if (id !== undefined)
+            url_ += "Id=" + encodeURIComponent("" + id) + "&";
         url_ = url_.replace(/[?&]$/, "");
 
         let options_ : any = {
             observe: "response",
             responseType: "blob",
             headers: new HttpHeaders({
+                "Accept": "application/json"
             })
         };
 
-        return this.http.request("delete", url_, options_).pipe(_observableMergeMap((response_ : any) => {
-            return this.processApiSellersDelete(response_);
+        return this.http.request("post", url_, options_).pipe(_observableMergeMap((response_ : any) => {
+            return this.processApiSellersDeletePost(response_);
         })).pipe(_observableCatch((response_: any) => {
             if (response_ instanceof HttpResponseBase) {
                 try {
-                    return this.processApiSellersDelete(response_ as any);
+                    return this.processApiSellersDeletePost(response_ as any);
                 } catch (e) {
-                    return _observableThrow(e) as any as Observable<void>;
+                    return _observableThrow(e) as any as Observable<SellerDto>;
                 }
             } else
-                return _observableThrow(response_) as any as Observable<void>;
+                return _observableThrow(response_) as any as Observable<SellerDto>;
         }));
     }
 
-    protected processApiSellersDelete(response: HttpResponseBase): Observable<void> {
+    protected processApiSellersDeletePost(response: HttpResponseBase): Observable<SellerDto> {
         const status = response.status;
         const responseBlob =
             response instanceof HttpResponse ? response.body :
             (response as any).error instanceof Blob ? (response as any).error : undefined;
 
         let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); }}
-        if (status === 204) {
+        if (status === 200) {
             return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
-            return _observableOf(null as any);
-            }));
-        } else if (status === 404) {
-            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
-            let result404: any = null;
-            let resultData404 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
-            result404 = ProblemDetails.fromJS(resultData404);
-            return throwException("A server side error occurred.", status, _responseText, _headers, result404);
+            let result200: any = null;
+            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result200 = SellerDto.fromJS(resultData200);
+            return _observableOf(result200);
             }));
         } else if (status !== 200 && status !== 204) {
             return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
@@ -927,12 +824,14 @@ export class SwaggerClient {
         return _observableOf(null as any);
     }
 
-    apiLookupGetLookupGet(lookupName: string | undefined): Observable<LookupDTO[]> {
+    apiLookupGetLookupGet(lookupName: string | undefined, searchTerm: string | null | undefined): Observable<LookupDTO[]> {
         let url_ = this.baseUrl + "/api/Lookup/GetLookup?";
         if (lookupName === null)
             throw new Error("The parameter 'lookupName' cannot be null.");
         else if (lookupName !== undefined)
             url_ += "lookupName=" + encodeURIComponent("" + lookupName) + "&";
+        if (searchTerm !== undefined && searchTerm !== null)
+            url_ += "searchTerm=" + encodeURIComponent("" + searchTerm) + "&";
         url_ = url_.replace(/[?&]$/, "");
 
         let options_ : any = {
@@ -985,59 +884,280 @@ export class SwaggerClient {
         }
         return _observableOf(null as any);
     }
-}
 
-export class CategoryViewModel implements ICategoryViewModel {
-    id!: number;
-    name!: string;
+    apiSellerCategoryGetAllGet(pageSize: number | undefined, page: number | undefined, searchTerm: string | null | undefined): Observable<DataSourceResultOfSellerCategoryDto> {
+        let url_ = this.baseUrl + "/api/SellerCategory/GetAll?";
+        if (pageSize === null)
+            throw new Error("The parameter 'pageSize' cannot be null.");
+        else if (pageSize !== undefined)
+            url_ += "pageSize=" + encodeURIComponent("" + pageSize) + "&";
+        if (page === null)
+            throw new Error("The parameter 'page' cannot be null.");
+        else if (page !== undefined)
+            url_ += "page=" + encodeURIComponent("" + page) + "&";
+        if (searchTerm !== undefined && searchTerm !== null)
+            url_ += "searchTerm=" + encodeURIComponent("" + searchTerm) + "&";
+        url_ = url_.replace(/[?&]$/, "");
 
-    constructor(data?: ICategoryViewModel) {
-        if (data) {
-            for (var property in data) {
-                if (data.hasOwnProperty(property))
-                    (<any>this)[property] = (<any>data)[property];
-            }
+        let options_ : any = {
+            observe: "response",
+            responseType: "blob",
+            headers: new HttpHeaders({
+                "Accept": "application/json"
+            })
+        };
+
+        return this.http.request("get", url_, options_).pipe(_observableMergeMap((response_ : any) => {
+            return this.processApiSellerCategoryGetAllGet(response_);
+        })).pipe(_observableCatch((response_: any) => {
+            if (response_ instanceof HttpResponseBase) {
+                try {
+                    return this.processApiSellerCategoryGetAllGet(response_ as any);
+                } catch (e) {
+                    return _observableThrow(e) as any as Observable<DataSourceResultOfSellerCategoryDto>;
+                }
+            } else
+                return _observableThrow(response_) as any as Observable<DataSourceResultOfSellerCategoryDto>;
+        }));
+    }
+
+    protected processApiSellerCategoryGetAllGet(response: HttpResponseBase): Observable<DataSourceResultOfSellerCategoryDto> {
+        const status = response.status;
+        const responseBlob =
+            response instanceof HttpResponse ? response.body :
+            (response as any).error instanceof Blob ? (response as any).error : undefined;
+
+        let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); }}
+        if (status === 200) {
+            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
+            let result200: any = null;
+            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result200 = DataSourceResultOfSellerCategoryDto.fromJS(resultData200);
+            return _observableOf(result200);
+            }));
+        } else if (status !== 200 && status !== 204) {
+            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            }));
         }
+        return _observableOf(null as any);
     }
 
-    init(_data?: any) {
-        if (_data) {
-            this.id = _data["id"];
-            this.name = _data["name"];
+    apiSellerCategoryGetDetailsGet(id: number | undefined): Observable<SellerCategoryDto> {
+        let url_ = this.baseUrl + "/api/SellerCategory/GetDetails?";
+        if (id === null)
+            throw new Error("The parameter 'id' cannot be null.");
+        else if (id !== undefined)
+            url_ += "id=" + encodeURIComponent("" + id) + "&";
+        url_ = url_.replace(/[?&]$/, "");
+
+        let options_ : any = {
+            observe: "response",
+            responseType: "blob",
+            headers: new HttpHeaders({
+                "Accept": "application/json"
+            })
+        };
+
+        return this.http.request("get", url_, options_).pipe(_observableMergeMap((response_ : any) => {
+            return this.processApiSellerCategoryGetDetailsGet(response_);
+        })).pipe(_observableCatch((response_: any) => {
+            if (response_ instanceof HttpResponseBase) {
+                try {
+                    return this.processApiSellerCategoryGetDetailsGet(response_ as any);
+                } catch (e) {
+                    return _observableThrow(e) as any as Observable<SellerCategoryDto>;
+                }
+            } else
+                return _observableThrow(response_) as any as Observable<SellerCategoryDto>;
+        }));
+    }
+
+    protected processApiSellerCategoryGetDetailsGet(response: HttpResponseBase): Observable<SellerCategoryDto> {
+        const status = response.status;
+        const responseBlob =
+            response instanceof HttpResponse ? response.body :
+            (response as any).error instanceof Blob ? (response as any).error : undefined;
+
+        let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); }}
+        if (status === 200) {
+            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
+            let result200: any = null;
+            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result200 = SellerCategoryDto.fromJS(resultData200);
+            return _observableOf(result200);
+            }));
+        } else if (status !== 200 && status !== 204) {
+            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            }));
         }
+        return _observableOf(null as any);
     }
 
-    static fromJS(data: any): CategoryViewModel {
-        data = typeof data === 'object' ? data : {};
-        let result = new CategoryViewModel();
-        result.init(data);
-        return result;
+    apiSellerCategoryInsertPost(entity: SellerCategoryDto): Observable<SellerCategoryDto> {
+        let url_ = this.baseUrl + "/api/SellerCategory/Insert";
+        url_ = url_.replace(/[?&]$/, "");
+
+        const content_ = JSON.stringify(entity);
+
+        let options_ : any = {
+            body: content_,
+            observe: "response",
+            responseType: "blob",
+            headers: new HttpHeaders({
+                "Content-Type": "application/json",
+                "Accept": "application/json"
+            })
+        };
+
+        return this.http.request("post", url_, options_).pipe(_observableMergeMap((response_ : any) => {
+            return this.processApiSellerCategoryInsertPost(response_);
+        })).pipe(_observableCatch((response_: any) => {
+            if (response_ instanceof HttpResponseBase) {
+                try {
+                    return this.processApiSellerCategoryInsertPost(response_ as any);
+                } catch (e) {
+                    return _observableThrow(e) as any as Observable<SellerCategoryDto>;
+                }
+            } else
+                return _observableThrow(response_) as any as Observable<SellerCategoryDto>;
+        }));
     }
 
-    toJSON(data?: any) {
-        data = typeof data === 'object' ? data : {};
-        data["id"] = this.id;
-        data["name"] = this.name;
-        return data;
+    protected processApiSellerCategoryInsertPost(response: HttpResponseBase): Observable<SellerCategoryDto> {
+        const status = response.status;
+        const responseBlob =
+            response instanceof HttpResponse ? response.body :
+            (response as any).error instanceof Blob ? (response as any).error : undefined;
+
+        let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); }}
+        if (status === 200) {
+            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
+            let result200: any = null;
+            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result200 = SellerCategoryDto.fromJS(resultData200);
+            return _observableOf(result200);
+            }));
+        } else if (status !== 200 && status !== 204) {
+            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            }));
+        }
+        return _observableOf(null as any);
+    }
+
+    apiSellerCategoryUpdatePost(entity: SellerCategoryDto): Observable<SellerCategoryDto> {
+        let url_ = this.baseUrl + "/api/SellerCategory/Update";
+        url_ = url_.replace(/[?&]$/, "");
+
+        const content_ = JSON.stringify(entity);
+
+        let options_ : any = {
+            body: content_,
+            observe: "response",
+            responseType: "blob",
+            headers: new HttpHeaders({
+                "Content-Type": "application/json",
+                "Accept": "application/json"
+            })
+        };
+
+        return this.http.request("post", url_, options_).pipe(_observableMergeMap((response_ : any) => {
+            return this.processApiSellerCategoryUpdatePost(response_);
+        })).pipe(_observableCatch((response_: any) => {
+            if (response_ instanceof HttpResponseBase) {
+                try {
+                    return this.processApiSellerCategoryUpdatePost(response_ as any);
+                } catch (e) {
+                    return _observableThrow(e) as any as Observable<SellerCategoryDto>;
+                }
+            } else
+                return _observableThrow(response_) as any as Observable<SellerCategoryDto>;
+        }));
+    }
+
+    protected processApiSellerCategoryUpdatePost(response: HttpResponseBase): Observable<SellerCategoryDto> {
+        const status = response.status;
+        const responseBlob =
+            response instanceof HttpResponse ? response.body :
+            (response as any).error instanceof Blob ? (response as any).error : undefined;
+
+        let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); }}
+        if (status === 200) {
+            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
+            let result200: any = null;
+            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result200 = SellerCategoryDto.fromJS(resultData200);
+            return _observableOf(result200);
+            }));
+        } else if (status !== 200 && status !== 204) {
+            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            }));
+        }
+        return _observableOf(null as any);
+    }
+
+    apiSellerCategoryDeletePost(id: number | undefined): Observable<SellerCategoryDto> {
+        let url_ = this.baseUrl + "/api/SellerCategory/Delete?";
+        if (id === null)
+            throw new Error("The parameter 'id' cannot be null.");
+        else if (id !== undefined)
+            url_ += "Id=" + encodeURIComponent("" + id) + "&";
+        url_ = url_.replace(/[?&]$/, "");
+
+        let options_ : any = {
+            observe: "response",
+            responseType: "blob",
+            headers: new HttpHeaders({
+                "Accept": "application/json"
+            })
+        };
+
+        return this.http.request("post", url_, options_).pipe(_observableMergeMap((response_ : any) => {
+            return this.processApiSellerCategoryDeletePost(response_);
+        })).pipe(_observableCatch((response_: any) => {
+            if (response_ instanceof HttpResponseBase) {
+                try {
+                    return this.processApiSellerCategoryDeletePost(response_ as any);
+                } catch (e) {
+                    return _observableThrow(e) as any as Observable<SellerCategoryDto>;
+                }
+            } else
+                return _observableThrow(response_) as any as Observable<SellerCategoryDto>;
+        }));
+    }
+
+    protected processApiSellerCategoryDeletePost(response: HttpResponseBase): Observable<SellerCategoryDto> {
+        const status = response.status;
+        const responseBlob =
+            response instanceof HttpResponse ? response.body :
+            (response as any).error instanceof Blob ? (response as any).error : undefined;
+
+        let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); }}
+        if (status === 200) {
+            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
+            let result200: any = null;
+            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result200 = SellerCategoryDto.fromJS(resultData200);
+            return _observableOf(result200);
+            }));
+        } else if (status !== 200 && status !== 204) {
+            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            }));
+        }
+        return _observableOf(null as any);
     }
 }
 
-export interface ICategoryViewModel {
-    id: number;
-    name: string;
-}
+export class DataSourceResultOfCategoryDto implements IDataSourceResultOfCategoryDto {
+    data!: CategoryDto[];
+    count!: number;
+    additionalValue!: number;
 
-export class ProblemDetails implements IProblemDetails {
-    type?: string | undefined;
-    title?: string | undefined;
-    status?: number | undefined;
-    detail?: string | undefined;
-    instance?: string | undefined;
-    extensions!: { [key: string]: any; };
-
-    [key: string]: any;
-
-    constructor(data?: IProblemDetails) {
+    constructor(data?: IDataSourceResultOfCategoryDto) {
         if (data) {
             for (var property in data) {
                 if (data.hasOwnProperty(property))
@@ -1045,72 +1165,50 @@ export class ProblemDetails implements IProblemDetails {
             }
         }
         if (!data) {
-            this.extensions = {};
+            this.data = [];
         }
     }
 
     init(_data?: any) {
         if (_data) {
-            for (var property in _data) {
-                if (_data.hasOwnProperty(property))
-                    this[property] = _data[property];
+            if (Array.isArray(_data["data"])) {
+                this.data = [] as any;
+                for (let item of _data["data"])
+                    this.data!.push(CategoryDto.fromJS(item));
             }
-            this.type = _data["type"];
-            this.title = _data["title"];
-            this.status = _data["status"];
-            this.detail = _data["detail"];
-            this.instance = _data["instance"];
-            if (_data["extensions"]) {
-                this.extensions = {} as any;
-                for (let key in _data["extensions"]) {
-                    if (_data["extensions"].hasOwnProperty(key))
-                        (<any>this.extensions)![key] = _data["extensions"][key];
-                }
-            }
+            this.count = _data["count"];
+            this.additionalValue = _data["additionalValue"];
         }
     }
 
-    static fromJS(data: any): ProblemDetails {
+    static fromJS(data: any): DataSourceResultOfCategoryDto {
         data = typeof data === 'object' ? data : {};
-        let result = new ProblemDetails();
+        let result = new DataSourceResultOfCategoryDto();
         result.init(data);
         return result;
     }
 
     toJSON(data?: any) {
         data = typeof data === 'object' ? data : {};
-        for (var property in this) {
-            if (this.hasOwnProperty(property))
-                data[property] = this[property];
+        if (Array.isArray(this.data)) {
+            data["data"] = [];
+            for (let item of this.data)
+                data["data"].push(item.toJSON());
         }
-        data["type"] = this.type;
-        data["title"] = this.title;
-        data["status"] = this.status;
-        data["detail"] = this.detail;
-        data["instance"] = this.instance;
-        if (this.extensions) {
-            data["extensions"] = {};
-            for (let key in this.extensions) {
-                if (this.extensions.hasOwnProperty(key))
-                    (<any>data["extensions"])[key] = (<any>this.extensions)[key];
-            }
-        }
+        data["count"] = this.count;
+        data["additionalValue"] = this.additionalValue;
         return data;
     }
 }
 
-export interface IProblemDetails {
-    type?: string | undefined;
-    title?: string | undefined;
-    status?: number | undefined;
-    detail?: string | undefined;
-    instance?: string | undefined;
-    extensions: { [key: string]: any; };
-
-    [key: string]: any;
+export interface IDataSourceResultOfCategoryDto {
+    data: CategoryDto[];
+    count: number;
+    additionalValue: number;
 }
 
 export class CategoryDto implements ICategoryDto {
+    id!: number;
     name!: string;
 
     constructor(data?: ICategoryDto) {
@@ -1124,6 +1222,7 @@ export class CategoryDto implements ICategoryDto {
 
     init(_data?: any) {
         if (_data) {
+            this.id = _data["id"];
             this.name = _data["name"];
         }
     }
@@ -1137,81 +1236,70 @@ export class CategoryDto implements ICategoryDto {
 
     toJSON(data?: any) {
         data = typeof data === 'object' ? data : {};
+        data["id"] = this.id;
         data["name"] = this.name;
         return data;
     }
 }
 
 export interface ICategoryDto {
+    id: number;
     name: string;
 }
 
-export class PartViewModel implements IPartViewModel {
-    id!: number;
-    name!: string;
-    description!: string;
-    price!: number;
-    condition!: string;
-    imageUrl!: string;
-    sellerShopName!: string;
-    isSold!: boolean;
-    categoryName!: string;
+export class DataSourceResultOfPartDto implements IDataSourceResultOfPartDto {
+    data!: PartDto[];
+    count!: number;
+    additionalValue!: number;
 
-    constructor(data?: IPartViewModel) {
+    constructor(data?: IDataSourceResultOfPartDto) {
         if (data) {
             for (var property in data) {
                 if (data.hasOwnProperty(property))
                     (<any>this)[property] = (<any>data)[property];
             }
         }
+        if (!data) {
+            this.data = [];
+        }
     }
 
     init(_data?: any) {
         if (_data) {
-            this.id = _data["id"];
-            this.name = _data["name"];
-            this.description = _data["description"];
-            this.price = _data["price"];
-            this.condition = _data["condition"];
-            this.imageUrl = _data["imageUrl"];
-            this.sellerShopName = _data["sellerShopName"];
-            this.isSold = _data["isSold"];
-            this.categoryName = _data["categoryName"];
+            if (Array.isArray(_data["data"])) {
+                this.data = [] as any;
+                for (let item of _data["data"])
+                    this.data!.push(PartDto.fromJS(item));
+            }
+            this.count = _data["count"];
+            this.additionalValue = _data["additionalValue"];
         }
     }
 
-    static fromJS(data: any): PartViewModel {
+    static fromJS(data: any): DataSourceResultOfPartDto {
         data = typeof data === 'object' ? data : {};
-        let result = new PartViewModel();
+        let result = new DataSourceResultOfPartDto();
         result.init(data);
         return result;
     }
 
     toJSON(data?: any) {
         data = typeof data === 'object' ? data : {};
-        data["id"] = this.id;
-        data["name"] = this.name;
-        data["description"] = this.description;
-        data["price"] = this.price;
-        data["condition"] = this.condition;
-        data["imageUrl"] = this.imageUrl;
-        data["sellerShopName"] = this.sellerShopName;
-        data["isSold"] = this.isSold;
-        data["categoryName"] = this.categoryName;
+        if (Array.isArray(this.data)) {
+            data["data"] = [];
+            for (let item of this.data)
+                data["data"].push(item.toJSON());
+        }
+        data["count"] = this.count;
+        data["additionalValue"] = this.additionalValue;
         return data;
     }
 }
 
-export interface IPartViewModel {
-    id: number;
-    name: string;
-    description: string;
-    price: number;
-    condition: string;
-    imageUrl: string;
-    sellerShopName: string;
-    isSold: boolean;
-    categoryName: string;
+export interface IDataSourceResultOfPartDto {
+    data: PartDto[];
+    count: number;
+    additionalValue: number;
 }
 
 export class PartDto implements IPartDto {
@@ -1280,53 +1368,66 @@ export enum PartConditionEnum {
     Refurbished = 2,
 }
 
-export class SellerViewModel implements ISellerViewModel {
-    id!: number;
-    shopName!: string;
-    phoneNumber!: string;
+export class DataSourceResultOfSellerDto implements IDataSourceResultOfSellerDto {
+    data!: SellerDto[];
+    count!: number;
+    additionalValue!: number;
 
-    constructor(data?: ISellerViewModel) {
+    constructor(data?: IDataSourceResultOfSellerDto) {
         if (data) {
             for (var property in data) {
                 if (data.hasOwnProperty(property))
                     (<any>this)[property] = (<any>data)[property];
             }
         }
+        if (!data) {
+            this.data = [];
+        }
     }
 
     init(_data?: any) {
         if (_data) {
-            this.id = _data["id"];
-            this.shopName = _data["shopName"];
-            this.phoneNumber = _data["phoneNumber"];
+            if (Array.isArray(_data["data"])) {
+                this.data = [] as any;
+                for (let item of _data["data"])
+                    this.data!.push(SellerDto.fromJS(item));
+            }
+            this.count = _data["count"];
+            this.additionalValue = _data["additionalValue"];
         }
     }
 
-    static fromJS(data: any): SellerViewModel {
+    static fromJS(data: any): DataSourceResultOfSellerDto {
         data = typeof data === 'object' ? data : {};
-        let result = new SellerViewModel();
+        let result = new DataSourceResultOfSellerDto();
         result.init(data);
         return result;
     }
 
     toJSON(data?: any) {
         data = typeof data === 'object' ? data : {};
-        data["id"] = this.id;
-        data["shopName"] = this.shopName;
-        data["phoneNumber"] = this.phoneNumber;
+        if (Array.isArray(this.data)) {
+            data["data"] = [];
+            for (let item of this.data)
+                data["data"].push(item.toJSON());
+        }
+        data["count"] = this.count;
+        data["additionalValue"] = this.additionalValue;
         return data;
     }
 }
 
-export interface ISellerViewModel {
-    id: number;
-    shopName: string;
-    phoneNumber: string;
+export interface IDataSourceResultOfSellerDto {
+    data: SellerDto[];
+    count: number;
+    additionalValue: number;
 }
 
 export class SellerDto implements ISellerDto {
     shopName!: string;
     phoneNumber!: string;
+    imageUrl!: string;
+    location!: string;
     password!: string;
 
     constructor(data?: ISellerDto) {
@@ -1342,6 +1443,8 @@ export class SellerDto implements ISellerDto {
         if (_data) {
             this.shopName = _data["shopName"];
             this.phoneNumber = _data["phoneNumber"];
+            this.imageUrl = _data["imageUrl"];
+            this.location = _data["location"];
             this.password = _data["password"];
         }
     }
@@ -1357,6 +1460,8 @@ export class SellerDto implements ISellerDto {
         data = typeof data === 'object' ? data : {};
         data["shopName"] = this.shopName;
         data["phoneNumber"] = this.phoneNumber;
+        data["imageUrl"] = this.imageUrl;
+        data["location"] = this.location;
         data["password"] = this.password;
         return data;
     }
@@ -1365,6 +1470,8 @@ export class SellerDto implements ISellerDto {
 export interface ISellerDto {
     shopName: string;
     phoneNumber: string;
+    imageUrl: string;
+    location: string;
     password: string;
 }
 
@@ -1406,6 +1513,101 @@ export class LookupDTO implements ILookupDTO {
 export interface ILookupDTO {
     id: any;
     text: string;
+}
+
+export class DataSourceResultOfSellerCategoryDto implements IDataSourceResultOfSellerCategoryDto {
+    data!: SellerCategoryDto[];
+    count!: number;
+    additionalValue!: number;
+
+    constructor(data?: IDataSourceResultOfSellerCategoryDto) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+        if (!data) {
+            this.data = [];
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            if (Array.isArray(_data["data"])) {
+                this.data = [] as any;
+                for (let item of _data["data"])
+                    this.data!.push(SellerCategoryDto.fromJS(item));
+            }
+            this.count = _data["count"];
+            this.additionalValue = _data["additionalValue"];
+        }
+    }
+
+    static fromJS(data: any): DataSourceResultOfSellerCategoryDto {
+        data = typeof data === 'object' ? data : {};
+        let result = new DataSourceResultOfSellerCategoryDto();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        if (Array.isArray(this.data)) {
+            data["data"] = [];
+            for (let item of this.data)
+                data["data"].push(item.toJSON());
+        }
+        data["count"] = this.count;
+        data["additionalValue"] = this.additionalValue;
+        return data;
+    }
+}
+
+export interface IDataSourceResultOfSellerCategoryDto {
+    data: SellerCategoryDto[];
+    count: number;
+    additionalValue: number;
+}
+
+export class SellerCategoryDto implements ISellerCategoryDto {
+    id!: number;
+    name!: string;
+
+    constructor(data?: ISellerCategoryDto) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            this.id = _data["id"];
+            this.name = _data["name"];
+        }
+    }
+
+    static fromJS(data: any): SellerCategoryDto {
+        data = typeof data === 'object' ? data : {};
+        let result = new SellerCategoryDto();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["id"] = this.id;
+        data["name"] = this.name;
+        return data;
+    }
+}
+
+export interface ISellerCategoryDto {
+    id: number;
+    name: string;
 }
 
 export class ApiException extends Error {

@@ -8,6 +8,7 @@ namespace Api.Services
         public static void RegisterAppReuiredServices(this WebApplicationBuilder builder)
         {
             builder.Services.AddHttpContextAccessor();
+            builder.Services.RegisterRepositoriesConfiguration();
             builder.Services.RegisterServicesConfiguration();
             builder.Services.AddDistributedMemoryCache();
             builder.Services.AddSession(opt =>

@@ -1,8 +1,6 @@
-﻿public interface IPartService
+﻿using Bussiness.Interfaces;
+
+public interface IPartService : _IBusinessService<Part, PartDto>
 {
-    Task<IEnumerable<PartViewModel>> GetAllAsync();
-    Task<PartViewModel> GetByIdAsync(int id);
-    Task AddAsync(PartDto dto);
-    Task UpdateAsync(int id, PartDto dto);
-    Task DeleteAsync(int id);
+   
 }
