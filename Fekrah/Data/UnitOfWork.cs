@@ -1,7 +1,5 @@
-﻿using Bussiness.Interfaces;
-using Data.IRepositories;
+﻿using Data.IRepositories;
 using Data.Repositories;
-using Data.ViewModels;
 
 namespace Data
 {

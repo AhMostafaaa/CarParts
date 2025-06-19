@@ -1,13 +1,7 @@
-﻿using Bussiness.Interfaces;
-using Microsoft.AspNetCore.Http;
-using System;
-using System.Collections.Generic;
-using System.Linq;
+﻿using Data.Interfaces;
 using System.Security.Claims;
-using System.Text;
-using System.Threading.Tasks;
 
-namespace Bussiness.Services
+namespace Data.Services
 {
     public class SessionService : ISessionService
     {

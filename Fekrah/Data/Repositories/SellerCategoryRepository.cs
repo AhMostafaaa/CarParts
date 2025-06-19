@@ -1,11 +1,5 @@
-﻿using Bussiness.Interfaces;
-using Data.IRepositories;
+﻿using Data.IRepositories;
 using Data.Models;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Data.Repositories
 {
@@ -13,7 +7,7 @@ namespace Data.Repositories
     {
         public SellerCategoryRepository(DatabaseContext context, ISessionService sessionService) : base(context, sessionService)
         {
-            
+
         }
     }
 }

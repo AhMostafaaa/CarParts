@@ -1,8 +1,10 @@
 ﻿using Bussiness.Interfaces;
 using Bussiness.Services;
 using Data;
+using Data.Interfaces;
 using Data.IRepositories;
 using Data.Repositories;
+using Data.Services;
 
 namespace Api.Services
 {

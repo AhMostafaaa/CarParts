@@ -1,21 +1,24 @@
-﻿# Use official .NET 6 SDK image for build
-FROM mcr.microsoft.com/dotnet/sdk:6.0 AS build
+﻿FROM mcr.microsoft.com/dotnet/sdk:8.0 AS build
+
 WORKDIR /app
 
-# Copy csproj and restore as distinct layers
-COPY *.csproj ./
-RUN dotnet restore
+COPY *.sln ./
+COPY API/*.csproj ./API/
+COPY Bussiness/*.csproj ./Bussiness/
+COPY Data/*.csproj ./Data/
 
-# Copy everything else and build
+RUN dotnet restore FokkerahSolution.sln
+
 COPY . ./
-RUN dotnet publish -c Release -o out
 
-# Build runtime image
-FROM mcr.microsoft.com/dotnet/aspnet:6.0
+RUN dotnet publish API/API.csproj -c Release -o /out
+
+FROM mcr.microsoft.com/dotnet/aspnet:8.0
+
 WORKDIR /app
-COPY --from=build /app/out ./
 
-# Expose port (مثلاً API بتسمع على 5000)
+COPY --from=build /out ./
+
 EXPOSE 5000
 
-ENTRYPOINT ["dotnet", "اسم_مشروعك.dll"]
+ENTRYPOINT ["dotnet", "API.dll"]

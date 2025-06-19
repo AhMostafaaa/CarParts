@@ -1,11 +1,4 @@
-﻿using Bussiness.Interfaces;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace Data.IRepositories
+﻿namespace Data.IRepositories
 {
     public interface ICategoryRepository : IGeneraicRepository<Category>
     {

@@ -1,10 +1,5 @@
-﻿using Bussiness.Interfaces;
+﻿using Data.Interfaces;
 using Data.IRepositories;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Data.Repositories
 {
@@ -12,7 +7,7 @@ namespace Data.Repositories
     {
         public PartRepository(DatabaseContext context, ISessionService sessionService) : base(context, sessionService)
         {
-            
+
         }
     }
 }
