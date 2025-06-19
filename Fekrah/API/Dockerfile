@@ -1,22 +1,21 @@
-#See https://aka.ms/customizecontainer to learn how to customize your debug container and how Visual Studio uses this Dockerfile to build your images for faster debugging.
-
-FROM mcr.microsoft.com/dotnet/aspnet:7.0 AS base
+﻿# Use official .NET 6 SDK image for build
+FROM mcr.microsoft.com/dotnet/sdk:6.0 AS build
 WORKDIR /app
-EXPOSE 80
-EXPOSE 443
 
-FROM mcr.microsoft.com/dotnet/sdk:7.0 AS build
-WORKDIR /src
-COPY ["WebApplication1.csproj", "."]
-RUN dotnet restore "./WebApplication1.csproj"
-COPY . .
-WORKDIR "/src/."
-RUN dotnet build "WebApplication1.csproj" -c Release -o /app/build
+# Copy csproj and restore as distinct layers
+COPY *.csproj ./
+RUN dotnet restore
 
-FROM build AS publish
-RUN dotnet publish "WebApplication1.csproj" -c Release -o /app/publish /p:UseAppHost=false
+# Copy everything else and build
+COPY . ./
+RUN dotnet publish -c Release -o out
 
-FROM base AS final
+# Build runtime image
+FROM mcr.microsoft.com/dotnet/aspnet:6.0
 WORKDIR /app
-COPY --from=publish /app/publish .
-ENTRYPOINT ["dotnet", "WebApplication1.dll"]
+COPY --from=build /app/out ./
+
+# Expose port (مثلاً API بتسمع على 5000)
+EXPOSE 5000
+
+ENTRYPOINT ["dotnet", "اسم_مشروعك.dll"]
