@@ -4,6 +4,7 @@ import { CommonModule } from '@angular/common';
 import { SellerRoutingModule } from './seller-routing.module';
 import { SellerPageComponent } from './seller-page/seller-page.component';
 import { FormsModule } from '@angular/forms';
+import { SharedModule } from '../../../Shared/shared.module';
 
 
 @NgModule({
@@ -13,7 +14,8 @@ import { FormsModule } from '@angular/forms';
   imports: [
     CommonModule,
     FormsModule,
-    SellerRoutingModule
+    SellerRoutingModule,
+    SharedModule
   ]
 })
 export class SellerModule { }
