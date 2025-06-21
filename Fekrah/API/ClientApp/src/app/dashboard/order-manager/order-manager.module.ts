@@ -11,7 +11,6 @@ import { SharedModule } from '../../Shared/shared.module';
   imports: [
     CommonModule,
     OrderManagerRoutingModule,
-    SharedModule
   ]
 })
 export class OrderManagerModule { }

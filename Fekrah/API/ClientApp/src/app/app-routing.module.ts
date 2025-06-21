@@ -1,6 +1,7 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { CategoryPageComponent } from './core/features/home/category-page/category-page.component';
+import { NotFoundComponent } from './Shared/components/not-found/not-found.component';
 
 const routes: Routes = [
   { path: '', redirectTo: 'home', pathMatch: 'full' },
@@ -12,11 +13,12 @@ const routes: Routes = [
   { path: 'addCart', loadChildren: () => import('./core/add-to-cart/add-to-cart.module').then(m => m.AddToCartModule) },
   { path: 'footer', loadChildren: () => import('./Shared/layout/footer/footer.module').then(m => m.FooterModule) },
   { path: 'merchant', loadChildren: () => import('./dashboard/dashboard.module').then(m => m.DashboardModule) },
+  { path: 'dashboard', loadChildren: () => import('./dashboard/dashboard.module').then(m => m.DashboardModule) },
   { path: 'order-mgr', loadChildren: () => import('./dashboard/order-manager/order-manager.module').then(m => m.OrderManagerModule) },
   { path: 'category/:name', component: CategoryPageComponent },
 
   { path: 'seller', loadChildren: () => import('./core/features/seller/seller-page.module').then(m => m.SellerModule) },
-
+  { path: 'NotFound', component: NotFoundComponent },
   // أي مسارات تانية
 
 
