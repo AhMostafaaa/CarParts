@@ -14,7 +14,7 @@ const routes: Routes = [
   { path: 'footer', loadChildren: () => import('./Shared/layout/footer/footer.module').then(m => m.FooterModule) },
   { path: 'merchant', loadChildren: () => import('./dashboard/dashboard.module').then(m => m.DashboardModule) },
   { path: 'dashboard', loadChildren: () => import('./dashboard/dashboard.module').then(m => m.DashboardModule) },
-  { path: 'order-mgr', loadChildren: () => import('./dashboard/order-manager/order-manager.module').then(m => m.OrderManagerModule) },
+  { path: 'order-mgr', loadChildren: () => import('./order-manager/order-manager.module').then(m => m.OrderManagerModule) },
   { path: 'category/:name', component: CategoryPageComponent },
 
   { path: 'seller', loadChildren: () => import('./core/features/seller/seller-page.module').then(m => m.SellerModule) },

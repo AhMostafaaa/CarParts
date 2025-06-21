@@ -9,7 +9,12 @@ interface OrderItem {
   quantity: number;
   price: number;
   image: string;
+  category?: string;
+  brand?: string;
+  model?: string;
+  warranty?: string;
 }
+
 
 interface Order {
   id: string;
@@ -25,7 +30,13 @@ interface Order {
   notes?: string;
   paymentMethod: 'cash' | 'card' | 'online';
   deliveryFee: number;
+  discount?: number; // ✅ تم إضافته هنا
+  trackingNumber?: string;
+  lastUpdated?: Date;
+  merchantNotes?: string;
 }
+
+
 
 @Component({
   selector: 'app-merchant-orders',
@@ -68,12 +79,138 @@ export class MerchantOrdersComponent implements OnInit, OnDestroy {
   ];
 
   // عرض التفاصيل
-  selectedOrder: Order | null = null;
+  selectedOrder: Order | null = {
+    id: 'ORD-2025-001',
+    orderNumber: 'ORD-2025-001',
+    customerName: 'أحمد محمد',
+    customerPhone: '01012345678',
+    customerAddress: 'شارع الثورة، مصر الجديدة، القاهرة',
+    orderDate: new Date('2025-06-21T22:21:00'),
+    estimatedDelivery: new Date('2025-06-22T18:00:00'),
+    items: [
+      {
+        id: 'item-01',
+        productName: 'فلتر هواء تويوتا كامري',
+        quantity: 2,
+        price: 150,
+        image: 'assets/parts/air-filter.jpg',
+        category: 'فلاتر',
+        brand: 'تويوتا',
+        model: 'كامري',
+        warranty: '6 شهور'
+      },
+      {
+        id: 'item-02',
+        productName: 'زيت موتور موبيل 1',
+        quantity: 1,
+        price: 280,
+        image: 'https://via.placeholder.com/120x120',
+        category: 'زيوت',
+        brand: 'Mobil',
+        model: '5W-30',
+        warranty: '12 شهر'
+      }
+    ],
+    totalAmount: 580,
+    deliveryFee: 50,
+    discount: 0,
+    notes: 'تم إنشاء الطلب بنجاح وإرساله إلى التاجر',
+    paymentMethod: 'cash',
+    status: 'pending',
+    trackingNumber: 'TRK-987654',
+    lastUpdated: new Date('2025-06-21T22:21:00'),
+    merchantNotes: ''
+  };
   showOrderDetails = false;
 
-  constructor(private router: Router) {}
+  constructor(private router: Router) { }
 
   ngOnInit(): void {
+    // this.selectedOrder = {
+    //   id: '1001',
+    //   orderNumber: 'ORD-2025-TEST',
+    //   customerName: 'عبدالله أحمد',
+    //   customerPhone: '01012345678',
+    //   customerAddress: 'شارع الجامعة، مدينة نصر، القاهرة',
+    //   orderDate: new Date('2025-06-20T14:30:00'),
+    //   estimatedDelivery: new Date('2025-06-22T18:00:00'),
+    //   items: [
+    //     {
+    //       id: 'item-1',
+    //       productName: 'فلتر زيت هيونداي',
+    //       quantity: 2,
+    //       price: 120,
+    //       image: 'assets/parts/oil-filter.jpg',
+    //       category: 'فلاتر',
+    //       brand: 'Hyundai',
+    //       model: 'Elantra',
+    //       warranty: '6 شهور'
+    //     },
+    //     {
+    //       id: 'item-2',
+    //       productName: 'بطارية 70 أمبير فارتا',
+    //       quantity: 1,
+    //       price: 950,
+    //       image: 'assets/parts/battery.jpg',
+    //       category: 'كهرباء',
+    //       brand: 'Varta',
+    //       model: 'Universal',
+    //       warranty: '12 شهر'
+    //     }
+    //   ],
+    //   totalAmount: 1190,
+    //   deliveryFee: 50,
+    //   discount: 30,
+    //   notes: 'الرجاء الاتصال قبل التوصيل',
+    //   status: 'confirmed',
+    //   paymentMethod: 'cash',
+    //   trackingNumber: 'TRK123456',
+    //   lastUpdated: new Date('2025-06-21T10:00:00'),
+    //   merchantNotes: 'تم التأكيد من التوافر'
+    // };
+
+    // this.selectedOrder = {
+    //   id: 'ORD-2025-001',
+    //   orderNumber: 'ORD-2025-001',
+    //   customerName: 'أحمد محمد',
+    //   customerPhone: '01012345678',
+    //   customerAddress: 'شارع الثورة، مصر الجديدة، القاهرة',
+    //   orderDate: new Date('2025-06-21T22:21:00'),
+    //   estimatedDelivery: new Date('2025-06-22T18:00:00'),
+    //   items: [
+    //     {
+    //       id: 'item-01',
+    //       productName: 'فلتر هواء تويوتا كامري',
+    //       quantity: 2,
+    //       price: 150,
+    //       image: 'assets/parts/air-filter.jpg',
+    //       category: 'فلاتر',
+    //       brand: 'تويوتا',
+    //       model: 'كامري',
+    //       warranty: '6 شهور'
+    //     },
+    //     {
+    //       id: 'item-02',
+    //       productName: 'زيت موتور موبيل 1',
+    //       quantity: 1,
+    //       price: 280,
+    //       image: 'https://via.placeholder.com/120x120',
+    //       category: 'زيوت',
+    //       brand: 'Mobil',
+    //       model: '5W-30',
+    //       warranty: '12 شهر'
+    //     }
+    //   ],
+    //   totalAmount: 580,
+    //   deliveryFee: 50,
+    //   discount: 0,
+    //   notes: 'تم إنشاء الطلب بنجاح وإرساله إلى التاجر',
+    //   paymentMethod: 'cash',
+    //   status: 'pending',
+    //   trackingNumber: 'TRK-987654',
+    //   lastUpdated: new Date('2025-06-21T22:21:00'),
+    //   merchantNotes: ''
+    // };
     this.loadOrders();
     this.calculateStats();
 
@@ -182,6 +319,71 @@ export class MerchantOrdersComponent implements OnInit, OnDestroy {
 
     return mockOrders;
   }
+
+  onCloseDetails(): void {
+    this.showOrderDetails = false;
+    this.selectedOrder = null;
+  }
+
+  onStatusUpdate(event: {orderId: string, newStatus: string}): void {
+    // تحديث حالة الطلب في قاعدة البيانات
+    this.updateOrderStatus(event.orderId, event.newStatus);
+  }
+  
+  orderStatusOptions: Order['status'][] = [
+    'pending', 'confirmed', 'preparing', 'ready', 'delivering', 'delivered', 'cancelled'
+  ];
+
+  // تحميل بيانات تجريبية
+  loadMockOrder(event: Event): void {
+    const selectedStatus = (event.target as HTMLSelectElement).value as Order['status'];
+
+    this.selectedOrder = {
+      id: 'ORD-2025-001',
+      orderNumber: 'ORD-2025-001',
+      customerName: 'أحمد محمد',
+      customerPhone: '01012345678',
+      customerAddress: 'شارع الثورة، مصر الجديدة، القاهرة',
+      orderDate: new Date('2025-06-21T22:21:00'),
+      estimatedDelivery: new Date('2025-06-22T18:00:00'),
+      items: [
+        {
+          id: 'item-01',
+          productName: 'فلتر هواء تويوتا كامري',
+          quantity: 2,
+          price: 150,
+          image: 'https://via.placeholder.com/100',
+          category: 'فلاتر',
+          brand: 'تويوتا',
+          model: 'كامري',
+          warranty: '6 شهور'
+        },
+        {
+          id: 'item-02',
+          productName: 'زيت موتور موبيل 1',
+          quantity: 1,
+          price: 280,
+          image: 'https://via.placeholder.com/100',
+          category: 'زيوت',
+          brand: 'Mobil',
+          model: '5W-30',
+          warranty: '12 شهر'
+        }
+      ],
+      totalAmount: 580,
+      deliveryFee: 50,
+      discount: 0,
+      notes: 'تم إنشاء الطلب بنجاح وإرساله إلى التاجر',
+      paymentMethod: 'cash',
+      status: selectedStatus,
+      trackingNumber: 'TRK-987654',
+      lastUpdated: new Date(),
+      merchantNotes: ''
+    };
+    this.showOrderDetails = true;
+  }
+
+
 
   // تطبيق الفلاتر
   applyFilters(): void {

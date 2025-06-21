@@ -3,11 +3,11 @@ import { CommonModule } from '@angular/common';
 
 import { OrderManagerRoutingModule } from './order-manager-routing.module';
 import { MerchantOrdersComponent } from './merchant-orders/merchant-orders.component';
-import { SharedModule } from '../../Shared/shared.module';
+import { OrderDetailsComponent } from './order-details/order-details.component';
 
 
 @NgModule({
-  declarations: [MerchantOrdersComponent],
+  declarations: [MerchantOrdersComponent,OrderDetailsComponent],
   imports: [
     CommonModule,
     OrderManagerRoutingModule,

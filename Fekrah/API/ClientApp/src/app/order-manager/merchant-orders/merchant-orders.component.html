@@ -114,12 +114,15 @@
       <div class="order-header">
         <div class="order-info">
           <div class="order-number">#{{ order.orderNumber }}</div>
-          <div class="order-date">{{ order.orderDate | date: 'dd MMMM yyyy - hh:mm a' : 'ar-EG' }}</div>
+          <div class="order-date">{{ order.orderDate | date: 'd MMMM yyyy - h:mm a' : 'ar-EG' }}
+          </div>
         </div>
-        <span class="status-badge" [ngStyle]="{'background': getStatusColor(order.status)}">
-          <i [class]="getStatusIcon(order.status)"></i>
-          {{ getStatusLabel(order.status) }}
-        </span>
+        <div class="d-flex align-items-center h-100">
+          <span class="status-badge" [ngStyle]="{'background': getStatusColor(order.status)}">
+            <i [class]="getStatusIcon(order.status)"></i>
+            {{ getStatusLabel(order.status) }}
+          </span>
+        </div>
       </div>
 
       <!-- بيانات العميل -->
@@ -161,10 +164,10 @@
       <div class="actions-section">
         <div class="actions-container">
           <div class="action-group">
-            <button class="btn btn-info" (click)="viewOrderDetails(order)">
+            <a class="btn btn-info" (click)="viewOrderDetails(order)">
               <i class="fas fa-eye"></i>
               عرض التفاصيل
-            </button>
+            </a>
             <button class="btn btn-outline" (click)="printOrder(order)">
               <i class="fas fa-print"></i>
               طباعة
@@ -188,3 +191,19 @@
   </div>
 
 </div>
+
+<div class="demo-loader" style="margin: 1rem 0;">
+  <label>🔁 تجربة الطلب بحالة مختلفة:</label>
+  <select (change)="loadMockOrder($event)">
+    <option disabled selected>اختر حالة...</option>
+    <option *ngFor="let status of orderStatusOptions" [value]="status">
+      {{ getStatusLabel(status) }}
+    </option>
+  </select>
+</div>
+
+
+<app-order-details *ngIf="showOrderDetails" [selectedOrder]="selectedOrder" [showOrderDetails]="showOrderDetails"
+  (closeDetails)="closeOrderDetails()" (statusUpdate)="updateOrderStatus($event.orderId, $event.newStatus)"
+  (orderPrint)="printOrder($event)">
+</app-order-details>
