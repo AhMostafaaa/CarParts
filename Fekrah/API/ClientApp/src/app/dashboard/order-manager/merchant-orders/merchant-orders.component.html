@@ -1,0 +1,190 @@
+<div class="container">
+  <!-- Header -->
+  <div class="page-header">
+    <div class="header-content">
+      <h1 class="page-title">
+        <i class="fas fa-car"></i>
+        إدارة طلبات قطع الغيار
+      </h1>
+      <div class="header-actions">
+        <button class="btn btn-outline">
+          <i class="fas fa-download"></i>
+          تصدير البيانات
+        </button>
+        <!-- <button class="btn btn-primary">
+          <i class="fas fa-plus"></i>
+          إضافة قطعة جديدة
+        </button> -->
+      </div>
+    </div>
+  </div>
+
+  <!-- الإحصائيات -->
+  <div class="stats-section">
+    <div class="stats-grid">
+      <div class="stat-card total">
+        <div class="stat-icon">
+          <i class="fas fa-clipboard-list"></i>
+        </div>
+        <div class="stat-content">
+          <h3>156</h3>
+          <p>إجمالي الطلبات</p>
+        </div>
+      </div>
+
+      <div class="stat-card pending">
+        <div class="stat-icon">
+          <i class="fas fa-clock"></i>
+        </div>
+        <div class="stat-content">
+          <h3>23</h3>
+          <p>في الانتظار</p>
+        </div>
+      </div>
+
+      <div class="stat-card confirmed">
+        <div class="stat-icon">
+          <i class="fas fa-check-circle"></i>
+        </div>
+        <div class="stat-content">
+          <h3>89</h3>
+          <p>مؤكد</p>
+        </div>
+      </div>
+
+      <div class="stat-card revenue">
+        <div class="stat-icon">
+          <i class="fas fa-money-bill-wave"></i>
+        </div>
+        <div class="stat-content">
+          <h3>15,250 ج.م</h3>
+          <p>إيرادات اليوم</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="filters-section">
+    <div class="filters-grid">
+      <div class="filter-group">
+        <label>البحث في الطلبات</label>
+        <div class="search-wrapper">
+          <!-- <i class="fas fa-search"></i> -->
+          <input type="text" placeholder="ابحث عن رقم الطلب، اسم العميل، أو نوع القطعة...">
+        </div>
+      </div>
+
+      <div class="filter-group">
+        <label>حالة الطلب</label>
+        <select>
+          <option>جميع الحالات</option>
+          <option>في الانتظار</option>
+          <option>مؤكد</option>
+          <option>جاري التحضير</option>
+          <option>جاهز للاستلام</option>
+          <option>في الطريق</option>
+          <option>تم التسليم</option>
+          <option>ملغي</option>
+        </select>
+      </div>
+
+      <div class="filter-group">
+        <label>التاريخ</label>
+        <input type="date">
+      </div>
+
+      <div class="filter-group">
+        <label>&nbsp;</label>
+        <button class="btn btn-outline">
+          <i class="fas fa-undo"></i>
+          إعادة تعيين
+        </button>
+      </div>
+    </div>
+  </div>
+
+
+  <!-- قائمة الطلبات -->
+  <div class="orders-section">
+    <div class="orders-header">
+      <h3>قائمة الطلبات ({{ filteredOrders.length }} طلب)</h3>
+    </div>
+
+    <div class="order-card" *ngFor="let order of filteredOrders">
+      <div class="order-header">
+        <div class="order-info">
+          <div class="order-number">#{{ order.orderNumber }}</div>
+          <div class="order-date">{{ order.orderDate | date: 'dd MMMM yyyy - hh:mm a' : 'ar-EG' }}</div>
+        </div>
+        <span class="status-badge" [ngStyle]="{'background': getStatusColor(order.status)}">
+          <i [class]="getStatusIcon(order.status)"></i>
+          {{ getStatusLabel(order.status) }}
+        </span>
+      </div>
+
+      <!-- بيانات العميل -->
+      <div class="customer-section">
+        <div class="customer-grid">
+          <div class="customer-item">
+            <i class="fas fa-user"></i>
+            <span>{{ order.customerName }}</span>
+          </div>
+          <div class="customer-item">
+            <i class="fas fa-phone"></i>
+            <span>{{ order.customerPhone }}</span>
+          </div>
+          <div class="customer-item">
+            <i class="fas fa-map-marker-alt"></i>
+            <span>{{ order.customerAddress }}</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- تفاصيل المنتجات -->
+      <div class="products-section">
+        <div class="products-header">
+          <span class="products-count">{{ order.items.length }} قطع غيار</span>
+          <span class="products-total">{{ order.totalAmount | number:'1.0-0' }} ج.م</span>
+        </div>
+        <div class="products-list">
+          <div class="product-item" *ngFor="let item of order.items">
+            <img [src]="item.image" class="product-image" alt="{{ item.productName }}">
+            <div class="product-details">
+              <div class="product-name">{{ item.productName }}</div>
+              <div class="product-specs">الكمية: {{ item.quantity }} × {{ item.price | number:'1.0-0' }} ج.م</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- إجراءات الطلب -->
+      <div class="actions-section">
+        <div class="actions-container">
+          <div class="action-group">
+            <button class="btn btn-info" (click)="viewOrderDetails(order)">
+              <i class="fas fa-eye"></i>
+              عرض التفاصيل
+            </button>
+            <button class="btn btn-outline" (click)="printOrder(order)">
+              <i class="fas fa-print"></i>
+              طباعة
+            </button>
+          </div>
+          <div class="action-group">
+            <button *ngIf="order.status === 'pending'" class="btn btn-success"
+              (click)="updateOrderStatus(order.id, 'confirmed')">
+              <i class="fas fa-check"></i>
+              تأكيد الطلب
+            </button>
+            <button *ngIf="order.status === 'pending'" class="btn btn-danger"
+              (click)="updateOrderStatus(order.id, 'cancelled')">
+              <i class="fas fa-times"></i>
+              إلغاء الطلب
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</div>

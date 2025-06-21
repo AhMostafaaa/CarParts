@@ -1,3 +1,9 @@
+<!-- Pre-Navbar مع البيانات من Service -->
+<app-pre-navbar [isMerchant]="userData.isMerchant" [isDriver]="userData.isDriver"
+  [pendingOrdersCount]="userData.pendingOrdersCount" [deliveryOrdersCount]="userData.deliveryOrdersCount"
+  [userName]="userData.userName">
+</app-pre-navbar>
+
 <app-header></app-header>
 <!-- <app-promo-ticker></app-promo-ticker> -->
 

@@ -38,7 +38,6 @@
     }
 
     .logo-text {
-      /* النص الأصلي يظهر في الشاشات الكبيرة فقط */
       display: inline-block;
     }
 
@@ -117,6 +116,265 @@
     align-items: center;
     gap: 20px;
 
+    // Orders Menu Styles
+    .orders-menu {
+      .orders-dropdown {
+        position: relative;
+
+        .orders-toggle {
+          color: white;
+          text-decoration: none;
+          font-size: 16px;
+          display: flex;
+          align-items: center;
+          gap: 8px;
+          font-weight: 600;
+          transition: transform 0.2s, color 0.2s;
+          padding: 6px 8px;
+          border-radius: 4px;
+          cursor: pointer;
+          position: relative;
+
+          i {
+            font-size: 16px;
+            color: #ffc107;
+          }
+
+          .dropdown-arrow {
+            margin-right: 0.5rem;
+            font-size: 0.8rem;
+            transition: transform 0.3s ease;
+          }
+
+          .orders-badge {
+            position: absolute;
+            top: -8px;
+            left: -8px;
+            background: linear-gradient(45deg, #dc3545, #c82333);
+            color: white;
+            font-size: 0.7rem;
+            padding: 0.2rem 0.4rem;
+            border-radius: 10px;
+            min-width: 18px;
+            text-align: center;
+            animation: pulse 2s infinite;
+            box-shadow: 0 2px 8px rgba(220, 53, 69, 0.4);
+          }
+
+          &:hover {
+            color: #ff9a00;
+            transform: translateY(-2px);
+            background-color: rgba(255, 255, 255, 0.1);
+
+            .dropdown-arrow {
+              transform: rotate(180deg);
+            }
+          }
+        }
+
+        .dropdown-content {
+          position: absolute;
+          top: 100%;
+          left: 0;
+          background: white;
+          border-radius: 12px;
+          box-shadow: 0 10px 40px rgba(0, 0, 0, 0.15);
+          padding: 0.5rem 0;
+          min-width: 280px;
+          z-index: 1000;
+          opacity: 0;
+          visibility: hidden;
+          transform: translateY(-10px);
+          transition: all 0.3s ease;
+          border: 1px solid rgba(255, 154, 0, 0.1);
+
+          .dropdown-item {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            padding: 1rem 1.5rem;
+            color: #2c3e50;
+            text-decoration: none;
+            transition: all 0.3s ease;
+            border-radius: 0;
+
+            i {
+              color: #ff9a00;
+            }
+
+            .item-content {
+              display: flex;
+              flex-direction: column;
+              gap: 0.2rem;
+
+              .item-title {
+                font-size: 0.95rem;
+                font-weight: 500;
+              }
+
+              .item-subtitle {
+                font-size: 0.8rem;
+                color: #6c757d;
+              }
+            }
+
+            &:hover {
+              background: linear-gradient(90deg, rgba(255, 154, 0, 0.05), rgba(255, 199, 7, 0.05));
+              color: #ff9a00;
+            }
+
+            &.orders-main {
+              background: linear-gradient(90deg, rgba(255, 154, 0, 0.1), rgba(255, 199, 7, 0.1));
+              color: #ff9a00;
+              font-weight: 600;
+
+              &:hover {
+                background: linear-gradient(90deg, rgba(255, 154, 0, 0.15), rgba(255, 199, 7, 0.15));
+              }
+            }
+          }
+
+          .dropdown-divider {
+            height: 1px;
+            background: #e9ecef;
+            margin: 0.5rem 1rem;
+          }
+        }
+
+        &:hover .dropdown-content {
+          opacity: 1;
+          visibility: visible;
+          transform: translateY(0);
+        }
+      }
+
+      .mobile-orders {
+        display: none;
+
+        .orders-link {
+          position: relative;
+          background: linear-gradient(90deg, rgba(255, 154, 0, 0.1), rgba(255, 199, 7, 0.1)) !important;
+          color: #ff9a00 !important;
+          font-weight: 600;
+        }
+
+        .mobile-orders-badge {
+          position: absolute;
+          top: -5px;
+          left: -5px;
+          background: #dc3545;
+          color: white;
+          font-size: 0.7rem;
+          padding: 0.2rem 0.4rem;
+          border-radius: 50%;
+          min-width: 16px;
+          text-align: center;
+        }
+      }
+    }
+
+    // Auth Section Styles
+    .auth-section {
+      .user-menu {
+        position: relative;
+
+        .user-avatar {
+          display: flex;
+          align-items: center;
+          gap: 0.5rem;
+          cursor: pointer;
+          padding: 0.5rem;
+          border-radius: 25px;
+          transition: background 0.3s ease;
+          color: white;
+          text-decoration: none;
+
+          .avatar-image {
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            object-fit: cover;
+          }
+
+          .user-name {
+            font-size: 14px;
+            font-weight: 600;
+          }
+
+          .dropdown-arrow {
+            font-size: 0.8rem;
+            transition: transform 0.3s ease;
+          }
+
+          &:hover {
+            background: rgba(255, 255, 255, 0.1);
+
+            .dropdown-arrow {
+              transform: rotate(180deg);
+            }
+          }
+        }
+
+        .user-dropdown {
+          position: absolute;
+          top: 100%;
+          left: 0;
+          background: white;
+          border-radius: 12px;
+          box-shadow: 0 10px 40px rgba(0, 0, 0, 0.15);
+          padding: 0.5rem 0;
+          min-width: 200px;
+          z-index: 1000;
+          opacity: 0;
+          visibility: hidden;
+          transform: translateY(-10px);
+          transition: all 0.3s ease;
+
+          &.show {
+            opacity: 1;
+            visibility: visible;
+            transform: translateY(0);
+          }
+
+          .dropdown-item {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            padding: 0.75rem 1.5rem;
+            color: #2c3e50;
+            text-decoration: none;
+            transition: background 0.3s ease;
+
+            i {
+              color: #ff9a00;
+            }
+
+            &:hover {
+              background: #f8f9fa;
+            }
+
+            &.logout {
+              color: #dc3545;
+
+              i {
+                color: #dc3545;
+              }
+
+              &:hover {
+                background: rgba(220, 53, 69, 0.1);
+              }
+            }
+          }
+
+          .dropdown-divider {
+            height: 1px;
+            background: #e9ecef;
+            margin: 0.5rem 0;
+          }
+        }
+      }
+    }
+
     a {
       color: white;
       text-decoration: none;
@@ -162,7 +420,6 @@
       }
     }
 
-    /* اسم الموقع في قائمة الموبايل */
     .mobile-menu-header {
       display: none;
       font-size: 22px;
@@ -226,6 +483,81 @@
         }
       }
     }
+  }
+}
+
+// Floating Orders Button
+.floating-orders-btn {
+  position: fixed;
+  bottom: 30px;
+  left: 30px;
+  width: 60px;
+  height: 60px;
+  background: linear-gradient(45deg, #ff9a00, #ffc107);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  font-size: 1.5rem;
+  cursor: pointer;
+  box-shadow: 0 8px 25px rgba(255, 154, 0, 0.4);
+  z-index: 1000;
+  transition: all 0.3s ease;
+  text-decoration: none;
+
+  // Driver specific styling
+  &.driver-mode {
+    background: linear-gradient(45deg, #007bff, #0056b3);
+    box-shadow: 0 8px 25px rgba(0, 123, 255, 0.4);
+  }
+
+  &:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 12px 35px rgba(255, 154, 0, 0.5);
+    color: white;
+
+    &.driver-mode {
+      box-shadow: 0 12px 35px rgba(0, 123, 255, 0.5);
+    }
+  }
+
+  &.animate {
+    animation: bounce 2s infinite;
+  }
+
+  .floating-badge {
+    position: absolute;
+    top: -5px;
+    right: -5px;
+    background: #dc3545;
+    color: white;
+    font-size: 0.7rem;
+    padding: 0.2rem 0.4rem;
+    border-radius: 50%;
+    min-width: 20px;
+    text-align: center;
+  }
+
+  .floating-tooltip {
+    position: absolute;
+    bottom: 70px;
+    left: 50%;
+    transform: translateX(-50%);
+    background: rgba(0, 0, 0, 0.8);
+    color: white;
+    padding: 0.5rem 1rem;
+    border-radius: 6px;
+    font-size: 0.8rem;
+    white-space: nowrap;
+    opacity: 0;
+    visibility: hidden;
+    transition: all 0.3s ease;
+  }
+
+  &:hover .floating-tooltip {
+    opacity: 1;
+    visibility: visible;
   }
 }
 
@@ -293,7 +625,51 @@
           box-shadow: inset 0 -3px 0 #16222e;
         }
       }
+
+      &.merchant-nav-item .merchant-quick-link {
+        background: linear-gradient(90deg, rgba(255, 255, 255, 0.2), rgba(255, 255, 255, 0.1));
+        color: #16222e !important;
+        font-weight: 700;
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+        position: relative;
+
+        .nav-badge {
+          background: #dc3545;
+          color: white;
+          font-size: 0.7rem;
+          padding: 0.2rem 0.4rem;
+          border-radius: 10px;
+          margin-right: auto;
+        }
+      }
     }
+  }
+}
+
+// Animations
+@keyframes pulse {
+  0% {
+    box-shadow: 0 2px 8px rgba(220, 53, 69, 0.4);
+  }
+  50% {
+    box-shadow: 0 2px 8px rgba(220, 53, 69, 0.8);
+  }
+  100% {
+    box-shadow: 0 2px 8px rgba(220, 53, 69, 0.4);
+  }
+}
+
+@keyframes bounce {
+  0%, 20%, 50%, 80%, 100% {
+    transform: translateY(0);
+  }
+  40% {
+    transform: translateY(-10px);
+  }
+  60% {
+    transform: translateY(-5px);
   }
 }
 
@@ -309,7 +685,17 @@
 
     .right-menu {
       gap: 15px;
+
+      .orders-menu .orders-dropdown .dropdown-content {
+        min-width: 250px;
+      }
     }
+  }
+
+  .floating-orders-btn {
+    width: 55px;
+    height: 55px;
+    font-size: 1.3rem;
   }
 }
 
@@ -388,6 +774,69 @@
         right: 0;
       }
 
+      .orders-menu {
+        width: 100%;
+
+        .orders-dropdown {
+          display: none;
+        }
+
+        .mobile-orders {
+          display: block;
+          width: 100%;
+
+          a {
+            width: 100%;
+            padding: 15px 0;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            justify-content: flex-start;
+            transform: none;
+
+            &:hover {
+              transform: none;
+              background-color: rgba(255, 255, 255, 0.1);
+            }
+          }
+        }
+      }
+
+      .auth-section {
+        width: 100%;
+
+        .user-menu .user-dropdown {
+          position: static;
+          opacity: 1;
+          visibility: visible;
+          transform: none;
+          box-shadow: none;
+          background: transparent;
+          padding: 0;
+
+          .dropdown-item {
+            color: white;
+            padding: 15px 0;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+
+            i {
+              color: #ffc107;
+            }
+
+            &:hover {
+              background: rgba(255, 255, 255, 0.1);
+            }
+
+            &.logout i {
+              color: #ff5722;
+            }
+          }
+
+          .dropdown-divider {
+            background: rgba(255, 255, 255, 0.1);
+            margin: 0;
+          }
+        }
+      }
+
       a {
         width: 100%;
         padding: 15px 0;
@@ -407,7 +856,6 @@
         }
       }
 
-      /* إظهار اسم الموقع داخل قائمة الموبايل */
       .mobile-menu-header {
         display: block;
       }
@@ -420,6 +868,14 @@
     .mobile-menu-toggle {
       z-index: 1003;
     }
+  }
+
+  .floating-orders-btn {
+    width: 50px;
+    height: 50px;
+    font-size: 1.2rem;
+    bottom: 20px;
+    left: 20px;
   }
 
   .main-nav {
@@ -455,6 +911,10 @@
         a {
           text-align: center;
           padding: 15px 20px;
+        }
+
+        &.merchant-nav-item .merchant-quick-link {
+          justify-content: center;
         }
       }
     }
@@ -506,6 +966,14 @@
         font-size: 14px;
       }
     }
+  }
+
+  .floating-orders-btn {
+    width: 45px;
+    height: 45px;
+    font-size: 1rem;
+    bottom: 15px;
+    left: 15px;
   }
 
   .main-nav {
