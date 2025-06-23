@@ -47,7 +47,7 @@ $transition-bounce: all 0.6s cubic-bezier(0.68, -0.55, 0.265, 1.55);
 
 @mixin glass-effect {
   background: rgba(255, 255, 255, 0.25);
-  backdrop-filter: blur(20px);
+  background: rgba(255, 255, 255, 0.85);
   border: 1px solid rgba(255, 255, 255, 0.18);
   box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
 }
@@ -129,7 +129,7 @@ body {
     left: 0;
     right: 0;
     bottom: 0;
-    background: 
+    background:
       radial-gradient(circle at 20% 80%, rgba(120, 119, 198, 0.3) 0%, transparent 50%),
       radial-gradient(circle at 80% 20%, rgba(255, 119, 198, 0.3) 0%, transparent 50%),
       radial-gradient(circle at 40% 40%, rgba(120, 219, 255, 0.2) 0%, transparent 50%);
@@ -400,7 +400,7 @@ body {
       font-size: 16px;
       transition: $transition-fast;
       background: rgba(255, 255, 255, 0.8);
-      backdrop-filter: blur(10px);
+      background: rgba(255, 255, 255, 0.85);
 
       &:focus {
         outline: none;
@@ -441,7 +441,6 @@ body {
     font-size: 16px;
     background: rgba(255, 255, 255, 0.8);
     transition: $transition-fast;
-    backdrop-filter: blur(10px);
 
     &:focus {
       outline: none;
@@ -517,7 +516,6 @@ body {
         padding: 10px;
         background: rgba(255, 255, 255, 0.15);
         border-radius: 14px;
-        backdrop-filter: blur(10px);
         border: 1px solid rgba(255, 255, 255, 0.3);
         box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
       }
@@ -678,7 +676,7 @@ body {
       left: 0;
       right: 0;
       bottom: 0;
-      background: 
+      background:
         radial-gradient(circle at 25% 50%, rgba(255, 255, 255, 0.1) 0%, transparent 50%),
         radial-gradient(circle at 75% 25%, rgba(255, 255, 255, 0.1) 0%, transparent 50%),
         url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><defs><pattern id="dots" width="25" height="25" patternUnits="userSpaceOnUse"><circle cx="12.5" cy="12.5" r="2" fill="rgba(255,255,255,0.1)"/></pattern></defs><rect width="100%" height="100%" fill="url(%23dots)"/></svg>');
@@ -715,10 +713,9 @@ body {
         background: rgba(255, 255, 255, 0.2);
         padding: 18px 30px;
         border-radius: $border-radius-lg;
-        backdrop-filter: blur(25px);
         border: 2px solid rgba(255, 255, 255, 0.3);
         display: inline-block;
-        box-shadow: 
+        box-shadow:
           0 10px 40px rgba(0, 0, 0, 0.15),
           inset 0 2px 0 rgba(255, 255, 255, 0.4);
         letter-spacing: -0.5px;
@@ -727,7 +724,7 @@ body {
 
         &:hover {
           transform: translateY(-3px) scale(1.02);
-          box-shadow: 
+          box-shadow:
             0 15px 50px rgba(0, 0, 0, 0.2),
             inset 0 2px 0 rgba(255, 255, 255, 0.5);
         }
@@ -741,7 +738,6 @@ body {
         padding: 15px 25px;
         border-radius: 14px;
         display: inline-block;
-        backdrop-filter: blur(15px);
         border: 1px solid rgba(255, 255, 255, 0.25);
         box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
       }
@@ -759,16 +755,15 @@ body {
       text-transform: uppercase;
       letter-spacing: 0.8px;
       background: rgba(255, 255, 255, 0.2);
-      backdrop-filter: blur(25px);
       border: 2px solid rgba(255, 255, 255, 0.3);
-      box-shadow: 
+      box-shadow:
         0 10px 40px rgba(0, 0, 0, 0.2),
         inset 0 2px 0 rgba(255, 255, 255, 0.4);
       transition: $transition;
 
       &:hover {
         transform: translateY(-3px) scale(1.02);
-        box-shadow: 
+        box-shadow:
           0 15px 50px rgba(0, 0, 0, 0.25),
           inset 0 2px 0 rgba(255, 255, 255, 0.5);
       }
@@ -796,7 +791,7 @@ body {
     left: 0;
     right: 0;
     bottom: 0;
-    background: 
+    background:
       radial-gradient(circle at 15% 25%, rgba(25, 118, 210, 0.1) 0%, transparent 60%),
       radial-gradient(circle at 85% 75%, rgba(25, 118, 210, 0.1) 0%, transparent 60%);
     opacity: 0.8;
@@ -847,15 +842,14 @@ body {
     border-radius: $border-radius;
     border: 2px solid rgba(25, 118, 210, 0.2);
     transition: $transition;
-    backdrop-filter: blur(15px);
-    box-shadow: 
+    box-shadow:
       0 5px 20px rgba(25, 118, 210, 0.15),
       0 2px 6px rgba(25, 118, 210, 0.1);
 
     &:hover {
       background: rgba(255, 255, 255, 1);
       transform: translateY(-5px) scale(1.02);
-      box-shadow: 
+      box-shadow:
         0 15px 40px rgba(25, 118, 210, 0.25),
         0 5px 15px rgba(25, 118, 210, 0.15);
       border-color: rgba(25, 118, 210, 0.5);
@@ -888,7 +882,7 @@ body {
     left: 0;
     right: 0;
     bottom: 0;
-    background: 
+    background:
       radial-gradient(circle at 20% 30%, rgba(56, 161, 105, 0.15) 0%, transparent 60%),
       radial-gradient(circle at 80% 70%, rgba(56, 161, 105, 0.15) 0%, transparent 60%);
     opacity: 0.9;
@@ -930,7 +924,6 @@ body {
       padding: 12px 22px;
       border-radius: 25px;
       border: 2px solid rgba(56, 161, 105, 0.3);
-      backdrop-filter: blur(15px);
       box-shadow: 0 5px 15px rgba(56, 161, 105, 0.25);
     }
 
@@ -942,8 +935,7 @@ body {
       padding: 15px 30px;
       border-radius: 30px;
       border: 3px solid rgba(56, 161, 105, 0.4);
-      backdrop-filter: blur(20px);
-      box-shadow: 
+      box-shadow:
         0 8px 25px rgba(56, 161, 105, 0.3),
         inset 0 2px 0 rgba(255, 255, 255, 0.6);
       text-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
@@ -966,8 +958,7 @@ body {
     border-radius: $border-radius-lg;
     border: 2px solid rgba(56, 161, 105, 0.2);
     transition: $transition;
-    backdrop-filter: blur(20px);
-    box-shadow: 
+    box-shadow:
       0 5px 20px rgba(56, 161, 105, 0.15),
       0 2px 6px rgba(56, 161, 105, 0.1);
     position: relative;
@@ -987,7 +978,7 @@ body {
     &:hover {
       background: rgba(255, 255, 255, 1);
       transform: translateY(-8px) scale(1.02);
-      box-shadow: 
+      box-shadow:
         0 20px 50px rgba(56, 161, 105, 0.25),
         0 8px 20px rgba(56, 161, 105, 0.15);
       border-color: rgba(56, 161, 105, 0.5);
@@ -1003,7 +994,7 @@ body {
       border-radius: 15px;
       object-fit: cover;
       border: 3px solid rgba(56, 161, 105, 0.3);
-      box-shadow: 
+      box-shadow:
         0 5px 15px rgba(56, 161, 105, 0.25),
         inset 0 2px 0 rgba(255, 255, 255, 0.6);
       transition: $transition;
@@ -1011,7 +1002,7 @@ body {
       &:hover {
         transform: scale(1.15) rotate(3deg);
         border-color: rgba(56, 161, 105, 0.6);
-        box-shadow: 
+        box-shadow:
           0 10px 30px rgba(56, 161, 105, 0.35),
           inset 0 2px 0 rgba(255, 255, 255, 0.8);
       }
@@ -1059,7 +1050,7 @@ body {
     left: 0;
     right: 0;
     bottom: 0;
-    background: 
+    background:
       radial-gradient(circle at 25% 35%, rgba(229, 62, 62, 0.1) 0%, transparent 60%),
       radial-gradient(circle at 75% 65%, rgba(229, 62, 62, 0.1) 0%, transparent 60%);
     opacity: 0.8;
@@ -1114,7 +1105,6 @@ body {
       transition: $transition;
       position: relative;
       overflow: hidden;
-      backdrop-filter: blur(15px);
       border: 2px solid transparent;
       box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
 
@@ -1252,7 +1242,6 @@ body {
     padding: 15px 25px;
     border-radius: 14px;
     border: 2px solid rgba(73, 80, 87, 0.2);
-    backdrop-filter: blur(15px);
     box-shadow: 0 5px 15px rgba(73, 80, 87, 0.15);
   }
 
@@ -1273,7 +1262,6 @@ body {
       font-weight: 700;
       border-radius: 14px;
       transition: $transition;
-      backdrop-filter: blur(15px);
       position: relative;
       overflow: hidden;
 
@@ -1304,7 +1292,7 @@ body {
         @include gradient-bg($primary-color, $secondary-color);
         color: white;
         border-color: rgba(102, 126, 234, 0.8);
-        box-shadow: 
+        box-shadow:
           0 8px 25px rgba(102, 126, 234, 0.5),
           inset 0 2px 0 rgba(255, 255, 255, 0.4);
         transform: translateY(-2px);
@@ -1334,13 +1322,13 @@ body {
 
 // Enhanced Animations
 @keyframes modernSpin {
-  0% { 
+  0% {
     transform: rotate(0deg) scale(1);
   }
-  50% { 
+  50% {
     transform: rotate(180deg) scale(1.1);
   }
-  100% { 
+  100% {
     transform: rotate(360deg) scale(1);
   }
 }
@@ -1393,11 +1381,11 @@ body {
 }
 
 @keyframes slideInOut {
-  0% { 
+  0% {
     opacity: 0;
     transform: translateX(100%) scale(0.8);
   }
-  100% { 
+  100% {
     opacity: 1;
     transform: translateX(0) scale(1);
   }
@@ -1412,9 +1400,8 @@ body {
   z-index: 9999;
   border-radius: $border-radius-lg;
   overflow: hidden;
-  backdrop-filter: blur(25px);
   border: 2px solid rgba(255, 255, 255, 0.25);
-  box-shadow: 
+  box-shadow:
     0 25px 70px rgba(0, 0, 0, 0.15),
     0 10px 30px rgba(0, 0, 0, 0.1);
   animation: slideInOut 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275);
@@ -1568,7 +1555,7 @@ body {
 
     .timeline-content {
       flex: 1;
-      
+
       .timeline-status {
         font-weight: 700;
         color: $text-primary;
@@ -1860,7 +1847,6 @@ body {
   right: 0;
   bottom: 0;
   background: rgba(0, 0, 0, 0.8);
-  backdrop-filter: blur(10px);
   @include flex-center;
   z-index: 9999;
 
@@ -1928,7 +1914,6 @@ body {
   right: 20px;
   transform: translateY(-50%);
   background: rgba(255, 255, 255, 0.95);
-  backdrop-filter: blur(20px);
   border-radius: $border-radius-lg;
   padding: 20px;
   box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
@@ -2067,50 +2052,50 @@ body {
     grid-template-columns: 1fr !important;
   }
 }
-  
+
   .stat-card {
     padding: 25px;
-    
+
     .stat-icon {
       width: 60px;
       height: 60px;
       font-size: 24px;
     }
-    
+
     .stat-content h3 {
       font-size: 28px;
     }
   }
-  
+
   .order-header {
     // flex-direction: column;
     gap: 20px;
     text-align: center;
     display: flex ;
     justify-content: space-between;
-    
+
     .order-info .order-number {
       font-size: 24px;
       padding: 12px 20px;
     }
-    
+
     .status-badge {
       padding: 15px 20px;
       font-size: 14px;
     }
   }
-  
+
   .actions-container {
     .action-group {
       justify-content: center;
-      
+
       .btn {
         font-size: 13px;
         padding: 12px 18px;
       }
     }
   }
-  
+
   .pagination-section {
     flex-direction: column;
     text-align: center;
@@ -2357,4 +2342,111 @@ body {
       }
     }
   }
+}
+
+@media (max-width: 768px) {
+  .header-actions {
+    width: 100%;
+    flex-direction: column;
+    align-items: stretch;
+
+    .btn {
+      width: 100%;
+      justify-content: center;
+    }
+  }
+
+  .stats-section .stats-grid {
+    grid-template-columns: 1fr !important;
+  }
+
+  .filters-section .filters-grid {
+    grid-template-columns: 1fr !important;
+  }
+
+  .orders-header h3 {
+    font-size: 22px !important;
+  }
+
+  .pagination-section {
+    .pagination-controls {
+      justify-content: center;
+      flex-wrap: wrap;
+
+      .page-btn {
+        min-width: 40px;
+        height: 40px;
+        font-size: 14px;
+      }
+    }
+  }
+}
+
+@media (max-width: 480px) {
+  .page-title {
+    font-size: 20px !important;
+
+    i {
+      font-size: 24px !important;
+    }
+  }
+
+  .order-header .order-info .order-number {
+    font-size: 18px !important;
+    padding: 8px 12px !important;
+  }
+
+  .order-header .order-info .order-date {
+    font-size: 14px !important;
+    padding: 6px 10px !important;
+  }
+
+  .order-header .status-badge {
+    font-size: 12px !important;
+    padding: 8px 12px !important;
+  }
+
+  .product-item {
+    padding: 10px !important;
+
+    .product-image {
+      width: 50px !important;
+      height: 50px !important;
+    }
+
+    .product-details .product-name {
+      font-size: 14px !important;
+    }
+
+    .product-details .product-specs {
+      font-size: 12px !important;
+    }
+  }
+
+  .customer-item {
+    font-size: 12px !important;
+    padding: 10px !important;
+
+    i {
+      font-size: 14px !important;
+    }
+  }
+
+  .action-group .btn {
+    padding: 10px 12px !important;
+    font-size: 12px !important;
+  }
+
+  .quick-filters {
+    right: 10px;
+    padding: 10px;
+
+    .quick-filter-btn {
+      padding: 8px 10px !important;
+      font-size: 12px !important;
+    }
+  }
+}
+body {
+  overflow-x: hidden;
 }
