@@ -69,7 +69,7 @@ export class PreNavbarComponent implements OnInit, OnDestroy {
   switchToCustomerMode(): void {
     if (this.isMerchant || this.isDriver) {
       // في التطبيق الحقيقي، استخدم Service
-      localStorage.setItem('view_mode', 'customer');
+      // localStorage.setItem('view_mode', 'customer');
 
       // إخفاء Pre-navbar مؤقتاً
       this.isVisible = false;

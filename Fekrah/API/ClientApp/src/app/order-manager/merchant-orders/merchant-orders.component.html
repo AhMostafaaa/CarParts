@@ -7,19 +7,19 @@
         إدارة طلبات قطع الغيار
       </h1>
       <div class="header-actions">
-        <button class="btn btn-outline">
+        <button class="btn btn-outline" (click)="exportOrders()">
           <i class="fas fa-download"></i>
           تصدير البيانات
         </button>
-        <!-- <button class="btn btn-primary">
+        <button class="btn btn-primary" (click)="addNewOrder()">
           <i class="fas fa-plus"></i>
-          إضافة قطعة جديدة
-        </button> -->
+          إضافة طلب جديد
+        </button>
       </div>
     </div>
   </div>
 
-  <!-- الإحصائيات -->
+  <!-- Statistics -->
   <div class="stats-section">
     <div class="stats-grid">
       <div class="stat-card total">
@@ -27,7 +27,7 @@
           <i class="fas fa-clipboard-list"></i>
         </div>
         <div class="stat-content">
-          <h3>156</h3>
+          <h3>{{ stats.total }}</h3>
           <p>إجمالي الطلبات</p>
         </div>
       </div>
@@ -37,7 +37,7 @@
           <i class="fas fa-clock"></i>
         </div>
         <div class="stat-content">
-          <h3>23</h3>
+          <h3>{{ stats.pending }}</h3>
           <p>في الانتظار</p>
         </div>
       </div>
@@ -47,7 +47,7 @@
           <i class="fas fa-check-circle"></i>
         </div>
         <div class="stat-content">
-          <h3>89</h3>
+          <h3>{{ stats.confirmed }}</h3>
           <p>مؤكد</p>
         </div>
       </div>
@@ -57,45 +57,53 @@
           <i class="fas fa-money-bill-wave"></i>
         </div>
         <div class="stat-content">
-          <h3>15,250 ج.م</h3>
+          <h3>{{ stats.todayRevenue | currency:'EGP':'symbol':'1.0-0' }}</h3>
           <p>إيرادات اليوم</p>
         </div>
       </div>
     </div>
   </div>
 
+  <!-- Filters -->
   <div class="filters-section">
+    <div class="filters-title">
+      <i class="fas fa-filter"></i>
+      تصفية وبحث الطلبات
+    </div>
     <div class="filters-grid">
       <div class="filter-group">
         <label>البحث في الطلبات</label>
         <div class="search-wrapper">
-          <!-- <i class="fas fa-search"></i> -->
-          <input type="text" placeholder="ابحث عن رقم الطلب، اسم العميل، أو نوع القطعة...">
+          <input 
+            type="text" 
+            [(ngModel)]="searchTerm" 
+            (ngModelChange)="applyFilters()"
+            placeholder="ابحث عن رقم الطلب، اسم العميل، أو نوع القطعة...">
+          <i class="fas fa-search"></i>
         </div>
       </div>
 
       <div class="filter-group">
         <label>حالة الطلب</label>
-        <select>
-          <option>جميع الحالات</option>
-          <option>في الانتظار</option>
-          <option>مؤكد</option>
-          <option>جاري التحضير</option>
-          <option>جاهز للاستلام</option>
-          <option>في الطريق</option>
-          <option>تم التسليم</option>
-          <option>ملغي</option>
+        <select [(ngModel)]="selectedStatus" (ngModelChange)="applyFilters()">
+          <option value="all">جميع الحالات</option>
+          <option *ngFor="let status of orderStatuses.slice(1)" [value]="status.value">
+            {{ status.label }}
+          </option>
         </select>
       </div>
 
       <div class="filter-group">
         <label>التاريخ</label>
-        <input type="date">
+        <input 
+          type="date" 
+          [(ngModel)]="selectedDate" 
+          (ngModelChange)="applyFilters()">
       </div>
 
       <div class="filter-group">
         <label>&nbsp;</label>
-        <button class="btn btn-outline">
+        <button class="btn btn-outline" (click)="resetFilters()">
           <i class="fas fa-undo"></i>
           إعادة تعيين
         </button>
@@ -103,107 +111,222 @@
     </div>
   </div>
 
-
-  <!-- قائمة الطلبات -->
+  <!-- Orders Section -->
   <div class="orders-section">
     <div class="orders-header">
-      <h3>قائمة الطلبات ({{ filteredOrders.length }} طلب)</h3>
+      <h3>
+        <i class="fas fa-list-alt"></i>
+        قائمة الطلبات ({{ paginatedOrders.length }} طلب)
+      </h3>
     </div>
 
-    <div class="order-card" *ngFor="let order of filteredOrders">
-      <div class="order-header">
-        <div class="order-info">
-          <div class="order-number">#{{ order.orderNumber }}</div>
-          <div class="order-date">{{ order.orderDate | date: 'd MMMM yyyy - h:mm a' : 'ar-EG' }}
+    <!-- Loading State -->
+    <div *ngIf="isLoading" class="loading-container">
+      <div class="spinner"></div>
+      <p>جاري تحميل الطلبات...</p>
+    </div>
+
+    <!-- Empty State -->
+    <div *ngIf="!isLoading && paginatedOrders.length === 0" class="empty-state">
+      <i class="fas fa-inbox"></i>
+      <h3>لا توجد طلبات</h3>
+      <p>لم يتم العثور على طلبات تطابق معايير البحث</p>
+    </div>
+
+    <!-- Orders List -->
+    <div class="orders-list" *ngIf="!isLoading && paginatedOrders.length > 0">
+      <div class="order-card" *ngFor="let order of paginatedOrders; trackBy: trackByOrderId">
+        <!-- Order Header -->
+        <div class="order-header  w-100">
+          <div class="order-info">
+            <div class="order-number">#{{ order.orderNumber }}</div>
+            <div class="order-date">{{ order.orderDate | date:'dd MMMM yyyy - h:mm a':'ar-EG' }}</div>
           </div>
-        </div>
-        <div class="d-flex align-items-center h-100">
-          <span class="status-badge" [ngStyle]="{'background': getStatusColor(order.status)}">
+          <div class="status-badge" [style.background]="getStatusColor(order.status)">
             <i [class]="getStatusIcon(order.status)"></i>
             {{ getStatusLabel(order.status) }}
-          </span>
+          </div>
         </div>
-      </div>
 
-      <!-- بيانات العميل -->
-      <div class="customer-section">
-        <div class="customer-grid">
-          <div class="customer-item">
-            <i class="fas fa-user"></i>
-            <span>{{ order.customerName }}</span>
+        <!-- Customer Section -->
+        <div class="customer-section">
+          <div class="customer-title">
+            <i class="fas fa-user-circle"></i>
+            بيانات العميل
           </div>
-          <div class="customer-item">
-            <i class="fas fa-phone"></i>
-            <span>{{ order.customerPhone }}</span>
-          </div>
-          <div class="customer-item">
-            <i class="fas fa-map-marker-alt"></i>
-            <span>{{ order.customerAddress }}</span>
+          <div class="customer-grid">
+            <div class="customer-item">
+              <i class="fas fa-user"></i>
+              <span>{{ order.customerName }}</span>
+            </div>
+            <div class="customer-item">
+              <i class="fas fa-phone"></i>
+              <span>{{ order.customerPhone }}</span>
+            </div>
+            <div class="customer-item">
+              <i class="fas fa-map-marker-alt"></i>
+              <span>{{ order.customerAddress }}</span>
+            </div>
           </div>
         </div>
-      </div>
 
-      <!-- تفاصيل المنتجات -->
-      <div class="products-section">
-        <div class="products-header">
-          <span class="products-count">{{ order.items.length }} قطع غيار</span>
-          <span class="products-total">{{ order.totalAmount | number:'1.0-0' }} ج.م</span>
+        <!-- Products Section -->
+        <div class="products-section">
+          <div class="products-header">
+            <div class="products-title">
+              <i class="fas fa-shopping-cart"></i>
+              عناصر الطلب
+            </div>
+            <div>
+              <span class="products-count">{{ order.items.length }} قطع غيار</span>
+              <span class="products-total">{{ calculateOrderTotal(order) | currency:'EGP':'symbol':'1.0-0' }}</span>
+            </div>
+          </div>
+          <div class="products-list">
+            <div class="product-item" *ngFor="let item of order.items; trackBy: trackByItemId">
+              <img [src]="item.image" class="product-image" [alt]="item.productName" (error)="onImageError($event)">
+              <div class="product-details">
+                <div class="product-name">{{ item.productName }}</div>
+                <div class="product-specs">الكمية: {{ item.quantity }} × {{ item.price | currency:'EGP':'symbol':'1.0-0' }}</div>
+              </div>
+            </div>
+          </div>
         </div>
-        <div class="products-list">
-          <div class="product-item" *ngFor="let item of order.items">
-            <img [src]="item.image" class="product-image" alt="{{ item.productName }}">
-            <div class="product-details">
-              <div class="product-name">{{ item.productName }}</div>
-              <div class="product-specs">الكمية: {{ item.quantity }} × {{ item.price | number:'1.0-0' }} ج.م</div>
+
+        <!-- Actions Section -->
+        <div class="actions-section">
+          <div class="actions-title">
+            <i class="fas fa-cogs"></i>
+            إجراءات الطلب
+          </div>
+          <div class="actions-container">
+            <div class="action-group">
+              <button class="btn btn-info" (click)="viewOrderDetails(order)">
+                <i class="fas fa-eye"></i>
+                عرض التفاصيل
+              </button>
+              <button class="btn btn-outline" (click)="printOrder(order)">
+                <i class="fas fa-print"></i>
+                طباعة
+              </button>
+              <button class="btn btn-outline" (click)="contactCustomer(order.customerPhone)">
+                <i class="fas fa-phone"></i>
+                اتصال
+              </button>
+            </div>
+            <div class="action-group">
+              <!-- Status-based action buttons -->
+              <button 
+                *ngIf="order.status === 'pending'" 
+                class="btn btn-success" 
+                (click)="updateOrderStatus(order.id, 'confirmed')">
+                <i class="fas fa-check"></i>
+                تأكيد الطلب
+              </button>
+              
+              <button 
+                *ngIf="order.status === 'confirmed'" 
+                class="btn btn-primary" 
+                (click)="updateOrderStatus(order.id, 'preparing')">
+                <i class="fas fa-cog"></i>
+                بدء التحضير
+              </button>
+              
+              <button 
+                *ngIf="order.status === 'preparing'" 
+                class="btn btn-success" 
+                (click)="updateOrderStatus(order.id, 'ready')">
+                <i class="fas fa-box"></i>
+                جاهز للتسليم
+              </button>
+              
+              <button 
+                *ngIf="order.status === 'ready'" 
+                class="btn btn-primary" 
+                (click)="updateOrderStatus(order.id, 'delivering')">
+                <i class="fas fa-truck"></i>
+                بدء التوصيل
+              </button>
+              
+              <button 
+                *ngIf="order.status === 'delivering'" 
+                class="btn btn-success" 
+                (click)="updateOrderStatus(order.id, 'delivered')">
+                <i class="fas fa-check-circle"></i>
+                تم التسليم
+              </button>
+
+              <button 
+                *ngIf="canCancelOrder(order)" 
+                class="btn btn-danger" 
+                (click)="cancelOrder(order)">
+                <i class="fas fa-times"></i>
+                إلغاء الطلب
+              </button>
+
+              <!-- Completed/Cancelled states -->
+              <span 
+                *ngIf="order.status === 'delivered'" 
+                class="btn btn-outline status-indicator">
+                <i class="fas fa-check-double"></i>
+                مكتمل
+              </span>
+              
+              <span 
+                *ngIf="order.status === 'cancelled'" 
+                class="btn btn-outline status-indicator cancelled">
+                <i class="fas fa-ban"></i>
+                ملغي
+              </span>
             </div>
           </div>
         </div>
       </div>
+    </div>
 
-      <!-- إجراءات الطلب -->
-      <div class="actions-section">
-        <div class="actions-container">
-          <div class="action-group">
-            <a class="btn btn-info" (click)="viewOrderDetails(order)">
-              <i class="fas fa-eye"></i>
-              عرض التفاصيل
-            </a>
-            <button class="btn btn-outline" (click)="printOrder(order)">
-              <i class="fas fa-print"></i>
-              طباعة
-            </button>
-          </div>
-          <div class="action-group">
-            <button *ngIf="order.status === 'pending'" class="btn btn-success"
-              (click)="updateOrderStatus(order.id, 'confirmed')">
-              <i class="fas fa-check"></i>
-              تأكيد الطلب
-            </button>
-            <button *ngIf="order.status === 'pending'" class="btn btn-danger"
-              (click)="updateOrderStatus(order.id, 'cancelled')">
-              <i class="fas fa-times"></i>
-              إلغاء الطلب
-            </button>
-          </div>
-        </div>
+    <!-- Pagination -->
+    <div class="pagination-section" *ngIf="!isLoading && totalPages > 1">
+      <div class="pagination-info">
+        عرض {{ getStartIndex() + 1 }}-{{ getEndIndex() }} من {{ filteredOrders.length }} طلب
+      </div>
+      <div class="pagination-controls">
+        <button 
+          class="page-btn" 
+          [disabled]="currentPage === 1" 
+          (click)="previousPage()">
+          <i class="fas fa-chevron-right"></i>
+        </button>
+        
+        <button 
+          *ngFor="let page of getPageNumbers()" 
+          class="page-btn" 
+          [class.active]="page === currentPage"
+          (click)="goToPage(page)">
+          {{ page }}
+        </button>
+        
+        <button 
+          class="page-btn" 
+          [disabled]="currentPage === totalPages" 
+          (click)="nextPage()">
+          <i class="fas fa-chevron-left"></i>
+        </button>
       </div>
     </div>
   </div>
-
 </div>
 
-<div class="demo-loader" style="margin: 1rem 0;">
-  <label>🔁 تجربة الطلب بحالة مختلفة:</label>
-  <select (change)="loadMockOrder($event)">
-    <option disabled selected>اختر حالة...</option>
-    <option *ngFor="let status of orderStatusOptions" [value]="status">
-      {{ getStatusLabel(status) }}
-    </option>
-  </select>
+<!-- Success/Error Messages -->
+<div 
+  *ngIf="notificationMessage" 
+  class="notification" 
+  [class]="notificationType"
+  [@slideInOut]>
+  <div class="notification-content">
+    <i [class]="getNotificationIcon()"></i>
+    <span>{{ notificationMessage }}</span>
+    <button class="close-notification" (click)="dismissNotification()">
+      <i class="fas fa-times"></i>
+    </button>
+  </div>
 </div>
-
-
-<app-order-details *ngIf="showOrderDetails" [selectedOrder]="selectedOrder" [showOrderDetails]="showOrderDetails"
-  (closeDetails)="closeOrderDetails()" (statusUpdate)="updateOrderStatus($event.orderId, $event.newStatus)"
-  (orderPrint)="printOrder($event)">
-</app-order-details>
