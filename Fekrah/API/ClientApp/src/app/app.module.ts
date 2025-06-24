@@ -10,6 +10,7 @@ import { FooterModule } from './Shared/layout/footer/footer.module';
 import { PreNavbarComponent } from './Shared/layout/pre-navbar/pre-navbar.component';
 import { registerLocaleData } from '@angular/common';
 import localeAr from '@angular/common/locales/ar';
+import { EnhancedSearchComponent } from './Shared/components/enhanced-search/enhanced-search.component';
 
 registerLocaleData(localeAr);
 
@@ -18,9 +19,8 @@ registerLocaleData(localeAr);
     AppComponent,
     HeaderComponent,
     PromoTickerComponent,
-    PreNavbarComponent
-
-
+    PreNavbarComponent,
+    EnhancedSearchComponent
   ],
   imports: [
     BrowserModule,
@@ -30,6 +30,10 @@ registerLocaleData(localeAr);
     ReactiveFormsModule,
     FooterModule
 
+  ],
+    exports: [
+    HeaderComponent,
+    EnhancedSearchComponent 
   ],
   providers: [{ provide: LOCALE_ID, useValue: 'ar-EG' }
   ],

@@ -1,3 +1,4 @@
+<!-- header.component.html - استبدال search-bar فقط -->
 <header class="header-container" [class.sticky]="isSticky">
   <!-- Logo -->
   <div class="logo">
@@ -9,22 +10,24 @@
     <span class="mobile-logo-text">قطع غيار</span>
   </div>
 
-  <!-- Search Bar -->
-  <div class="search-bar" [class.hidden]="!showSearch">
-    <select class="category-select">
-      <option value="">{{ searchCategories.default }}</option>
-      <option *ngFor="let category of searchCategories.options" [value]="category.value">
-        {{ category.label }}
-      </option>
-    </select>
-    <input type="text" [placeholder]="searchPlaceholder" [(ngModel)]="searchTerm" />
-    <button class="search-button" (click)="search()">
-      <i class="fas fa-search"></i>
-      <span class="search-text">{{ searchButtonText }}</span>
-    </button>
+  <!-- استبدال search-bar بـ Enhanced Search Component -->
+  <div class="search-bar-wrapper" [class.hidden]="!showSearch">
+    <app-enhanced-search 
+      [isHeaderMode]="true"
+      [placeholder]="searchPlaceholder"
+      [categories]="searchCategories.options"
+      [showQuickActions]="false"
+      [showHistory]="false"
+      [showVoiceSearch]="true"
+      [showAdvancedSearch]="true"
+      (searchPerformed)="onSearchPerformed($event)"
+      (suggestionSelected)="onSuggestionSelected($event)"
+      (categoryChanged)="onCategoryChanged($event)"
+      (advancedSearchPerformed)="onAdvancedSearchPerformed($event)">
+    </app-enhanced-search>
   </div>
 
-  <!-- Right Menu -->
+  <!-- Right Menu - بدون تغيير -->
   <div class="right-menu" [class.show]="showMobileMenu">
     <!-- اسم الموقع في قائمة الموبايل -->
     <div class="mobile-menu-header">
@@ -91,7 +94,7 @@
   </button>
 </header>
 
-<!-- Navigation Menu (بدون روابط التجار والمراسلين) -->
+<!-- Navigation Menu - بدون تغيير -->
 <nav class="main-nav" [class.show]="showMobileNav">
   <div class="container">
     <!-- Mobile Nav Toggle -->

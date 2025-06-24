@@ -24,25 +24,25 @@ export class PreNavbarComponent implements OnInit, OnDestroy {
   constructor(private router: Router) { }
 
   ngOnInit(): void {
-    this.updateVisibility();
-    this.updateCurrentRoute();
+    // this.updateVisibility();
+    // this.updateCurrentRoute();
 
-    // Listen to route changes
-    this.router.events.pipe(takeUntil(this.destroy$)).subscribe(event => {
-      if (event instanceof NavigationEnd) {
-        this.updateCurrentRoute();
-        this.updateVisibility();
-      }
-    });
+    // // Listen to route changes
+    // this.router.events.pipe(takeUntil(this.destroy$)).subscribe(event => {
+    //   if (event instanceof NavigationEnd) {
+    //     this.updateCurrentRoute();
+    //     this.updateVisibility();
+    //   }
+    // });
 
-    // Update stats periodically
-    interval(30000).pipe(takeUntil(this.destroy$)).subscribe(() => {
-      if (this.isMerchant || this.isDriver) {
-        this.loadQuickStats();
-      }
-    });
+    // // Update stats periodically
+    // interval(30000).pipe(takeUntil(this.destroy$)).subscribe(() => {
+    //   if (this.isMerchant || this.isDriver) {
+    //     this.loadQuickStats();
+    //   }
+    // });
 
-    this.loadQuickStats();
+    // this.loadQuickStats();
   }
 
   ngOnDestroy(): void {
