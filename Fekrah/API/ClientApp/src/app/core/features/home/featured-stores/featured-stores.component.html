@@ -1,0 +1,126 @@
+<!-- featured-stores.component.html -->
+<div class="featured-sellers-section">
+  <!-- Header Section -->
+  <div class="section-header">
+    <h2 class="section-title py-5">المتاجر المميزة</h2>
+    <p class="section-subtitle">اكتشف أفضل المتاجر الموثوقة لقطع غيار السيارات</p>
+  </div>
+
+  <!-- Loading State -->
+  <div *ngIf="isLoading" class="loading-container">
+    <div class="loading-spinner">
+      <div class="spinner-border text-warning" role="status">
+        <span class="visually-hidden">جاري التحميل...</span>
+      </div>
+      <p class="loading-text">جاري تحميل المتاجر المميزة...</p>
+    </div>
+  </div>
+
+  <!-- Stores Swiper -->
+  <div *ngIf="!isLoading && sellers.length > 0" class="swiper-container featured-sellers-swiper" 
+       #swiperContainer dir="ltr">
+    <div class="swiper-wrapper">
+      <!-- Store Cards -->
+      <div class="swiper-slide" *ngFor="let seller of sellers; trackBy: trackBySellerId">
+        <div class="seller-card" 
+             [ngClass]="{'trusted-border': seller.isTrusted}" 
+             [attr.aria-label]="'عرض متجر ' + seller.name">
+
+          <!-- Trusted Badge -->
+          <div *ngIf="seller.isTrusted" class="trusted-badge" title="متجر موثوق">
+            <i class="fas fa-star"></i>
+          </div>
+
+          <!-- Store Image -->
+          <div class="seller-image">
+            <!-- <img 
+              [src]="seller.imageUrl" 
+              [alt]="seller.name" 
+              (error)="onImageError($event)"
+              loading="lazy" /> -->
+          </div>
+
+          <!-- Store Name -->
+          <h3 class="seller-name">{{ seller.name }}</h3>
+
+          <!-- Location -->
+          <p class="seller-location">
+            <i class="fas fa-map-marker-alt"></i>
+            {{ seller.location }}
+          </p>
+
+          <!-- Category -->
+          <span class="seller-category" (click)="viewStoresByCategory(seller.category); $event.stopPropagation()">
+            {{ seller.category }}
+          </span>
+
+          <!-- Rating (if available) -->
+          <div *ngIf="seller.rating" class="seller-rating">
+            <div class="stars">
+              <i *ngFor="let star of [1,2,3,4,5]" 
+                 class="fas fa-star" 
+                 [class.active]="star <= seller.rating!"></i>
+            </div>
+            <span class="rating-text">{{ seller.rating }} ({{ seller.reviewsCount }})</span>
+          </div>
+        </div>
+
+        <!-- View Store Button -->
+        <button class="view-store-button" 
+                [routerLink]="['/seller',seller.id]" routerLinkActive="router-link-active"  
+                [attr.title]="'عرض متجر ' + seller.name"
+                [attr.aria-label]="'عرض متجر ' + seller.name">
+          <i class="fas fa-eye"></i>
+        </button>
+      </div>
+
+      <!-- View More Card -->
+      <div *ngIf="showViewMore" class="swiper-slide">
+        <div class="view-more-card" (click)="viewAllStores()">
+          <div class="view-more-content">
+            <div class="view-more-icon">
+              <i class="fas fa-plus-circle"></i>
+            </div>
+            <h3 class="view-more-title">عرض المزيد</h3>
+            <p class="view-more-subtitle">استكشف جميع المتاجر المتاحة</p>
+            <div class="view-more-arrow">
+              <i class="fas fa-arrow-left"></i>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Navigation Buttons -->
+    <div class="swiper-button-next ">
+      <i class="fas fa-chevron-right"></i>
+    </div>
+    <div class="swiper-button-prev">
+      <i class="fas fa-chevron-left"></i>
+    </div>
+
+    <!-- Pagination -->
+    <div class="swiper-pagination"></div>
+  </div>
+
+  <!-- Empty State -->
+  <div *ngIf="!isLoading && sellers.length === 0" class="empty-state">
+    <div class="empty-icon">
+      <i class="fas fa-store-slash"></i>
+    </div>
+    <h3 class="empty-title">لا توجد متاجر مميزة حالياً</h3>
+    <p class="empty-subtitle">يمكنك تصفح جميع المتاجر المتاحة</p>
+    <button class="btn btn-primary" (click)="viewAllStores()">
+      <i class="fas fa-store"></i>
+      عرض جميع المتاجر
+    </button>
+  </div>
+
+  <!-- View All Button (Alternative placement) -->
+  <div *ngIf="!isLoading && sellers.length > 0" class="view-all-section">
+    <button class="btn-view-all" (click)="viewAllStores()">
+      <span class="btn-text">عرض جميع المتاجر</span>
+      <i class="fas fa-arrow-left btn-icon"></i>
+    </button>
+  </div>
+</div>

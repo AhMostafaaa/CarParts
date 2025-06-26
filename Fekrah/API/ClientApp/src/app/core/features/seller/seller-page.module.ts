@@ -5,11 +5,13 @@ import { SellerRoutingModule } from './seller-routing.module';
 import { SellerPageComponent } from './seller-page/seller-page.component';
 import { FormsModule } from '@angular/forms';
 import { SharedModule } from '../../../Shared/shared.module';
+import { AllStoresComponent } from './all-stores/all-stores.component';
 
 
 @NgModule({
   declarations: [
-    SellerPageComponent
+    SellerPageComponent,
+    AllStoresComponent
   ],
   imports: [
     CommonModule,
