@@ -1,0 +1,355 @@
+<!-- all-offers.component.html -->
+<div class="all-offers-container">
+  <!-- Header Section -->
+  <div class="page-header py-4 mb-4">
+    <div class="container">
+      <div class="row align-items-center">
+        <div class="col-md-8">
+          <h1 class="page-title mb-2">
+            <i class="fas fa-tags me-3"></i>
+            جميع العروض المتاحة
+          </h1>
+          <p class="page-subtitle text-muted mb-0">
+            اكتشف أفضل قطع الغيار بأسعار تنافسية من متاجر موثوقة
+          </p>
+        </div>
+        <div class="col-md-4 text-md-end">
+          <div class="stats-badge">
+            <span class="total-count">{{ totalCount$ | async | number }}</span>
+            <small class="text-muted d-block">منتج متاح</small>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="container">
+    <!-- Search and Filter Bar -->
+    <div class="search-filter-section mb-4">
+      <div class="row g-3">
+        <!-- Search Input -->
+        <div class="col-lg-6">
+          <div class="search-input-wrapper position-relative">
+            <input
+              type="text"
+              class="form-control search-input"
+              placeholder="ابحث عن قطع الغيار..."
+              formControlName="searchTerm"
+              (input)="onSearch($event)">
+            <i class="fas fa-search search-icon"></i>
+          </div>
+        </div>
+
+        <!-- Sort Options -->
+        <div class="col-lg-3">
+          <select class="form-select sort-select" (change)="onSortChange($event)">
+            <option value="latest">الأحدث</option>
+            <option value="price-low">السعر: الأقل أولاً</option>
+            <option value="price-high">السعر: الأعلى أولاً</option>
+            <option value="discount">أعلى خصم</option>
+            <option value="rating">الأعلى تقييماً</option>
+          </select>
+        </div>
+
+        <!-- View Mode and Filter Toggle -->
+        <div class="col-lg-3">
+          <div class="d-flex gap-2">
+            <div class="btn-group view-mode-toggle" role="group">
+              <button
+                type="button"
+                class="btn btn-outline-primary"
+                [class.active]="viewMode === 'grid'"
+                (click)="onViewModeChange('grid')">
+                <i class="fas fa-th"></i>
+              </button>
+              <button
+                type="button"
+                class="btn btn-outline-primary"
+                [class.active]="viewMode === 'list'"
+                (click)="onViewModeChange('list')">
+                <i class="fas fa-list"></i>
+              </button>
+            </div>
+            <button
+              class="btn btn-outline-secondary filter-toggle-btn"
+              (click)="toggleFilters()">
+              <i class="fas fa-filter"></i>
+              فلترة
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="row">
+      <!-- Filters Sidebar -->
+      <div class="col-lg-3" [class.d-none]="!showFilters">
+        <div class="filters-sidebar">
+          <div class="filters-header d-flex justify-content-between align-items-center mb-3">
+            <h5 class="mb-0">الفلاتر</h5>
+            <button class="btn btn-sm btn-outline-secondary" (click)="clearFilters()">
+              مسح الكل
+            </button>
+          </div>
+
+          <form [formGroup]="filterForm" (ngSubmit)="onFilterChange()">
+            <!-- Categories Filter -->
+            <div class="filter-group mb-4">
+              <h6 class="filter-title">الفئات</h6>
+              <div class="filter-options">
+                <div class="form-check" *ngFor="let category of filterOptions.categories">
+                  <input
+                    class="form-check-input"
+                    type="checkbox"
+                    [value]="category.id"
+                    [id]="'category-' + category.id">
+                  <label class="form-check-label" [for]="'category-' + category.id">
+                    {{ category.name }}
+                    <span class="count">({{ category.count }})</span>
+                  </label>
+                </div>
+              </div>
+            </div>
+
+            <!-- Price Range Filter -->
+            <div class="filter-group mb-4">
+              <h6 class="filter-title">نطاق السعر</h6>
+              <div class="filter-options">
+                <div class="form-check" *ngFor="let range of filterOptions.priceRanges">
+                  <input
+                    class="form-check-input"
+                    type="radio"
+                    name="priceRange"
+                    [value]="range"
+                    [id]="'price-' + range.label">
+                  <label class="form-check-label" [for]="'price-' + range.label">
+                    {{ range.label }}
+                  </label>
+                </div>
+              </div>
+            </div>
+
+            <!-- Condition Filter -->
+            <div class="filter-group mb-4">
+              <h6 class="filter-title">حالة المنتج</h6>
+              <div class="filter-options">
+                <div class="form-check" *ngFor="let condition of filterOptions.conditions">
+                  <input
+                    class="form-check-input"
+                    type="checkbox"
+                    [value]="condition"
+                    [id]="'condition-' + condition">
+                  <label class="form-check-label" [for]="'condition-' + condition">
+                    {{ condition }}
+                  </label>
+                </div>
+              </div>
+            </div>
+
+            <!-- Brand Filter -->
+            <div class="filter-group mb-4">
+              <h6 class="filter-title">العلامة التجارية</h6>
+              <div class="filter-options scrollable">
+                <div class="form-check" *ngFor="let brand of filterOptions.brands">
+                  <input
+                    class="form-check-input"
+                    type="checkbox"
+                    [value]="brand"
+                    [id]="'brand-' + brand">
+                  <label class="form-check-label" [for]="'brand-' + brand">
+                    {{ brand }}
+                  </label>
+                </div>
+              </div>
+            </div>
+
+            <!-- Additional Filters -->
+            <div class="filter-group mb-4">
+              <h6 class="filter-title">خيارات إضافية</h6>
+              <div class="filter-options">
+                <div class="form-check">
+                  <input
+                    class="form-check-input"
+                    type="checkbox"
+                    id="inStockOnly"
+                    formControlName="inStockOnly">
+                  <label class="form-check-label" for="inStockOnly">
+                    متوفر فقط
+                  </label>
+                </div>
+                <div class="form-check">
+                  <input
+                    class="form-check-input"
+                    type="checkbox"
+                    id="fastDeliveryOnly"
+                    formControlName="fastDeliveryOnly">
+                  <label class="form-check-label" for="fastDeliveryOnly">
+                    توصيل سريع
+                  </label>
+                </div>
+                <div class="form-check">
+                  <input
+                    class="form-check-input"
+                    type="checkbox"
+                    id="discountOnly"
+                    formControlName="discountOnly">
+                  <label class="form-check-label" for="discountOnly">
+                    العروض المخفضة فقط
+                  </label>
+                </div>
+              </div>
+            </div>
+          </form>
+        </div>
+      </div>
+
+      <!-- Products Grid -->
+      <div class="col-lg-9" [class.col-lg-12]="!showFilters">
+        <!-- Loading State -->
+        <div class="loading-section text-center py-5" *ngIf="isLoading$ | async">
+          <div class="spinner-border text-primary mb-3" style="width: 3rem; height: 3rem;">
+            <span class="visually-hidden">جاري التحميل...</span>
+          </div>
+          <p class="text-muted">جاري تحميل العروض...</p>
+        </div>
+
+        <!-- Products Grid View -->
+        <div
+          class="products-grid"
+          [class.list-view]="viewMode === 'list'"
+          *ngIf="!(isLoading$ | async)">
+
+          <div
+            class="product-card"
+            *ngFor="let offer of offers$ | async; trackBy: trackByOfferIdFn"
+            (click)="viewOfferDetails(offer)">
+
+            <!-- Product Image -->
+            <div class="product-image-container">
+              <img
+                [src]="offer.imageUrl"
+                [alt]="offer.name"
+                class="product-image"
+                (error)="onImageError($event)">
+
+              <!-- Badges -->
+              <div class="product-badges">
+                <span class="badge badge-featured" *ngIf="offer.featured">مميز</span>
+                <span class="badge badge-discount" *ngIf="hasDiscount(offer)">
+                  خصم {{ offer.discount }}%
+                </span>
+                <span class="badge badge-fast-delivery" *ngIf="offer.fastDelivery">
+                  توصيل سريع
+                </span>
+              </div>
+
+              <!-- Quick Actions -->
+              <div class="quick-actions">
+                <button
+                  class="btn btn-sm btn-outline-light"
+                  (click)="addToWishlist(offer, $event)"
+                  title="إضافة للمفضلة">
+                  <i class="fas fa-heart"></i>
+                </button>
+              </div>
+            </div>
+
+            <!-- Product Info -->
+            <div class="product-info">
+              <h3 class="product-title">{{ offer.name }}</h3>
+              <p class="product-description">{{ offer.description }}</p>
+
+              <!-- Seller Info -->
+              <div class="seller-info">
+                <i class="fas fa-store"></i>
+                <span class="seller-name">{{ offer.sellerName }}</span>
+                <span class="location">{{ offer.location }}</span>
+              </div>
+
+              <!-- Rating -->
+              <div class="rating" *ngIf="offer.rating">
+                <div class="stars">
+                  <i class="fas fa-star" *ngFor="let star of [1,2,3,4,5]; let i = index"
+                     [class.filled]="i < Math.floor(offer.rating || 0)"></i>
+                </div>
+                <span class="rating-count">({{ offer.reviewsCount }})</span>
+              </div>
+
+              <!-- Price Section -->
+              <div class="price-section">
+                <div class="current-price">
+                  {{ formatPrice(offer.price) }}
+                </div>
+                <div class="old-price" *ngIf="offer.oldPrice">
+                  {{ formatPrice(offer.oldPrice) }}
+                </div>
+                <div class="savings" *ngIf="hasDiscount(offer)">
+                  وفّر {{ formatPrice(getDiscountAmount(offer)) }}
+                </div>
+              </div>
+
+              <!-- Condition Badge -->
+              <div class="condition-badge">
+                <span class="badge"
+                      [class.bg-success]="isOfferNew(offer)"
+                      [class.bg-warning]="!isOfferNew(offer)">
+                  {{ getConditionInArabic(offer.condition) }}
+                </span>
+              </div>
+
+              <!-- Action Buttons -->
+              <div class="action-buttons">
+                <button
+                  class="btn btn-primary btn-sm flex-fill"
+                  (click)="addToCart(offer, $event)"
+                  [disabled]="!offer.inStock">
+                  <i class="fas fa-shopping-cart me-1"></i>
+                  {{ offer.inStock ? 'أضف للسلة' : 'غير متوفر' }}
+                </button>
+                <button
+                  class="btn btn-outline-secondary btn-sm"
+                  (click)="contactSeller(offer, $event)"
+                  title="تواصل مع البائع">
+                  <i class="fas fa-phone"></i>
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- No Results -->
+        <div class="no-results text-center py-5" *ngIf="(offers$ | async)?.length === 0 && !(isLoading$ | async)">
+          <i class="fas fa-search fa-3x text-muted mb-3"></i>
+          <h4>لم يتم العثور على نتائج</h4>
+          <p class="text-muted">جرب تعديل معايير البحث أو الفلاتر</p>
+          <button class="btn btn-primary" (click)="clearFilters()">مسح الفلاتر</button>
+        </div>
+
+        <!-- Pagination -->
+        <nav class="pagination-nav mt-4" *ngIf="totalPages > 1 && !(isLoading$ | async)">
+          <ul class="pagination justify-content-center">
+            <li class="page-item" [class.disabled]="currentPage === 1">
+              <button class="page-link" (click)="onPageChange(currentPage - 1)">
+                <i class="fas fa-chevron-right"></i>
+              </button>
+            </li>
+
+            <li class="page-item"
+                *ngFor="let page of [].constructor(totalPages); let i = index"
+                [class.active]="currentPage === i + 1">
+              <button class="page-link" (click)="onPageChange(i + 1)">
+                {{ i + 1 }}
+              </button>
+            </li>
+
+            <li class="page-item" [class.disabled]="currentPage === totalPages">
+              <button class="page-link" (click)="onPageChange(currentPage + 1)">
+                <i class="fas fa-chevron-left"></i>
+              </button>
+            </li>
+          </ul>
+        </nav>
+      </div>
+    </div>
+  </div>
+</div>

@@ -9,7 +9,6 @@ import { NgxPaginationModule } from 'ngx-pagination';
 import { CardComponent } from './components/card/card.component';
 import { BreadcrumbComponent } from './components/breadcrumb/breadcrumb.component';
 import { OfferCardComponent } from './components/offer-card/offer-card.component';
-import { NotFoundComponent } from './components/not-found/not-found.component';
 
 @NgModule({
   imports: [

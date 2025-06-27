@@ -91,15 +91,35 @@
                   <i class="fas fa-arrow-left"></i>
                 </span>
               </a>
-
             </div>
-
           </div>
         </div>
       </div>
     </div>
+  </div>
 
-   
+  <!-- View More Button Section -->
+  <div class="text-center mt-4 position-relative">
+    <button class="view-more-btn btn btn-lg rounded-pill px-4 py-3 fw-bold position-relative border-0 text-decoration-none"
+      (click)="navigateToAllOffers()"
+      [attr.aria-label]="'عرض جميع العروض المتاحة'"
+      type="button">
+      <span class="position-relative z-1 d-flex align-items-center justify-content-center gap-3">
+        <i class="fas fa-tags"></i>
+        <span>عرض جميع العروض</span>
+        <i class="fas fa-arrow-left"></i>
+      </span>
+      <div class="btn-glow"></div>
+    </button>
+
+    <!-- Statistics Info -->
+    <div class="mt-3">
+      <small class="text-white-50 fw-semibold">
+        <i class="fas fa-info-circle me-1"></i>
+        أكثر من {{ totalOffersCount }} عرض متاح من {{ totalStoresCount }} متجر
+      </small>
+    </div>
+  </div>
 
   <!-- Loading State -->
   <div class="text-center py-4" *ngIf="bestOffers.length === 0">
@@ -108,5 +128,4 @@
     </div>
     <p class="mt-2 text-muted">جاري تحميل العروض...</p>
   </div>
-
-
+</div>

@@ -1,5 +1,12 @@
 <div class="brand-section">
-  <h2 class="section-title">أختر موديل السيارة</h2>
+  <div class="section-header">
+    <h2 class="section-title">أختر موديل السيارة</h2>
+    <a routerLink="/brands" class="view-more-link">
+      <span>عرض المزيد</span>
+      <i class="fas fa-arrow-left"></i>
+    </a>
+  </div>
+
   <div class="swiper">
     <div class="swiper-wrapper">
       <div class="swiper-slide" *ngFor="let brand of carBrands">
@@ -10,7 +17,6 @@
           <p>{{ brand.name }}</p>
         </div>
       </div>
-
     </div>
     <!-- <div class="swiper-pagination"></div> -->
     <!-- <div class="swiper-button-prev"></div>
