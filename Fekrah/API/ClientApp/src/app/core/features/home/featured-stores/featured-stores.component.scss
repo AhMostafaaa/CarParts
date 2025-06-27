@@ -1,5 +1,6 @@
-// featured-stores.component.scss
+// featured-stores.component.scss - Optimized
 .featured-sellers-section {
+  // Simplified gradient for better performance
   background: linear-gradient(135deg, #6a11cb, #2575fc);
   padding: 40px 20px;
   border-radius: 20px;
@@ -8,7 +9,10 @@
   overflow: hidden;
   position: relative;
 
-  // Background Pattern
+  // Use transform3d for hardware acceleration
+  transform: translate3d(0, 0, 0);
+
+  // Simplified background pattern
   &::before {
     content: '';
     position: absolute;
@@ -16,9 +20,7 @@
     left: 0;
     right: 0;
     bottom: 0;
-    background-image: 
-      radial-gradient(circle at 20% 80%, rgba(255, 255, 255, 0.1) 0%, transparent 50%),
-      radial-gradient(circle at 80% 20%, rgba(255, 255, 255, 0.05) 0%, transparent 50%);
+    background: radial-gradient(circle at 30% 30%, rgba(255, 255, 255, 0.1) 0%, transparent 70%);
     pointer-events: none;
   }
 
@@ -33,14 +35,15 @@
       font-size: 50px;
       font-weight: bold;
       margin-bottom: 10px;
-      text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
-      
+      // Simplified text shadow
+      text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+
       @media (max-width: 768px) {
-        font-size: 35px !important;
+        font-size: 35px;
       }
 
       @media (max-width: 480px) {
-        font-size: 30px !important;
+        font-size: 30px;
       }
     }
 
@@ -109,7 +112,7 @@
     }
   }
 
-  // Store Card
+  // Store Card - Optimized
   .seller-card {
     position: relative;
     width: 100%;
@@ -118,51 +121,52 @@
     color: #333;
     border-radius: 20px;
     padding: 20px 16px 35px;
-    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+    // Simplified box shadow
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
     text-align: center;
     display: flex;
     flex-direction: column;
     align-items: center;
-    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    // Simplified transition
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
     cursor: pointer;
     min-height: 250px;
-    backdrop-filter: blur(10px);
+    // Use transform3d for hardware acceleration
+    transform: translate3d(0, 0, 0);
 
     &:hover {
-      transform: translateY(-8px) scale(1.02);
-      box-shadow: 0 15px 35px rgba(0, 0, 0, 0.2);
+      transform: translate3d(0, -5px, 0);
+      box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
     }
 
     // Trusted Border
     &.trusted-border {
-      border: 3px solid #ffd700;
-      box-shadow: 0 8px 25px rgba(255, 215, 0, 0.3);
+      border: 2px solid #ffd700;
 
       &:hover {
         border-color: #ffed4e;
-        box-shadow: 0 15px 35px rgba(255, 215, 0, 0.4);
       }
     }
 
-    // Trusted Badge
+    // Trusted Badge - Simplified
     .trusted-badge {
       position: absolute;
       top: 15px;
       right: 15px;
-      background: linear-gradient(45deg, #ffd700, #ffed4e);
+      background: #ffd700;
       color: #333;
-      width: 32px;
-      height: 32px;
+      width: 28px;
+      height: 28px;
       border-radius: 50%;
-      box-shadow: 0 4px 12px rgba(255, 215, 0, 0.4);
       display: flex;
       align-items: center;
       justify-content: center;
       z-index: 10;
-      animation: pulse-gold 2s infinite;
+      // Simplified animation
+      animation: pulse-simple 2s infinite;
 
       i {
-        font-size: 14px;
+        font-size: 12px;
         font-weight: bold;
       }
     }
@@ -175,10 +179,11 @@
       overflow: hidden;
       margin-bottom: 15px;
       border: 3px solid #f8f9fa;
-      transition: transform 0.3s ease;
+      // Hardware acceleration
+      transform: translate3d(0, 0, 0);
 
       &:hover {
-        transform: scale(1.1);
+        transform: translate3d(0, 0, 0) scale(1.05);
       }
 
       img {
@@ -222,17 +227,16 @@
     .seller-category {
       display: inline-block;
       font-size: 12px;
-      background: linear-gradient(45deg, #e3f2fd, #bbdefb);
+      background: #e3f2fd;
       color: #1976d2;
       padding: 6px 12px;
       border-radius: 15px;
       margin-bottom: 10px;
       cursor: pointer;
-      transition: all 0.3s ease;
+      transition: background-color 0.3s ease;
 
       &:hover {
-        background: linear-gradient(45deg, #bbdefb, #90caf9);
-        transform: scale(1.05);
+        background: #bbdefb;
       }
     }
 
@@ -267,7 +271,7 @@
     }
   }
 
-  // View Store Button
+  // View Store Button - Optimized
   .view-store-button {
     position: absolute;
     bottom: -15px;
@@ -275,7 +279,7 @@
     transform: translateX(-50%);
     width: 44px;
     height: 44px;
-    background: linear-gradient(45deg, #25d366, #20c55a);
+    background: #25d366;
     color: #fff;
     border: none;
     border-radius: 50%;
@@ -283,28 +287,24 @@
     align-items: center;
     justify-content: center;
     font-size: 16px;
-    box-shadow: 0 6px 16px rgba(37, 211, 102, 0.4);
-    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    // Simplified box shadow
+    box-shadow: 0 4px 12px rgba(37, 211, 102, 0.3);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
     cursor: pointer;
     z-index: 5;
 
     &:hover {
-      background: linear-gradient(45deg, #20c55a, #1db954);
-      transform: translateX(-50%) scale(1.15);
-      box-shadow: 0 8px 20px rgba(37, 211, 102, 0.6);
-    }
-
-    &:active {
-      transform: translateX(-50%) scale(1.05);
+      transform: translateX(-50%) scale(1.1);
+      box-shadow: 0 6px 16px rgba(37, 211, 102, 0.4);
     }
   }
 
-  // View More Card
+  // View More Card - Optimized
   .view-more-card {
     position: relative;
     width: 100%;
     max-width: 280px;
-    background: linear-gradient(135deg, rgba(255, 255, 255, 0.95), rgba(255, 255, 255, 0.9));
+    background: rgba(255, 255, 255, 0.95);
     color: #333;
     border: 2px dashed #007bff;
     border-radius: 20px;
@@ -316,21 +316,18 @@
     justify-content: center;
     cursor: pointer;
     min-height: 250px;
-    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-    backdrop-filter: blur(10px);
+    transition: transform 0.3s ease, border-color 0.3s ease;
 
     &:hover {
-      transform: translateY(-8px) scale(1.02);
+      transform: translateY(-5px);
       border-color: #0056b3;
-      background: linear-gradient(135deg, #fff, rgba(255, 255, 255, 0.95));
-      box-shadow: 0 15px 35px rgba(0, 123, 255, 0.2);
 
       .view-more-icon i {
-        transform: rotate(90deg) scale(1.1);
+        transform: rotate(90deg);
       }
 
       .view-more-arrow {
-        transform: translateX(10px);
+        transform: translateX(5px);
       }
     }
 
@@ -344,7 +341,7 @@
     .view-more-icon {
       width: 60px;
       height: 60px;
-      background: linear-gradient(45deg, #007bff, #0056b3);
+      background: #007bff;
       border-radius: 50%;
       display: flex;
       align-items: center;
@@ -382,7 +379,7 @@
     }
   }
 
-  // Navigation Buttons
+  // Navigation Buttons - Simplified
   .swiper-button-prev,
   .swiper-button-next {
     color: rgba(255, 255, 255, 0.8);
@@ -391,13 +388,11 @@
     height: 50px;
     background: rgba(255, 255, 255, 0.1);
     border-radius: 50%;
-    backdrop-filter: blur(10px);
     transition: all 0.3s ease;
 
     &:hover {
       color: #fff;
       background: rgba(255, 255, 255, 0.2);
-      transform: scale(1.1);
     }
 
     &::after {
@@ -432,13 +427,12 @@
 
       &:hover {
         background: rgba(255, 255, 255, 0.8);
-        transform: scale(1.2);
       }
     }
 
     .swiper-pagination-bullet-active {
       background: #ffc107;
-      transform: scale(1.3);
+      transform: scale(1.2);
     }
   }
 
@@ -478,7 +472,6 @@
       &:hover {
         background: rgba(255, 255, 255, 0.3);
         border-color: rgba(255, 255, 255, 0.5);
-        transform: translateY(-2px);
       }
 
       i {
@@ -495,7 +488,7 @@
     z-index: 2;
 
     .btn-view-all {
-      background: linear-gradient(45deg, rgba(255, 255, 255, 0.2), rgba(255, 255, 255, 0.1));
+      background: rgba(255, 255, 255, 0.2);
       border: 2px solid rgba(255, 255, 255, 0.3);
       color: white;
       padding: 15px 35px;
@@ -503,20 +496,18 @@
       font-size: 16px;
       font-weight: 600;
       cursor: pointer;
-      transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+      transition: all 0.3s ease;
       display: inline-flex;
       align-items: center;
       gap: 12px;
-      backdrop-filter: blur(10px);
 
       &:hover {
-        background: linear-gradient(45deg, rgba(255, 255, 255, 0.3), rgba(255, 255, 255, 0.2));
+        background: rgba(255, 255, 255, 0.3);
         border-color: rgba(255, 255, 255, 0.5);
-        transform: translateY(-3px);
-        box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+        transform: translateY(-2px);
 
         .btn-icon {
-          transform: translateX(5px);
+          transform: translateX(3px);
         }
       }
 
@@ -528,17 +519,17 @@
   }
 }
 
-// Animations
-@keyframes pulse-gold {
+// Simplified Animation
+@keyframes pulse-simple {
   0%, 100% {
-    box-shadow: 0 4px 12px rgba(255, 215, 0, 0.4);
+    opacity: 1;
   }
   50% {
-    box-shadow: 0 4px 20px rgba(255, 215, 0, 0.6);
+    opacity: 0.7;
   }
 }
 
-// Responsive Design
+// Responsive Design - Optimized
 @media (max-width: 1200px) {
   .featured-sellers-section {
     margin: 15px;
@@ -582,7 +573,7 @@
     .swiper-button-next {
       width: 40px;
       height: 40px;
-      
+
       i {
         font-size: 14px;
       }
@@ -666,101 +657,19 @@
   }
 }
 
-// Print styles
-@media print {
-  .featured-sellers-section {
-    background: none !important;
-    color: black !important;
-    box-shadow: none !important;
-
-    .swiper-button-prev,
-    .swiper-button-next,
-    .swiper-pagination,
-    .view-store-button {
-      display: none !important;
-    }
-
-    .seller-card {
-      box-shadow: none !important;
-      border: 1px solid #ccc !important;
-      break-inside: avoid;
-    }
-  }
+// Performance optimizations
+* {
+  box-sizing: border-box;
 }
 
-// Dark mode support
-@media (prefers-color-scheme: dark) {
-  .featured-sellers-section {
-    .seller-card {
-      background: #2c3e50;
-      color: #ecf0f1;
-
-      .seller-name {
-        color: #ecf0f1;
-      }
-
-      .seller-location {
-        color: #bdc3c7;
-      }
-
-      .seller-category {
-        background: linear-gradient(45deg, #34495e, #2c3e50);
-        color: #3498db;
-      }
-    }
-
-    .view-more-card {
-      background: linear-gradient(135deg, rgba(44, 62, 80, 0.95), rgba(44, 62, 80, 0.9));
-      border-color: #3498db;
-      color: #ecf0f1;
-
-      .view-more-title {
-        color: #ecf0f1;
-      }
-
-      .view-more-subtitle {
-        color: #bdc3c7;
-      }
-
-      &:hover {
-        background: linear-gradient(135deg, #34495e, rgba(44, 62, 80, 0.95));
-      }
-    }
-  }
+// Use will-change for animated elements
+.seller-card,
+.view-more-card,
+.view-store-button {
+  will-change: transform;
 }
 
-// High contrast mode
-@media (prefers-contrast: high) {
-  .featured-sellers-section {
-    .seller-card {
-      border: 2px solid #000;
-      
-      &.trusted-border {
-        border-color: #ffff00;
-      }
-    }
-
-    .view-more-card {
-      border: 3px solid #0000ff;
-    }
-
-    .swiper-button-prev,
-    .swiper-button-next {
-      background: #000;
-      color: #fff;
-    }
-
-    .swiper-pagination-bullet {
-      background: #000;
-      
-      &.swiper-pagination-bullet-active {
-        background: #ffff00;
-      }
-    }
-  }
-}
-
-// Reduced motion
+// Reduce motion for users who prefer it
 @media (prefers-reduced-motion: reduce) {
   .featured-sellers-section {
     .seller-card,
@@ -774,17 +683,33 @@
       animation: none;
     }
 
-    .seller-image,
+    .seller-image img,
     .view-more-icon i,
     .view-more-arrow,
     .btn-icon {
       transition: none;
     }
 
+    // Disable autoplay for reduced motion
     .swiper-container {
       .swiper-wrapper {
         scroll-behavior: auto;
       }
     }
   }
+}
+
+// Force hardware acceleration for key elements
+.seller-card,
+.view-more-card,
+.swiper-slide {
+  backface-visibility: hidden;
+  perspective: 1000px;
+}
+
+// Optimize font rendering
+.featured-sellers-section {
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-rendering: optimizeLegibility;
 }

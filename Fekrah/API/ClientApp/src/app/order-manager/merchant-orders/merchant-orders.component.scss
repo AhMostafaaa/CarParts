@@ -326,6 +326,8 @@ body {
 }
 
 // Enhanced Filters Section
+// تحديث CSS للبحث - إزالة search-wrapper وإضافة search-container
+
 .filters-section {
   @include glass-effect;
   border-radius: $border-radius-xl;
@@ -387,71 +389,289 @@ body {
       color: $text-secondary;
       font-size: 16px;
     }
-  }
 
-  .search-wrapper {
-    position: relative;
+    // تصميم البحث مع الأيكون تحت الـ input
+    .search-container {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 12px;
+      position: relative;
 
-    input {
+      .search-input {
+        width: 100%;
+        padding: 18px 25px;
+        border: 2px solid rgba(226, 232, 240, 0.6);
+        border-radius: $border-radius;
+        font-size: 16px;
+        transition: all 0.3s ease;
+        background: rgba(255, 255, 255, 0.85);
+        color: #495057;
+        padding-right: 90px;
+        &:focus {
+          outline: none;
+          border-color: $primary-color;
+          background: rgba(255, 255, 255, 0.95);
+          box-shadow: 0 0 0 4px rgba(102, 126, 234, 0.1);
+          transform: translateY(-2px);
+
+          // تأثير على الأيكون عند focus على الـ input
+          ~ .search-icon {
+            transform: scale(1.15);
+            box-shadow: 0 0 20px rgba(102, 126, 234, 0.5);
+            animation: searchPulse 2s infinite;
+          }
+        }
+
+        &::placeholder {
+          color: #a0aec0;
+          font-weight: 500;
+          font-style: italic;
+        }
+      }
+
+      .search-icon {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 45px;
+        height: 45px;
+        background: linear-gradient(135deg, #007bff, #0056b3);
+        border-radius: 50%;
+        color: white;
+        box-shadow: 0 4px 15px rgba(0, 123, 255, 0.3);
+        transition: all 0.3s ease;
+        cursor: pointer;
+        position: absolute;
+        right: 20px;
+        top: 10px;
+
+        &:hover {
+          transform: translateY(-3px) scale(1.1);
+          box-shadow: 0 6px 20px rgba(0, 123, 255, 0.4);
+        }
+
+        &:focus {
+          outline: 2px solid #007bff;
+          outline-offset: 2px;
+        }
+
+        // تأثير إضافي للنقر
+        &:active {
+          transform: scale(0.95);
+        }
+
+        i {
+          font-size: 1.3rem;
+          background: none;
+          padding: 0;
+          transition: transform 0.3s ease;
+        }
+
+        // تحريك الأيكون قليلاً عند hover
+        &:hover i {
+          transform: rotate(15deg) scale(1.1);
+        }
+      }
+
+      // حالة نشطة للبحث
+      &.active {
+        .search-icon {
+          background: linear-gradient(135deg, #28a745, #20c997);
+
+          i {
+            animation: searchSpin 1s linear infinite;
+          }
+        }
+      }
+    }
+
+    // إزالة أي CSS خاص بـ search-wrapper القديم
+    // وإبقاء باقي العناصر كما هي
+    select,
+    input[type="date"] {
       width: 100%;
-      padding: 18px 55px 18px 25px;
+      padding: 18px 25px;
       border: 2px solid rgba(226, 232, 240, 0.6);
       border-radius: $border-radius;
       font-size: 16px;
-      transition: $transition-fast;
       background: rgba(255, 255, 255, 0.8);
-      background: rgba(255, 255, 255, 0.85);
+      transition: $transition-fast;
 
       &:focus {
         outline: none;
         border-color: $primary-color;
         background: rgba(255, 255, 255, 0.95);
         box-shadow: 0 0 0 4px rgba(102, 126, 234, 0.1);
+        transform: translateY(-1px);
+      }
+    }
+
+    select {
+      cursor: pointer;
+      appearance: none;
+      background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6,9 12,15 18,9'%3e%3c/polyline%3e%3c/svg%3e");
+      background-repeat: no-repeat;
+      background-position: left 15px center;
+      background-size: 20px;
+      padding-left: 45px;
+
+      &:hover {
+        border-color: #adb5bd;
+      }
+    }
+
+    .btn {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      padding: 18px 25px;
+      border: 2px solid #6c757d;
+      background: white;
+      color: #6c757d;
+      border-radius: $border-radius;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      font-weight: 600;
+      font-size: 16px;
+      white-space: nowrap;
+
+      &:hover {
+        background: #6c757d;
+        color: white;
         transform: translateY(-2px);
+        box-shadow: 0 4px 15px rgba(108, 117, 125, 0.3);
       }
 
-      &::placeholder {
-        color: #a0aec0;
-        font-weight: 500;
+      &:active {
+        transform: translateY(0);
       }
-    }
 
-    i {
-      position: absolute;
-      right: 20px;
-      top: 50%;
-      transform: translateY(-50%);
-      color: #a0aec0;
-      font-size: 20px;
-      transition: $transition-fast;
-    }
+      i {
+        font-size: 16px;
+        transition: transform 0.3s ease;
+      }
 
-    &:focus-within i {
-      color: $primary-color;
-      transform: translateY(-50%) scale(1.1);
-    }
-  }
-
-  select,
-  input[type="date"] {
-    width: 100%;
-    padding: 18px 25px;
-    border: 2px solid rgba(226, 232, 240, 0.6);
-    border-radius: $border-radius;
-    font-size: 16px;
-    background: rgba(255, 255, 255, 0.8);
-    transition: $transition-fast;
-
-    &:focus {
-      outline: none;
-      border-color: $primary-color;
-      background: rgba(255, 255, 255, 0.95);
-      box-shadow: 0 0 0 4px rgba(102, 126, 234, 0.1);
-      transform: translateY(-2px);
+      &:hover i {
+        transform: rotate(-90deg);
+      }
     }
   }
 }
 
+// Animations
+@keyframes searchPulse {
+  0%, 100% {
+    box-shadow: 0 0 20px rgba(0, 123, 255, 0.5);
+  }
+  50% {
+    box-shadow: 0 0 30px rgba(0, 123, 255, 0.8);
+  }
+}
+
+@keyframes searchSpin {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+// تحسينات للشاشات الصغيرة
+@media (max-width: 768px) {
+  .filters-section {
+    padding: 20px;
+
+    .filters-title {
+      font-size: 18px;
+      margin-bottom: 20px;
+    }
+
+    .filters-grid {
+      .filter-group {
+        .search-container {
+          gap: 10px;
+
+          .search-input {
+            padding: 15px 20px;
+            font-size: 15px;
+          }
+
+          .search-icon {
+            width: 40px;
+            height: 40px;
+
+            i {
+              font-size: 1.1rem;
+            }
+          }
+        }
+
+        select,
+        input[type="date"] {
+          padding: 15px 20px;
+          font-size: 15px;
+        }
+
+        .btn {
+          padding: 15px 20px;
+          font-size: 15px;
+        }
+      }
+    }
+  }
+}
+
+@media (max-width: 480px) {
+  .filters-section {
+    padding: 15px;
+
+    .filters-grid {
+      gap: 15px;
+
+      .filter-group {
+        .search-container {
+          .search-input {
+            padding: 12px 15px;
+            font-size: 14px;
+          }
+
+          .search-icon {
+            width: 35px;
+            height: 35px;
+
+            i {
+              font-size: 1rem;
+            }
+          }
+        }
+
+        select,
+        input[type="date"] {
+          padding: 12px 15px;
+          font-size: 14px;
+        }
+
+        select {
+          padding-left: 35px;
+          background-size: 16px;
+          background-position: left 10px center;
+        }
+
+        .btn {
+          padding: 12px 15px;
+          font-size: 14px;
+        }
+
+        label {
+          font-size: 14px;
+        }
+      }
+    }
+  }
+}
 // Enhanced Orders Section
 .orders-section {
   @include glass-effect;
@@ -2360,9 +2580,7 @@ body {
     grid-template-columns: 1fr !important;
   }
 
-  .filters-section .filters-grid {
-    grid-template-columns: 1fr !important;
-  }
+
 
   .orders-header h3 {
     font-size: 22px !important;
@@ -2449,4 +2667,389 @@ body {
 }
 body {
   overflow-x: hidden;
+}
+
+
+// Quick Filters Toggle Button
+.quick-filters-toggle-btn {
+  position: fixed;
+  top: 50%;
+  right: 20px;
+  transform: translateY(-50%);
+  background: linear-gradient(135deg, #667eea, #764ba2);
+  color: white;
+  border: none;
+  border-radius: 50px;
+  padding: 15px 20px;
+  cursor: pointer;
+  box-shadow: 0 8px 25px rgba(102, 126, 234, 0.3);
+  transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  z-index: 1001;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-weight: 600;
+  font-size: 14px;
+  min-width: 60px;
+  justify-content: center;
+  backdrop-filter: blur(10px);
+  border: 2px solid rgba(255, 255, 255, 0.2);
+
+  &:hover {
+    transform: translateY(-50%) scale(1.05);
+    box-shadow: 0 12px 35px rgba(102, 126, 234, 0.4);
+    background: linear-gradient(135deg, #764ba2, #f093fb);
+  }
+
+  &.active {
+    background: linear-gradient(135deg, #f093fb, #f5576c);
+    transform: translateY(-50%) scale(1.1);
+    box-shadow: 0 15px 40px rgba(245, 87, 108, 0.4);
+
+    .toggle-text {
+      display: inline;
+    }
+
+    i {
+      animation: filterPulse 1s ease-in-out infinite;
+    }
+  }
+
+  .toggle-text {
+    display: none;
+    white-space: nowrap;
+
+    @media (min-width: 768px) {
+      display: inline;
+    }
+  }
+
+  i {
+    font-size: 16px;
+    transition: all 0.3s ease;
+  }
+
+  // Responsive behavior
+  @media (max-width: 768px) {
+    right: 15px;
+    padding: 12px;
+    min-width: 50px;
+
+    .toggle-text {
+      display: none !important;
+    }
+  }
+}
+
+// Quick Filters Panel
+.quick-filters {
+  position: fixed;
+  top: 50%;
+  right: 20px;
+  transform: translateY(-50%) translateX(100%);
+  background: rgba(255, 255, 255, 0.95);
+  backdrop-filter: blur(20px);
+  border-radius: 20px;
+  padding: 25px;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.15);
+  border: 2px solid rgba(255, 255, 255, 0.3);
+  z-index: 1002;
+  min-width: 200px;
+  max-width: 250px;
+  opacity: 0;
+  visibility: hidden;
+  transition: all 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+
+  // Show state
+  &.show {
+    opacity: 1;
+    visibility: visible;
+    transform: translateY(-50%) translateX(0);
+  }
+
+  // Hide state
+  &.hide {
+    opacity: 0;
+    visibility: hidden;
+    transform: translateY(-50%) translateX(100%);
+  }
+
+  // Header with close button
+  .quick-filters-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+    padding-bottom: 15px;
+    border-bottom: 2px solid rgba(102, 126, 234, 0.2);
+  }
+
+  .quick-filters-title {
+    font-size: 16px;
+    font-weight: 800;
+    color: #2d3748;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+
+    i {
+      color: #667eea;
+      padding: 8px;
+      background: rgba(102, 126, 234, 0.1);
+      border-radius: 8px;
+      font-size: 14px;
+    }
+  }
+
+  .close-quick-filters {
+    background: rgba(220, 53, 69, 0.1);
+    border: none;
+    color: #dc3545;
+    width: 35px;
+    height: 35px;
+    border-radius: 50%;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 14px;
+
+    &:hover {
+      background: rgba(220, 53, 69, 0.2);
+      transform: scale(1.1);
+      color: #c82333;
+    }
+  }
+
+  // Filter buttons
+  .quick-filter-buttons {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+  }
+
+  .quick-filter-btn {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 15px 18px;
+    background: rgba(248, 250, 252, 0.8);
+    border: 2px solid transparent;
+    border-radius: 12px;
+    color: #4a5568;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    text-align: right;
+    width: 100%;
+    font-size: 14px;
+    position: relative;
+    overflow: hidden;
+
+    &::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: -100%;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(90deg, transparent, rgba(102, 126, 234, 0.1), transparent);
+      transition: left 0.6s ease;
+    }
+
+    &:hover {
+      background: linear-gradient(135deg, rgba(102, 126, 234, 0.1), rgba(118, 75, 162, 0.1));
+      color: #667eea;
+      transform: translateY(-2px);
+      box-shadow: 0 8px 25px rgba(102, 126, 234, 0.2);
+      border-color: rgba(102, 126, 234, 0.3);
+
+      &::before {
+        left: 100%;
+      }
+
+      i {
+        transform: scale(1.1);
+        color: #667eea;
+      }
+    }
+
+    &.active {
+      background: linear-gradient(135deg, #667eea, #764ba2);
+      color: white;
+      border-color: rgba(102, 126, 234, 0.5);
+      transform: translateY(-3px);
+      box-shadow: 0 12px 35px rgba(102, 126, 234, 0.4);
+
+      &::before {
+        background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+      }
+
+      i {
+        color: white;
+        transform: scale(1.15);
+        filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.2));
+      }
+    }
+
+    i {
+      font-size: 14px;
+      transition: all 0.3s ease;
+      flex-shrink: 0;
+    }
+  }
+
+  // Responsive behavior
+  @media (max-width: 768px) {
+    right: 15px;
+    min-width: 180px;
+    max-width: 200px;
+    padding: 20px;
+
+    .quick-filter-btn {
+      padding: 12px 15px;
+      font-size: 13px;
+      gap: 10px;
+    }
+  }
+
+  @media (max-width: 480px) {
+    right: 10px;
+    min-width: 160px;
+    max-width: 180px;
+    padding: 15px;
+
+    .quick-filters-title {
+      font-size: 14px;
+    }
+
+    .quick-filter-btn {
+      padding: 10px 12px;
+      font-size: 12px;
+      gap: 8px;
+    }
+  }
+}
+
+// Overlay
+.quick-filters-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.3);
+  z-index: 1000;
+  backdrop-filter: blur(2px);
+  animation: fadeIn 0.3s ease-out;
+}
+
+// Animations
+@keyframes filterPulse {
+  0%, 100% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.1);
+  }
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+// Enhanced animations for panel entrance
+.quick-filters.show {
+  animation: slideInFromRight 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+.quick-filters.hide {
+  animation: slideOutToRight 0.3s ease-in;
+}
+
+@keyframes slideInFromRight {
+  0% {
+    opacity: 0;
+    transform: translateY(-50%) translateX(100%) scale(0.8);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(-50%) translateX(0) scale(1);
+  }
+}
+
+@keyframes slideOutToRight {
+  0% {
+    opacity: 1;
+    transform: translateY(-50%) translateX(0) scale(1);
+  }
+  100% {
+    opacity: 0;
+    transform: translateY(-50%) translateX(100%) scale(0.8);
+  }
+}
+
+// Special effects for active filter
+.quick-filter-btn.active {
+  position: relative;
+
+  &::after {
+    content: '✓';
+    position: absolute;
+    right: 15px;
+    top: 50%;
+    transform: translateY(-50%);
+    font-weight: bold;
+    font-size: 16px;
+    color: white;
+    animation: checkMark 0.3s ease-out;
+  }
+}
+
+@keyframes checkMark {
+  0% {
+    opacity: 0;
+    transform: translateY(-50%) scale(0);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(-50%) scale(1);
+  }
+}
+
+// Enhanced hover effects
+.quick-filters-toggle-btn {
+  &::before {
+    content: '';
+    position: absolute;
+    top: -2px;
+    left: -2px;
+    right: -2px;
+    bottom: -2px;
+    background: linear-gradient(45deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+    border-radius: inherit;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+    z-index: -1;
+  }
+
+  &:hover::before {
+    opacity: 1;
+    animation: shimmerEffect 1.5s ease-in-out infinite;
+  }
+}
+
+@keyframes shimmerEffect {
+  0% {
+    background-position: -200% 0;
+  }
+  100% {
+    background-position: 200% 0;
+  }
 }
