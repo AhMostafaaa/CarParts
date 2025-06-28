@@ -9,7 +9,6 @@ import { PartDetailsComponent } from './part-details/part-details.component';
 import { SharedModule } from '../../../Shared/shared.module';
 import { PartSearchComponent } from './part-search/part-search.component';
 import { NgImageSliderModule } from 'ng-image-slider';
-import { BrandPartsComponent } from './brand-parts/brand-parts.component';
 
 
 @NgModule({
@@ -20,7 +19,6 @@ import { BrandPartsComponent } from './brand-parts/brand-parts.component';
     PartListComponent,
     PartCardComponent,
     PartDetailsComponent,
-    BrandPartsComponent
   ],
   imports: [
     SharedModule,

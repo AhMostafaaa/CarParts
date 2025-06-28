@@ -10,7 +10,7 @@
   <div class="swiper">
     <div class="swiper-wrapper">
       <div class="swiper-slide" *ngFor="let brand of carBrands">
-        <div class="brand-card" [routerLink]="['/parts/brand', brand.id]">
+        <div class="brand-card" [routerLink]="['/category', brand.id]">
           <div class="brand-image">
             <img [src]="brand.logo" [alt]="brand.name" />
           </div>

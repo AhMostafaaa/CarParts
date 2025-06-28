@@ -7,7 +7,7 @@
   <div #swiperRef class="swiper">
     <div class="swiper-wrapper">
       <div class="swiper-slide" *ngFor="let part of partTypes; trackBy: trackByPartName">
-        <div class="part-card"  [routerLink]="['/parts/brand', part.id]">
+        <div class="part-card"  [routerLink]="['/category', part.id]">
           <div class="icon-wrapper">
             <img [src]="part.imageUrl" [alt]="part.name" class="part-icon" />
           </div>
