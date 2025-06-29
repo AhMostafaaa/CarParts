@@ -1,11 +1,11 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
-import { PartsComponent } from './parts.component';
 import { PartDetailsComponent } from './part-details/part-details.component';
+import { AllPartsComponent } from './all-parts.component';
 
 const routes: Routes = [
   { path: ':id', component: PartDetailsComponent },       // بعده
-  { path: '', component: PartsComponent }                 // في النهاية
+  { path: '', component: AllPartsComponent },                 // في النهاية
 ];
 
 

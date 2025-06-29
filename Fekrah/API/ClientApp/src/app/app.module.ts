@@ -11,6 +11,7 @@ import { PreNavbarComponent } from './Shared/layout/pre-navbar/pre-navbar.compon
 import { registerLocaleData } from '@angular/common';
 import localeAr from '@angular/common/locales/ar';
 import { EnhancedSearchComponent } from './Shared/components/enhanced-search/enhanced-search.component';
+import { PartsFilterComponent } from './Shared/components/parts-filter/parts-filter.component';
 
 registerLocaleData(localeAr);
 
@@ -20,7 +21,8 @@ registerLocaleData(localeAr);
     HeaderComponent,
     PromoTickerComponent,
     PreNavbarComponent,
-    EnhancedSearchComponent
+    EnhancedSearchComponent,
+    PartsFilterComponent
   ],
   imports: [
     BrowserModule,
@@ -31,9 +33,10 @@ registerLocaleData(localeAr);
     FooterModule
 
   ],
-    exports: [
+  exports: [
     HeaderComponent,
-    EnhancedSearchComponent 
+    EnhancedSearchComponent,
+    PartsFilterComponent
   ],
   providers: [{ provide: LOCALE_ID, useValue: 'ar-EG' }
   ],

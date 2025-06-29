@@ -1,7 +1,9 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
-import { Subject, takeUntil } from 'rxjs';
 
-// إذا لم يتم إنشاء Service بعد، استخدم هذا التعريف المؤقت:
+
+import { Component, OnInit, OnDestroy, HostListener, Renderer2, ElementRef } from '@angular/core';
+import { Subject } from 'rxjs';
+import { FilterService } from './Shared/Services/filter.service';
+
 interface UserData {
   isLoggedIn: boolean;
   isMerchant: boolean;
@@ -13,6 +15,18 @@ interface UserData {
   deliveryOrdersCount: number;
 }
 
+interface FilterData {
+  searchText?: string;
+  brand?: string;
+  model?: string;
+  year?: number;
+  condition?: string;
+  partCategory?: string;
+  priceRange?: string;
+  location?: string;
+  inStock?: boolean;
+}
+
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
@@ -20,13 +34,19 @@ interface UserData {
 })
 export class AppComponent implements OnInit, OnDestroy {
   title = 'قطع غيار';
-
   private destroy$ = new Subject<void>();
 
-  // بيانات المستخدم (مؤقتة حتى يتم إنشاء Service)
+  filtersOpened = false;
+  isMobile = false;
+  isTablet = false;
+  showDisabledMessage = false; // لإظهار رسالة التعطيل (اختياري)
+
+  // للتحكم في تأثيرات الانميشن
+  private animationTimeout: any;
+
   userData: UserData = {
     isLoggedIn: false,
-    isMerchant: true,
+    isMerchant: false,
     isDriver: false,
     userName: '',
     userAvatar: '',
@@ -35,35 +55,149 @@ export class AppComponent implements OnInit, OnDestroy {
     deliveryOrdersCount: 0
   };
 
-  promoOffers = [
-    { id: 1, title: 'خصم خاص على فلاتر الهواء' },
-    { id: 2, title: 'عروض بطاريات السيارات - ضمان سنة' },
-    { id: 3, title: 'مساعدين بأسعار خاصة لفترة محدودة' },
-    { id: 4, title: 'ردياتيرات أصلية بنصف السعر' },
-    { id: 5, title: 'قطع غيار كهرباء بخصومات ضخمة' },
-    { id: 6, title: 'أكسسوارات أصلية بأفضل الأسعار' },
-    { id: 7, title: 'أطقم فرامل بضمان سنتين' }
-  ];
-
-  constructor() {}
+  constructor(
+    private filterService: FilterService,
+    private renderer: Renderer2,
+    private elementRef: ElementRef
+  ) {
+    this.checkDeviceType();
+  }
 
   ngOnInit(): void {
-    // تحميل البيانات من localStorage
     this.loadUserData();
-
-    // تحديث دوري للطلبات
-    setInterval(() => {
-      this.updateOrdersCounts();
-    }, 30000);
+    this.setupOrdersUpdateInterval();
+    this.initializePageSetup();
   }
 
   ngOnDestroy(): void {
     this.destroy$.next();
     this.destroy$.complete();
+
+    if (this.animationTimeout) {
+      clearTimeout(this.animationTimeout);
+    }
   }
 
-  // تحميل بيانات المستخدم
-  loadUserData(): void {
+  // مراقبة تغيير حجم الشاشة
+  @HostListener('window:resize', ['$event'])
+  onResize(event: any): void {
+    this.checkDeviceType();
+
+    // إغلاق الفلتر تلقائياً عند التبديل من الجوال للكمبيوتر
+    if (!this.isMobile && !this.isTablet && this.filtersOpened) {
+      this.closeFilters();
+    }
+  }
+
+  // إغلاق الفلتر عند الضغط على Escape
+  @HostListener('document:keydown.escape', ['$event'])
+  onEscapeKey(event: KeyboardEvent): void {
+    if (this.filtersOpened) {
+      this.closeFilters();
+    }
+  }
+
+  // منع التمرير عند فتح الفلتر في الجوال
+  @HostListener('document:touchmove', ['$event'])
+  onTouchMove(event: TouchEvent): void {
+    if (this.filtersOpened && (this.isMobile || this.isTablet)) {
+      event.preventDefault();
+    }
+  }
+
+  private checkDeviceType(): void {
+    const width = window.innerWidth;
+    this.isMobile = width < 768;
+    this.isTablet = width >= 768 && width < 1024;
+  }
+
+  private initializePageSetup(): void {
+    // إضافة classes أساسية للـ body
+    this.renderer.addClass(document.body, 'app-initialized');
+    this.renderer.setStyle(document.body, 'overflow-x', 'hidden');
+  }
+
+  toggleFilters(): void {
+    if (this.filtersOpened) {
+      this.closeFilters();
+    } else {
+      this.openFilters();
+    }
+  }
+
+  private openFilters(): void {
+    this.filtersOpened = true;
+
+    // إضافة class للـ body
+    this.renderer.addClass(document.body, 'filter-open');
+
+    // تعطيل التمرير في جميع الشاشات
+    this.renderer.setStyle(document.body, 'overflow', 'hidden');
+    this.renderer.setStyle(document.body, 'height', '100vh');
+
+    // منع التفاعل مع الخلفية
+    this.renderer.setStyle(document.body, 'user-select', 'none');
+
+    // في الجوال والتابلت، منع التمرير إضافي
+    if (this.isMobile || this.isTablet) {
+      this.renderer.setStyle(document.body, 'position', 'fixed');
+      this.renderer.setStyle(document.body, 'width', '100%');
+    }
+
+    // إظهار رسالة التعطيل (اختياري)
+    // this.showDisabledMessage = true;
+
+    // تأثير تأخير لسلاسة الانميشن
+    this.animationTimeout = setTimeout(() => {
+      this.renderer.addClass(document.body, 'filter-animation-complete');
+    }, 100);
+
+    // إحصائيات الاستخدام
+    this.trackFilterUsage('opened');
+  }
+
+  closeFilters(): void {
+    this.filtersOpened = false;
+    this.showDisabledMessage = false;
+
+    // إزالة classes
+    this.renderer.removeClass(document.body, 'filter-open');
+    this.renderer.removeClass(document.body, 'filter-animation-complete');
+
+    // استعادة التمرير والتفاعل
+    this.renderer.removeStyle(document.body, 'overflow');
+    this.renderer.removeStyle(document.body, 'height');
+    this.renderer.removeStyle(document.body, 'user-select');
+    this.renderer.removeStyle(document.body, 'position');
+    this.renderer.removeStyle(document.body, 'width');
+
+    // مسح timeout إذا كان موجود
+    if (this.animationTimeout) {
+      clearTimeout(this.animationTimeout);
+    }
+
+    // إحصائيات الاستخدام
+    this.trackFilterUsage('closed');
+  }
+
+  handleFilters(filters: FilterData): void {
+    try {
+      // تحديث الفلاتر في الخدمة
+      this.filterService.updateFilters(filters);
+
+      // حفظ الفلاتر المطبقة
+      this.saveFilterState(filters);
+
+      // إحصائيات الفلاتر المطبقة
+      this.trackFilterUsage('applied', filters);
+
+      console.log('Applied filters:', filters);
+    } catch (error) {
+      console.error('Error applying filters:', error);
+    }
+  }
+
+  private loadUserData(): void {
     try {
       const authToken = localStorage.getItem('auth_token');
       const userDataStr = localStorage.getItem('user_data');
@@ -84,79 +218,11 @@ export class AppComponent implements OnInit, OnDestroy {
       }
     } catch (error) {
       console.error('Error loading user data:', error);
+      this.resetUserData();
     }
   }
 
-  // تحديث عدد الطلبات
-  updateOrdersCounts(): void {
-    if (this.userData.isMerchant) {
-      const pendingOrders = localStorage.getItem('pending_orders_count');
-      this.userData.pendingOrdersCount = pendingOrders ? parseInt(pendingOrders) : 0;
-    }
-
-    if (this.userData.isDriver) {
-      const deliveryOrders = localStorage.getItem('delivery_orders_count');
-      this.userData.deliveryOrdersCount = deliveryOrders ? parseInt(deliveryOrders) : 0;
-    }
-  }
-
-  // وظائف للتجربة
-  debugSimulateMerchant(): void {
-    const mockUser = {
-      id: '1',
-      name: 'محمد التاجر',
-      email: 'merchant@example.com',
-      type: 'merchant',
-      avatar: ''
-    };
-
-    localStorage.setItem('auth_token', 'mock_token_' + Date.now());
-    localStorage.setItem('user_data', JSON.stringify(mockUser));
-    localStorage.setItem('pending_orders_count', '5');
-
-    this.loadUserData();
-    console.log('تم محاكاة تسجيل دخول تاجر');
-  }
-
-  debugSimulateDriver(): void {
-    const mockUser = {
-      id: '2',
-      name: 'أحمد المراسل',
-      email: 'driver@example.com',
-      type: 'driver',
-      avatar: ''
-    };
-
-    localStorage.setItem('auth_token', 'mock_token_' + Date.now());
-    localStorage.setItem('user_data', JSON.stringify(mockUser));
-    localStorage.setItem('delivery_orders_count', '3');
-
-    this.loadUserData();
-    console.log('تم محاكاة تسجيل دخول مراسل');
-  }
-
-  debugAddOrder(): void {
-    if (this.userData.isMerchant) {
-      this.userData.pendingOrdersCount += 1;
-      localStorage.setItem('pending_orders_count', this.userData.pendingOrdersCount.toString());
-      console.log('تم إضافة طلب جديد:', this.userData.pendingOrdersCount);
-    }
-  }
-
-  debugAddDelivery(): void {
-    if (this.userData.isDriver) {
-      this.userData.deliveryOrdersCount += 1;
-      localStorage.setItem('delivery_orders_count', this.userData.deliveryOrdersCount.toString());
-      console.log('تم إضافة طلب توصيل:', this.userData.deliveryOrdersCount);
-    }
-  }
-
-  debugLogout(): void {
-    localStorage.removeItem('auth_token');
-    localStorage.removeItem('user_data');
-    localStorage.removeItem('pending_orders_count');
-    localStorage.removeItem('delivery_orders_count');
-
+  private resetUserData(): void {
     this.userData = {
       isLoggedIn: false,
       isMerchant: false,
@@ -167,7 +233,120 @@ export class AppComponent implements OnInit, OnDestroy {
       pendingOrdersCount: 0,
       deliveryOrdersCount: 0
     };
-
-    console.log('تم تسجيل الخروج');
   }
+
+  private setupOrdersUpdateInterval(): void {
+    // تحديث عداد الطلبات كل 30 ثانية للمستخدمين المسجلين
+    setInterval(() => {
+      if (this.userData.isLoggedIn) {
+        this.updateOrdersCounts();
+      }
+    }, 30000);
+  }
+
+  private updateOrdersCounts(): void {
+    try {
+      if (this.userData.isMerchant) {
+        const pendingOrders = localStorage.getItem('pending_orders_count');
+        this.userData.pendingOrdersCount = pendingOrders ? parseInt(pendingOrders, 10) : 0;
+      }
+
+      if (this.userData.isDriver) {
+        const deliveryOrders = localStorage.getItem('delivery_orders_count');
+        this.userData.deliveryOrdersCount = deliveryOrders ? parseInt(deliveryOrders, 10) : 0;
+      }
+    } catch (error) {
+      console.error('Error updating orders counts:', error);
+    }
+  }
+
+  // دالة مساعدة لحفظ حالة الفلتر
+  private saveFilterState(filters: FilterData): void {
+    try {
+      localStorage.setItem('saved_filters', JSON.stringify(filters));
+      localStorage.setItem('filter_last_used', new Date().toISOString());
+    } catch (error) {
+      console.error('Error saving filter state:', error);
+    }
+  }
+
+  // دالة مساعدة لاستعادة حالة الفلتر
+  loadFilterState(): FilterData | null {
+    try {
+      const saved = localStorage.getItem('saved_filters');
+      return saved ? JSON.parse(saved) : null;
+    } catch (error) {
+      console.error('Error loading filter state:', error);
+      return null;
+    }
+  }
+
+  // تتبع استخدام الفلتر للإحصائيات
+  private trackFilterUsage(action: string, filters?: FilterData): void {
+    try {
+      const usage = {
+        action,
+        timestamp: new Date().toISOString(),
+        deviceType: this.isMobile ? 'mobile' : this.isTablet ? 'tablet' : 'desktop',
+        filters: filters || null,
+        userType: this.userData.userType
+      };
+
+      // حفظ في localStorage للإحصائيات
+      const existingUsage = JSON.parse(localStorage.getItem('filter_usage') || '[]');
+      existingUsage.push(usage);
+
+      // الاحتفاظ بآخر 100 حدث فقط
+      const recentUsage = existingUsage.slice(-100);
+      localStorage.setItem('filter_usage', JSON.stringify(recentUsage));
+
+    } catch (error) {
+      console.error('Error tracking filter usage:', error);
+    }
+  }
+
+  // دالة للحصول على إحصائيات الفلتر
+  getFilterStatistics(): any {
+    try {
+      const usage = JSON.parse(localStorage.getItem('filter_usage') || '[]');
+      const totalOpened = usage.filter((u: any) => u.action === 'opened').length;
+      const totalApplied = usage.filter((u: any) => u.action === 'applied').length;
+
+      return {
+        totalOpened,
+        totalApplied,
+        conversionRate: totalOpened > 0 ? (totalApplied / totalOpened * 100).toFixed(2) : 0,
+        lastUsed: localStorage.getItem('filter_last_used')
+      };
+    } catch (error) {
+      console.error('Error getting filter statistics:', error);
+      return null;
+    }
+  }
+
+  // دالة لتحسين الأداء - تنظيف الذاكرة
+  private cleanupMemory(): void {
+    // تنظيف timeouts
+    if (this.animationTimeout) {
+      clearTimeout(this.animationTimeout);
+      this.animationTimeout = null;
+    }
+
+    // تنظيف event listeners إضافية إذا كانت موجودة
+    // هذا يتم تلقائياً عبر Angular لكن يمكن إضافة تنظيف يدوي إذا لزم الأمر
+  }
+
+  onSiteClick(event: Event): void {
+    if (this.filtersOpened) {
+      // التأكد من أن النقر ليس على زر الفلتر نفسه
+      const target = event.target as HTMLElement;
+      const isFilterButton = target.closest('.filter-toggle-btn');
+
+      if (!isFilterButton) {
+        this.closeFilters();
+      }
+    }
+  }
+
+
 }

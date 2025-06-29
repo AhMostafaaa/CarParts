@@ -1,6 +1,6 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { FormsModule } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { HttpClientModule } from '@angular/common/http';
 import { RouterModule } from '@angular/router';
 import { PartCardComponent } from './components/part-card/part-card.component';
@@ -17,8 +17,7 @@ import { OfferCardComponent } from './components/offer-card/offer-card.component
     HttpClientModule,
     RouterModule,
     NgxPaginationModule,
-
-
+    ReactiveFormsModule
   ],
   exports: [
     CommonModule,
@@ -32,7 +31,6 @@ import { OfferCardComponent } from './components/offer-card/offer-card.component
     OfferCardComponent,
     BreadcrumbComponent,
 
-
   ],
   declarations: [
     PartCardComponent,
@@ -40,7 +38,6 @@ import { OfferCardComponent } from './components/offer-card/offer-card.component
     CardComponent,
     BreadcrumbComponent,
     OfferCardComponent,
-
   ]
 })
 export class SharedModule { }
