@@ -140,10 +140,10 @@ export class OrderDetailsComponent implements OnInit, OnDestroy {
 
   // Section visibility states
   sectionStates = {
-    customer: true,      // بيانات العميل مفتوحة بشكل افتراضي
-    items: true,         // عناصر الطلب مفتوحة بشكل افتراضي
+    customer: false,      // بيانات العميل مفتوحة بشكل افتراضي
+    items: false,         // عناصر الطلب مفتوحة بشكل افتراضي
     payment: false,      // الدفع والتوصيل
-    summary: true,       // ملخص الطلب مفتوح بشكل افتراضي
+    summary: false,       // ملخص الطلب مفتوح بشكل افتراضي
     notes: false,        // الملاحظات
     timeline: false,     // التاريخ الزمني
     quickActions: false, // الإجراءات السريعة
@@ -268,8 +268,18 @@ export class OrderDetailsComponent implements OnInit, OnDestroy {
   }
 
   // Section toggle functionality
+  // تعديل دالة toggleSection لتغلق باقي الـ tabs
   toggleSection(sectionName: keyof typeof this.sectionStates): void {
-    this.sectionStates[sectionName] = !this.sectionStates[sectionName];
+    // إذا كان الـ section مفتوح، أغلقه
+    if (this.sectionStates[sectionName]) {
+      this.sectionStates[sectionName] = false;
+    } else {
+      // أغلق جميع الـ sections أولاً
+      this.collapseAllSections();
+
+      // ثم افتح الـ section المطلوب
+      this.sectionStates[sectionName] = true;
+    }
 
     // Save user preferences
     this.saveSectionPreferences();
@@ -303,21 +313,47 @@ export class OrderDetailsComponent implements OnInit, OnDestroy {
     }
   }
 
-  // Expand/Collapse all sections
+  // تعديل دالة expandAllSections لتفتح section واحد في كل مرة
   expandAllSections(): void {
-    Object.keys(this.sectionStates).forEach(key => {
-      this.sectionStates[key as keyof typeof this.sectionStates] = true;
-    });
+    // بدلاً من فتح الكل، افتح أول section فقط
+    this.collapseAllSections();
+    this.sectionStates.customer = true;
     this.saveSectionPreferences();
+
+    // إظهار رسالة توضيحية
+    this.showSuccessMessage('تم فتح القسم الأول. يمكنك فتح قسم واحد فقط في كل مرة');
   }
 
   collapseAllSections(): void {
     Object.keys(this.sectionStates).forEach(key => {
       this.sectionStates[key as keyof typeof this.sectionStates] = false;
     });
-    this.saveSectionPreferences();
+  }
+ // إضافة دالة جديدة لفتح section محدد وإغلاق الباقي
+ openSingleSection(sectionName: keyof typeof this.sectionStates): void {
+  // أغلق جميع الـ sections
+  this.collapseAllSections();
+
+  // افتح الـ section المطلوب فقط
+  this.sectionStates[sectionName] = true;
+
+  this.saveSectionPreferences();
+  this.animateToggle(sectionName);
+}
+
+
+  // دالة للتحقق من وجود sections مفتوحة
+  hasOpenSections(): boolean {
+    return Object.values(this.sectionStates).some(state => state === true);
   }
 
+  // دالة للحصول على الـ section المفتوح حالياً
+  getOpenSection(): keyof typeof this.sectionStates | null {
+    const openSection = Object.entries(this.sectionStates)
+      .find(([key, value]) => value === true);
+
+    return openSection ? openSection[0] as keyof typeof this.sectionStates : null;
+  }
   // Load order details
   private loadOrderDetails(): void {
     if (this.selectedOrder) {

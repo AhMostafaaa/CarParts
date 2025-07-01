@@ -1,7 +1,18 @@
 // featured-stores.component.ts
-import { Component, OnInit, AfterViewInit, ViewChild, ElementRef } from '@angular/core';
+import {
+  Component,
+  OnInit,
+  AfterViewInit,
+  ViewChild,
+  ElementRef,
+  OnDestroy,
+  ChangeDetectionStrategy,
+  ChangeDetectorRef
+} from '@angular/core';
 import { Router } from '@angular/router';
 import { StoresService } from 'src/app/Shared/Services/stores.service';
+import { BehaviorSubject, Observable } from 'rxjs';
+import { finalize } from 'rxjs/operators';
 import Swiper from 'swiper';
 
 export interface Seller {
@@ -18,19 +29,29 @@ export interface Seller {
 @Component({
   selector: 'app-featured-stores',
   templateUrl: './featured-stores.component.html',
-  styleUrls: ['./featured-stores.component.scss']
+  styleUrls: ['./featured-stores.component.scss'],
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class FeaturedStoresComponent implements OnInit, AfterViewInit {
+export class FeaturedStoresComponent implements OnInit, AfterViewInit, OnDestroy {
   @ViewChild('swiperContainer', { static: false }) swiperContainer!: ElementRef;
-  
-  sellers: Seller[] = [];
-  isLoading = false;
+
+  private sellersSubject = new BehaviorSubject<Seller[]>([]);
+  private loadingSubject = new BehaviorSubject<boolean>(false);
+
+  sellers$: Observable<Seller[]> = this.sellersSubject.asObservable();
+  isLoading$: Observable<boolean> = this.loadingSubject.asObservable();
+
   swiper!: Swiper;
   showViewMore = false;
+  private swiperInitialized = false;
+
+  // Pre-generate star arrays to avoid template function calls
+  readonly starArray = [1, 2, 3, 4, 5];
 
   constructor(
     private storesService: StoresService,
-    private router: Router
+    private router: Router,
+    private cdr: ChangeDetectorRef
   ) {}
 
   ngOnInit(): void {
@@ -38,140 +59,150 @@ export class FeaturedStoresComponent implements OnInit, AfterViewInit {
   }
 
   ngAfterViewInit(): void {
-    this.initializeSwiper();
+    // Use requestAnimationFrame for better performance
+    requestAnimationFrame(() => {
+      this.initializeSwiper();
+    });
   }
 
   loadFeaturedStores(): void {
-    this.isLoading = true;
-    
-    this.storesService.getFeaturedStores(8).subscribe({
-      next: (stores: any[]) => {
-        this.sellers = stores.map(store => ({
-          id: store.id,
-          name: store.arabicName,
-          imageUrl: store.logo,
-          location: store.arabicLocation,
-          category: store.arabicSpecialties[0] || 'قطع غيار',
-          isTrusted: store.isVerified,
-          rating: store.rating,
-          reviewsCount: store.reviewsCount
-        }));
-        
-        // إظهار زر "عرض المزيد" إذا كان هناك أكثر من 6 متاجر
-        this.showViewMore = this.sellers.length >= 6;
-        this.isLoading = false;
-        
-        // إعادة تهيئة السوايبر بعد تحديث البيانات
-        setTimeout(() => {
-          if (this.swiper) {
-            this.swiper.update();
+    this.loadingSubject.next(true);
+
+    this.storesService.getFeaturedStores(8)
+      .pipe(
+        finalize(() => this.loadingSubject.next(false))
+      )
+      .subscribe({
+        next: (stores: any[]) => {
+          const sellers = stores.map(store => ({
+            id: store.id,
+            name: store.arabicName,
+            imageUrl: store.logo || 'assets/images/default-store-logo.png',
+            location: store.arabicLocation,
+            category: store.arabicSpecialties?.[0] || 'قطع غيار',
+            isTrusted: store.isVerified,
+            rating: store.rating,
+            reviewsCount: store.reviewsCount
+          }));
+
+          this.sellersSubject.next(sellers);
+          this.showViewMore = sellers.length >= 6;
+
+          // Update swiper after data is loaded
+          if (this.swiperInitialized) {
+            setTimeout(() => this.swiper?.update(), 50);
           } else {
-            this.initializeSwiper();
+            setTimeout(() => this.initializeSwiper(), 100);
           }
-        }, 100);
-      },
-      error: (error) => {
-        console.error('Error loading featured stores:', error);
-        this.isLoading = false;
-      }
-    });
+
+          this.cdr.markForCheck();
+        },
+        error: (error) => {
+          console.error('Error loading featured stores:', error);
+          this.sellersSubject.next([]);
+          this.cdr.markForCheck();
+        }
+      });
   }
 
   initializeSwiper(): void {
-    if (!this.swiperContainer) return;
+    if (!this.swiperContainer?.nativeElement || this.swiperInitialized) return;
 
-    // تدمير السوايبر السابق إن وجد
-    if (this.swiper) {
-      this.swiper.destroy(true, true);
+    try {
+      this.swiper = new Swiper(this.swiperContainer.nativeElement, {
+        slidesPerView: 'auto',
+        spaceBetween: 20,
+        centeredSlides: false,
+        loop: false,
+        autoplay: {
+          delay: 4000,
+          disableOnInteraction: false,
+          pauseOnMouseEnter: true
+        },
+        pagination: {
+          el: '.swiper-pagination',
+          clickable: true,
+          dynamicBullets: true
+        },
+        navigation: {
+          nextEl: '.swiper-button-next',
+          prevEl: '.swiper-button-prev',
+        },
+        breakpoints: {
+          320: {
+            slidesPerView: 1.2,
+            spaceBetween: 15
+          },
+          480: {
+            slidesPerView: 1.5,
+            spaceBetween: 15
+          },
+          768: {
+            slidesPerView: 2.5,
+            spaceBetween: 20
+          },
+          1024: {
+            slidesPerView: 3.5,
+            spaceBetween: 20
+          },
+          1200: {
+            slidesPerView: 4,
+            spaceBetween: 25
+          }
+        },
+        on: {
+          init: () => {
+            this.swiperInitialized = true;
+            console.log('Swiper initialized');
+          }
+        }
+      });
+    } catch (error) {
+      console.error('Error initializing swiper:', error);
     }
-
-    this.swiper = new Swiper(this.swiperContainer.nativeElement, {
-      slidesPerView: 'auto',
-      spaceBetween: 20,
-      centeredSlides: false,
-      loop: false,
-      autoplay: {
-        delay: 3000,
-        disableOnInteraction: false,
-        pauseOnMouseEnter: true
-      },
-      pagination: {
-        el: '.swiper-pagination',
-        clickable: true,
-        dynamicBullets: true
-      },
-      navigation: {
-        nextEl: '.swiper-button-next',
-        prevEl: '.swiper-button-prev',
-      },
-      breakpoints: {
-        320: {
-          slidesPerView: 1.2,
-          spaceBetween: 15
-        },
-        480: {
-          slidesPerView: 1.5,
-          spaceBetween: 15
-        },
-        768: {
-          slidesPerView: 2.5,
-          spaceBetween: 20
-        },
-        1024: {
-          slidesPerView: 3.5,
-          spaceBetween: 20
-        },
-        1200: {
-          slidesPerView: 4,
-          spaceBetween: 25
-        }
-      },
-      on: {
-        init: () => {
-          console.log('Swiper initialized');
-        }
-      }
-    });
   }
 
-  onImageError(event: Event): void {
+  // Optimized trackBy function for sellers
+  trackBySellerId = (index: number, seller: Seller): number => seller.id;
+
+  // Optimized trackBy function for stars
+  trackByIndex = (index: number): number => index;
+
+  // Pre-bound methods to avoid template function calls
+  onImageError = (event: Event): void => {
     const target = event.target as HTMLImageElement;
-    target.src = 'assets/images/default-store-logo.png';
-  }
+    if (target.src !== 'assets/images/default-store-logo.png') {
+      target.src = 'assets/images/default-store-logo.png';
+    }
+  };
 
-  viewAllStores(): void {
+  viewAllStores = (): void => {
     this.router.navigate(['seller/all-store'], {
       queryParams: { featured: true }
     });
-  }
+  };
 
-  viewStoresByCategory(category: string): void {
+  viewStoresByCategory = (category: string): void => {
     this.router.navigate(['/stores'], {
       queryParams: { category: category }
     });
-  }
+  };
 
-  viewStore(sellerId: number): void {
+  viewStore = (sellerId: number): void => {
     this.router.navigate(['/stores', sellerId]);
-  }
+  };
 
-  viewStoreProducts(sellerId: number): void {
-    this.router.navigate(['/products'], {
-      queryParams: { store: sellerId }
-    });
-  }
-
-  addToFavorites(sellerId: number): void {
-    console.log('Add store to favorites:', sellerId);
-  }
-
-  trackBySellerId(index: number, seller: Seller): number {
-    return seller.id;
+  // Helper method to get star class
+  getStarClass(star: number, rating: number): string {
+    return star <= rating ? 'fas fa-star active' : 'fas fa-star';
   }
 
   ngOnDestroy(): void {
     if (this.swiper) {
       this.swiper.destroy(true, true);
+      this.swiperInitialized = false;
     }
+    this.sellersSubject.complete();
+    this.loadingSubject.complete();
   }
 }

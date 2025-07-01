@@ -19,18 +19,10 @@
           <div class="col-lg-9 col-md-12 my-3">
             <div class="advanced-search-container">
               <div class="search-box">
-                <input
-                  type="text"
-                  class="form-control search-input"
-                  placeholder="ابحث عن متجر، قطع غيار، أو تخصص..."
-                  [(ngModel)]="searchTerm"
-                  (input)="onSearchInput($event)"
-                  (keyup.enter)="onSearch()"
-                  (focus)="
+                <input type="text" class="form-control search-input" placeholder="ابحث عن متجر، قطع غيار، أو تخصص..."
+                  [(ngModel)]="searchTerm" (input)="onSearchInput($event)" (keyup.enter)="onSearch()" (focus)="
                     showSearchSuggestions = true; showAdvancedFilters = false
-                  "
-                  (blur)="hideSearchSuggestions()"
-                />
+                  " (blur)="hideSearchSuggestions()" />
 
                 <!-- Search Icon & Voice Search -->
                 <!-- <div class="search-icons">
@@ -50,49 +42,30 @@
                 </div> -->
 
                 <!-- Search Suggestions Dropdown -->
-                <div
-                  class="search-suggestions"
-                  *ngIf="showSearchSuggestions && searchSuggestions.length > 0"
-                >
+                <div class="search-suggestions" *ngIf="showSearchSuggestions && searchSuggestions.length > 0">
                   <div class="suggestions-header">
                     <span>اقتراحات البحث</span>
-                    <button
-                      class="clear-history-btn"
-                      (click)="clearSearchHistory()"
-                    >
+                    <button class="clear-history-btn" (click)="clearSearchHistory()">
                       <i class="fas fa-trash-alt"></i>
                     </button>
                   </div>
-                  <div
-                    *ngFor="let suggestion of searchSuggestions"
-                    class="suggestion-item"
-                    (click)="selectSuggestion(suggestion)"
-                  >
+                  <div *ngFor="let suggestion of searchSuggestions" class="suggestion-item"
+                    (click)="selectSuggestion(suggestion)">
                     <i class="fas fa-history suggestion-icon"></i>
                     <span>{{ suggestion }}</span>
-                    <button
-                      class="remove-suggestion"
-                      (click)="
+                    <button class="remove-suggestion" (click)="
                         removeSuggestion(suggestion); $event.stopPropagation()
-                      "
-                    >
+                      ">
                       <i class="fas fa-times"></i>
                     </button>
                   </div>
                 </div>
 
                 <!-- Popular Searches -->
-                <div
-                  class="popular-searches"
-                  *ngIf="showSearchSuggestions && searchTerm.length === 0"
-                >
+                <div class="popular-searches" *ngIf="showSearchSuggestions && searchTerm.length === 0">
                   <div class="popular-header">البحث الشائع</div>
                   <div class="popular-tags">
-                    <span
-                      *ngFor="let tag of popularSearches"
-                      class="popular-tag"
-                      (click)="selectPopularSearch(tag)"
-                    >
+                    <span *ngFor="let tag of popularSearches" class="popular-tag" (click)="selectPopularSearch(tag)">
                       {{ tag }}
                     </span>
                   </div>
@@ -102,23 +75,13 @@
           </div>
 
           <!-- Advanced Filters Toggle -->
-          <div
-            class="col-lg-3 col-md-12 my-3 d-flex justify-content-end align-items-center"
-          >
-            <div
-              class="filters-header d-flex justify-content-end align-items-center"
-            >
-              <button
-                class="btn btn-outline-primary filters-toggle"
-                (click)="toggleAdvancedFilters()"
-                [class.active]="showAdvancedFilters"
-              >
+          <div class="col-lg-3 col-md-12 my-3 d-flex justify-content-end align-items-center">
+            <div class="filters-header d-flex justify-content-end align-items-center">
+              <button class="btn btn-outline-primary filters-toggle" (click)="toggleAdvancedFilters()"
+                [class.active]="showAdvancedFilters">
                 <i class="fas fa-filter"></i>
                 فلاتر متقدمة
-                <i
-                  class="fas fa-chevron-down toggle-icon"
-                  [class.rotated]="showAdvancedFilters"
-                ></i>
+                <i class="fas fa-chevron-down toggle-icon" [class.rotated]="showAdvancedFilters"></i>
               </button>
 
               <!-- Quick Filter Badges -->
@@ -141,15 +104,8 @@
             <div class="col-lg-3 col-md-6 mb-3">
               <label class="filter-label">التصنيف</label>
               <div class="custom-select-wrapper">
-                <select
-                  class="form-select filter-select"
-                  [(ngModel)]="selectedCategory"
-                  (change)="onCategoryChange()"
-                >
-                  <option
-                    *ngFor="let category of categories"
-                    [value]="category.value"
-                  >
+                <select class="form-select filter-select" [(ngModel)]="selectedCategory" (change)="onCategoryChange()">
+                  <option *ngFor="let category of categories" [value]="category.value">
                     {{ category.arabicLabel }}
                   </option>
                 </select>
@@ -161,20 +117,12 @@
             <div class="col-lg-3 col-md-6 mb-3">
               <label class="filter-label">التقييم</label>
               <div class="rating-filter">
-                <div
-                  *ngFor="let rating of ratingOptions"
-                  class="rating-option"
-                  [class.selected]="selectedRating === rating.value"
-                  (click)="selectRating(rating.value)"
-                >
+                <div *ngFor="let rating of ratingOptions" class="rating-option"
+                  [class.selected]="selectedRating === rating.value" (click)="selectRating(rating.value)">
                   <div class="rating-stars">
-                    <i
-                      *ngFor="let star of [1, 2, 3, 4, 5]"
-                      class="fas fa-star"
-                      [class.active]="
+                    <i *ngFor="let star of [1, 2, 3, 4, 5]" class="fas fa-star" [class.active]="
                         star <= +rating.value && +rating.value > 0
-                      "
-                    >
+                      ">
                     </i>
                   </div>
                   <span class="rating-label">{{ rating.label }}</span>
@@ -186,15 +134,8 @@
             <div class="col-lg-3 col-md-6 mb-3">
               <label class="filter-label">المحافظة</label>
               <div class="custom-select-wrapper">
-                <select
-                  class="form-select filter-select"
-                  [(ngModel)]="selectedLocation"
-                  (change)="onLocationChange()"
-                >
-                  <option
-                    *ngFor="let location of locationOptions"
-                    [value]="location.value"
-                  >
+                <select class="form-select filter-select" [(ngModel)]="selectedLocation" (change)="onLocationChange()">
+                  <option *ngFor="let location of locationOptions" [value]="location.value">
                     {{ location.label }}
                   </option>
                 </select>
@@ -207,21 +148,13 @@
               <label class="filter-label">نوع المتجر</label>
               <div class="checkbox-group">
                 <label class="checkbox-item">
-                  <input
-                    type="checkbox"
-                    [(ngModel)]="filters.verifiedOnly"
-                    (change)="onFilterChange()"
-                  />
+                  <input type="checkbox" [(ngModel)]="filters.verifiedOnly" (change)="onFilterChange()" />
                   <!-- <span class="checkmark"></span> -->
                   <!-- <span class="checkbox-label">متاجر موثقة فقط</span> -->
                   <i class="fas fa-check-circle verified-icon"></i>
                 </label>
                 <label class="checkbox-item">
-                  <input
-                    type="checkbox"
-                    [(ngModel)]="filters.featuredOnly"
-                    (change)="onFilterChange()"
-                  />
+                  <input type="checkbox" [(ngModel)]="filters.featuredOnly" (change)="onFilterChange()" />
                   <span class="checkmark"></span>
                   <span class="checkbox-label">متاجر مميزة فقط</span>
                   <i class="fas fa-star featured-icon"></i>
@@ -235,12 +168,8 @@
             <div class="col-md-8 mb-3">
               <label class="filter-label">ترتيب النتائج</label>
               <div class="sort-options">
-                <div
-                  *ngFor="let sort of sortOptions"
-                  class="sort-option"
-                  [class.active]="sortBy === sort.value"
-                  (click)="setSortBy(sort.value.toString())"
-                >
+                <div *ngFor="let sort of sortOptions" class="sort-option" [class.active]="sortBy === sort.value"
+                  (click)="setSortBy(sort.value.toString())">
                   <i class="fas" [ngClass]="sort.icon"></i>
                   <span>{{ sort.label }}</span>
                 </div>
@@ -250,19 +179,13 @@
             <div class="col-md-4 mb-3">
               <label class="filter-label">اتجاه الترتيب</label>
               <div class="sort-direction">
-                <button
-                  class="btn sort-direction-btn"
-                  [class.active]="sortOrder === 'asc'"
-                  (click)="setSortOrder('asc')"
-                >
+                <button class="btn sort-direction-btn" [class.active]="sortOrder === 'asc'"
+                  (click)="setSortOrder('asc')">
                   <i class="fas fa-sort-amount-up"></i>
                   تصاعدي
                 </button>
-                <button
-                  class="btn sort-direction-btn"
-                  [class.active]="sortOrder === 'desc'"
-                  (click)="setSortOrder('desc')"
-                >
+                <button class="btn sort-direction-btn" [class.active]="sortOrder === 'desc'"
+                  (click)="setSortOrder('desc')">
                   <i class="fas fa-sort-amount-down"></i>
                   تنازلي
                 </button>
@@ -272,17 +195,11 @@
 
           <!-- Filter Actions -->
           <div class="filter-actions">
-            <button
-              class="btn btn-primary apply-filters-btn"
-              (click)="applyFilters()"
-            >
+            <button class="btn btn-primary apply-filters-btn" (click)="applyFilters()">
               <i class="fas fa-check"></i>
               تطبيق الفلاتر
             </button>
-            <button
-              class="btn btn-outline-secondary clear-filters-btn"
-              (click)="clearFilters()"
-            >
+            <button class="btn btn-outline-secondary clear-filters-btn" (click)="clearFilters()">
               <i class="fas fa-times"></i>
               مسح جميع الفلاتر
             </button>
@@ -359,10 +276,7 @@
       <!-- Store Card Section Only - Replace the existing card in your HTML -->
       <div *ngIf="!isLoading && filteredStores.length > 0" class="stores-grid">
         <div class="row">
-          <div
-            *ngFor="let store of paginatedStores; trackBy: trackByStoreId"
-            class="col-xl-3 col-lg-4 col-md-6 mb-4"
-          >
+          <div *ngFor="let store of paginatedStores; trackBy: trackByStoreId" class="col-xl-3 col-lg-4 col-md-6 mb-4">
             <div class="store-card" [class.featured]="store.isFeatured">
               <!-- Enhanced Store Card -->
               <div class="card h-100 shadow-sm modern-card">
@@ -389,13 +303,8 @@
                 <!-- Store Logo Section -->
                 <div class="store-logo-container enhanced-logo bg-danger">
                   <div class="logo-wrapper">
-                    <img
-                      [src]="store.logo"
-                      [alt]="store.arabicName"
-                      class="store-logo enhanced-img"
-                      [loading]="'lazy'"
-                      onerror="this.src='assets/images/default-store-logo.png'"
-                    />
+                    <img [src]="store.logo" [alt]="store.arabicName" class="store-logo enhanced-img" [loading]="'lazy'"
+                      onerror="this.src='assets/images/default-store-logo.png'" />
                   </div>
 
                   <!-- Hover Overlay -->
@@ -424,7 +333,7 @@
                       <i class="fas fa-map-marker-alt location-icon"></i>
                       <span class="location-text">{{
                         store.arabicLocation
-                      }}</span>
+                        }}</span>
                     </div>
                   </div>
 
@@ -437,46 +346,33 @@
                   <div class="rating-section enhanced-rating">
                     <div class="stars-display">
                       <div class="stars-background">
-                        <i
-                          class="fas fa-star"
-                          *ngFor="let star of [1, 2, 3, 4, 5]"
-                        ></i>
+                        <i class="fas fa-star" *ngFor="let star of [1, 2, 3, 4, 5]"></i>
                       </div>
-                      <div
-                        class="stars-fill"
-                        [style.width.%]="(store.rating / 5) * 100"
-                      >
-                        <i
-                          class="fas fa-star"
-                          *ngFor="let star of [1, 2, 3, 4, 5]"
-                        ></i>
+                      <div class="stars-fill" [style.width.%]="(store.rating / 5) * 100">
+                        <i class="fas fa-star" *ngFor="let star of [1, 2, 3, 4, 5]"></i>
                       </div>
                     </div>
                     <div class="rating-info">
                       <span class="rating-number">{{ store.rating }}</span>
-                      <span class="reviews-text"
-                        >({{ store.reviewsCount }} مراجعة)</span
-                      >
+                      <span class="reviews-text">({{ store.reviewsCount }} مراجعة)</span>
                     </div>
                   </div>
 
                   <!-- Enhanced Specialties -->
+                  <!-- Enhanced Specialty Tags with truncation -->
                   <div class="specialties-section enhanced-tags">
                     <div class="specialty-tags-grid">
-                      <span
-                        *ngFor="
-                          let specialty of store.arabicSpecialties.slice(0, 3)
-                        "
-                        class="specialty-tag enhanced-tag"
-                      >
+                      <!-- عرض أول تخصصين فقط -->
+                      <span *ngFor="let specialty of store.arabicSpecialties.slice(0, 2)"
+                        class="specialty-tag enhanced-tag" [title]="specialty">
                         <i class="fas fa-tag tag-icon"></i>
-                        {{ specialty }}
+                        <span class="tag-text">{{ specialty }}</span>
                       </span>
-                      <span
-                        *ngIf="store.arabicSpecialties.length > 3"
-                        class="specialty-tag more-tag"
-                      >
-                        +{{ store.arabicSpecialties.length - 3 }}
+
+                      <!-- زر المزيد إذا كان هناك أكثر من تخصصين -->
+                      <span *ngIf="store.arabicSpecialties.length > 2" class="specialty-tag more-tag"
+                        [title]="'المزيد من التخصصات: ' + store.arabicSpecialties.slice(2).join(', ')">
+                        +{{ store.arabicSpecialties.length - 2 }}
                       </span>
                     </div>
                   </div>
@@ -502,22 +398,14 @@
                 <div class="card-footer enhanced-footer">
                   <!-- Main Actions -->
                   <div class="store-actions enhanced-actions">
-                    <a
-                      class="action-btn view-btn"
-                      [routerLink]="['/seller', store.id]"
-                      routerLinkActive="router-link-active"
-                      [title]="'عرض تفاصيل ' + store.arabicName"
-                    >
+                    <a class="action-btn view-btn" [routerLink]="['/seller', store.id]"
+                      routerLinkActive="router-link-active" [title]="'عرض تفاصيل ' + store.arabicName">
                       <i class="fas fa-eye"></i>
                       <span>عرض</span>
                     </a>
 
-                    <a
-                      class="action-btn shop-btn primary-btn"
-                      [routerLink]="['/seller', store.id]"
-                      routerLinkActive="router-link-active"
-                      [title]="'تسوق من ' + store.arabicName"
-                    >
+                    <a class="action-btn shop-btn primary-btn" [routerLink]="['/seller', store.id]"
+                      routerLinkActive="router-link-active" [title]="'تسوق من ' + store.arabicName">
                       <i class="fas fa-shopping-cart"></i>
                       <span>تسوق الآن</span>
                     </a>
@@ -568,20 +456,13 @@
       </div>
 
       <!-- Pagination -->
-      <div
-        *ngIf="!isLoading && filteredStores.length > 0 && totalPages > 1"
-        class="pagination-container"
-      >
+      <div *ngIf="!isLoading && filteredStores.length > 0 && totalPages > 1" class="pagination-container">
         <nav aria-label="تنقل الصفحات">
           <ul class="pagination justify-content-center">
             <!-- Previous Button -->
             <li class="page-item" [class.disabled]="currentPage === 1">
-              <button
-                class="page-link"
-                (click)="previousPage()"
-                [disabled]="currentPage === 1"
-                aria-label="الصفحة السابقة"
-              >
+              <button class="page-link" (click)="previousPage()" [disabled]="currentPage === 1"
+                aria-label="الصفحة السابقة">
                 <i class="fas fa-chevron-right"></i>
               </button>
             </li>
@@ -595,25 +476,14 @@
             </li>
 
             <!-- Page Numbers -->
-            <li
-              *ngFor="let page of pages"
-              class="page-item"
-              [class.active]="page === currentPage"
-            >
-              <button
-                class="page-link"
-                (click)="goToPage(page)"
-                [attr.aria-label]="'الذهاب إلى الصفحة ' + page"
-              >
+            <li *ngFor="let page of pages" class="page-item" [class.active]="page === currentPage">
+              <button class="page-link" (click)="goToPage(page)" [attr.aria-label]="'الذهاب إلى الصفحة ' + page">
                 {{ page }}
               </button>
             </li>
 
             <!-- Last Page -->
-            <li
-              *ngIf="pages[pages.length - 1] < totalPages - 1"
-              class="page-item disabled"
-            >
+            <li *ngIf="pages[pages.length - 1] < totalPages - 1" class="page-item disabled">
               <span class="page-link">...</span>
             </li>
             <li *ngIf="pages[pages.length - 1] < totalPages" class="page-item">
@@ -624,12 +494,8 @@
 
             <!-- Next Button -->
             <li class="page-item" [class.disabled]="currentPage === totalPages">
-              <button
-                class="page-link"
-                (click)="nextPage()"
-                [disabled]="currentPage === totalPages"
-                aria-label="الصفحة التالية"
-              >
+              <button class="page-link" (click)="nextPage()" [disabled]="currentPage === totalPages"
+                aria-label="الصفحة التالية">
                 <i class="fas fa-chevron-left"></i>
               </button>
             </li>

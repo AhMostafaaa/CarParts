@@ -125,7 +125,7 @@ export class MerchantOrdersComponent implements OnInit, OnDestroy {
 
   // Quick Filter properties
   quickFilter: string = 'all';
-  showQuickFilters: boolean = true;
+  showQuickFilters: boolean = false;
 
   // Processing properties
   isProcessing: boolean = false;
@@ -170,16 +170,57 @@ export class MerchantOrdersComponent implements OnInit, OnDestroy {
   }
 
   private setupEventListeners(): void {
-    // Close FAB menu when clicking outside
+    // Close quick filters when clicking outside
     document.addEventListener('click', (event) => {
       const target = event.target as HTMLElement;
-      const fabContainer = document.querySelector('.fab-container');
+      const quickFiltersContainer = document.querySelector('.quick-filters');
+      const toggleButton = document.querySelector('.quick-filters-toggle-btn');
 
+      if (this.showQuickFilters &&
+          quickFiltersContainer &&
+          !quickFiltersContainer.contains(target) &&
+          toggleButton &&
+          !toggleButton.contains(target)) {
+        this.hideQuickFilters();
+      }
+
+      // Existing FAB menu logic
+      const fabContainer = document.querySelector('.fab-container');
       if (fabContainer && !fabContainer.contains(target) && this.fabMenuOpen) {
         this.fabMenuOpen = false;
       }
     });
+
+    // Close quick filters with Escape key
+    document.addEventListener('keydown', (event) => {
+      if (event.key === 'Escape' && this.showQuickFilters) {
+        this.hideQuickFilters();
+      }
+    });
   }
+
+
+    // Quick Filter Methods - ADD THESE NEW METHODS
+    toggleQuickFilters(): void {
+      this.showQuickFilters = !this.showQuickFilters;
+
+      if (this.showQuickFilters) {
+        // Close FAB menu if open
+        this.fabMenuOpen = false;
+        this.showNotification('تم فتح لوحة التصفية السريعة', 'info');
+      } else {
+        this.showNotification('تم إغلاق لوحة التصفية السريعة', 'info');
+      }
+    }
+
+    hideQuickFilters(): void {
+      this.showQuickFilters = false;
+    }
+
+    showQuickFiltersPanel(): void {
+      this.showQuickFilters = true;
+      this.showNotification('تم فتح لوحة التصفية السريعة', 'info');
+    }
 
   ngOnDestroy(): void {
     this.destroy$.next();
@@ -847,7 +888,7 @@ export class MerchantOrdersComponent implements OnInit, OnDestroy {
     this.showNotification('سيتم فتح نافذة الإحصائيات قريباً', 'info');
   }
 
-  // Quick Filter Methods
+  // Enhanced Quick Filter Methods - UPDATE EXISTING METHOD
   applyQuickFilter(filter: string): void {
     this.quickFilter = filter;
 
@@ -868,11 +909,29 @@ export class MerchantOrdersComponent implements OnInit, OnDestroy {
         this.selectedStatus = 'all';
         this.selectedDate = '';
         // Filter for high priority orders
+        this.filteredOrders = this.filteredOrders.filter(order =>
+          order.priority === 'high' ||
+          this.isUrgentOrder(order)
+        );
         break;
     }
 
-    this.applyFilters();
-    this.showNotification(`تم تطبيق فلتر: ${this.getQuickFilterLabel(filter)}`, 'info');
+    // Apply filters if not urgent (urgent has custom logic above)
+    if (filter !== 'urgent') {
+      this.applyFilters();
+    } else {
+      this.updatePagination();
+    }
+
+    const filterLabel = this.getQuickFilterLabel(filter);
+    this.showNotification(`تم تطبيق فلتر: ${filterLabel}`, 'success');
+
+    // Auto-hide quick filters after selection on mobile
+    if (window.innerWidth <= 768) {
+      setTimeout(() => {
+        this.hideQuickFilters();
+      }, 1500);
+    }
   }
 
   private getQuickFilterLabel(filter: string): string {
@@ -1063,5 +1122,20 @@ export class MerchantOrdersComponent implements OnInit, OnDestroy {
 
   goToReports(): void {
     this.router.navigate(['/merchant/reports']);
+  }
+
+
+   // Helper method to determine if order is urgent
+   private isUrgentOrder(order: Order): boolean {
+    const now = new Date();
+    const orderDate = new Date(order.orderDate);
+    const hoursOld = (now.getTime() - orderDate.getTime()) / (1000 * 60 * 60);
+
+    return (
+      order.priority === 'high' ||
+      (order.status === 'pending' && hoursOld > 4) || // Pending for more than 4 hours
+      (order.status === 'delivering' && hoursOld > 8) || // In delivery for more than 8 hours
+      order.customerType === 'vip'
+    );
   }
 }

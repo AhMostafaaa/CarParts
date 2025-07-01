@@ -26,7 +26,6 @@ export class PreNavbarComponent implements OnInit, OnDestroy {
   ngOnInit(): void {
     // this.updateVisibility();
     // this.updateCurrentRoute();
-
     // // Listen to route changes
     // this.router.events.pipe(takeUntil(this.destroy$)).subscribe(event => {
     //   if (event instanceof NavigationEnd) {
@@ -34,7 +33,6 @@ export class PreNavbarComponent implements OnInit, OnDestroy {
     //     this.updateVisibility();
     //   }
     // });
-
     // // Update stats periodically
     // interval(30000).pipe(takeUntil(this.destroy$)).subscribe(() => {
     //   if (this.isMerchant || this.isDriver) {

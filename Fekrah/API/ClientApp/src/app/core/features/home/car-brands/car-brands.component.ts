@@ -66,8 +66,8 @@ export class CarBrandsComponent implements OnInit {
           spaceBetween: 20,
         },
         1024: {
-          slidesPerView: 11,
-          spaceBetween: 30,
+          slidesPerView: 10,
+          spaceBetween: 10,
         },
       }
 
