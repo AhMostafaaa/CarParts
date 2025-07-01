@@ -24,9 +24,6 @@ C:\Users\TIGEER2\Source\Repos\CarParts\Fekrah\Data\obj\Debug\net8.0\Data.dll
 C:\Users\TIGEER2\Source\Repos\CarParts\Fekrah\Data\obj\Debug\net8.0\refint\Data.dll
 C:\Users\TIGEER2\Source\Repos\CarParts\Fekrah\Data\obj\Debug\net8.0\Data.pdb
 C:\Users\TIGEER2\Source\Repos\CarParts\Fekrah\Data\obj\Debug\net8.0\ref\Data.dll
-C:\Users\TIGEER2\Source\Repos\CarParts\Fekrah\Data\bin\Debug\net8.0\Bussiness.dll
-C:\Users\TIGEER2\Source\Repos\CarParts\Fekrah\Data\bin\Debug\net8.0\Bussiness.pdb
-C:\Users\TIGEER2\Source\Repos\CarParts\Fekrah\Data\obj\Debug\net8.0\Data.csproj.Up2Date
 C:\Users\carpart\Fekrah\Data\bin\Debug\net8.0\Data.deps.json
 C:\Users\carpart\Fekrah\Data\bin\Debug\net8.0\Data.dll
 C:\Users\carpart\Fekrah\Data\bin\Debug\net8.0\Data.pdb
