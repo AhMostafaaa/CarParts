@@ -9,6 +9,8 @@ public class Seller
     public string PhoneNumber { get; set; }
     public string PasswordHash { get; set; }
     public string Location { get; set; }
+    public double Rating { get; set; }
+    public bool IsActive { get; set; }
 
 
     public ICollection<Part> Parts { get; set; }

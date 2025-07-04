@@ -12,7 +12,7 @@ namespace Data.IRepositories
 
     public interface IGeneraicRepository<TDbEntity> : IGeneraicRepository where TDbEntity : class
     {
-        IEnumerable<TDbEntity> GetAll();
+        IQueryable<TDbEntity> GetAll();
         TDbEntity GetById(object id);
         TDbEntity Insert(TDbEntity entity);
         TDbEntity Update(TDbEntity entity);

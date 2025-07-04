@@ -16,9 +16,9 @@ namespace Data.Repositories
             _sessionService = sessionService;
         }
 
-        public IEnumerable<TDbEntity> GetAll()
+        public IQueryable<TDbEntity> GetAll()
         {
-            return _context.Set<TDbEntity>().ToList();
+            return _context.Set<TDbEntity>();
         }
 
         public TDbEntity GetById(object id)

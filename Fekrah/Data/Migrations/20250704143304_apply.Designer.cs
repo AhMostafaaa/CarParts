@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -10,9 +11,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Data.Migrations
 {
     [DbContext(typeof(DatabaseContext))]
-    partial class DatabaseContextModelSnapshot : ModelSnapshot
+    [Migration("20250704143304_apply")]
+    partial class apply
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -35,40 +38,7 @@ namespace Data.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Categories", (string)null);
-                });
-
-            modelBuilder.Entity("Data.Models.CarsModel", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<int?>("CreatedBy")
-                        .HasColumnType("int");
-
-                    b.Property<DateTimeOffset?>("CreatedOn")
-                        .HasColumnType("datetimeoffset");
-
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<int?>("UpdatedBy")
-                        .HasColumnType("int");
-
-                    b.Property<DateTimeOffset?>("UpdatedOn")
-                        .HasColumnType("datetimeoffset");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("CreatedBy");
-
-                    b.HasIndex("UpdatedBy");
-
-                    b.ToTable("CarsModels", (string)null);
+                    b.ToTable("Categories");
                 });
 
             modelBuilder.Entity("Data.Models.Localization", b =>
@@ -109,47 +79,7 @@ namespace Data.Migrations
 
                     b.HasIndex("UpdatedBy");
 
-                    b.ToTable("Localizations", (string)null);
-                });
-
-            modelBuilder.Entity("Data.Models.Offer", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<int?>("CreatedBy")
-                        .HasColumnType("int");
-
-                    b.Property<DateTimeOffset?>("CreatedOn")
-                        .HasColumnType("datetimeoffset");
-
-                    b.Property<double>("DiscountRate")
-                        .HasColumnType("float");
-
-                    b.Property<double>("NewPrice")
-                        .HasColumnType("float");
-
-                    b.Property<int>("PartId")
-                        .HasColumnType("int");
-
-                    b.Property<int?>("UpdatedBy")
-                        .HasColumnType("int");
-
-                    b.Property<DateTimeOffset?>("UpdatedOn")
-                        .HasColumnType("datetimeoffset");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("CreatedBy");
-
-                    b.HasIndex("PartId");
-
-                    b.HasIndex("UpdatedBy");
-
-                    b.ToTable("Offers", (string)null);
+                    b.ToTable("Localizations");
                 });
 
             modelBuilder.Entity("Data.Models.SellerCategory", b =>
@@ -171,7 +101,7 @@ namespace Data.Migrations
 
                     b.HasIndex("SellerId");
 
-                    b.ToTable("SellerCategories", (string)null);
+                    b.ToTable("SellerCategories");
                 });
 
             modelBuilder.Entity("Part", b =>
@@ -181,9 +111,6 @@ namespace Data.Migrations
                         .HasColumnType("int");
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<int?>("CarsModelId")
-                        .HasColumnType("int");
 
                     b.Property<int>("CategoryId")
                         .HasColumnType("int");
@@ -206,21 +133,19 @@ namespace Data.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<double>("Price")
-                        .HasColumnType("float");
+                    b.Property<decimal>("Price")
+                        .HasColumnType("decimal(18,2)");
 
                     b.Property<int>("SellerId")
                         .HasColumnType("int");
 
                     b.HasKey("Id");
 
-                    b.HasIndex("CarsModelId");
-
                     b.HasIndex("CategoryId");
 
                     b.HasIndex("SellerId");
 
-                    b.ToTable("Parts", (string)null);
+                    b.ToTable("Parts");
                 });
 
             modelBuilder.Entity("Seller", b =>
@@ -235,9 +160,6 @@ namespace Data.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<bool>("IsActive")
-                        .HasColumnType("bit");
-
                     b.Property<string>("Location")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
@@ -250,16 +172,13 @@ namespace Data.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<double>("Rating")
-                        .HasColumnType("float");
-
                     b.Property<string>("ShopName")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
 
-                    b.ToTable("Sellers", (string)null);
+                    b.ToTable("Sellers");
                 });
 
             modelBuilder.Entity("User", b =>
@@ -284,22 +203,7 @@ namespace Data.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Users", (string)null);
-                });
-
-            modelBuilder.Entity("Data.Models.CarsModel", b =>
-                {
-                    b.HasOne("User", "CreatedByUser")
-                        .WithMany()
-                        .HasForeignKey("CreatedBy");
-
-                    b.HasOne("User", "UpdatedByUser")
-                        .WithMany()
-                        .HasForeignKey("UpdatedBy");
-
-                    b.Navigation("CreatedByUser");
-
-                    b.Navigation("UpdatedByUser");
+                    b.ToTable("Users");
                 });
 
             modelBuilder.Entity("Data.Models.Localization", b =>
@@ -317,29 +221,6 @@ namespace Data.Migrations
                     b.Navigation("UpdatedByUser");
                 });
 
-            modelBuilder.Entity("Data.Models.Offer", b =>
-                {
-                    b.HasOne("User", "CreatedByUser")
-                        .WithMany()
-                        .HasForeignKey("CreatedBy");
-
-                    b.HasOne("Part", "Part")
-                        .WithMany("Offers")
-                        .HasForeignKey("PartId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("User", "UpdatedByUser")
-                        .WithMany()
-                        .HasForeignKey("UpdatedBy");
-
-                    b.Navigation("CreatedByUser");
-
-                    b.Navigation("Part");
-
-                    b.Navigation("UpdatedByUser");
-                });
-
             modelBuilder.Entity("Data.Models.SellerCategory", b =>
                 {
                     b.HasOne("Seller", "Seller")
@@ -353,10 +234,6 @@ namespace Data.Migrations
 
             modelBuilder.Entity("Part", b =>
                 {
-                    b.HasOne("Data.Models.CarsModel", null)
-                        .WithMany("Parts")
-                        .HasForeignKey("CarsModelId");
-
                     b.HasOne("Category", "Category")
                         .WithMany("Parts")
                         .HasForeignKey("CategoryId")
@@ -377,16 +254,6 @@ namespace Data.Migrations
             modelBuilder.Entity("Category", b =>
                 {
                     b.Navigation("Parts");
-                });
-
-            modelBuilder.Entity("Data.Models.CarsModel", b =>
-                {
-                    b.Navigation("Parts");
-                });
-
-            modelBuilder.Entity("Part", b =>
-                {
-                    b.Navigation("Offers");
                 });
 
             modelBuilder.Entity("Seller", b =>
