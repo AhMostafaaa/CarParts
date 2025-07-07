@@ -1,4 +1,6 @@
 ﻿using AutoMapper;
+using Data.DTOs;
+using Data.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -14,6 +16,8 @@ namespace Bussiness.Profilers
             CreateMap<Category, CategoryDto>().ReverseMap();
             CreateMap<Seller, SellerDto>().ReverseMap();
             CreateMap<Part, PartDto>().ReverseMap();
+            CreateMap<SellerCategory, SellerCategoryDto>().ReverseMap();
+            CreateMap<CarsModel, CarsModelDto>().ReverseMap();
         }
     }
 }

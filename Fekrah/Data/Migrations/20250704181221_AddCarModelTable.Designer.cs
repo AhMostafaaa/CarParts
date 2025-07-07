@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -10,9 +11,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Data.Migrations
 {
     [DbContext(typeof(DatabaseContext))]
-    partial class DatabaseContextModelSnapshot : ModelSnapshot
+    [Migration("20250704181221_AddCarModelTable")]
+    partial class AddCarModelTable
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -35,7 +38,7 @@ namespace Data.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Categories", (string)null);
+                    b.ToTable("Categories");
                 });
 
             modelBuilder.Entity("Data.Models.CarsModel", b =>
@@ -68,7 +71,7 @@ namespace Data.Migrations
 
                     b.HasIndex("UpdatedBy");
 
-                    b.ToTable("CarsModels", (string)null);
+                    b.ToTable("CarsModels");
                 });
 
             modelBuilder.Entity("Data.Models.Localization", b =>
@@ -109,7 +112,7 @@ namespace Data.Migrations
 
                     b.HasIndex("UpdatedBy");
 
-                    b.ToTable("Localizations", (string)null);
+                    b.ToTable("Localizations");
                 });
 
             modelBuilder.Entity("Data.Models.Offer", b =>
@@ -149,7 +152,7 @@ namespace Data.Migrations
 
                     b.HasIndex("UpdatedBy");
 
-                    b.ToTable("Offers", (string)null);
+                    b.ToTable("Offers");
                 });
 
             modelBuilder.Entity("Data.Models.SellerCategory", b =>
@@ -171,7 +174,7 @@ namespace Data.Migrations
 
                     b.HasIndex("SellerId");
 
-                    b.ToTable("SellerCategories", (string)null);
+                    b.ToTable("SellerCategories");
                 });
 
             modelBuilder.Entity("Part", b =>
@@ -220,7 +223,7 @@ namespace Data.Migrations
 
                     b.HasIndex("SellerId");
 
-                    b.ToTable("Parts", (string)null);
+                    b.ToTable("Parts");
                 });
 
             modelBuilder.Entity("Seller", b =>
@@ -259,7 +262,7 @@ namespace Data.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Sellers", (string)null);
+                    b.ToTable("Sellers");
                 });
 
             modelBuilder.Entity("User", b =>
@@ -284,7 +287,7 @@ namespace Data.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Users", (string)null);
+                    b.ToTable("Users");
                 });
 
             modelBuilder.Entity("Data.Models.CarsModel", b =>
