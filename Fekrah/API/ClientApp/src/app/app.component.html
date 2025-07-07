@@ -3,6 +3,7 @@
 
   <!-- ✅ Pre-Navbar مع بيانات المستخدم -->
   <app-pre-navbar
+   *ngIf="!isAuthRoute"
     [isMerchant]="userData.isMerchant"
     [isDriver]="userData.isDriver"
     [pendingOrdersCount]="userData.pendingOrdersCount"
@@ -12,6 +13,7 @@
 
   <!-- ✅ الهيدر مع زر الفلتر -->
   <app-header
+    *ngIf="!isAuthRoute"
     [isFilterOpen]="filtersOpened"
     (toggleFilter)="toggleFilters()">
   </app-header>
@@ -22,12 +24,12 @@
   </main>
 
   <!-- ✅ الفوتر -->
-  <app-footer></app-footer>
+  <app-footer   *ngIf="!isAuthRoute"></app-footer>
 
 </div>
 
 <!-- ✅ Sidebar الفلتر - خارج الحاوي الرئيسي -->
-<div class="filters-sidebar" [class.open]="filtersOpened" (click)="$event.stopPropagation()">
+<div   *ngIf="!isAuthRoute" class="filters-sidebar" [class.open]="filtersOpened" (click)="$event.stopPropagation()">
   <app-parts-filter
     [isOpen]="filtersOpened"
     (filtersChanged)="handleFilters($event)"
@@ -37,13 +39,14 @@
 
 <!-- Overlay للشاشات الصغيرة -->
 <div
+
   class="filter-overlay"
   [class.active]="filtersOpened"
   (click)="closeFilters()"
-  *ngIf="filtersOpened">
+  *ngIf="filtersOpened && !isAuthRoute">
 </div>
 
 <!-- تلميح النقر للإغلاق (يظهر في الشاشات الكبيرة) -->
-<div class="click-to-close-hint" *ngIf="filtersOpened">
+<div class="click-to-close-hint" *ngIf="filtersOpened && !isAuthRoute">
   انقر في أي مكان لإغلاق الفلتر
 </div>

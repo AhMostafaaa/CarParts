@@ -3,6 +3,7 @@
 import { Component, OnInit, OnDestroy, HostListener, Renderer2, ElementRef } from '@angular/core';
 import { Subject } from 'rxjs';
 import { FilterService } from './Shared/Services/filter.service';
+import { Router } from '@angular/router';
 
 interface UserData {
   isLoggedIn: boolean;
@@ -58,7 +59,8 @@ export class AppComponent implements OnInit, OnDestroy {
   constructor(
     private filterService: FilterService,
     private renderer: Renderer2,
-    private elementRef: ElementRef
+    private elementRef: ElementRef,
+    private router:Router
   ) {
     this.checkDeviceType();
   }
@@ -77,7 +79,9 @@ export class AppComponent implements OnInit, OnDestroy {
       clearTimeout(this.animationTimeout);
     }
   }
-
+   isAuthRoute(): boolean {
+    return this.router.url.includes('/auth');
+  }
   // مراقبة تغيير حجم الشاشة
   @HostListener('window:resize', ['$event'])
   onResize(event: any): void {
