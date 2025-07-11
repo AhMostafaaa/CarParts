@@ -76,15 +76,15 @@ export class FeaturedStoresComponent implements OnInit, AfterViewInit, OnDestroy
         next: (stores: any[]) => {
           const sellers = stores.map(store => ({
             id: store.id,
-            name: store.arabicName,
-            imageUrl: store.logo || 'assets/images/default-store-logo.png',
-            location: store.arabicLocation,
+            name: store.shopName,
+            imageUrl: store.imageUrl || 'assets/images/default-store-logo.png',
+            location: store.location,
             category: store.arabicSpecialties?.[0] || 'قطع غيار',
-            isTrusted: store.isVerified,
+            isTrusted: store.isVerified || true,
             rating: store.rating,
             reviewsCount: store.reviewsCount
           }));
-
+           console.log(sellers)
           this.sellersSubject.next(sellers);
           this.showViewMore = sellers.length >= 6;
 
@@ -98,7 +98,6 @@ export class FeaturedStoresComponent implements OnInit, AfterViewInit, OnDestroy
           this.cdr.markForCheck();
         },
         error: (error) => {
-          console.error('Error loading featured stores:', error);
           this.sellersSubject.next([]);
           this.cdr.markForCheck();
         }
