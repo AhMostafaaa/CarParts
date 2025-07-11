@@ -18,6 +18,7 @@ namespace Api.Services
             services.AddScoped<ICategoryService, CategoryService>();
             services.AddScoped<ILookupService, LookupService>();
             services.AddScoped<ICarsModelService, CarsModelService>();
+            services.AddScoped<ICityService, CityService>();
         }
 
         public static void RegisterRepositoriesConfiguration(this IServiceCollection services)
