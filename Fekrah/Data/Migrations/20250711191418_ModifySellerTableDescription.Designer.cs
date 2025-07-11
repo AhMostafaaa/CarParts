@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -10,9 +11,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Data.Migrations
 {
     [DbContext(typeof(DatabaseContext))]
-    partial class DatabaseContextModelSnapshot : ModelSnapshot
+    [Migration("20250711191418_ModifySellerTableDescription")]
+    partial class ModifySellerTableDescription
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -69,43 +72,6 @@ namespace Data.Migrations
                     b.HasIndex("UpdatedBy");
 
                     b.ToTable("CarsModels");
-                });
-
-            modelBuilder.Entity("Data.Models.City", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<int?>("CreatedByUserId")
-                        .HasColumnType("int");
-
-                    b.Property<DateTimeOffset?>("CreatedOn")
-                        .HasColumnType("datetimeoffset");
-
-                    b.Property<string>("NameAr")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("NameEn")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<int?>("UpdatedBy")
-                        .HasColumnType("int");
-
-                    b.Property<DateTimeOffset?>("UpdatedOn")
-                        .HasColumnType("datetimeoffset");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("CreatedByUserId");
-
-                    b.HasIndex("UpdatedBy");
-
-                    b.ToTable("City");
                 });
 
             modelBuilder.Entity("Data.Models.Localization", b =>
@@ -371,10 +337,6 @@ namespace Data.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<int?>("CityId")
-                        .IsRequired()
-                        .HasColumnType("int");
-
                     b.Property<string>("Description")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
@@ -382,9 +344,6 @@ namespace Data.Migrations
                     b.Property<string>("ImageUrl")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
-
-                    b.Property<bool>("IsFavoritSeller")
-                        .HasColumnType("bit");
 
                     b.Property<string>("Location")
                         .IsRequired()
@@ -402,8 +361,6 @@ namespace Data.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("CityId");
-
                     b.HasIndex("UserId")
                         .IsUnique();
 
@@ -411,21 +368,6 @@ namespace Data.Migrations
                 });
 
             modelBuilder.Entity("Data.Models.CarsModel", b =>
-                {
-                    b.HasOne("Data.Models.User", "CreatedByUser")
-                        .WithMany()
-                        .HasForeignKey("CreatedByUserId");
-
-                    b.HasOne("Data.Models.User", "UpdatedByUser")
-                        .WithMany()
-                        .HasForeignKey("UpdatedBy");
-
-                    b.Navigation("CreatedByUser");
-
-                    b.Navigation("UpdatedByUser");
-                });
-
-            modelBuilder.Entity("Data.Models.City", b =>
                 {
                     b.HasOne("Data.Models.User", "CreatedByUser")
                         .WithMany()
@@ -545,19 +487,11 @@ namespace Data.Migrations
 
             modelBuilder.Entity("Seller", b =>
                 {
-                    b.HasOne("Data.Models.City", "City")
-                        .WithMany()
-                        .HasForeignKey("CityId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
                     b.HasOne("Data.Models.User", "User")
                         .WithOne("Seller")
                         .HasForeignKey("Seller", "UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
-
-                    b.Navigation("City");
 
                     b.Navigation("User");
                 });

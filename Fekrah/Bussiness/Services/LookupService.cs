@@ -1,6 +1,7 @@
 ﻿using Bussiness.Interfaces;
 using Data;
 using Data.DTOs;
+using Data.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -54,6 +55,16 @@ namespace Bussiness.Services
                         {
                             Id = c.Id,
                             Text = c.ShopName,
+                        }).ToList();
+                    break;
+                case "cities":
+                    result = _unitOfWork.Repository<City>()
+                        .GetAll()
+                        .Where(s => string.IsNullOrEmpty(searchTerm) || s.NameAr.Contains(searchTerm) || s.NameEn.Contains(searchTerm))
+                        .Select(c => new LookupDTO
+                        {
+                            Id = c.Id,
+                            Text = c.NameAr,
                         }).ToList();
                     break;
                 default:

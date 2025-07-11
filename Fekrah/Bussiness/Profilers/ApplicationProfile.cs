@@ -18,6 +18,7 @@ namespace Bussiness.Profilers
             CreateMap<Part, PartDto>().ReverseMap();
             CreateMap<SellerCategory, SellerCategoryDto>().ReverseMap();
             CreateMap<CarsModel, CarsModelDto>().ReverseMap();
+            CreateMap<City, CityDto>().ReverseMap();
         }
     }
 }
