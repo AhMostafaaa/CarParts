@@ -17,6 +17,7 @@ public class DatabaseContext : DbContext
     public DbSet<Localization> Localizations { get; set; }
     public DbSet<CarsModel> CarsModels { get; set; }
     public DbSet<Offer> Offers { get; set; }
+    public DbSet<VisitorRegister> VisitorRegisters { get; set; }
 
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
@@ -32,6 +33,12 @@ public class DatabaseContext : DbContext
             .HasMany(s => s.SellerCategories)
             .WithOne(s => s.Seller)
             .HasForeignKey(f => f.SellerId);
+
+        modelBuilder.Entity<Seller>()
+            .HasOne(s => s.User)
+            .WithOne(s => s.Seller)
+            .HasForeignKey<Seller>(s => s.UserId);
+
 
         modelBuilder.Entity<Category>()
           .HasMany(c => c.Parts)
