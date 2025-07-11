@@ -4,6 +4,7 @@ using Api.Services;
 using Data;
 using Bussiness.Interfaces;
 using Bussiness.Profilers;
+using Bussiness.Helpers;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -19,6 +20,9 @@ builder.WebHost.ConfigureKestrel(serverOptions =>
 {
     serverOptions.Limits.MaxRequestBodySize = 10L * 1024 * 1024 * 1024; // 10 GB
 });
+
+// Binding Configuration
+builder.Services.Configure<JWTSetting>(builder.Configuration.GetSection("BearerTokens"));
 
 // AutoMapper
 builder.Services.AddAutoMapper(cfg => cfg.AddProfile<ApplicationProfile>(), AppDomain.CurrentDomain.GetAssemblies());

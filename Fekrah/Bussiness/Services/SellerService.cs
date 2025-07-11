@@ -2,7 +2,9 @@
 using Bussiness.Helpers;
 using Bussiness.Services;
 using Data;
+using Data.Enums;
 using Data.DTOs;
+using Data.Models;
 using Microsoft.EntityFrameworkCore;
 
 public class SellerService : _BusinessService<Seller, SellerDto>, ISellerService
@@ -14,11 +16,13 @@ public class SellerService : _BusinessService<Seller, SellerDto>, ISellerService
 
     public override DataSourceResult<SellerDto> GetAll(int pageSize, int page, string? searchTerm = null)
     {
-        var allSellers = _UnitOfWork.Repository<Seller>()
+        var allSellers = _UnitOfWork.Repository<User>()
             .GetAll()
-            .Include(s => s.SellerCategories)
+            .Include(s => s.Seller)
+            .ThenInclude(s => s.SellerCategories) 
             .Where(s => s.IsActive &&
-                    (string.IsNullOrEmpty(searchTerm) || s.ShopName.Contains(searchTerm)))
+                        s.UserType == UserTypeEnum.Seller &&
+                    (string.IsNullOrEmpty(searchTerm) || s.Seller.ShopName.Contains(searchTerm)))
             .ToList();
 
         List<SellerDto> result = allSellers
@@ -26,13 +30,13 @@ public class SellerService : _BusinessService<Seller, SellerDto>, ISellerService
             .Select(s => new SellerDto
             {
                 Id = s.Id,
-                ShopName = s.ShopName,
-                Location = s.Location,
-                ImageUrl = s.ImageUrl,
+                ShopName = s.Seller?.ShopName,
+                Location = s.Seller?.Location,
+                ImageUrl = s.Seller.ImageUrl,
                 IsActive = s.IsActive,
                 PhoneNumber = s.PhoneNumber,
-                Rating = s.Rating,
-                SellerCategories = s?.SellerCategories?.Select(c => new SellerCategoryDto
+                Rating = s.Seller.Rating,
+                SellerCategories = s?.Seller.SellerCategories?.Select(c => new SellerCategoryDto
                 {
                     Id = c.Id,
                     Name = c.Name,

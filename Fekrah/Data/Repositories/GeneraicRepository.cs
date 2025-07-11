@@ -32,7 +32,7 @@ namespace Data.Repositories
         public TDbEntity Insert(TDbEntity entity)
         {
             SetProperty(entity, "CreatedOn", DateTimeOffset.Now);
-            SetProperty(entity, "CreatedBy", _sessionService.UserId);
+            //SetProperty(entity, "CreatedBy", _sessionService.UserId);
 
             _context.Set<TDbEntity>().Add(entity);
             var inserted = _context.SaveChanges();
@@ -72,7 +72,7 @@ namespace Data.Repositories
         public TDbEntity Delete(TDbEntity entity)
         {
             SetProperty(entity, "DeletedOn", DateTimeOffset.Now);
-            SetProperty(entity, "DeletedBy", _sessionService.UserId);
+            //SetProperty(entity, "DeletedBy", _sessionService.UserId);
 
             _context.Set<TDbEntity>().Remove(entity);
             _context.SaveChanges();
